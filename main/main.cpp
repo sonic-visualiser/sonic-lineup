@@ -75,6 +75,8 @@ protected:
 int
 main(int argc, char **argv)
 {
+    StoreStartupLocale();
+
     VectApplication application(argc, argv);
 
     QStringList args = application.arguments();
