@@ -178,7 +178,7 @@ main(int argc, char **argv)
 
         if (i->startsWith("http:") || i->startsWith("ftp:")) {
             std::cerr << "opening URL: \"" << i->toStdString() << "\"..." << std::endl;
-            status = gui.openURL(*i);
+            status = gui.open(*i);
             continue;
         }
 
@@ -198,18 +198,18 @@ main(int argc, char **argv)
         }
         if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
-                status = gui.openSomeFile(path, MainWindow::ReplaceMainModel);
+                status = gui.open(path, MainWindow::ReplaceMainModel);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveMainModel = true;
                 }
             } else {
                 if (haveSession && !havePriorCommandLineModel) {
-                    status = gui.openSomeFile(path, MainWindow::AskUser);
+                    status = gui.open(path, MainWindow::AskUser);
                     if (status == MainWindow::FileOpenSucceeded) {
                         havePriorCommandLineModel = true;
                     }
                 } else {
-                    status = gui.openSomeFile(path, MainWindow::CreateAdditionalModel);
+                    status = gui.open(path, MainWindow::CreateAdditionalModel);
                 }
             }
         }

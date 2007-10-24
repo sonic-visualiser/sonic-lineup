@@ -110,17 +110,8 @@ using std::set;
 
 
 MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
-    m_document(0),
-    m_paneStack(0),
-    m_viewManager(0),
+    MainWindowBase(withAudioOutput, withOSCSupport),
     m_overview(0),
-    m_timeRulerLayer(0),
-    m_audioOutput(withAudioOutput),
-    m_playSource(0),
-    m_playTarget(0),
-    m_oscQueue(withOSCSupport ? new OSCQueue() : 0),
-    m_recentFiles("RecentFiles", 20),
-    m_recentTransforms("RecentTransforms", 20),
     m_mainMenusCreated(false),
     m_paneMenu(0),
     m_layerMenu(0),
@@ -137,9 +128,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_deleteSelectedAction(0),
     m_ffwdAction(0),
     m_rwdAction(0),
-    m_documentModified(false),
-    m_openingAudioFile(false),
-    m_abandoning(false),
     m_preferencesDialog(0),
     m_layerTreeView(0),
     m_keyReference(new KeyReference())
@@ -167,32 +155,11 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     Preferences::getInstance()->setResampleOnLoad(true);
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-	    this, SLOT(documentModified()));
-    connect(CommandHistory::getInstance(), SIGNAL(documentRestored()),
-	    this, SLOT(documentRestored()));
-
     QFrame *frame = new QFrame;
     setCentralWidget(frame);
 
     QGridLayout *layout = new QGridLayout;
     
-    m_viewManager = new ViewManager();
-    connect(m_viewManager, SIGNAL(selectionChanged()),
-	    this, SLOT(updateMenuStates()));
-    connect(m_viewManager, SIGNAL(inProgressSelectionChanged()),
-	    this, SLOT(inProgressSelectionChanged()));
-    m_viewManager->setPlaySoloMode(true);
-    m_viewManager->setAlignMode(true);
-
-    Preferences::BackgroundMode mode =
-        Preferences::getInstance()->getBackgroundMode();
-    m_initialDarkBackground = m_viewManager->getGlobalDarkBackground();
-    if (mode != Preferences::BackgroundFromTheme) {
-        m_viewManager->setGlobalDarkBackground
-            (mode == Preferences::DarkBackground);
-    }
-
     m_descriptionLabel = new QLabel;
 
     QScrollArea *scroll = new QScrollArea(frame);
@@ -200,20 +167,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scroll->setFrameShape(QFrame::NoFrame);
 
-    m_paneStack = new PaneStack(scroll, m_viewManager);
     m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
-
-    connect(m_paneStack, SIGNAL(currentPaneChanged(Pane *)),
-	    this, SLOT(currentPaneChanged(Pane *)));
-    connect(m_paneStack, SIGNAL(currentLayerChanged(Pane *, Layer *)),
-	    this, SLOT(currentLayerChanged(Pane *, Layer *)));
-    connect(m_paneStack, SIGNAL(rightButtonMenuRequested(Pane *, QPoint)),
-            this, SLOT(rightButtonMenuRequested(Pane *, QPoint)));
-    connect(m_paneStack, SIGNAL(propertyStacksResized()),
-            this, SLOT(propertyStacksResized()));
-    connect(m_paneStack, SIGNAL(contextHelpChanged(const QString &)),
-            this, SLOT(contextHelpChanged(const QString &)));
-
     scroll->setWidget(m_paneStack);
 
     m_overview = new Overview(frame);
@@ -241,13 +195,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
         m_panLayer->setBaseColour
             (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
     }        
-
-    m_playSource = new AudioCallbackPlaySource(m_viewManager);
-
-    connect(m_playSource, SIGNAL(sampleRateMismatch(size_t, size_t, bool)),
-	    this,           SLOT(sampleRateMismatch(size_t, size_t, bool)));
-    connect(m_playSource, SIGNAL(audioOverloadPluginDisabled()),
-            this,           SLOT(audioOverloadPluginDisabled()));
 
     m_fader = new Fader(frame, false);
     connect(m_fader, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
@@ -316,35 +263,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     frame->setLayout(layout);
 
-    connect(m_viewManager, SIGNAL(outputLevelsChanged(float, float)),
-	    this, SLOT(outputLevelsChanged(float, float)));
-
-    connect(m_viewManager, SIGNAL(playbackFrameChanged(unsigned long)),
-            this, SLOT(playbackFrameChanged(unsigned long)));
-
-    connect(m_viewManager, SIGNAL(globalCentreFrameChanged(unsigned long)),
-            this, SLOT(globalCentreFrameChanged(unsigned long)));
-
-    connect(m_viewManager, SIGNAL(viewCentreFrameChanged(View *, unsigned long)),
-            this, SLOT(viewCentreFrameChanged(View *, unsigned long)));
-
-    connect(m_viewManager, SIGNAL(viewZoomLevelChanged(View *, unsigned long, bool)),
-            this, SLOT(viewZoomLevelChanged(View *, unsigned long, bool)));
-
-    connect(Preferences::getInstance(),
-            SIGNAL(propertyChanged(PropertyContainer::PropertyName)),
-            this,
-            SLOT(preferenceChanged(PropertyContainer::PropertyName)));
-
-//    preferenceChanged("Property Box Layout");
-
-    if (m_oscQueue && m_oscQueue->isOK()) {
-        connect(m_oscQueue, SIGNAL(messagesAvailable()), this, SLOT(pollOSC()));
-        QTimer *oscTimer = new QTimer(this);
-        connect(oscTimer, SIGNAL(timeout()), this, SLOT(pollOSC()));
-        oscTimer->start(1000);
-    }
-
     setupMenus();
     setupToolbars();
     setupHelpMenu();
@@ -356,75 +274,10 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
 MainWindow::~MainWindow()
 {
-//    std::cerr << "MainWindow::~MainWindow()" << std::endl;
-
-    if (!m_abandoning) {
-        closeSession();
-    }
-    delete m_playTarget;
-    delete m_playSource;
-    delete m_viewManager;
-    delete m_oscQueue;
     delete m_keyReference;
     delete m_preferencesDialog;
     delete m_layerTreeView;
     Profiles::getInstance()->dump();
-}
-
-QString
-MainWindow::getOpenFileName(FileFinder::FileType type)
-{
-    FileFinder *ff = FileFinder::getInstance();
-    switch (type) {
-    case FileFinder::SessionFile:
-        return ff->getOpenFileName(type, m_sessionFile);
-    case FileFinder::AudioFile:
-        return ff->getOpenFileName(type, m_audioFile);
-    case FileFinder::LayerFile:
-        return ff->getOpenFileName(type, m_sessionFile);
-    case FileFinder::SessionOrAudioFile:
-        return ff->getOpenFileName(type, m_sessionFile);
-    case FileFinder::ImageFile:
-        return ff->getOpenFileName(type, m_sessionFile);
-    case FileFinder::AnyFile:
-        if (getMainModel() != 0 &&
-            m_paneStack != 0 &&
-            m_paneStack->getCurrentPane() != 0) { // can import a layer
-            return ff->getOpenFileName(FileFinder::AnyFile, m_sessionFile);
-        } else {
-            return ff->getOpenFileName(FileFinder::SessionOrAudioFile,
-                                       m_sessionFile);
-        }
-    }
-    return "";
-}
-
-QString
-MainWindow::getSaveFileName(FileFinder::FileType type)
-{
-    FileFinder *ff = FileFinder::getInstance();
-    switch (type) {
-    case FileFinder::SessionFile:
-        return ff->getSaveFileName(type, m_sessionFile);
-    case FileFinder::AudioFile:
-        return ff->getSaveFileName(type, m_audioFile);
-    case FileFinder::LayerFile:
-        return ff->getSaveFileName(type, m_sessionFile);
-    case FileFinder::SessionOrAudioFile:
-        return ff->getSaveFileName(type, m_sessionFile);
-    case FileFinder::ImageFile:
-        return ff->getSaveFileName(type, m_sessionFile);
-    case FileFinder::AnyFile:
-        return ff->getSaveFileName(type, m_sessionFile);
-    }
-    return "";
-}
-
-void
-MainWindow::registerLastOpenedFilePath(FileFinder::FileType type, QString path)
-{
-    FileFinder *ff = FileFinder::getInstance();
-    ff->registerLastOpenedFilePath(type, path);
 }
 
 void
@@ -1851,6 +1704,8 @@ MainWindow::setupToolbars()
 void
 MainWindow::updateMenuStates()
 {
+    MainWindowBase::updateMenuStates();
+
     Pane *currentPane = 0;
     Layer *currentLayer = 0;
 
@@ -1862,10 +1717,6 @@ MainWindow::updateMenuStates()
     bool haveCurrentLayer =
         (haveCurrentPane &&
          (currentLayer != 0));
-    bool haveMainModel =
-	(getMainModel() != 0);
-    bool havePlayTarget =
-	(m_playTarget != 0);
     bool haveSelection = 
 	(m_viewManager &&
 	 !m_viewManager->getSelections().empty());
@@ -1878,57 +1729,23 @@ MainWindow::updateMenuStates()
     bool haveCurrentTimeValueLayer = 
 	(haveCurrentLayer &&
 	 dynamic_cast<TimeValueLayer *>(currentLayer));
-    bool haveCurrentColour3DPlot =
-        (haveCurrentLayer &&
-         dynamic_cast<Colour3DPlotLayer *>(currentLayer));
-    bool haveClipboardContents =
-        (m_viewManager &&
-         !m_viewManager->getClipboard().empty());
-
-    emit canAddPane(haveMainModel);
-    emit canDeleteCurrentPane(haveCurrentPane);
-    emit canZoom(haveMainModel && haveCurrentPane);
-    emit canScroll(haveMainModel && haveCurrentPane);
-    emit canAddLayer(haveMainModel && haveCurrentPane);
-    emit canImportMoreAudio(haveMainModel);
-    emit canImportLayer(haveMainModel && haveCurrentPane);
-    emit canExportAudio(haveMainModel);
-    emit canExportLayer(haveMainModel &&
-                        (haveCurrentEditableLayer || haveCurrentColour3DPlot));
-    emit canExportImage(haveMainModel && haveCurrentPane);
-    emit canDeleteCurrentLayer(haveCurrentLayer);
-    emit canRenameLayer(haveCurrentLayer);
-    emit canEditLayer(haveCurrentEditableLayer);
-    emit canMeasureLayer(haveCurrentLayer);
-    emit canSelect(haveMainModel && haveCurrentPane);
-    emit canPlay(havePlayTarget);
-    emit canFfwd(true);
-    emit canRewind(true);
-    emit canPaste(haveCurrentEditableLayer && haveClipboardContents);
-    emit canInsertInstant(haveCurrentPane);
-    emit canInsertInstantsAtBoundaries(haveCurrentPane && haveSelection);
-    emit canPlaySelection(haveMainModel && havePlayTarget && haveSelection);
-    emit canClearSelection(haveSelection);
-    emit canEditSelection(haveSelection && haveCurrentEditableLayer);
-    emit canSave(m_sessionFile != "" && m_documentModified);
-
-    if (m_deleteSelectedAction) {
-        if (m_viewManager && 
-            (m_viewManager->getToolMode() == ViewManager::MeasureMode)) {
-            emit canDeleteSelection(haveCurrentLayer);
-            m_deleteSelectedAction->setText(tr("&Delete Current Measurement"));
-            m_deleteSelectedAction->setStatusTip(tr("Delete the measurement currently under the mouse pointer"));
-        } else {
-            emit canDeleteSelection(haveSelection && haveCurrentEditableLayer);
-            m_deleteSelectedAction->setText(tr("&Delete Selected Items"));
-            m_deleteSelectedAction->setStatusTip(tr("Delete items in current selection from the current layer"));
-        }
-    }
 
     emit canChangePlaybackSpeed(true);
     int v = m_playSpeed->value();
     emit canSpeedUpPlayback(v < m_playSpeed->maximum());
     emit canSlowDownPlayback(v > m_playSpeed->minimum());
+/*!!!!
+    if (m_viewManager && 
+        (m_viewManager->getToolMode() == ViewManager::MeasureMode)) {
+        emit canDeleteSelection(haveCurrentLayer);
+        m_deleteSelectedAction->setText(tr("&Delete Current Measurement"));
+        m_deleteSelectedAction->setStatusTip(tr("Delete the measurement currently under the mouse pointer"));
+    } else {
+        emit canDeleteSelection(haveSelection && haveCurrentEditableLayer);
+        m_deleteSelectedAction->setText(tr("&Delete Selected Items"));
+        m_deleteSelectedAction->setStatusTip(tr("Delete items in current selection from the current layer"));
+    }
+*/
 
     if (m_ffwdAction && m_rwdAction) {
         if (haveCurrentTimeInstantsLayer) {
@@ -1981,129 +1798,15 @@ MainWindow::updateDescriptionLabel()
 void
 MainWindow::documentModified()
 {
-//    std::cerr << "MainWindow::documentModified" << std::endl;
-
-    if (!m_documentModified) {
-	setWindowTitle(tr("%1 (modified)").arg(windowTitle()));
-    }
-
-    m_documentModified = true;
-    updateMenuStates();
+    //!!!
+    MainWindowBase::documentModified();
 }
 
 void
 MainWindow::documentRestored()
 {
-//    std::cerr << "MainWindow::documentRestored" << std::endl;
-
-    if (m_documentModified) {
-	QString wt(windowTitle());
-	wt.replace(tr(" (modified)"), "");
-	setWindowTitle(wt);
-    }
-
-    m_documentModified = false;
-    updateMenuStates();
-}
-
-void
-MainWindow::playLoopToggled()
-{
-    QAction *action = dynamic_cast<QAction *>(sender());
-    
-    if (action) {
-	m_viewManager->setPlayLoopMode(action->isChecked());
-    } else {
-	m_viewManager->setPlayLoopMode(!m_viewManager->getPlayLoopMode());
-    }
-}
-
-void
-MainWindow::playSelectionToggled()
-{
-    QAction *action = dynamic_cast<QAction *>(sender());
-    
-    if (action) {
-	m_viewManager->setPlaySelectionMode(action->isChecked());
-    } else {
-	m_viewManager->setPlaySelectionMode(!m_viewManager->getPlaySelectionMode());
-    }
-}
-
-void
-MainWindow::playSoloToggled()
-{
-    QAction *action = dynamic_cast<QAction *>(sender());
-    
-    if (action) {
-	m_viewManager->setPlaySoloMode(action->isChecked());
-    } else {
-	m_viewManager->setPlaySoloMode(!m_viewManager->getPlaySoloMode());
-    }
-
-    if (!m_viewManager->getPlaySoloMode()) {
-        m_viewManager->setPlaybackModel(0);
-        if (m_playSource) {
-            m_playSource->clearSoloModelSet();
-        }
-    }
-}
-
-void
-MainWindow::currentPaneChanged(Pane *p)
-{
-    updateMenuStates();
-    updateVisibleRangeDisplay(p);
-
-    if (!p) return;
-
-    if (!(m_viewManager &&
-          m_playSource &&
-          m_viewManager->getPlaySoloMode())) {
-        if (m_viewManager) m_viewManager->setPlaybackModel(0);
-        return;
-    }
-
-    Model *prevPlaybackModel = m_viewManager->getPlaybackModel();
-
-    std::set<Model *> soloModels;
-
-    for (int i = 0; i < p->getLayerCount(); ++i) {
-        Layer *layer = p->getLayer(i);
-        if (dynamic_cast<TimeRulerLayer *>(layer)) {
-            continue;
-        }
-        if (layer && layer->getModel()) {
-            Model *model = layer->getModel();
-            if (dynamic_cast<RangeSummarisableTimeValueModel *>(model)) {
-                m_viewManager->setPlaybackModel(model);
-            }
-            soloModels.insert(model);
-        }
-    }
-    
-    RangeSummarisableTimeValueModel *a = 
-        dynamic_cast<RangeSummarisableTimeValueModel *>(prevPlaybackModel);
-    RangeSummarisableTimeValueModel *b = 
-        dynamic_cast<RangeSummarisableTimeValueModel *>(m_viewManager->
-                                                        getPlaybackModel());
-
-    m_playSource->setSoloModelSet(soloModels);
-
-    if (a && b && (a != b)) {
-        int frame = m_playSource->getCurrentPlayingFrame();
-        //!!! I don't really believe that these functions are the right way around
-        int rframe = a->alignFromReference(frame);
-        int bframe = b->alignToReference(rframe);
-        if (m_playSource->isPlaying()) m_playSource->play(bframe);
-    }
-}
-
-void
-MainWindow::currentLayerChanged(Pane *p, Layer *)
-{
-    updateMenuStates();
-    updateVisibleRangeDisplay(p);
+    //!!!
+    MainWindowBase::documentRestored();
 }
 
 void
@@ -2142,226 +1845,6 @@ MainWindow::toolMeasureSelected()
 //    m_viewManager->setToolMode(ViewManager::TextMode);
 //}
 
-void
-MainWindow::selectAll()
-{
-    if (!getMainModel()) return;
-    m_viewManager->setSelection(Selection(getMainModel()->getStartFrame(),
-					  getMainModel()->getEndFrame()));
-}
-
-void
-MainWindow::selectToStart()
-{
-    if (!getMainModel()) return;
-    m_viewManager->setSelection(Selection(getMainModel()->getStartFrame(),
-					  m_viewManager->getGlobalCentreFrame()));
-}
-
-void
-MainWindow::selectToEnd()
-{
-    if (!getMainModel()) return;
-    m_viewManager->setSelection(Selection(m_viewManager->getGlobalCentreFrame(),
-					  getMainModel()->getEndFrame()));
-}
-
-void
-MainWindow::selectVisible()
-{
-    Model *model = getMainModel();
-    if (!model) return;
-
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (!currentPane) return;
-
-    size_t startFrame, endFrame;
-
-    if (currentPane->getStartFrame() < 0) startFrame = 0;
-    else startFrame = currentPane->getStartFrame();
-
-    if (currentPane->getEndFrame() > model->getEndFrame()) endFrame = model->getEndFrame();
-    else endFrame = currentPane->getEndFrame();
-
-    m_viewManager->setSelection(Selection(startFrame, endFrame));
-}
-
-void
-MainWindow::clearSelection()
-{
-    m_viewManager->clearSelections();
-}
-
-void
-MainWindow::cut()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (!currentPane) return;
-
-    Layer *layer = currentPane->getSelectedLayer();
-    if (!layer) return;
-
-    Clipboard &clipboard = m_viewManager->getClipboard();
-    clipboard.clear();
-
-    MultiSelection::SelectionList selections = m_viewManager->getSelections();
-
-    CommandHistory::getInstance()->startCompoundOperation(tr("Cut"), true);
-
-    for (MultiSelection::SelectionList::iterator i = selections.begin();
-         i != selections.end(); ++i) {
-        layer->copy(*i, clipboard);
-        layer->deleteSelection(*i);
-    }
-
-    CommandHistory::getInstance()->endCompoundOperation();
-}
-
-void
-MainWindow::copy()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (!currentPane) return;
-
-    Layer *layer = currentPane->getSelectedLayer();
-    if (!layer) return;
-
-    Clipboard &clipboard = m_viewManager->getClipboard();
-    clipboard.clear();
-
-    MultiSelection::SelectionList selections = m_viewManager->getSelections();
-
-    for (MultiSelection::SelectionList::iterator i = selections.begin();
-         i != selections.end(); ++i) {
-        layer->copy(*i, clipboard);
-    }
-}
-
-void
-MainWindow::paste()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (!currentPane) return;
-
-    //!!! if we have no current layer, we should create one of the most
-    // appropriate type
-
-    Layer *layer = currentPane->getSelectedLayer();
-    if (!layer) return;
-
-    Clipboard &clipboard = m_viewManager->getClipboard();
-    Clipboard::PointList contents = clipboard.getPoints();
-/*
-    long minFrame = 0;
-    bool have = false;
-    for (int i = 0; i < contents.size(); ++i) {
-        if (!contents[i].haveFrame()) continue;
-        if (!have || contents[i].getFrame() < minFrame) {
-            minFrame = contents[i].getFrame();
-            have = true;
-        }
-    }
-
-    long frameOffset = long(m_viewManager->getGlobalCentreFrame()) - minFrame;
-
-    layer->paste(clipboard, frameOffset);
-*/
-    layer->paste(clipboard, 0, true);
-}
-
-void
-MainWindow::deleteSelected()
-{
-    if (m_paneStack->getCurrentPane() &&
-	m_paneStack->getCurrentPane()->getSelectedLayer()) {
-        
-        Layer *layer = m_paneStack->getCurrentPane()->getSelectedLayer();
-
-        if (m_viewManager && 
-            (m_viewManager->getToolMode() == ViewManager::MeasureMode)) {
-
-            layer->deleteCurrentMeasureRect();
-
-        } else {
-
-            MultiSelection::SelectionList selections =
-                m_viewManager->getSelections();
-            
-            for (MultiSelection::SelectionList::iterator i = selections.begin();
-                 i != selections.end(); ++i) {
-                layer->deleteSelection(*i);
-            }
-	}
-    }
-}
-
-void
-MainWindow::insertInstant()
-{
-    int frame = m_viewManager->getPlaybackFrame();
-    insertInstantAt(frame);
-}
-
-void
-MainWindow::insertInstantsAtBoundaries()
-{
-    MultiSelection::SelectionList selections = m_viewManager->getSelections();
-    for (MultiSelection::SelectionList::iterator i = selections.begin();
-         i != selections.end(); ++i) {
-        size_t start = i->getStartFrame();
-        size_t end = i->getEndFrame();
-        if (start != end) {
-            insertInstantAt(i->getStartFrame());
-            insertInstantAt(i->getEndFrame());
-        }
-    }
-}
-
-void
-MainWindow::insertInstantAt(size_t frame)
-{
-    Pane *pane = m_paneStack->getCurrentPane();
-    if (!pane) {
-        return;
-    }
-
-    Layer *layer = dynamic_cast<TimeInstantLayer *>
-        (pane->getSelectedLayer());
-
-    if (!layer) {
-        for (int i = pane->getLayerCount(); i > 0; --i) {
-            layer = dynamic_cast<TimeInstantLayer *>(pane->getLayer(i - 1));
-            if (layer) break;
-        }
-
-        if (!layer) {
-            CommandHistory::getInstance()->startCompoundOperation
-                (tr("Add Point"), true);
-            layer = m_document->createEmptyLayer(LayerFactory::TimeInstants);
-            if (layer) {
-                m_document->addLayerToView(pane, layer);
-                m_paneStack->setCurrentLayer(pane, layer);
-            }
-            CommandHistory::getInstance()->endCompoundOperation();
-        }
-    }
-
-    if (layer) {
-    
-        Model *model = layer->getModel();
-        SparseOneDimensionalModel *sodm = dynamic_cast<SparseOneDimensionalModel *>
-            (model);
-
-        if (sodm) {
-            SparseOneDimensionalModel::Point point
-                (frame, QString("%1").arg(sodm->getPointCount() + 1));
-            CommandHistory::getInstance()->addCommand
-                (new SparseOneDimensionalModel::AddPointCommand(sodm, point,
-                                                                tr("Add Points")),
-                 true, true); // bundled
-        }
-    }
-}
 
 void
 MainWindow::importAudio()
@@ -2369,7 +1852,7 @@ MainWindow::importAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudioFile(path, ReplaceMainModel) == FileOpenFailed) {
+	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("Audio file \"%1\" could not be opened").arg(path));
 	}
@@ -2382,7 +1865,7 @@ MainWindow::importMoreAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudioFile(path, CreateAdditionalModel) == FileOpenFailed) {
+	if (openAudio(path, CreateAdditionalModel) == FileOpenFailed) {
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("Audio file \"%1\" could not be opened").arg(path));
 	}
@@ -2517,96 +2000,12 @@ MainWindow::importLayer()
 
     if (path != "") {
 
-        if (openLayerFile(path) == FileOpenFailed) {
+        if (openLayer(path) == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("File %1 could not be opened.").arg(path));
             return;
         }
     }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openLayerFile(QString path)
-{
-    return openLayerFile(path, path);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openLayerFile(QString path, QString location)
-{
-    Pane *pane = m_paneStack->getCurrentPane();
-    
-    if (!pane) {
-	// shouldn't happen, as the menu action should have been disabled
-	std::cerr << "WARNING: MainWindow::openLayerFile: no current pane" << std::endl;
-	return FileOpenFailed;
-    }
-
-    if (!getMainModel()) {
-	// shouldn't happen, as the menu action should have been disabled
-	std::cerr << "WARNING: MainWindow::openLayerFile: No main model -- hence no default sample rate available" << std::endl;
-	return FileOpenFailed;
-    }
-
-    bool realFile = (location == path);
-
-    if (path.endsWith(".svl") || path.endsWith(".xml")) {
-
-        PaneCallback callback(this);
-        QFile file(path);
-        
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            std::cerr << "ERROR: MainWindow::openLayerFile("
-                      << location.toStdString()
-                      << "): Failed to open file for reading" << std::endl;
-            return FileOpenFailed;
-        }
-        
-        SVFileReader reader(m_document, callback, location);
-        reader.setCurrentPane(pane);
-        
-        QXmlInputSource inputSource(&file);
-        reader.parse(inputSource);
-        
-        if (!reader.isOK()) {
-            std::cerr << "ERROR: MainWindow::openLayerFile("
-                      << location.toStdString()
-                      << "): Failed to read XML file: "
-                      << reader.getErrorString().toStdString() << std::endl;
-            return FileOpenFailed;
-        }
-
-        m_recentFiles.addFile(location);
-
-        if (realFile) {
-            registerLastOpenedFilePath(FileFinder::LayerFile, path); // for file dialog
-        }
-
-        return FileOpenSucceeded;
-        
-    } else {
-        
-        Model *model = DataFileReaderFactory::load(path, getMainModel()->getSampleRate());
-        
-        if (model) {
-
-            Layer *newLayer = m_document->createImportedLayer(model);
-
-            if (newLayer) {
-
-                m_document->addLayerToView(pane, newLayer);
-                m_recentFiles.addFile(location);
-
-                if (realFile) {
-                    registerLastOpenedFilePath(FileFinder::LayerFile, path); // for file dialog
-                }
-
-                return FileOpenSucceeded;
-            }
-        }
-    }
-
-    return FileOpenFailed;
 }
 
 void
@@ -2760,220 +2159,6 @@ MainWindow::exportImage()
     delete image;
 }
 
-MainWindow::FileOpenStatus
-MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
-{
-    return openAudioFile(path, path, mode);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode)
-{
-    if (!(QFileInfo(path).exists() &&
-	  QFileInfo(path).isFile() &&
-	  QFileInfo(path).isReadable())) {
-	return FileOpenFailed;
-    }
-
-    m_openingAudioFile = true;
-
-    size_t rate = 0;
-
-    if (Preferences::getInstance()->getResampleOnLoad()) {
-        rate = m_playSource->getSourceSampleRate();
-    }
-
-    WaveFileModel *newModel = new WaveFileModel(FileSource(location), rate);
-
-    if (!newModel->isOK()) {
-	delete newModel;
-        m_openingAudioFile = false;
-	return FileOpenFailed;
-    }
-
-    bool setAsMain = true;
-    static bool prevSetAsMain = true;
-
-    bool realFile = (location == path);
-
-    //!!!
-    mode = CreateAdditionalModel;
-
-    if (mode == CreateAdditionalModel) {
-        if (m_document->getMainModel()) {
-            setAsMain = false;
-        }
-    } else if (mode == AskUser) {
-        if (m_document->getMainModel()) {
-
-            QStringList items;
-            items << tr("Replace the existing main waveform")
-                  << tr("Load this file into a new waveform pane");
-
-            bool ok = false;
-            QString item = ListInputDialog::getItem
-                (this, tr("Select target for import"),
-                 tr("You already have an audio waveform loaded.\nWhat would you like to do with the new audio file?"),
-                 items, prevSetAsMain ? 0 : 1, &ok);
-            
-            if (!ok || item.isEmpty()) {
-                delete newModel;
-                m_openingAudioFile = false;
-                return FileOpenCancelled;
-            }
-            
-            setAsMain = (item == items[0]);
-            prevSetAsMain = setAsMain;
-        }
-    }
-
-    if (setAsMain) {
-
-        Model *prevMain = getMainModel();
-        if (prevMain) {
-            m_playSource->removeModel(prevMain);
-            PlayParameterRepository::getInstance()->removeModel(prevMain);
-        }
-
-        PlayParameterRepository::getInstance()->addModel(newModel);
-
-	m_document->setMainModel(newModel);
-	setupMenus();
-
-	if (m_sessionFile == "") {
-	    setWindowTitle(tr("Vect: %1")
-			   .arg(QFileInfo(location).fileName()));
-	    CommandHistory::getInstance()->clear();
-	    CommandHistory::getInstance()->documentSaved();
-	    m_documentModified = false;
-	} else {
-	    setWindowTitle(tr("Vect: %1 [%2]")
-			   .arg(QFileInfo(m_sessionFile).fileName())
-			   .arg(QFileInfo(location).fileName()));
-	    if (m_documentModified) {
-		m_documentModified = false;
-		documentModified(); // so as to restore "(modified)" window title
-	    }
-	}
-
-        if (realFile) m_audioFile = path;
-
-    } else { // !setAsMain
-
-	CommandHistory::getInstance()->startCompoundOperation
-	    (tr("Import \"%1\"").arg(QFileInfo(location).fileName()), true);
-
-	m_document->addImportedModel(newModel);
-
-	AddPaneCommand *command = new AddPaneCommand(this);
-	CommandHistory::getInstance()->addCommand(command);
-
-	Pane *pane = command->getPane();
-
-	if (!m_timeRulerLayer) {
-	    m_timeRulerLayer = m_document->createMainModelLayer
-		(LayerFactory::TimeRuler);
-	}
-
-//!!!	m_document->addLayerToView(pane, m_timeRulerLayer);
-
-	Layer *newLayer = m_document->createImportedLayer(newModel);
-
-	if (newLayer) {
-	    m_document->addLayerToView(pane, newLayer);
-	}
-	
-	CommandHistory::getInstance()->endCompoundOperation();
-    }
-
-    updateMenuStates();
-    m_recentFiles.addFile(location);
-    if (realFile) {
-        registerLastOpenedFilePath(FileFinder::AudioFile, path); // for file dialog
-    }
-    m_openingAudioFile = false;
-
-    currentPaneChanged(m_paneStack->getCurrentPane());
-
-    return FileOpenSucceeded;
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openPlaylistFile(QString path, AudioFileOpenMode mode)
-{
-    return openPlaylistFile(path, path, mode);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openPlaylistFile(QString path, QString location, AudioFileOpenMode mode)
-{
-    if (!(QFileInfo(path).exists() &&
-	  QFileInfo(path).isFile() &&
-	  QFileInfo(path).isReadable())) {
-	return FileOpenFailed;
-    }
-    
-    std::set<QString> extensions;
-    PlaylistFileReader::getSupportedExtensions(extensions);
-    QString extension = QFileInfo(path).suffix();
-    if (extensions.find(extension) == extensions.end()) return FileOpenFailed;
-
-    PlaylistFileReader reader(path);
-    if (!reader.isOK()) return FileOpenFailed;
-
-    PlaylistFileReader::Playlist playlist = reader.load();
-
-    bool someSuccess = false;
-
-    for (PlaylistFileReader::Playlist::const_iterator i = playlist.begin();
-         i != playlist.end(); ++i) {
-
-        FileOpenStatus status = openURL(*i, mode);
-
-        if (status == FileOpenCancelled) {
-            return FileOpenCancelled;
-        }
-
-        if (status == FileOpenSucceeded) {
-            someSuccess = true;
-            mode = CreateAdditionalModel;
-        }
-    }
-
-    if (someSuccess) return FileOpenSucceeded;
-    else return FileOpenFailed;
-}
-
-void
-MainWindow::createPlayTarget()
-{
-    if (m_playTarget) return;
-
-    m_playTarget = AudioTargetFactory::createCallbackTarget(m_playSource);
-    if (!m_playTarget) {
-	QMessageBox::warning
-	    (this, tr("Couldn't open audio device"),
-	     tr("Could not open an audio device for playback.\nAudio playback will not be available during this session.\n"),
-	     QMessageBox::Ok);
-    }
-    connect(m_fader, SIGNAL(valueChanged(float)),
-	    m_playTarget, SLOT(setOutputGain(float)));
-}
-
-WaveFileModel *
-MainWindow::getMainModel()
-{
-    if (!m_document) return 0;
-    return m_document->getMainModel();
-}
-
-const WaveFileModel *
-MainWindow::getMainModel() const
-{
-    if (!m_document) return 0;
-    return m_document->getMainModel();
-}
-
 void
 MainWindow::newSession()
 {
@@ -3003,33 +2188,6 @@ MainWindow::newSession()
     CommandHistory::getInstance()->documentSaved();
     documentRestored();
     updateMenuStates();
-}
-
-void
-MainWindow::createDocument()
-{
-    m_document = new Document;
-
-    connect(m_document, SIGNAL(layerAdded(Layer *)),
-	    this, SLOT(layerAdded(Layer *)));
-    connect(m_document, SIGNAL(layerRemoved(Layer *)),
-	    this, SLOT(layerRemoved(Layer *)));
-    connect(m_document, SIGNAL(layerAboutToBeDeleted(Layer *)),
-	    this, SLOT(layerAboutToBeDeleted(Layer *)));
-    connect(m_document, SIGNAL(layerInAView(Layer *, bool)),
-	    this, SLOT(layerInAView(Layer *, bool)));
-
-    connect(m_document, SIGNAL(modelAdded(Model *)),
-	    this, SLOT(modelAdded(Model *)));
-    connect(m_document, SIGNAL(mainModelChanged(WaveFileModel *)),
-	    this, SLOT(mainModelChanged(WaveFileModel *)));
-    connect(m_document, SIGNAL(modelAboutToBeDeleted(Model *)),
-	    this, SLOT(modelAboutToBeDeleted(Model *)));
-
-    connect(m_document, SIGNAL(modelGenerationFailed(QString)),
-            this, SLOT(modelGenerationFailed(QString)));
-    connect(m_document, SIGNAL(modelRegenerationFailed(QString, QString)),
-            this, SLOT(modelRegenerationFailed(QString, QString)));
 }
 
 void
@@ -3092,7 +2250,7 @@ MainWindow::openSession()
 
     if (openSessionFile(path) == FileOpenFailed) {
 	QMessageBox::critical(this, tr("Failed to open file"),
-			      tr("Session file \"%1\" could not be opened").arg(path));
+			      tr("<b>File open failed</b><p>Session file \"%1\" could not be opened").arg(path));
     }
 }
 
@@ -3103,36 +2261,18 @@ MainWindow::openSomething()
     if (orig == "") orig = ".";
     else orig = QFileInfo(orig).absoluteDir().canonicalPath();
 
-    bool canImportLayer = (getMainModel() != 0 &&
-                           m_paneStack != 0 &&
-                           m_paneStack->getCurrentPane() != 0);
-
     QString path = getOpenFileName(FileFinder::AnyFile);
 
     if (path.isEmpty()) return;
 
-    if (path.endsWith(".sv")) {
+    FileOpenStatus status = open(path, AskUser);
 
-        if (!checkSaveModified()) return;
-
-        if (openSessionFile(path) == FileOpenFailed) {
-            QMessageBox::critical(this, tr("Failed to open file"),
-                                  tr("Session file \"%1\" could not be opened").arg(path));
-        }
-
-    } else {
-
-        if (openPlaylistFile(path, AskUser) == FileOpenFailed) {
-
-            if (openAudioFile(path, AskUser) == FileOpenFailed) {
-
-                if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
-
-                    QMessageBox::critical(this, tr("Failed to open file"),
-                                          tr("File \"%1\" could not be opened").arg(path));
-                }
-            }
-        }
+    if (status == FileOpenFailed) {
+        QMessageBox::critical(this, tr("Failed to open file"),
+                              tr("<b>File open failed</b><p>File \"%1\" could not be opened").arg(path));
+    } else if (status == FileOpenWrongMode) {
+        QMessageBox::critical(this, tr("Failed to open file"),
+                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     }
 }
 
@@ -3155,9 +2295,14 @@ MainWindow::openLocation()
 
     if (text.isEmpty()) return;
 
-    if (openURL(QUrl(text)) == FileOpenFailed) {
+    FileOpenStatus status = open(text);
+
+    if (status == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open location"),
-                              tr("URL \"%1\" could not be opened").arg(text));
+                              tr("<b>Open failed</b><p>URL \"%1\" could not be opened").arg(text));
+    } else if (status == FileOpenWrongMode) {
+        QMessageBox::critical(this, tr("Failed to open location"),
+                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     }
 }
 
@@ -3176,211 +2321,71 @@ MainWindow::openRecentFile()
     QString path = action->text();
     if (path == "") return;
 
-    QUrl url(path);
-    if (FileSource::canHandleScheme(url)) {
-        openURL(url);
+    FileOpenStatus status = open(path);
+
+    if (status == FileOpenFailed) {
+        QMessageBox::critical(this, tr("Failed to open location"),
+                              tr("<b>Open failed</b><p>File or URL \"%1\" could not be opened").arg(path));
+    } else if (status == FileOpenWrongMode) {
+        QMessageBox::critical(this, tr("Failed to open location"),
+                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+    }
+}
+
+void
+MainWindow::paneAdded(Pane *pane)
+{
+    if (m_overview) m_overview->registerView(pane);
+}    
+
+void
+MainWindow::paneHidden(Pane *pane)
+{
+    if (m_overview) m_overview->unregisterView(pane); 
+}    
+
+void
+MainWindow::paneAboutToBeDeleted(Pane *pane)
+{
+    if (m_overview) m_overview->unregisterView(pane); 
+}    
+
+void
+MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
+{
+    if (pane) m_paneStack->setCurrentPane(pane);
+
+    for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
+
+        FileOpenStatus status = open(*i, ReplaceCurrentPane);
+
+        if (status == FileOpenFailed) {
+            QMessageBox::critical(this, tr("Failed to open dropped URL"),
+                                  tr("<b>Open failed</b><p>Dropped URL \"%1\" could not be opened").arg(*i));
+        } else if (status == FileOpenWrongMode) {
+            QMessageBox::critical(this, tr("Failed to open dropped URL"),
+                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+        }
+    }
+}
+
+void
+MainWindow::paneDropAccepted(Pane *pane, QString text)
+{
+    if (pane) m_paneStack->setCurrentPane(pane);
+
+    QUrl testUrl(text);
+    if (testUrl.scheme() == "file" || 
+        testUrl.scheme() == "http" || 
+        testUrl.scheme() == "ftp") {
+        QStringList list;
+        list.push_back(text);
+        paneDropAccepted(pane, list);
         return;
     }
 
-    if (path.endsWith("sv")) {
-
-        if (!checkSaveModified()) return;
-
-        if (openSessionFile(path) == FileOpenFailed) {
-            QMessageBox::critical(this, tr("Failed to open file"),
-                                  tr("Session file \"%1\" could not be opened").arg(path));
-        }
-
-    } else {
-
-        if (openPlaylistFile(path, AskUser) == FileOpenFailed) {
-
-            if (openAudioFile(path, AskUser) == FileOpenFailed) {
-
-                bool canImportLayer = (getMainModel() != 0 &&
-                                       m_paneStack != 0 &&
-                                       m_paneStack->getCurrentPane() != 0);
-                
-                if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
-                    
-                    QMessageBox::critical(this, tr("Failed to open file"),
-                                          tr("File \"%1\" could not be opened").arg(path));
-                }
-            }
-        }
-    }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openURL(QUrl url, AudioFileOpenMode mode)
-{
-    if (url.scheme().toLower() == "file") {
-
-        return openSomeFile(url.toLocalFile(), mode);
-
-    } else if (!FileSource::canHandleScheme(url)) {
-
-        QMessageBox::critical(this, tr("Unsupported scheme in URL"),
-                              tr("The URL scheme \"%1\" is not supported")
-                              .arg(url.scheme()));
-        return FileOpenFailed;
-
-    } else {
-        FileSource rf(url);
-        rf.waitForData();
-        if (!rf.isOK()) {
-            QMessageBox::critical(this, tr("File download failed"),
-                                  tr("Failed to download URL \"%1\": %2")
-                                  .arg(url.toString()).arg(rf.getErrorString()));
-            return FileOpenFailed;
-        }
-        FileOpenStatus status;
-        if ((status = openSomeFile(rf.getLocalFilename(), url.toString(),
-                                   mode)) !=
-            FileOpenSucceeded) {
-//            rf.deleteLocalFile();
-        }
-        return status;
-    }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openURL(QString ustr, AudioFileOpenMode mode)
-{
-    // This function is used when we don't know whether the string is
-    // an encoded or human-readable url
-
-    QUrl url(ustr);
-
-    if (url.scheme().toLower() == "file") {
-
-        return openSomeFile(url.toLocalFile(), mode);
-
-    } else if (!FileSource::canHandleScheme(url)) {
-
-        QMessageBox::critical(this, tr("Unsupported scheme in URL"),
-                              tr("The URL scheme \"%1\" is not supported")
-                              .arg(url.scheme()));
-        return FileOpenFailed;
-
-    } else {
-        FileSource rf(url);
-        rf.waitForData();
-        if (!rf.isOK()) {
-            // rf was created on the assumption that ustr was
-            // human-readable.  Let's try again, this time assuming it
-            // was already encoded.
-            std::cerr << "MainWindow::openURL: Failed to retrieve URL \""
-                      << ustr.toStdString() << "\" as human-readable URL; "
-                      << "trying again treating it as encoded URL"
-                      << std::endl;
-            url.setEncodedUrl(ustr.toAscii());
-            return openURL(url, mode);
-        }
-
-        FileOpenStatus status;
-        if ((status = openSomeFile(rf.getLocalFilename(), ustr, mode)) !=
-            FileOpenSucceeded) {
-//            rf.deleteLocalFile();
-        }
-        return status;
-    }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openSomeFile(QString path, AudioFileOpenMode mode)
-{
-    return openSomeFile(path, path, mode);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openSomeFile(QString path, QString location,
-                         AudioFileOpenMode mode)
-{
-    FileOpenStatus status;
-
-    bool canImportLayer = (getMainModel() != 0 &&
-                           m_paneStack != 0 &&
-                           m_paneStack->getCurrentPane() != 0);
-
-    if ((status = openPlaylistFile(path, location, mode)) != FileOpenFailed) {
-        return status;
-    } else if ((status = openAudioFile(path, location, mode)) != FileOpenFailed) {
-        return status;
-    } else if ((status = openSessionFile(path, location)) != FileOpenFailed) {
-	return status;
-    } else if (!canImportLayer) {
-        return FileOpenFailed;
-    } else if ((status = openLayerFile(path, location)) != FileOpenFailed) {
-        return status;
-    } else {
-	return FileOpenFailed;
-    }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openSessionFile(QString path)
-{
-    return openSessionFile(path, path);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openSessionFile(QString path, QString location)
-{
-    BZipFileDevice bzFile(path);
-    if (!bzFile.open(QIODevice::ReadOnly)) {
-        std::cerr << "Failed to open session file \"" << location.toStdString()
-                  << "\": " << bzFile.errorString().toStdString() << std::endl;
-        return FileOpenFailed;
-    }
-
-    if (!checkSaveModified()) return FileOpenCancelled;
-
-    QString error;
-    closeSession();
-    createDocument();
-
-    PaneCallback callback(this);
-    m_viewManager->clearSelections();
-
-    SVFileReader reader(m_document, callback, location);
-    QXmlInputSource inputSource(&bzFile);
-    reader.parse(inputSource);
-    
-    if (!reader.isOK()) {
-        error = tr("SV XML file read error:\n%1").arg(reader.getErrorString());
-    }
-    
-    bzFile.close();
-
-    bool ok = (error == "");
-
-    bool realFile = (location == path);
-    
-    if (ok) {
-
-	setWindowTitle(tr("Vect: %1")
-		       .arg(QFileInfo(location).fileName()));
-
-	if (realFile) m_sessionFile = path;
-
-	setupMenus();
-	CommandHistory::getInstance()->clear();
-	CommandHistory::getInstance()->documentSaved();
-	m_documentModified = false;
-	updateMenuStates();
-
-        m_recentFiles.addFile(location);
-
-        if (realFile) {
-            registerLastOpenedFilePath(FileFinder::SessionFile, path); // for file dialog
-        }
-
-    } else {
-	setWindowTitle(tr("Vect"));
-    }
-
-    return ok ? FileOpenSucceeded : FileOpenFailed;
+    //!!! open as text -- but by importing as if a CSV, or just adding
+    //to a text layer?
 }
 
 void
@@ -3419,6 +2424,8 @@ MainWindow::closeEvent(QCloseEvent *e)
         m_layerTreeView->isVisible()) {
         delete m_layerTreeView;
     }
+
+    closeSession();
 
     e->accept();
     return;
@@ -3547,239 +2554,12 @@ MainWindow::saveSessionAs()
     }
 }
 
-bool
-MainWindow::saveSessionFile(QString path)
-{
-    BZipFileDevice bzFile(path);
-    if (!bzFile.open(QIODevice::WriteOnly)) {
-        std::cerr << "Failed to open session file \"" << path.toStdString()
-                  << "\" for writing: "
-                  << bzFile.errorString().toStdString() << std::endl;
-        return false;
-    }
-
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
-    QTextStream out(&bzFile);
-    toXml(out);
-    out.flush();
-
-    QApplication::restoreOverrideCursor();
-
-    if (!bzFile.isOK()) {
-	QMessageBox::critical(this, tr("Failed to write file"),
-			      tr("Failed to write to file \"%1\": %2")
-			      .arg(path).arg(bzFile.errorString()));
-        bzFile.close();
-	return false;
-    }
-
-    bzFile.close();
-    return true;
-}
-
-void
-MainWindow::toXml(QTextStream &out)
-{
-    QString indent("  ");
-
-    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    out << "<!DOCTYPE sonic-visualiser>\n";
-    out << "<sv>\n";
-
-    m_document->toXml(out, "", "");
-
-    out << "<display>\n";
-
-    out << QString("  <window width=\"%1\" height=\"%2\"/>\n")
-	.arg(width()).arg(height());
-
-    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
-
-	Pane *pane = m_paneStack->getPane(i);
-
-	if (pane) {
-            pane->toXml(out, indent);
-	}
-    }
-
-    out << "</display>\n";
-
-    m_viewManager->getSelection().toXml(out);
-
-    out << "</sv>\n";
-}
-
-Pane *
-MainWindow::addPaneToStack()
-{
-    AddPaneCommand *command = new AddPaneCommand(this);
-    CommandHistory::getInstance()->addCommand(command);
-    return command->getPane();
-}
-
-void
-MainWindow::zoomIn()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (currentPane) currentPane->zoom(true);
-}
-
-void
-MainWindow::zoomOut()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (currentPane) currentPane->zoom(false);
-}
-
-void
-MainWindow::zoomToFit()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (!currentPane) return;
-
-    Model *model = getMainModel();
-    if (!model) return;
-    
-    size_t start = model->getStartFrame();
-    size_t end = model->getEndFrame();
-    size_t pixels = currentPane->width();
-
-    size_t sw = currentPane->getVerticalScaleWidth();
-    if (pixels > sw * 2) pixels -= sw * 2;
-    else pixels = 1;
-    if (pixels > 4) pixels -= 4;
-
-    size_t zoomLevel = (end - start) / pixels;
-
-    currentPane->setZoomLevel(zoomLevel);
-    currentPane->setCentreFrame((start + end) / 2);
-}
-
-void
-MainWindow::zoomDefault()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (currentPane) currentPane->setZoomLevel(1024);
-}
-
-void
-MainWindow::scrollLeft()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (currentPane) currentPane->scroll(false, false);
-}
-
-void
-MainWindow::jumpLeft()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (currentPane) currentPane->scroll(false, true);
-}
-
-void
-MainWindow::scrollRight()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (currentPane) currentPane->scroll(true, false);
-}
-
-void
-MainWindow::jumpRight()
-{
-    Pane *currentPane = m_paneStack->getCurrentPane();
-    if (currentPane) currentPane->scroll(true, true);
-}
-
-void
-MainWindow::showNoOverlays()
-{
-    m_viewManager->setOverlayMode(ViewManager::NoOverlays);
-}
-
-void
-MainWindow::showMinimalOverlays()
-{
-    m_viewManager->setOverlayMode(ViewManager::MinimalOverlays);
-}
-
-void
-MainWindow::showStandardOverlays()
-{
-    m_viewManager->setOverlayMode(ViewManager::StandardOverlays);
-}
-
-void
-MainWindow::showAllOverlays()
-{
-    m_viewManager->setOverlayMode(ViewManager::AllOverlays);
-}
-
-void
-MainWindow::toggleZoomWheels()
-{
-    if (m_viewManager->getZoomWheelsEnabled()) {
-        m_viewManager->setZoomWheelsEnabled(false);
-    } else {
-        m_viewManager->setZoomWheelsEnabled(true);
-    }
-}
-
-void
-MainWindow::togglePropertyBoxes()
-{
-    if (m_paneStack->getLayoutStyle() == PaneStack::NoPropertyStacks) {
-        if (Preferences::getInstance()->getPropertyBoxLayout() ==
-            Preferences::VerticallyStacked) {
-            m_paneStack->setLayoutStyle(PaneStack::PropertyStackPerPaneLayout);
-        } else {
-            m_paneStack->setLayoutStyle(PaneStack::SinglePropertyStackLayout);
-        }
-    } else {
-        m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
-    }
-}
-
-void
-MainWindow::toggleStatusBar()
-{
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    bool sb = settings.value("showstatusbar", true).toBool();
-
-    if (sb) {
-        statusBar()->hide();
-    } else {
-        statusBar()->show();
-    }
-
-    settings.setValue("showstatusbar", !sb);
-
-    settings.endGroup();
-}
-
 void
 MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 {
-    if (name == "Property Box Layout") {
-        if (m_paneStack->getLayoutStyle() != PaneStack::NoPropertyStacks) {
-            if (Preferences::getInstance()->getPropertyBoxLayout() ==
-                Preferences::VerticallyStacked) {
-                m_paneStack->setLayoutStyle(PaneStack::PropertyStackPerPaneLayout);
-            } else {
-                m_paneStack->setLayoutStyle(PaneStack::SinglePropertyStackLayout);
-            }
-        }
-    } else if (name == "Background Mode" && m_viewManager) {
-        Preferences::BackgroundMode mode =
-            Preferences::getInstance()->getBackgroundMode();
-        if (mode == Preferences::BackgroundFromTheme) {
-            m_viewManager->setGlobalDarkBackground(m_initialDarkBackground);
-        } else if (mode == Preferences::DarkBackground) {
-            m_viewManager->setGlobalDarkBackground(true);
-        } else {
-            m_viewManager->setGlobalDarkBackground(false);
-        }
+    MainWindowBase::preferenceChanged(name);
+
+    if (name == "Background Mode" && m_viewManager) {
         if (m_viewManager->getGlobalDarkBackground()) {
             m_panLayer->setBaseColour
                 (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
@@ -3787,171 +2567,7 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
             m_panLayer->setBaseColour
                 (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
         }      
-    }            
-}
-
-void
-MainWindow::play()
-{
-    if (m_playSource->isPlaying()) {
-        stop();
-    } else {
-        playbackFrameChanged(m_viewManager->getPlaybackFrame());
-	m_playSource->play(m_viewManager->getPlaybackFrame());
-    }
-}
-
-void
-MainWindow::ffwd()
-{
-    if (!getMainModel()) return;
-
-    int frame = m_viewManager->getPlaybackFrame();
-    ++frame;
-
-    Layer *layer = getSnapLayer();
-    size_t sr = getMainModel()->getSampleRate();
-
-    if (!layer) {
-
-        frame = RealTime::realTime2Frame
-            (RealTime::frame2RealTime(frame, sr) + RealTime(2, 0), sr);
-        if (frame > int(getMainModel()->getEndFrame())) {
-            frame = getMainModel()->getEndFrame();
-        }
-
-    } else {
-
-        size_t resolution = 0;
-        if (!layer->snapToFeatureFrame(m_paneStack->getCurrentPane(),
-                                       frame, resolution, Layer::SnapRight)) {
-            frame = getMainModel()->getEndFrame();
-        }
-    }
-        
-    if (frame < 0) frame = 0;
-
-    if (m_viewManager->getPlaySelectionMode()) {
-        frame = m_viewManager->constrainFrameToSelection(size_t(frame));
-    }
-    
-    m_viewManager->setPlaybackFrame(frame);
-}
-
-void
-MainWindow::ffwdEnd()
-{
-    if (!getMainModel()) return;
-
-    size_t frame = getMainModel()->getEndFrame();
-
-    if (m_viewManager->getPlaySelectionMode()) {
-        frame = m_viewManager->constrainFrameToSelection(frame);
-    }
-
-    m_viewManager->setPlaybackFrame(frame);
-}
-
-void
-MainWindow::rewind()
-{
-    if (!getMainModel()) return;
-
-    int frame = m_viewManager->getPlaybackFrame();
-    if (frame > 0) --frame;
-
-    Layer *layer = getSnapLayer();
-    size_t sr = getMainModel()->getSampleRate();
-    
-    // when rewinding during playback, we want to allow a period
-    // following a rewind target point at which the rewind will go to
-    // the prior point instead of the immediately neighbouring one
-    if (m_playSource && m_playSource->isPlaying()) {
-        RealTime ct = RealTime::frame2RealTime(frame, sr);
-        ct = ct - RealTime::fromSeconds(0.25);
-        if (ct < RealTime::zeroTime) ct = RealTime::zeroTime;
-//        std::cerr << "rewind: frame " << frame << " -> ";
-        frame = RealTime::realTime2Frame(ct, sr);
-//        std::cerr << frame << std::endl;
-    }
-
-    if (!layer) {
-        
-        frame = RealTime::realTime2Frame
-            (RealTime::frame2RealTime(frame, sr) - RealTime(2, 0), sr);
-        if (frame < int(getMainModel()->getStartFrame())) {
-            frame = getMainModel()->getStartFrame();
-        }
-
-    } else {
-
-        size_t resolution = 0;
-        if (!layer->snapToFeatureFrame(m_paneStack->getCurrentPane(),
-                                       frame, resolution, Layer::SnapLeft)) {
-            frame = getMainModel()->getStartFrame();
-        }
-    }
-
-    if (frame < 0) frame = 0;
-
-    if (m_viewManager->getPlaySelectionMode()) {
-        frame = m_viewManager->constrainFrameToSelection(size_t(frame));
-    }
-
-    m_viewManager->setPlaybackFrame(frame);
-}
-
-void
-MainWindow::rewindStart()
-{
-    if (!getMainModel()) return;
-
-    size_t frame = getMainModel()->getStartFrame();
-
-    if (m_viewManager->getPlaySelectionMode()) {
-        frame = m_viewManager->constrainFrameToSelection(frame);
-    }
-
-    m_viewManager->setPlaybackFrame(frame);
-}
-
-Layer *
-MainWindow::getSnapLayer() const
-{
-    Pane *pane = m_paneStack->getCurrentPane();
-    if (!pane) return 0;
-
-    Layer *layer = pane->getSelectedLayer();
-
-    if (!dynamic_cast<TimeInstantLayer *>(layer) &&
-        !dynamic_cast<TimeValueLayer *>(layer) &&
-        !dynamic_cast<TimeRulerLayer *>(layer)) {
-
-        layer = 0;
-
-        for (int i = pane->getLayerCount(); i > 0; --i) {
-            Layer *l = pane->getLayer(i-1);
-            if (dynamic_cast<TimeRulerLayer *>(l)) {
-                layer = l;
-                break;
-            }
-        }
-    }
-
-    return layer;
-}
-
-void
-MainWindow::stop()
-{
-    m_playSource->stop();
-
-    if (m_paneStack && m_paneStack->getCurrentPane()) {
-        updateVisibleRangeDisplay(m_paneStack->getCurrentPane());
-    } else {
-        m_myStatusMessage = "";
-        statusBar()->showMessage("");
-    }
+    }    
 }
 
 void
@@ -4047,92 +2663,6 @@ MainWindow::addPane(const PaneConfiguration &configuration, QString text)
     CommandHistory::getInstance()->endCompoundOperation();
 
     updateMenuStates();
-}
-
-MainWindow::AddPaneCommand::AddPaneCommand(MainWindow *mw) :
-    m_mw(mw),
-    m_pane(0),
-    m_prevCurrentPane(0),
-    m_added(false)
-{
-}
-
-MainWindow::AddPaneCommand::~AddPaneCommand()
-{
-    if (m_pane && !m_added) {
-	m_mw->m_paneStack->deletePane(m_pane);
-    }
-}
-
-QString
-MainWindow::AddPaneCommand::getName() const
-{
-    return tr("Add Pane");
-}
-
-void
-MainWindow::AddPaneCommand::execute()
-{
-    if (!m_pane) {
-	m_prevCurrentPane = m_mw->m_paneStack->getCurrentPane();
-	m_pane = m_mw->m_paneStack->addPane();
-
-        connect(m_pane, SIGNAL(contextHelpChanged(const QString &)),
-                m_mw, SLOT(contextHelpChanged(const QString &)));
-    } else {
-	m_mw->m_paneStack->showPane(m_pane);
-    }
-
-    m_mw->m_paneStack->setCurrentPane(m_pane);
-    m_mw->m_overview->registerView(m_pane);
-    m_added = true;
-}
-
-void
-MainWindow::AddPaneCommand::unexecute()
-{
-    m_mw->m_paneStack->hidePane(m_pane);
-    m_mw->m_paneStack->setCurrentPane(m_prevCurrentPane);
-    m_mw->m_overview->unregisterView(m_pane); 
-    m_added = false;
-}
-
-MainWindow::RemovePaneCommand::RemovePaneCommand(MainWindow *mw, Pane *pane) :
-    m_mw(mw),
-    m_pane(pane),
-    m_added(true)
-{
-}
-
-MainWindow::RemovePaneCommand::~RemovePaneCommand()
-{
-    if (m_pane && !m_added) {
-	m_mw->m_paneStack->deletePane(m_pane);
-    }
-}
-
-QString
-MainWindow::RemovePaneCommand::getName() const
-{
-    return tr("Remove Pane");
-}
-
-void
-MainWindow::RemovePaneCommand::execute()
-{
-    m_prevCurrentPane = m_mw->m_paneStack->getCurrentPane();
-    m_mw->m_paneStack->hidePane(m_pane);
-    m_mw->m_overview->unregisterView(m_pane);
-    m_added = false;
-}
-
-void
-MainWindow::RemovePaneCommand::unexecute()
-{
-    m_mw->m_paneStack->showPane(m_pane);
-    m_mw->m_paneStack->setCurrentPane(m_prevCurrentPane);
-    m_mw->m_overview->registerView(m_pane);
-    m_added = true;
 }
 
 void
@@ -4266,45 +2796,6 @@ MainWindow::addLayer()
 }
 
 void
-MainWindow::deleteCurrentPane()
-{
-    CommandHistory::getInstance()->startCompoundOperation
-	(tr("Delete Pane"), true);
-
-    Pane *pane = m_paneStack->getCurrentPane();
-    if (pane) {
-	while (pane->getLayerCount() > 0) {
-	    Layer *layer = pane->getLayer(0);
-	    if (layer) {
-		m_document->removeLayerFromView(pane, layer);
-	    } else {
-		break;
-	    }
-	}
-
-	RemovePaneCommand *command = new RemovePaneCommand(this, pane);
-	CommandHistory::getInstance()->addCommand(command);
-    }
-
-    CommandHistory::getInstance()->endCompoundOperation();
-
-    updateMenuStates();
-}
-
-void
-MainWindow::deleteCurrentLayer()
-{
-    Pane *pane = m_paneStack->getCurrentPane();
-    if (pane) {
-	Layer *layer = pane->getSelectedLayer();
-	if (layer) {
-	    m_document->removeLayerFromView(pane, layer);
-	}
-    }
-    updateMenuStates();
-}
-
-void
 MainWindow::renameCurrentLayer()
 {
     Pane *pane = m_paneStack->getCurrentPane();
@@ -4402,68 +2893,6 @@ MainWindow::restoreNormalPlayback()
 }
 
 void
-MainWindow::playbackFrameChanged(unsigned long frame)
-{
-    if (!(m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
-
-    RealTime now = RealTime::frame2RealTime
-        (frame, getMainModel()->getSampleRate());
-
-    if (now.sec == m_lastPlayStatusSec) return;
-
-    RealTime then = RealTime::frame2RealTime
-        (m_playSource->getPlayEndFrame(), getMainModel()->getSampleRate());
-
-    QString nowStr;
-    QString thenStr;
-    QString remainingStr;
-
-    if (then.sec > 10) {
-        nowStr = now.toSecText().c_str();
-        thenStr = then.toSecText().c_str();
-        remainingStr = (then - now).toSecText().c_str();
-        m_lastPlayStatusSec = now.sec;
-    } else {
-        nowStr = now.toText(true).c_str();
-        thenStr = then.toText(true).c_str();
-        remainingStr = (then - now).toText(true).c_str();
-    }        
-
-    m_myStatusMessage = tr("Playing: %1 of %2 (%3 remaining)")
-        .arg(nowStr).arg(thenStr).arg(remainingStr);
-
-    statusBar()->showMessage(m_myStatusMessage);
-}
-
-void
-MainWindow::globalCentreFrameChanged(unsigned long )
-{
-    if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
-    Pane *p = 0;
-    if (!m_paneStack || !(p = m_paneStack->getCurrentPane())) return;
-    if (!p->getFollowGlobalPan()) return;
-    updateVisibleRangeDisplay(p);
-}
-
-void
-MainWindow::viewCentreFrameChanged(View *v, unsigned long )
-{
-    if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
-    Pane *p = 0;
-    if (!m_paneStack || !(p = m_paneStack->getCurrentPane())) return;
-    if (v == p) updateVisibleRangeDisplay(p);
-}
-
-void
-MainWindow::viewZoomLevelChanged(View *v, unsigned long , bool )
-{
-    if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
-    Pane *p = 0;
-    if (!m_paneStack || !(p = m_paneStack->getCurrentPane())) return;
-    if (v == p) updateVisibleRangeDisplay(p);
-}
-
-void
 MainWindow::updateVisibleRangeDisplay(Pane *p) const
 {
     if (!getMainModel() || !p) {
@@ -4545,68 +2974,23 @@ MainWindow::audioOverloadPluginDisabled()
 }
 
 void
-MainWindow::layerAdded(Layer *)
+MainWindow::layerRemoved(Layer *layer)
 {
-//    std::cerr << "MainWindow::layerAdded(" << layer << ")" << std::endl;
-//    setupExistingLayersMenu();
-    updateMenuStates();
-}
-
-void
-MainWindow::layerRemoved(Layer *)
-{
-//    std::cerr << "MainWindow::layerRemoved(" << layer << ")" << std::endl;
     setupExistingLayersMenus();
-    updateMenuStates();
-}
-
-void
-MainWindow::layerAboutToBeDeleted(Layer *layer)
-{
-//    std::cerr << "MainWindow::layerAboutToBeDeleted(" << layer << ")" << std::endl;
-    if (layer == m_timeRulerLayer) {
-//	std::cerr << "(this is the time ruler layer)" << std::endl;
-	m_timeRulerLayer = 0;
-    }
+    MainWindowBase::layerRemoved(layer);
 }
 
 void
 MainWindow::layerInAView(Layer *layer, bool inAView)
 {
-//    std::cerr << "MainWindow::layerInAView(" << layer << "," << inAView << ")" << std::endl;
-
-    // Check whether we need to add or remove model from play source
-    Model *model = layer->getModel();
-    if (model) {
-        if (inAView) {
-            m_playSource->addModel(model);
-        } else {
-            bool found = false;
-            for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
-                Pane *pane = m_paneStack->getPane(i);
-                if (!pane) continue;
-                for (int j = 0; j < pane->getLayerCount(); ++j) {
-                    Layer *pl = pane->getLayer(j);
-                    if (pl && pl->getModel() == model) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) break;
-            }
-            if (!found) m_playSource->removeModel(model);
-        }
-    }
-
     setupExistingLayersMenus();
-    updateMenuStates();
+    MainWindowBase::layerInAView(layer, inAView);
 }
 
 void
 MainWindow::modelAdded(Model *model)
 {
-//    std::cerr << "MainWindow::modelAdded(" << model << ")" << std::endl;
-    m_playSource->addModel(model);
+    MainWindowBase::modelAdded(model);
     if (dynamic_cast<DenseTimeValueModel *>(model)) {
         setupPaneAndLayerMenus();
     }
@@ -4615,22 +2999,14 @@ MainWindow::modelAdded(Model *model)
 void
 MainWindow::mainModelChanged(WaveFileModel *model)
 {
-//    std::cerr << "MainWindow::mainModelChanged(" << model << ")" << std::endl;
-    updateDescriptionLabel();
     m_panLayer->setModel(model);
-    if (model) m_viewManager->setMainModelSampleRate(model->getSampleRate());
-    if (model && !m_playTarget && m_audioOutput) createPlayTarget();
-}
 
-void
-MainWindow::modelAboutToBeDeleted(Model *model)
-{
-//    std::cerr << "MainWindow::modelAboutToBeDeleted(" << model << ")" << std::endl;
-    if (model == m_viewManager->getPlaybackModel()) {
-        m_viewManager->setPlaybackModel(0);
+    MainWindowBase::mainModelChanged(model);
+
+    if (m_playTarget) {
+        connect(m_fader, SIGNAL(valueChanged(float)),
+                m_playTarget, SLOT(setOutputGain(float)));
     }
-    m_playSource->removeModel(model);
-    FFTDataServer::modelAboutToBeDeleted(model);
 }
 
 void
@@ -4664,19 +3040,6 @@ MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
 }
 
 void
-MainWindow::propertyStacksResized()
-{
-/*
-    std::cerr << "MainWindow::propertyStacksResized" << std::endl;
-    Pane *pane = m_paneStack->getCurrentPane();
-    if (pane && m_overview) {
-        std::cerr << "Fixed width: "  << pane->width() << std::endl;
-        m_overview->setFixedWidth(pane->width());
-    }
-*/
-}
-
-void
 MainWindow::showLayerTree()
 {
     if (!m_layerTreeView.isNull()) {
@@ -4696,23 +3059,6 @@ MainWindow::showLayerTree()
 }
 
 void
-MainWindow::pollOSC()
-{
-    if (!m_oscQueue || m_oscQueue->isEmpty()) return;
-    std::cerr << "MainWindow::pollOSC: have " << m_oscQueue->getMessagesAvailable() << " messages" << std::endl;
-
-    if (m_openingAudioFile) return;
-
-    OSCMessage message = m_oscQueue->readMessage();
-
-    if (message.getTarget() != 0) {
-        return; //!!! for now -- this class is target 0, others not handled yet
-    }
-
-    handleOSCMessage(message);
-}
-
-void
 MainWindow::handleOSCMessage(const OSCMessage &message)
 {
     std::cerr << "MainWindow::handleOSCMessage: thread id = " 
@@ -4725,7 +3071,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
-            if (openSomeFile(path, ReplaceMainModel) != FileOpenSucceeded) {
+            if (open(path, ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << path.toStdString() << "\"" << std::endl;
             }
@@ -4738,7 +3084,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
-            if (openSomeFile(path, CreateAdditionalModel) != FileOpenSucceeded) {
+            if (open(path, CreateAdditionalModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << path.toStdString() << "\"" << std::endl;
             }
@@ -4755,7 +3101,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
         std::vector<QString> recent = m_recentFiles.getRecent();
         if (n >= 0 && n < int(recent.size())) {
-            if (openSomeFile(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
+            if (open(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << recent[n].toStdString() << "\"" << std::endl;
             }
@@ -5246,24 +3592,6 @@ MainWindow::mouseLeftWidget()
 }
 
 void
-MainWindow::inProgressSelectionChanged()
-{
-    Pane *currentPane = 0;
-    if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
-    if (currentPane) updateVisibleRangeDisplay(currentPane);
-}
-
-void
-MainWindow::contextHelpChanged(const QString &s)
-{
-    if (s == "" && m_myStatusMessage != "") {
-        statusBar()->showMessage(m_myStatusMessage);
-        return;
-    }
-    statusBar()->showMessage(s);
-}
-
-void
 MainWindow::website()
 {
     openHelpUrl(tr("http://www.sonicvisualiser.org/"));
@@ -5273,46 +3601,6 @@ void
 MainWindow::help()
 {
     openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.0/en/"));
-}
-
-void
-MainWindow::openHelpUrl(QString url)
-{
-    // This method mostly lifted from Qt Assistant source code
-
-    QProcess *process = new QProcess(this);
-    connect(process, SIGNAL(finished(int)), process, SLOT(deleteLater()));
-
-    QStringList args;
-
-#ifdef Q_OS_MAC
-    args.append(url);
-    process->start("open", args);
-#else
-#ifdef Q_OS_WIN32
-
-	QString pf(getenv("ProgramFiles"));
-	QString command = pf + QString("\\Internet Explorer\\IEXPLORE.EXE");
-
-	args.append(url);
-	process->start(command, args);
-
-#else
-#ifdef Q_WS_X11
-    if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        args.append("exec");
-        args.append(url);
-        process->start("kfmclient", args);
-    } else if (!qgetenv("BROWSER").isEmpty()) {
-        args.append(url);
-        process->start(qgetenv("BROWSER"), args);
-    } else {
-        args.append(url);
-        process->start("firefox", args);
-    }
-#endif
-#endif
-#endif
 }
 
 void
