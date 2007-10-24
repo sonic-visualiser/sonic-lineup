@@ -16,7 +16,7 @@
 #include "../version.h"
 
 #include "MainWindow.h"
-#include "document/Document.h"
+#include "framework/Document.h"
 #include "PreferencesDialog.h"
 
 #include "view/Pane.h"
@@ -52,10 +52,10 @@
 #include "data/fileio/WavFileWriter.h"
 #include "data/fileio/CSVFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
-#include "data/fileio/RemoteFile.h"
+#include "data/fileio/FileSource.h"
 #include "data/fft/FFTDataServer.h"
 #include "base/RecentFiles.h"
-#include "transform/TransformFactory.h"
+#include "plugin/transform/TransformFactory.h"
 #include "base/PlayParameterRepository.h"
 #include "base/XmlExportable.h"
 #include "base/CommandHistory.h"
@@ -63,7 +63,7 @@
 #include "base/Clipboard.h"
 #include "base/UnitDatabase.h"
 #include "base/ColourDatabase.h"
-#include "osc/OSCQueue.h"
+#include "data/osc/OSCQueue.h"
 
 //!!!
 #include "data/model/AggregateWaveModel.h"
@@ -2783,7 +2783,7 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
         rate = m_playSource->getSourceSampleRate();
     }
 
-    WaveFileModel *newModel = new WaveFileModel(path, location, rate);
+    WaveFileModel *newModel = new WaveFileModel(FileSource(location), rate);
 
     if (!newModel->isOK()) {
 	delete newModel;
@@ -3177,7 +3177,7 @@ MainWindow::openRecentFile()
     if (path == "") return;
 
     QUrl url(path);
-    if (RemoteFile::canHandleScheme(url)) {
+    if (FileSource::canHandleScheme(url)) {
         openURL(url);
         return;
     }
@@ -3218,7 +3218,7 @@ MainWindow::openURL(QUrl url, AudioFileOpenMode mode)
 
         return openSomeFile(url.toLocalFile(), mode);
 
-    } else if (!RemoteFile::canHandleScheme(url)) {
+    } else if (!FileSource::canHandleScheme(url)) {
 
         QMessageBox::critical(this, tr("Unsupported scheme in URL"),
                               tr("The URL scheme \"%1\" is not supported")
@@ -3226,8 +3226,8 @@ MainWindow::openURL(QUrl url, AudioFileOpenMode mode)
         return FileOpenFailed;
 
     } else {
-        RemoteFile rf(url);
-        rf.wait();
+        FileSource rf(url);
+        rf.waitForData();
         if (!rf.isOK()) {
             QMessageBox::critical(this, tr("File download failed"),
                                   tr("Failed to download URL \"%1\": %2")
@@ -3238,7 +3238,7 @@ MainWindow::openURL(QUrl url, AudioFileOpenMode mode)
         if ((status = openSomeFile(rf.getLocalFilename(), url.toString(),
                                    mode)) !=
             FileOpenSucceeded) {
-            rf.deleteLocalFile();
+//            rf.deleteLocalFile();
         }
         return status;
     }
@@ -3256,7 +3256,7 @@ MainWindow::openURL(QString ustr, AudioFileOpenMode mode)
 
         return openSomeFile(url.toLocalFile(), mode);
 
-    } else if (!RemoteFile::canHandleScheme(url)) {
+    } else if (!FileSource::canHandleScheme(url)) {
 
         QMessageBox::critical(this, tr("Unsupported scheme in URL"),
                               tr("The URL scheme \"%1\" is not supported")
@@ -3264,8 +3264,8 @@ MainWindow::openURL(QString ustr, AudioFileOpenMode mode)
         return FileOpenFailed;
 
     } else {
-        RemoteFile rf(url);
-        rf.wait();
+        FileSource rf(url);
+        rf.waitForData();
         if (!rf.isOK()) {
             // rf was created on the assumption that ustr was
             // human-readable.  Let's try again, this time assuming it
@@ -3281,7 +3281,7 @@ MainWindow::openURL(QString ustr, AudioFileOpenMode mode)
         FileOpenStatus status;
         if ((status = openSomeFile(rf.getLocalFilename(), ustr, mode)) !=
             FileOpenSucceeded) {
-            rf.deleteLocalFile();
+//            rf.deleteLocalFile();
         }
         return status;
     }

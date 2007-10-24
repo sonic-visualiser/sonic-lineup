@@ -27,8 +27,8 @@
 #include "base/PropertyContainer.h"
 #include "base/RecentFiles.h"
 #include "layer/LayerFactory.h"
-#include "transform/Transform.h"
-#include "document/SVFileReader.h"
+#include "plugin/transform/Transform.h"
+#include "framework/SVFileReader.h"
 #include "data/fileio/FileFinder.h"
 #include <map>
 
