@@ -183,6 +183,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_viewManager, SIGNAL(inProgressSelectionChanged()),
 	    this, SLOT(inProgressSelectionChanged()));
     m_viewManager->setPlaySoloMode(true);
+    m_viewManager->setAlignMode(true);
 
     Preferences::BackgroundMode mode =
         Preferences::getInstance()->getBackgroundMode();
