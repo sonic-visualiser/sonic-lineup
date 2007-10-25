@@ -71,24 +71,15 @@ public slots:
     virtual bool commitData(bool mayAskUser); // on session shutdown
 
 protected slots:
-    virtual void openSession();
-    virtual void importAudio();
-    virtual void importMoreAudio();
-    virtual void openSomething();
+    virtual void openFile();
     virtual void openLocation();
     virtual void openRecentFile();
-    virtual void exportAudio();
-    virtual void importLayer();
-    virtual void exportLayer();
-    virtual void exportImage();
     virtual void saveSession();
     virtual void saveSessionAs();
     virtual void newSession();
     virtual void closeSession();
     virtual void preferences();
 
-    virtual void addPane();
-    virtual void addLayer();
     virtual void renameCurrentLayer();
 
     virtual void paneAdded(Pane *);
@@ -110,12 +101,6 @@ protected slots:
 
     virtual void outputLevelsChanged(float, float);
 
-    virtual void toolNavigateSelected();
-    virtual void toolSelectSelected();
-    virtual void toolEditSelected();
-    virtual void toolDrawSelected();
-    virtual void toolMeasureSelected();
-
     virtual void documentModified();
     virtual void documentRestored();
 
@@ -134,7 +119,6 @@ protected slots:
     virtual void rightButtonMenuRequested(Pane *, QPoint point);
 
     virtual void setupRecentFilesMenu();
-    virtual void setupRecentTransformsMenu();
 
     virtual void showLayerTree();
 
@@ -157,17 +141,9 @@ protected:
     WaveformLayer           *m_panLayer;
 
     bool                     m_mainMenusCreated;
-    QMenu                   *m_paneMenu;
-    QMenu                   *m_layerMenu;
-    QMenu                   *m_transformsMenu;
     QMenu                   *m_playbackMenu;
-    QMenu                   *m_existingLayersMenu;
-    QMenu                   *m_sliceMenu;
     QMenu                   *m_recentFilesMenu;
-    QMenu                   *m_recentTransformsMenu;
     QMenu                   *m_rightButtonMenu;
-    QMenu                   *m_rightButtonLayerMenu;
-    QMenu                   *m_rightButtonTransformsMenu;
     QMenu                   *m_rightButtonPlaybackMenu;
 
     QAction                 *m_deleteSelectedAction;
@@ -179,47 +155,11 @@ protected:
 
     KeyReference            *m_keyReference;
 
-    struct PaneConfiguration {
-	PaneConfiguration(LayerFactory::LayerType _layer
-			                       = LayerFactory::TimeRuler,
-                          Model *_source = 0,
-			  int _channel = -1) :
-	    layer(_layer), sourceModel(_source), channel(_channel) { }
-	LayerFactory::LayerType layer;
-        Model *sourceModel;
-	int channel;
-    };
-
-    typedef std::map<QAction *, PaneConfiguration> PaneActionMap;
-    PaneActionMap m_paneActions;
-
-    typedef std::map<QAction *, TransformId> TransformActionMap;
-    TransformActionMap m_transformActions;
-
-    typedef std::map<TransformId, QAction *> TransformActionReverseMap;
-    TransformActionReverseMap m_transformActionsReverse;
-
-    typedef std::map<QAction *, LayerFactory::LayerType> LayerActionMap;
-    LayerActionMap m_layerActions;
-
-    typedef std::map<QAction *, Layer *> ExistingLayerActionMap;
-    ExistingLayerActionMap m_existingLayerActions;
-    ExistingLayerActionMap m_sliceActions;
-
-    typedef std::map<ViewManager::ToolMode, QAction *> ToolActionMap;
-    ToolActionMap m_toolActions;
-
     virtual void setupMenus();
     virtual void setupFileMenu();
-    virtual void setupEditMenu();
     virtual void setupViewMenu();
-    virtual void setupPaneAndLayerMenus();
-    virtual void setupTransformsMenu();
     virtual void setupHelpMenu();
-    virtual void setupExistingLayersMenus();
     virtual void setupToolbars();
-
-    virtual void addPane(const PaneConfiguration &configuration, QString text);
 
     virtual void closeEvent(QCloseEvent *e);
     bool checkSaveModified();

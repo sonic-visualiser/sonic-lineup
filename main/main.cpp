@@ -92,7 +92,7 @@ main(int argc, char **argv)
     svSystemSpecificInitialisation();
 
     bool audioOutput = true;
-    bool oscSupport = true;
+    bool oscSupport = false;
 
     if (args.contains("--help") || args.contains("-h") || args.contains("-?")) {
         std::cerr << QApplication::tr(
@@ -101,7 +101,7 @@ main(int argc, char **argv)
     }
 
     if (args.contains("--no-audio")) audioOutput = false;
-    if (args.contains("--no-osc")) oscSupport = false;
+//    if (args.contains("--no-osc")) oscSupport = false;
 
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
