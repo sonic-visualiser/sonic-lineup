@@ -150,7 +150,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_viewManager->setAlignMode(true);
     m_viewManager->setPlaySoloMode(true);
     m_viewManager->setToolMode(ViewManager::NavigateMode);
-
+    m_viewManager->setZoomWheelsEnabled(false);
+    
     QFrame *frame = new QFrame;
     setCentralWidget(frame);
 
@@ -998,6 +999,8 @@ MainWindow::openRecentFile()
 void
 MainWindow::paneAdded(Pane *pane)
 {
+    pane->setPlaybackFollow(PlaybackScrollContinuous);
+    m_paneStack->sizePanesEqually();
     if (m_overview) m_overview->registerView(pane);
 }    
 
