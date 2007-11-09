@@ -105,7 +105,7 @@ main(int argc, char **argv)
 
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
-    QApplication::setApplicationName("vect");
+    QApplication::setApplicationName("Vect");
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };

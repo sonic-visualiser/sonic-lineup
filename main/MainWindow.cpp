@@ -56,6 +56,7 @@
 #include "data/fft/FFTDataServer.h"
 #include "base/RecentFiles.h"
 #include "plugin/transform/TransformFactory.h"
+#include "plugin/transform/ModelTransformerFactory.h"
 #include "base/PlayParameterRepository.h"
 #include "base/XmlExportable.h"
 #include "base/CommandHistory.h"
@@ -81,6 +82,8 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QToolBar>
+#include <QToolButton>
+#include <QButtonGroup>
 #include <QInputDialog>
 #include <QStatusBar>
 #include <QTreeView>
@@ -122,7 +125,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_rwdAction(0),
     m_preferencesDialog(0),
     m_layerTreeView(0),
-    m_keyReference(new KeyReference())
+    m_keyReference(new KeyReference()),
+    m_displayMode(WaveformMode)
 {
     setWindowTitle(tr("Vect"));
 
@@ -146,11 +150,44 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
 
     Preferences::getInstance()->setResampleOnLoad(true);
+    Preferences::getInstance()->setSpectrogramSmoothing
+        (Preferences::SpectrogramInterpolated);
+
+    QSettings settings;
+
+    settings.beginGroup("LayerDefaults");
+
+    settings.setValue("waveform", "<layer/>");
+//                      QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
+//                      .arg(int(WaveformLayer::MeterScale))
+//                      .arg(int(WaveformLayer::MergeChannels)));
+
+    settings.setValue("timevalues",
+                      QString("<layer plotStyle=\"%1\"/>")
+                      .arg(int(TimeValueLayer::PlotStems)));
+
+    settings.setValue("spectrogram",
+                      QString("<layer windowSize=\"2048\" windowHopLevel=\"2\"/>"));
+
+    settings.setValue("melodicrange",
+                      QString("<layer normalizeVisibleArea=\"true\">"));
+
+    settings.endGroup();
+
+    settings.beginGroup("MainWindow");
+    settings.setValue("showstatusbar", false);
+    settings.endGroup();
 
     m_viewManager->setAlignMode(true);
     m_viewManager->setPlaySoloMode(true);
     m_viewManager->setToolMode(ViewManager::NavigateMode);
     m_viewManager->setZoomWheelsEnabled(false);
+    m_viewManager->setIlluminateLocalFeatures(false);
+    m_viewManager->setShowWorkTitle(true);
+
+#ifndef __APPLE__
+    m_viewManager->setGlobalDarkBackground(true);
+#endif
     
     QFrame *frame = new QFrame;
     setCentralWidget(frame);
@@ -166,6 +203,53 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
     scroll->setWidget(m_paneStack);
+    
+    QButtonGroup *bg = new QButtonGroup;
+    IconLoader il;
+
+    QFrame *buttonFrame = new QFrame;
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->setSpacing(0);
+    buttonLayout->setMargin(0);
+    buttonFrame->setLayout(buttonLayout);
+
+    QToolButton *button = new QToolButton;
+    button->setIcon(il.load("waveform"));
+    button->setCheckable(true);
+    button->setChecked(true);
+    button->setAutoRaise(true);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(waveformModeSelected()));
+
+    button = new QToolButton;
+    button->setIcon(il.load("values"));
+    button->setCheckable(true);
+    button->setChecked(false);
+    button->setAutoRaise(true);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
+
+    button = new QToolButton;
+    button->setIcon(il.load("spectrogram"));
+    button->setCheckable(true);
+    button->setChecked(false);
+    button->setAutoRaise(true);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(spectrogramModeSelected()));
+
+    button = new QToolButton;
+    button->setIcon(il.load("melodogram"));
+    button->setCheckable(true);
+    button->setChecked(false);
+    button->setAutoRaise(true);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(melodogramModeSelected()));
+
+    layout->addWidget(buttonFrame, 1, 0);
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
@@ -214,8 +298,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    IconLoader il;
-
+/*!!!
     m_playSharpen = new NotifyingPushButton(frame);
     m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
     m_playSharpen->setFixedSize(20, 20);
@@ -238,25 +321,29 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playMono, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playMono, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    QSettings settings;
     settings.beginGroup("MainWindow");
     m_playSharpen->setChecked(settings.value("playsharpen", true).toBool());
     m_playMono->setChecked(settings.value("playmono", false).toBool());
     settings.endGroup();
 
+*/
+
+
     layout->setSpacing(4);
-    layout->addWidget(scroll, 0, 0, 1, 5);
-    layout->addWidget(m_overview, 1, 0);
-    layout->addWidget(m_fader, 1, 1);
-    layout->addWidget(m_playSpeed, 1, 2);
-    layout->addWidget(m_playSharpen, 1, 3);
-    layout->addWidget(m_playMono, 1, 4);
-
+    layout->addWidget(scroll, 0, 0, 1, 6);
+    layout->addWidget(m_overview, 1, 1);
+    layout->addWidget(m_fader, 1, 2);
+    layout->addWidget(m_playSpeed, 1, 3);
+/*!!!
+    layout->addWidget(m_playSharpen, 1, 4);
+    layout->addWidget(m_playMono, 1, 5);
+*/
     m_paneStack->setPropertyStackMinWidth
-        (m_fader->width() + m_playSpeed->width() + m_playSharpen->width() +
-         m_playMono->width() + layout->spacing() * 4);
+        (m_fader->width() + m_playSpeed->width()
+         /*!!! + m_playSharpen->width() +
+           m_playMono->width() */ + layout->spacing() * 4);
 
-    layout->setColumnStretch(0, 10);
+    layout->setColumnStretch(1, 10);
 
     frame->setLayout(layout);
 
@@ -298,6 +385,7 @@ MainWindow::setupMenus()
     }
 
     setupFileMenu();
+//    setupEditMenu();
     setupViewMenu();
 
     m_mainMenusCreated = true;
@@ -326,7 +414,8 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
     toolbar->addAction(action);
 
-    icon = il.load("fileopenaudio");
+    icon = il.load("fileopen");
+    icon.addPixmap(il.loadPixmap("fileopen-22"));
     action = new QAction(icon, tr("&Add File..."), this);
     action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Add a file"));
@@ -363,6 +452,16 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+}
+
+void
+MainWindow::setupEditMenu()
+{
+    if (m_mainMenusCreated) return;
+
+    QMenu *menu = menuBar()->addMenu(tr("&Edit"));
+    menu->setTearOffEnabled(true);
+    CommandHistory::getInstance()->registerMenu(menu);
 }
 
 void
@@ -937,6 +1036,8 @@ MainWindow::openFile()
     } else if (status == FileOpenWrongMode) {
         QMessageBox::critical(this, tr("Failed to open file"),
                               tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+    } else {
+        configureNewPane(m_paneStack->getCurrentPane());
     }
 }
 
@@ -967,6 +1068,8 @@ MainWindow::openLocation()
     } else if (status == FileOpenWrongMode) {
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+    } else {
+        configureNewPane(m_paneStack->getCurrentPane());
     }
 }
 
@@ -993,6 +1096,174 @@ MainWindow::openRecentFile()
     } else if (status == FileOpenWrongMode) {
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+    } else {
+        configureNewPane(m_paneStack->getCurrentPane());
+    }
+}
+
+Model *
+MainWindow::selectExistingModeLayer(Pane *pane, QString name)
+{   
+    Model *model = 0;
+
+    bool have = false;
+
+    for (int i = 0; i < pane->getLayerCount(); ++i) {
+        
+        Layer *layer = pane->getLayer(i);
+        if (!layer) continue;
+        
+        Model *lm = layer->getModel();
+        while (lm && lm->getSourceModel()) lm = lm->getSourceModel();
+        if (dynamic_cast<WaveFileModel *>(lm)) model = lm;
+        
+        QString ln = layer->objectName();
+        if (ln != name) {
+            m_hiddenLayers[pane].insert(layer);
+            m_document->removeLayerFromView(pane, layer);
+            continue;
+        }
+        
+        have = true;
+    }
+    
+    if (have) return 0;
+
+    LayerSet &ls = m_hiddenLayers[pane];
+    bool found = false;
+    for (LayerSet::iterator i = ls.begin(); i != ls.end(); ++i) {
+        if ((*i)->objectName() == name) {
+            m_document->addLayerToView(pane, *i);
+            ls.erase(i);
+            found = true;
+            break;
+        }
+    }
+
+    if (found) return 0;
+
+    return model;
+}
+
+void
+MainWindow::curveModeSelected()
+{
+    QString name = "Curve"; // shouldn't need to be translated
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
+
+        Model *model = selectExistingModeLayer(pane, name);
+        if (!model) continue;
+
+        TransformId id = "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn";
+        TransformFactory *tf = TransformFactory::getInstance();
+
+        if (tf->haveTransform(id)) {
+
+            ModelTransformerFactory *mf = ModelTransformerFactory::getInstance();
+
+            PluginTransformer::ExecutionContext context
+                (-1, 1024, 2048, HanningWindow);
+            context.updates = false;
+
+            Layer *newLayer = m_document->createDerivedLayer
+                (id, model, context, "");
+
+            if (newLayer) {
+                newLayer->setObjectName(name);
+                m_document->addLayerToView(pane, newLayer);
+                m_paneStack->setCurrentLayer(pane, newLayer);
+            }
+            
+        } else {
+            std::cerr << "No Aubio onset detector plugin available" << std::endl;
+        }
+    }
+
+    m_displayMode = CurveMode;
+}
+
+void
+MainWindow::waveformModeSelected()
+{
+    QString name = "Waveform"; // shouldn't need to be translated
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
+
+        Model *model = selectExistingModeLayer(pane, name);
+        if (!model) continue;
+
+        Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
+        newLayer->setObjectName(name);
+        m_document->setModel(newLayer, model);
+        m_document->addLayerToView(pane, newLayer);
+        m_paneStack->setCurrentLayer(pane, newLayer);
+    }
+
+    m_displayMode = WaveformMode;
+}
+
+void
+MainWindow::spectrogramModeSelected()
+{
+    QString name = "Spectrogram"; // shouldn't need to be translated
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
+
+        Model *model = selectExistingModeLayer(pane, name);
+        if (!model) continue;
+
+        Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
+        newLayer->setObjectName(name);
+        m_document->setModel(newLayer, model);
+        m_document->addLayerToView(pane, newLayer);
+        m_paneStack->setCurrentLayer(pane, newLayer);
+    }
+
+    m_displayMode = SpectrogramMode;
+}
+
+void
+MainWindow::melodogramModeSelected()
+{
+    QString name = "Melodogram"; // shouldn't need to be translated
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
+
+        Model *model = selectExistingModeLayer(pane, name);
+        if (!model) continue;
+
+        Layer *newLayer = m_document->createLayer
+            (LayerFactory::MelodicRangeSpectrogram);
+        newLayer->setObjectName(name);
+        m_document->setModel(newLayer, model);
+        m_document->addLayerToView(pane, newLayer);
+        m_paneStack->setCurrentLayer(pane, newLayer);
+    }
+
+    m_displayMode = MelodogramMode;
+}
+
+void
+MainWindow::reselectMode()
+{
+    switch (m_displayMode) {
+    case CurveMode: curveModeSelected(); break;
+    case WaveformMode: waveformModeSelected(); break;
+    case SpectrogramMode: spectrogramModeSelected(); break;
+    case MelodogramMode: melodogramModeSelected(); break;
     }
 }
 
@@ -1019,7 +1290,7 @@ MainWindow::paneAboutToBeDeleted(Pane *pane)
 void
 MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
 {
-    if (pane) m_paneStack->setCurrentPane(pane);
+//    if (pane) m_paneStack->setCurrentPane(pane);
 
     for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
 
@@ -1031,6 +1302,8 @@ MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
         } else if (status == FileOpenWrongMode) {
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
                                   tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+        } else {
+            configureNewPane(m_paneStack->getCurrentPane());
         }
     }
 }
@@ -1052,6 +1325,29 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 
     //!!! open as text -- but by importing as if a CSV, or just adding
     //to a text layer?
+}
+
+void
+MainWindow::configureNewPane(Pane *pane)
+{
+    std::cerr << "MainWindow::configureNewPane(" << pane << ")" << std::endl;
+
+    if (!pane) return;
+
+    Layer *waveformLayer = 0;
+
+    for (int i = 0; i < pane->getLayerCount(); ++i) {
+        Layer *layer = pane->getLayer(i);
+        if (!layer) continue;
+        if (dynamic_cast<WaveformLayer *>(layer)) waveformLayer = layer;
+        if (dynamic_cast<TimeValueLayer *>(layer)) return;
+    }
+    if (!waveformLayer) return;
+
+    waveformLayer->setObjectName("Waveform");
+
+    zoomToFit();
+    reselectMode();
 }
 
 void
@@ -1276,11 +1572,14 @@ MainWindow::playSpeedChanged(int position)
                            .arg(position > 100 ? "+" : "")
                            .arg(pc));
     }
-
+/*!!!
     m_playSharpen->setEnabled(something);
     m_playMono->setEnabled(something);
     bool sharpen = (something && m_playSharpen->isChecked());
     bool mono = (something && m_playMono->isChecked());
+*/
+    bool sharpen = true;
+    bool mono = false;
     m_playSource->setTimeStretch(factor, sharpen, mono);
 
     updateMenuStates();

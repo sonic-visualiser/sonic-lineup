@@ -80,6 +80,11 @@ protected slots:
     virtual void closeSession();
     virtual void preferences();
 
+    virtual void curveModeSelected();
+    virtual void waveformModeSelected();
+    virtual void spectrogramModeSelected();
+    virtual void melodogramModeSelected();
+
     virtual void renameCurrentLayer();
 
     virtual void paneAdded(Pane *);
@@ -155,14 +160,31 @@ protected:
 
     KeyReference            *m_keyReference;
 
+    typedef std::set<Layer *> LayerSet;
+    typedef std::map<Pane *, LayerSet> PaneLayerMap;
+    PaneLayerMap             m_hiddenLayers;
+
     virtual void setupMenus();
     virtual void setupFileMenu();
+    virtual void setupEditMenu();
     virtual void setupViewMenu();
     virtual void setupHelpMenu();
     virtual void setupToolbars();
 
+    enum DisplayMode {
+        CurveMode,
+        WaveformMode,
+        SpectrogramMode,
+        MelodogramMode
+    };
+    virtual void reselectMode();
+    DisplayMode m_displayMode;
+
     virtual void closeEvent(QCloseEvent *e);
     bool checkSaveModified();
+
+    virtual void configureNewPane(Pane *p);
+    virtual Model *selectExistingModeLayer(Pane *, QString);
 
     virtual void updateVisibleRangeDisplay(Pane *p) const;
 };
