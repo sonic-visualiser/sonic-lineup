@@ -23,6 +23,8 @@
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
+#include "data/model/FFTModel.h"
+#include "base/StorageAdviser.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "layer/WaveformLayer.h"
@@ -157,20 +159,21 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     settings.beginGroup("LayerDefaults");
 
-    settings.setValue("waveform", "<layer/>");
-//                      QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
-//                      .arg(int(WaveformLayer::MeterScale))
-//                      .arg(int(WaveformLayer::MergeChannels)));
+    settings.setValue("waveform",
+                      QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
+                      .arg(int(WaveformLayer::MeterScale))
+//                      .arg(int(WaveformLayer::LinearScale))
+                      .arg(int(WaveformLayer::MergeChannels)));
 
     settings.setValue("timevalues",
                       QString("<layer plotStyle=\"%1\"/>")
                       .arg(int(TimeValueLayer::PlotStems)));
 
     settings.setValue("spectrogram",
-                      QString("<layer windowSize=\"2048\" windowHopLevel=\"2\"/>"));
+                      QString("<layer channel=\"-1\" windowSize=\"2048\" windowHopLevel=\"2\"/>"));
 
     settings.setValue("melodicrange",
-                      QString("<layer normalizeVisibleArea=\"true\">"));
+                      QString("<layer channel=\"-1\" normalizeVisibleArea=\"true\"/>"));
 
     settings.endGroup();
 
@@ -1148,7 +1151,7 @@ MainWindow::selectExistingModeLayer(Pane *pane, QString name)
 void
 MainWindow::curveModeSelected()
 {
-    QString name = "Curve"; // shouldn't need to be translated
+    QString name = tr("Curve");
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
@@ -1189,7 +1192,7 @@ MainWindow::curveModeSelected()
 void
 MainWindow::waveformModeSelected()
 {
-    QString name = "Waveform"; // shouldn't need to be translated
+    QString name = tr("Waveform");
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
@@ -1199,7 +1202,7 @@ MainWindow::waveformModeSelected()
         Model *model = selectExistingModeLayer(pane, name);
         if (!model) continue;
 
-        Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
+        Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
         newLayer->setObjectName(name);
         m_document->setModel(newLayer, model);
         m_document->addLayerToView(pane, newLayer);
@@ -1212,7 +1215,7 @@ MainWindow::waveformModeSelected()
 void
 MainWindow::spectrogramModeSelected()
 {
-    QString name = "Spectrogram"; // shouldn't need to be translated
+    QString name = tr("Spectrogram");
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
@@ -1235,7 +1238,7 @@ MainWindow::spectrogramModeSelected()
 void
 MainWindow::melodogramModeSelected()
 {
-    QString name = "Melodogram"; // shouldn't need to be translated
+    QString name = tr("Melodic Range Spectrogram");
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
@@ -1344,7 +1347,7 @@ MainWindow::configureNewPane(Pane *pane)
     }
     if (!waveformLayer) return;
 
-    waveformLayer->setObjectName("Waveform");
+    waveformLayer->setObjectName(tr("Waveform"));
 
     zoomToFit();
     reselectMode();
@@ -1728,6 +1731,30 @@ void
 MainWindow::modelAdded(Model *model)
 {
     MainWindowBase::modelAdded(model);
+    DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(model);
+    if (dtvm) {
+        StorageAdviser::Criteria criteria = StorageAdviser::NoCriteria;
+        if (dtvm == getMainModel()) {
+            criteria = StorageAdviser::SpeedCritical;
+        }
+        m_fftModelMap[dtvm] = new FFTModel
+            (dtvm,
+             -1,
+             HanningWindow,
+             2048, 1024, 2048,
+             false,
+             criteria);
+    }
+}
+
+void
+MainWindow::modelAboutToBeDeleted(Model *model)
+{
+    if (m_fftModelMap.find(model) != m_fftModelMap.end()) {
+        delete m_fftModelMap[model];
+        m_fftModelMap.erase(model);
+    }
+    MainWindowBase::modelAboutToBeDeleted(model);
 }
 
 void

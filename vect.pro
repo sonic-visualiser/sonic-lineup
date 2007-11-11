@@ -4,8 +4,10 @@ TEMPLATE = app
 SV_UNIT_PACKAGES = vamp vamp-hostsdk fftw3f samplerate jack portaudio mad id3tag oggz fishsound lrdf raptor sndfile liblo
 load(../sonic-visualiser/sv.prf)
 
-CONFIG += sv qt thread warn_on stl rtti exceptions
+CONFIG += release sv qt thread warn_on stl rtti exceptions
 QT += xml network
+
+linux-g++:QMAKE_CXXFLAGS_RELEASE += -DNDEBUG -DNO_TIMING -O3 -march=pentium-m -msse -msse2 -msse3 -mmmx
 
 TARGET = vect
 
