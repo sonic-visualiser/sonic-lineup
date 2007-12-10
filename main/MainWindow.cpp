@@ -1166,14 +1166,17 @@ MainWindow::curveModeSelected()
 
         if (tf->haveTransform(id)) {
 
-            ModelTransformerFactory *mf = ModelTransformerFactory::getInstance();
+            Transform transform = tf->getDefaultTransformFor
+                (id, model->getSampleRate());
 
-            PluginTransformer::ExecutionContext context
-                (-1, 1024, 2048, HanningWindow);
-            context.updates = false;
+            transform.setStepSize(1024);
+            transform.setBlockSize(2048);
 
-            Layer *newLayer = m_document->createDerivedLayer
-                (id, model, context, "");
+            ModelTransformer::Input input(model, -1);
+
+//!!! no equivalent for this yet            context.updates = false;
+
+            Layer *newLayer = m_document->createDerivedLayer(transform, model);
 
             if (newLayer) {
                 newLayer->setObjectName(name);
