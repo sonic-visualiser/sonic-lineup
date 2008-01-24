@@ -1774,24 +1774,71 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 }
 
 void
-MainWindow::modelGenerationFailed(QString transformName)
+MainWindow::modelGenerationFailed(QString transformName, QString message)
 {
-    QMessageBox::warning
-        (this,
-         tr("Failed to generate layer"),
-         tr("Failed to generate a derived layer.\n\nThe layer transform \"%1\" failed.\n\nThis probably means that a plugin failed to initialise, perhaps because it\nrejected the processing block size that was requested.")
-         .arg(transformName),
-         QMessageBox::Ok);
+    if (message != "") {
+
+        QMessageBox::warning
+            (this,
+             tr("Failed to generate layer"),
+             tr("<b>Layer generation failed</b><p>Failed to generate derived layer.<p>The layer transform \"%1\" failed:<p>%2")
+             .arg(transformName).arg(message),
+             QMessageBox::Ok);
+    } else {
+        QMessageBox::warning
+            (this,
+             tr("Failed to generate layer"),
+             tr("<b>Layer generation failed</b><p>Failed to generate a derived layer.<p>The layer transform \"%1\" failed.<p>No error information is available.")
+             .arg(transformName),
+             QMessageBox::Ok);
+    }
 }
 
 void
-MainWindow::modelRegenerationFailed(QString layerName, QString transformName)
+MainWindow::modelGenerationWarning(QString transformName, QString message)
+{
+    QMessageBox::warning
+        (this, tr("Warning"), message, QMessageBox::Ok);
+}
+
+void
+MainWindow::modelRegenerationFailed(QString layerName,
+                                    QString transformName, QString message)
+{
+    if (message != "") {
+
+        QMessageBox::warning
+            (this,
+             tr("Failed to regenerate layer"),
+             tr("<b>Layer generation failed</b><p>Failed to regenerate derived layer \"%1\" using new data model as input.<p>The layer transform \"%2\" failed:<p>%3")
+             .arg(layerName).arg(transformName).arg(message),
+             QMessageBox::Ok);
+    } else {
+        QMessageBox::warning
+            (this,
+             tr("Failed to regenerate layer"),
+             tr("<b>Layer generation failed</b><p>Failed to regenerate derived layer \"%1\" using new data model as input.<p>The layer transform \"%2\" failed.<p>No error information is available.")
+             .arg(layerName).arg(transformName),
+             QMessageBox::Ok);
+    }
+}
+
+void
+MainWindow::modelRegenerationWarning(QString layerName,
+                                     QString transformName, QString message)
+{
+    QMessageBox::warning
+        (this, tr("Warning"), tr("<b>Warning when regenerating layer</b><p>When regenerating the derived layer \"%1\" using new data model as input:<p>%2").arg(layerName).arg(message), QMessageBox::Ok);
+}
+
+void
+MainWindow::alignmentFailed(QString transformName, QString message)
 {
     QMessageBox::warning
         (this,
-         tr("Failed to regenerate layer"),
-         tr("Failed to regenerate derived layer \"%1\".\n\nThe layer transform \"%2\" failed to run.\n\nThis probably means the layer used a plugin that is not currently available.")
-         .arg(layerName).arg(transformName),
+         tr("Failed to calculate alignment"),
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment using transform \"%1\":<p>%2")
+         .arg(transformName).arg(message),
          QMessageBox::Ok);
 }
 
