@@ -301,50 +301,15 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-/*!!!
-    m_playSharpen = new NotifyingPushButton(frame);
-    m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
-    m_playSharpen->setFixedSize(20, 20);
-    m_playSharpen->setEnabled(false);
-    m_playSharpen->setCheckable(true);
-    m_playSharpen->setChecked(false);
-    m_playSharpen->setIcon(il.load("sharpen"));
-    connect(m_playSharpen, SIGNAL(clicked()), this, SLOT(playSharpenToggled()));
-    connect(m_playSharpen, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_playSharpen, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-
-    m_playMono = new NotifyingPushButton(frame);
-    m_playMono->setToolTip(tr("Run time stretcher in mono only"));
-    m_playMono->setFixedSize(20, 20);
-    m_playMono->setEnabled(false);
-    m_playMono->setCheckable(true);
-    m_playMono->setChecked(false);
-    m_playMono->setIcon(il.load("mono"));
-    connect(m_playMono, SIGNAL(clicked()), this, SLOT(playMonoToggled()));
-    connect(m_playMono, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_playMono, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-
-    settings.beginGroup("MainWindow");
-    m_playSharpen->setChecked(settings.value("playsharpen", true).toBool());
-    m_playMono->setChecked(settings.value("playmono", false).toBool());
-    settings.endGroup();
-
-*/
-
-
     layout->setSpacing(4);
     layout->addWidget(scroll, 0, 0, 1, 6);
     layout->addWidget(m_overview, 1, 1);
     layout->addWidget(m_fader, 1, 2);
     layout->addWidget(m_playSpeed, 1, 3);
-/*!!!
-    layout->addWidget(m_playSharpen, 1, 4);
-    layout->addWidget(m_playMono, 1, 5);
-*/
+
     m_paneStack->setPropertyStackMinWidth
-        (m_fader->width() + m_playSpeed->width()
-         /*!!! + m_playSharpen->width() +
-           m_playMono->width() */ + layout->spacing() * 4);
+        (m_fader->width() + m_playSpeed->width() +
+         layout->spacing() * 4);
 
     layout->setColumnStretch(1, 10);
 
@@ -1578,15 +1543,8 @@ MainWindow::playSpeedChanged(int position)
                            .arg(position > 100 ? "+" : "")
                            .arg(pc));
     }
-/*!!!
-    m_playSharpen->setEnabled(something);
-    m_playMono->setEnabled(something);
-    bool sharpen = (something && m_playSharpen->isChecked());
-    bool mono = (something && m_playMono->isChecked());
-*/
-    bool sharpen = true;
-    bool mono = false;
-    m_playSource->setTimeStretch(factor, sharpen, mono);
+
+    m_playSource->setTimeStretch(factor);
 
     updateMenuStates();
 }
