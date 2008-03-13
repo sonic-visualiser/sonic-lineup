@@ -15,11 +15,11 @@ ICON = icons/sv-macicon.icns
 
 DEPENDPATH += . ../sonic-visualiser i18n main
 INCLUDEPATH += . ../sonic-visualiser main
-LIBPATH = ../sonic-visualiser/framework ../sonic-visualiser/audioio ../sonic-visualiser/view ../sonic-visualiser/layer ../sonic-visualiser/data ../sonic-visualiser/widgets ../sonic-visualiser/plugin ../sonic-visualiser/base ../sonic-visualiser/system $$LIBPATH
+LIBPATH = ../sonic-visualiser/framework ../sonic-visualiser/audioio ../sonic-visualiser/view ../sonic-visualiser/layer ../sonic-visualiser/data ../sonic-visualiser/widgets ../sonic-visualiser/plugin ../sonic-visualiser/transform ../sonic-visualiser/base ../sonic-visualiser/system $$LIBPATH
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvplugin -lsvbase -lsvsystem $$LIBS
+LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvtransform -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 PRE_TARGETDEPS += ../sonic-visualiser/framework/libsvframework.a \
                   ../sonic-visualiser/audioio/libsvaudioio.a \
@@ -27,6 +27,7 @@ PRE_TARGETDEPS += ../sonic-visualiser/framework/libsvframework.a \
                   ../sonic-visualiser/layer/libsvlayer.a \
                   ../sonic-visualiser/data/libsvdata.a \
                   ../sonic-visualiser/widgets/libsvwidgets.a \
+                  ../sonic-visualiser/transform/libsvtransform.a \
                   ../sonic-visualiser/plugin/libsvplugin.a \
                   ../sonic-visualiser/base/libsvbase.a \
                   ../sonic-visualiser/system/libsvsystem.a
