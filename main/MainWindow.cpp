@@ -132,6 +132,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 {
     setWindowTitle(tr("Vect"));
 
+    StorageAdviser::setFixedRecommendation(StorageAdviser::UseDisc |
+                                           StorageAdviser::ConserveSpace);
+
     UnitDatabase *udb = UnitDatabase::getInstance();
     udb->registerUnit("Hz");
     udb->registerUnit("dB");
@@ -1694,19 +1697,56 @@ MainWindow::modelAdded(Model *model)
     MainWindowBase::modelAdded(model);
     DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(model);
     if (dtvm) {
-        StorageAdviser::Criteria criteria = StorageAdviser::NoCriteria;
-        if (dtvm == getMainModel()) {
-            criteria = StorageAdviser::SpeedCritical;
+        if (!model->isReady()) {
+            connect(dtvm, SIGNAL(ready()), this, SLOT(modelReady()));
+        } else {
+            StorageAdviser::Criteria criteria = StorageAdviser::NoCriteria;
+            if (dtvm == getMainModel()) {
+                criteria = StorageAdviser::SpeedCritical;
+            }
+
+            FFTModel *fftmodel = new FFTModel
+                (dtvm,
+                 -1,
+                 HanningWindow,
+                 2048, 1024, 2048,
+                 false,
+                 criteria);
+
+            m_fftModelMap[dtvm] = fftmodel;
+            fftmodel->resume();
         }
-        m_fftModelMap[dtvm] = new FFTModel
-            (dtvm,
-             -1,
-             HanningWindow,
-             2048, 1024, 2048,
-             false,
-             criteria);
     }
 }
+
+void
+MainWindow::modelReady()
+{
+    QObject *s = sender();
+    std::cerr << "MainWindow::modelReady(" << s << ")" << std::endl;
+    if (s) {
+        DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(s);
+        if (dtvm) {
+            StorageAdviser::Criteria criteria = StorageAdviser::NoCriteria;
+            if (dtvm == getMainModel()) {
+                criteria = StorageAdviser::SpeedCritical;
+            }
+
+            FFTModel *fftmodel = new FFTModel
+                (dtvm,
+                 -1,
+                 HanningWindow,
+                 2048, 1024, 2048,
+                 false,
+                 criteria);
+
+            m_fftModelMap[dtvm] = fftmodel;
+            fftmodel->resume();
+        } else {
+            std::cerr << "Not a DenseTimeValueModel!" << std::endl;
+        }
+    }
+}            
 
 void
 MainWindow::modelAboutToBeDeleted(Model *model)
