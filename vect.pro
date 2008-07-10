@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 
-SV_UNIT_PACKAGES = vamp vamp-hostsdk fftw3f samplerate jack portaudio-2.0 mad id3tag oggz fishsound lrdf raptor sndfile liblo rubberband fftw3
+SV_UNIT_PACKAGES = vamp vamp-hostsdk fftw3f samplerate libpulse jack portaudio-2.0 mad id3tag oggz fishsound lrdf raptor sndfile liblo rubberband fftw3
 load(../sonic-visualiser/sv.prf)
 
 CONFIG += release sv qt thread warn_on stl rtti exceptions
@@ -19,7 +19,7 @@ LIBPATH = ../sonic-visualiser/framework ../sonic-visualiser/audioio ../sonic-vis
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvtransform -lsvplugin -lsvbase -lsvsystem $$LIBS
+LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvwidgets -lsvdata -lsvtransform -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 PRE_TARGETDEPS += ../sonic-visualiser/framework/libsvframework.a \
                   ../sonic-visualiser/audioio/libsvaudioio.a \
