@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 
-SV_UNIT_PACKAGES = vamp vamp-hostsdk fftw3f samplerate libpulse jack portaudio-2.0 mad id3tag oggz fishsound lrdf raptor sndfile liblo rubberband fftw3
+SV_UNIT_PACKAGES = vamp vamp-hostsdk fftw3f samplerate libpulse jack portaudio-2.0 mad id3tag oggz fishsound lrdf raptor rasqal redland sndfile liblo rubberband fftw3
 load(../sonic-visualiser/sv.prf)
 
 CONFIG += release sv qt thread warn_on stl rtti exceptions
@@ -15,11 +15,11 @@ ICON = icons/sv-macicon.icns
 
 DEPENDPATH += . ../sonic-visualiser i18n main
 INCLUDEPATH += . ../sonic-visualiser main
-LIBPATH = ../sonic-visualiser/framework ../sonic-visualiser/audioio ../sonic-visualiser/view ../sonic-visualiser/layer ../sonic-visualiser/data ../sonic-visualiser/widgets ../sonic-visualiser/plugin ../sonic-visualiser/transform ../sonic-visualiser/base ../sonic-visualiser/system $$LIBPATH
+LIBPATH = ../sonic-visualiser/framework ../sonic-visualiser/audioio ../sonic-visualiser/view ../sonic-visualiser/layer ../sonic-visualiser/data ../sonic-visualiser/widgets ../sonic-visualiser/plugin ../sonic-visualiser/transform ../sonic-visualiser/rdf ../sonic-visualiser/base ../sonic-visualiser/system $$LIBPATH
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvwidgets -lsvdata -lsvtransform -lsvplugin -lsvbase -lsvsystem $$LIBS
+LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvwidgets -lsvdata -lsvtransform -lsvrdf -lsvdata -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 PRE_TARGETDEPS += ../sonic-visualiser/framework/libsvframework.a \
                   ../sonic-visualiser/audioio/libsvaudioio.a \

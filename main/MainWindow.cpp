@@ -132,8 +132,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 {
     setWindowTitle(tr("Vect"));
 
-    StorageAdviser::setFixedRecommendation(StorageAdviser::UseDisc |
-                                           StorageAdviser::ConserveSpace);
+    StorageAdviser::setFixedRecommendation
+        (StorageAdviser::Recommendation(StorageAdviser::UseDisc |
+                                        StorageAdviser::ConserveSpace));
 
     UnitDatabase *udb = UnitDatabase::getInstance();
     udb->registerUnit("Hz");
