@@ -19,12 +19,13 @@ LIBPATH = ../sonic-visualiser/framework ../sonic-visualiser/audioio ../sonic-vis
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvwidgets -lsvdata -lsvtransform -lsvrdf -lsvdata -lsvplugin -lsvbase -lsvsystem $$LIBS
+LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvwidgets -lsvdata -lsvtransform -lsvrdf -lsvtransform -lsvdata -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 PRE_TARGETDEPS += ../sonic-visualiser/framework/libsvframework.a \
                   ../sonic-visualiser/audioio/libsvaudioio.a \
                   ../sonic-visualiser/view/libsvview.a \
                   ../sonic-visualiser/layer/libsvlayer.a \
+                  ../sonic-visualiser/rdf/libsvrdf.a \
                   ../sonic-visualiser/data/libsvdata.a \
                   ../sonic-visualiser/widgets/libsvwidgets.a \
                   ../sonic-visualiser/transform/libsvtransform.a \
