@@ -30,7 +30,7 @@
 #include "layer/LayerFactory.h"
 #include "transform/Transform.h"
 #include "framework/SVFileReader.h"
-#include "widgets/FileFinder.h"
+#include "widgets/InteractiveFileFinder.h"
 #include <map>
 
 class Document;
@@ -196,6 +196,7 @@ protected:
     virtual Model *selectExistingModeLayer(Pane *, QString);
 
     virtual void updateVisibleRangeDisplay(Pane *p) const;
+    virtual void updatePositionStatusDisplays() const;
 };
 
 

@@ -1651,6 +1651,13 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
 }
 
 void
+MainWindow::updatePositionStatusDisplays() const
+{
+    if (!statusBar()->isVisible()) return;
+
+}
+
+void
 MainWindow::outputLevelsChanged(float left, float right)
 {
     m_fader->setPeakLeft(left);
@@ -2064,4 +2071,5 @@ MainWindow::keyReference()
 {
     m_keyReference->show();
 }
+
 
