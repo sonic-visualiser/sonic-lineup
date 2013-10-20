@@ -35,8 +35,8 @@
 #include "widgets/IconLoader.h"
 #include "base/Preferences.h"
 
-PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
-    QDialog(parent, flags),
+PreferencesDialog::PreferencesDialog(QWidget *parent) :
+    QDialog(parent),
     m_changesOnRestart(false)
 {
     setWindowTitle(tr("Sonic Visualiser: Application Preferences"));

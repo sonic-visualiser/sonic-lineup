@@ -201,8 +201,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     QGridLayout *layout = new QGridLayout;
     
-    m_descriptionLabel = new QLabel;
-
     QScrollArea *scroll = new QScrollArea(frame);
     scroll->setWidgetResizable(true);
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -658,7 +656,7 @@ MainWindow::setupRecentFilesMenu()
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
                 (tr("Re-open"),
-                 action->shortcut(),
+                 action->shortcut().toString(),
                  tr("Re-open the current or most recently opened file"));
         }
 	m_recentFilesMenu->addAction(action);
@@ -881,7 +879,6 @@ void
 MainWindow::updateDescriptionLabel()
 {
     if (!getMainModel()) {
-	m_descriptionLabel->setText(tr("No audio file loaded."));
 	return;
     }
 
@@ -901,8 +898,6 @@ MainWindow::updateDescriptionLabel()
 	.arg(RealTime::frame2RealTime(getMainModel()->getEndFrame(), ssr)
 	     .toText(false).c_str())
 	.arg(description);
-
-    m_descriptionLabel->setText(description);
 }
 
 void
