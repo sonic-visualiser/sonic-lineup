@@ -96,7 +96,7 @@ main(int argc, char **argv)
 
     if (args.contains("--help") || args.contains("-h") || args.contains("-?")) {
         std::cerr << QApplication::tr(
-            "\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation.\n\nUsage:\n\n  %1 [--no-audio] [--no-osc] [<file> ...]\n\n  --no-audio: Do not attempt to open an audio output device\n  --no-osc: Do not provide an Open Sound Control port for remote control\n  <file>: One or more Sonic Visualiser (.sv) and audio files may be provided.\n").arg(argv[0]).toStdString() << std::endl;
+            "\nSonic Vector is a comparative viewer for sets of related audio recordings.\n\nUsage:\n\n  %1 [--no-audio] [<file1>, <file2>...]\n\n  --no-audio: Do not attempt to open an audio output device\n  <file1>, <file2>...: Audio files; Sonic Vector is designed for comparative\nviewing of multiple recordings of the same music or other related material.\n").arg(argv[0]).toStdString() << std::endl;
         exit(2);
     }
 
@@ -105,7 +105,7 @@ main(int argc, char **argv)
 
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
-    QApplication::setApplicationName("Vect");
+    QApplication::setApplicationName("Sonic Vector");
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
@@ -134,7 +134,7 @@ main(int argc, char **argv)
 
     //!!! load sv translations, plus vect translations
     QTranslator svTranslator;
-    QString svTrName = QString("sonic-visualiser_%1").arg(language);
+    QString svTrName = QString("sonic-vector_%1").arg(language);
     std::cerr << "Loading " << svTrName.toStdString() << "..." << std::endl;
     svTranslator.load(svTrName, ":i18n");
     application.installTranslator(&svTranslator);

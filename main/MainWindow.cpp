@@ -156,8 +156,15 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
 
     Preferences::getInstance()->setResampleOnLoad(true);
+
+
     Preferences::getInstance()->setSpectrogramSmoothing
-        (Preferences::SpectrogramInterpolated);
+//        (Preferences::SpectrogramInterpolated);
+        (Preferences::NoSpectrogramSmoothing);
+
+    Preferences::getInstance()->setSpectrogramXSmoothing
+//        (Preferences::SpectrogramXInterpolated);
+        (Preferences::NoSpectrogramXSmoothing);
 
     QSettings settings;
 
@@ -174,7 +181,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
                       .arg(int(TimeValueLayer::PlotStems)));
 
     settings.setValue("spectrogram",
-                      QString("<layer channel=\"-1\" windowSize=\"2048\" windowHopLevel=\"2\"/>"));
+                      QString("<layer channel=\"-1\" windowSize=\"1024\" windowHopLevel=\"2\"/>"));
 
     settings.setValue("melodicrange",
                       QString("<layer channel=\"-1\" gain=\"10\" normalizeVisibleArea=\"false\" normalizeColumns=\"false\" minFrequency=\"100\" maxFrequency=\"1200\" windowSize=\"4096\" windowOverlap=\"75\" binDisplay=\"0\" />"));
@@ -633,13 +640,13 @@ MainWindow::setupHelpMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     
-    action = new QAction(tr("Sonic Visualiser on the &Web"), this); 
-    action->setStatusTip(tr("Open the Sonic Visualiser website")); 
+    action = new QAction(tr("Sonic Vector on the &Web"), this); 
+    action->setStatusTip(tr("Open the Sonic Vector website")); 
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
-    action = new QAction(tr("&About Sonic Visualiser"), this); 
-    action->setStatusTip(tr("Show information about Sonic Visualiser")); 
+    action = new QAction(tr("&About Sonic Vector"), this); 
+    action->setStatusTip(tr("Show information about Sonic Vector")); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
 }
@@ -1935,13 +1942,13 @@ MainWindow::mouseLeftWidget()
 void
 MainWindow::website()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/sonicvector/"));
 }
 
 void
 MainWindow::help()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.0/en/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/sonicvector/doc/"));
 }
 
 void
@@ -1967,98 +1974,24 @@ MainWindow::about()
 
     QString aboutText;
 
-    aboutText += tr("<h3>About Sonic Visualiser</h3>");
-    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for<br>semantic music analysis and annotation.</p>");
+    aboutText += tr("<h3>About Sonic Vector</h3>");
+    aboutText += tr("<p>Sonic Vector is a comparative viewer for sets of related audio recordings.</p>");
     aboutText += tr("<p>%1 : %2 configuration</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
 
-#ifndef BUILD_STATIC
-    aboutText += tr("<br>Using Qt v%1 &copy; Trolltech AS").arg(QT_VERSION_STR);
-#else
-#ifdef QT_SHARED
-    aboutText += tr("<br>Using Qt v%1 &copy; Trolltech AS").arg(QT_VERSION_STR);
-#endif
-#endif
-
-#ifdef BUILD_STATIC
-    aboutText += tr("<p>Statically linked");
-#ifndef QT_SHARED
-    aboutText += tr("<br>With Qt (v%1) &copy; Trolltech AS").arg(QT_VERSION_STR);
-#endif
-#ifdef HAVE_JACK
-#ifdef JACK_VERSION
-    aboutText += tr("<br>With JACK audio output (v%1) &copy; Paul Davis and Jack O'Quin").arg(JACK_VERSION);
-#else
-    aboutText += tr("<br>With JACK audio output &copy; Paul Davis and Jack O'Quin");
-#endif
-#endif
-#ifdef HAVE_PORTAUDIO
-    aboutText += tr("<br>With PortAudio audio output &copy; Ross Bencina and Phil Burk");
-#endif
-#ifdef HAVE_OGGZ
-#ifdef OGGZ_VERSION
-    aboutText += tr("<br>With Ogg file decoder (oggz v%1, fishsound v%2) &copy; CSIRO Australia").arg(OGGZ_VERSION).arg(FISHSOUND_VERSION);
-#else
-    aboutText += tr("<br>With Ogg file decoder &copy; CSIRO Australia");
-#endif
-#endif
-#ifdef HAVE_MAD
-#ifdef MAD_VERSION
-    aboutText += tr("<br>With MAD mp3 decoder (v%1) &copy; Underbit Technologies Inc").arg(MAD_VERSION);
-#else
-    aboutText += tr("<br>With MAD mp3 decoder &copy; Underbit Technologies Inc");
-#endif
-#endif
-#ifdef HAVE_SAMPLERATE
-#ifdef SAMPLERATE_VERSION
-    aboutText += tr("<br>With libsamplerate (v%1) &copy; Erik de Castro Lopo").arg(SAMPLERATE_VERSION);
-#else
-    aboutText += tr("<br>With libsamplerate &copy; Erik de Castro Lopo");
-#endif
-#endif
-#ifdef HAVE_SNDFILE
-#ifdef SNDFILE_VERSION
-    aboutText += tr("<br>With libsndfile (v%1) &copy; Erik de Castro Lopo").arg(SNDFILE_VERSION);
-#else
-    aboutText += tr("<br>With libsndfile &copy; Erik de Castro Lopo");
-#endif
-#endif
-#ifdef HAVE_FFTW3F
-#ifdef FFTW3_VERSION
-    aboutText += tr("<br>With FFTW3 (v%1) &copy; Matteo Frigo and MIT").arg(FFTW3_VERSION);
-#else
-    aboutText += tr("<br>With FFTW3 &copy; Matteo Frigo and MIT");
-#endif
-#endif
-#ifdef HAVE_VAMP
-    aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
-#endif
-    aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
-    aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
-#ifdef HAVE_LIBLO
-#ifdef LIBLO_VERSION
-    aboutText += tr("<br>With liblo Lite OSC library (v%1) &copy; Steve Harris").arg(LIBLO_VERSION);
-#else
-    aboutText += tr("<br>With liblo Lite OSC library &copy; Steve Harris").arg(LIBLO_VERSION);
-#endif
-    if (m_oscQueue && m_oscQueue->isOK()) {
-        aboutText += tr("<p>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
-    }
-#endif
-    aboutText += "</p>";
-#endif
-
     aboutText += 
-        "<p>Sonic Visualiser Copyright &copy; 2005 - 2007 Chris Cannam and<br>"
+        "<p>Sonic Vector Copyright &copy; 2005 - 2013 Chris Cannam and<br>"
         "Queen Mary, University of London.</p>"
+        "<p>This program uses library code from many other authors. Please<br>"
+        "refer to the accompanying documentation for more information.</p>"
         "<p>This program is free software; you can redistribute it and/or<br>"
         "modify it under the terms of the GNU General Public License as<br>"
         "published by the Free Software Foundation; either version 2 of the<br>"
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</p>";
     
-    QMessageBox::about(this, tr("About Sonic Visualiser"), aboutText);
+    QMessageBox::about(this, tr("About Sonic Vector"), aboutText);
 }
 
 void
