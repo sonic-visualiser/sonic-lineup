@@ -114,7 +114,7 @@ main(int argc, char **argv)
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
-    for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+    for (int i = 0; i < (int)(sizeof(sizes)/sizeof(sizes[0])); ++i) {
         icon.addFile(QString(":icons/sv-%1x%2.png").arg(sizes[i]).arg(sizes[i]));
     }
     QApplication::setWindowIcon(icon);
@@ -148,8 +148,8 @@ main(int argc, char **argv)
     qRegisterMetaType<size_t>("size_t");
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
-    MainWindow gui(audioOutput, oscSupport);
-    application.setMainWindow(&gui);
+    MainWindow *gui = new MainWindow(audioOutput, oscSupport);
+    application.setMainWindow(gui);
 
     QDesktopWidget *desktop = QApplication::desktop();
     QRect available = desktop->availableGeometry();
@@ -178,7 +178,7 @@ main(int argc, char **argv)
 
     settings.endGroup();
     
-    gui.show();
+    gui->show();
 
     bool haveSession = false;
     bool haveMainModel = false;
@@ -193,7 +193,7 @@ main(int argc, char **argv)
 
         if (i->startsWith("http:") || i->startsWith("ftp:")) {
             std::cerr << "opening URL: \"" << i->toStdString() << "\"..." << std::endl;
-            status = gui.open(*i);
+            status = gui->open(*i);
             continue;
         }
 
@@ -201,7 +201,7 @@ main(int argc, char **argv)
 
         if (path.endsWith("sv")) {
             if (!haveSession) {
-                status = gui.openSessionFile(path);
+                status = gui->openSessionFile(path);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveSession = true;
                     haveMainModel = true;
@@ -213,42 +213,36 @@ main(int argc, char **argv)
         }
         if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
-                status = gui.open(path, MainWindow::ReplaceMainModel);
+                status = gui->open(path, MainWindow::ReplaceMainModel);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveMainModel = true;
                 }
             } else {
                 if (haveSession && !havePriorCommandLineModel) {
-                    status = gui.open(path, MainWindow::AskUser);
+                    status = gui->open(path, MainWindow::AskUser);
                     if (status == MainWindow::FileOpenSucceeded) {
                         havePriorCommandLineModel = true;
                     }
                 } else {
-                    status = gui.open(path, MainWindow::CreateAdditionalModel);
+                    status = gui->open(path, MainWindow::CreateAdditionalModel);
                 }
             }
         }
         if (status == MainWindow::FileOpenFailed) {
 	    QMessageBox::critical
-                (&gui, QMessageBox::tr("Failed to open file"),
+                (gui, QMessageBox::tr("Failed to open file"),
                  QMessageBox::tr("File \"%1\" could not be opened").arg(path));
         }
     }
-    
 
-
-/*
-    TipDialog tipDialog;
-    if (tipDialog.isOK()) {
-        tipDialog.exec();
-    }
-*/
     int rv = application.exec();
 //    std::cerr << "application.exec() returned " << rv << std::endl;
 
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();
     application.releaseMainWindow();
+
+    delete gui;
 
     cleanupMutex.unlock();
 

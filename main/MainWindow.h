@@ -93,6 +93,7 @@ protected slots:
     virtual void paneDropAccepted(Pane *, QStringList);
     virtual void paneDropAccepted(Pane *, QString);
 
+    virtual void alignToggled();
     virtual void playSpeedChanged(int);
     virtual void playSharpenToggled();
     virtual void playMonoToggled();

@@ -754,6 +754,18 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(plAction);
     m_keyReference->registerShortcut(soAction);
 */
+
+
+    QAction *alAction = 0;
+    alAction = toolbar->addAction(il.load("align"),
+                                  tr("Align File Timelines"));
+    alAction->setCheckable(true);
+    alAction->setChecked(m_viewManager->getAlignMode());
+    alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
+    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
+            alAction, SLOT(setChecked(bool)));
+    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+
     m_keyReference->registerShortcut(playAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
@@ -773,6 +785,8 @@ MainWindow::setupToolbars()
     menu->addAction(rwdStartAction);
     menu->addAction(ffwdEndAction);
     menu->addSeparator();
+    menu->addAction(alAction);
+    menu->addSeparator();
 
     m_rightButtonPlaybackMenu->addAction(playAction);
 /*
@@ -786,6 +800,8 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(rwdStartAction);
     m_rightButtonPlaybackMenu->addAction(ffwdEndAction);
+    m_rightButtonPlaybackMenu->addSeparator();
+    m_rightButtonPlaybackMenu->addAction(alAction);
     m_rightButtonPlaybackMenu->addSeparator();
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
@@ -1521,6 +1537,33 @@ MainWindow::renameCurrentLayer()
 		layer->setObjectName(newName);
 	    }
 	}
+    }
+}
+
+void
+MainWindow::alignToggled()
+{
+    QAction *action = dynamic_cast<QAction *>(sender());
+    
+    if (!m_viewManager) return;
+
+    if (action) {
+	m_viewManager->setAlignMode(action->isChecked());
+    } else {
+	m_viewManager->setAlignMode(!m_viewManager->getAlignMode());
+    }
+
+    if (m_viewManager->getAlignMode()) {
+        m_document->alignModels();
+        m_document->setAutoAlignment(true);
+    } else {
+        m_document->setAutoAlignment(false);
+    }
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+	Pane *pane = m_paneStack->getPane(i);
+	if (!pane) continue;
+        pane->update();
     }
 }
 

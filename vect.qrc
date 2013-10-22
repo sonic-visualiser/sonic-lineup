@@ -44,6 +44,8 @@
     <file>icons/exit.png</file>
     <file>icons/speaker.png</file>
     <file>icons/annotation.png</file>
+    <file>icons/align.png</file>
+    <file>icons/align-on.png</file>
     <file>icons/fileopen.png</file>
     <file>icons/fileopensession.png</file>
     <file>icons/fileopenaudio.png</file>
