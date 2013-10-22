@@ -161,11 +161,21 @@ main(int argc, char **argv)
 
     QSettings settings;
     settings.beginGroup("MainWindow");
+
     QSize size = settings.value("size", QSize(width, height)).toSize();
-    gui.resize(size);
+    gui->resizeConstrained(size);
+
     if (settings.contains("position")) {
-        gui.move(settings.value("position").toPoint());
+        QRect prevrect(settings.value("position").toPoint(), size);
+        if (!(available & prevrect).isEmpty()) {
+            gui->move(prevrect.topLeft());
+        }
     }
+
+    if (settings.value("maximised", false).toBool()) {
+        gui->setWindowState(Qt::WindowMaximized);
+    }
+
     settings.endGroup();
     
     gui.show();
