@@ -37,16 +37,21 @@
 #include <signal.h>
 
 static QMutex cleanupMutex;
+static bool cleanedUp = false;
 
 static void
 signalHandler(int /* signal */)
 {
     // Avoid this happening more than once across threads
 
-    cleanupMutex.lock();
     std::cerr << "signalHandler: cleaning up and exiting" << std::endl;
-    TempDirectory::getInstance()->cleanup();
-    exit(0); // without releasing mutex
+    cleanupMutex.lock();
+    if (!cleanedUp) {
+        TempDirectory::getInstance()->cleanup();
+        cleanedUp = true;
+    }
+    cleanupMutex.unlock();
+    exit(0);
 }
 
 class VectApplication : public QApplication
