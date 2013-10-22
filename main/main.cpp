@@ -235,5 +235,7 @@ main(int argc, char **argv)
     TempDirectory::getInstance()->cleanup();
     application.releaseMainWindow();
 
+    cleanupMutex.unlock();
+
     return rv;
 }
