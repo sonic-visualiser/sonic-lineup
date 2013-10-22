@@ -167,6 +167,14 @@ protected:
     QAction                 *m_ffwdAction;
     QAction                 *m_rwdAction;
 
+    QAction                 *m_playAction;
+    QAction                 *m_zoomInAction;
+    QAction                 *m_zoomOutAction;
+    QAction                 *m_zoomFitAction;
+    QAction                 *m_scrollLeftAction;
+    QAction                 *m_scrollRightAction;
+    QAction                 *m_showPropertyBoxesAction;
+
     bool                     m_exiting;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
