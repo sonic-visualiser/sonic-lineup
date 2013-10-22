@@ -125,6 +125,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_deleteSelectedAction(0),
     m_ffwdAction(0),
     m_rwdAction(0),
+    m_exiting(false),
     m_preferencesDialog(0),
     m_layerTreeView(0),
     m_keyReference(new KeyReference()),
@@ -359,6 +360,13 @@ MainWindow::setupMenus()
     setupViewMenu();
 
     m_mainMenusCreated = true;
+}
+
+void
+MainWindow::goFullScreen()
+{
+    m_paneStack->setParent(0);
+    m_paneStack->showFullScreen();
 }
 
 void
@@ -1339,6 +1347,11 @@ MainWindow::configureNewPane(Pane *pane)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
+    if (m_exiting) {
+        e->accept();
+        return;
+    }
+
 //    std::cerr << "MainWindow::closeEvent" << std::endl;
 
     if (m_openingAudioFile) {
@@ -1379,6 +1392,10 @@ MainWindow::closeEvent(QCloseEvent *e)
     closeSession();
 
     e->accept();
+
+    m_exiting = true;
+    qApp->closeAllWindows();
+    
     return;
 }
 
