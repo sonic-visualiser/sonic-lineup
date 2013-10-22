@@ -130,7 +130,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_keyReference(new KeyReference()),
     m_displayMode(WaveformMode)
 {
-    setWindowTitle(tr("Vect"));
+    setWindowTitle(tr("Sonic Vector"));
 
     StorageAdviser::setFixedRecommendation
         (StorageAdviser::Recommendation(StorageAdviser::UseDisc |
@@ -425,7 +425,7 @@ MainWindow::setupFileMenu()
     menu->addSeparator();
     action = new QAction(il.load("exit"), tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
-    action->setStatusTip(tr("Exit Vect"));
+    action->setStatusTip(tr("Exit Sonic Vector"));
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
@@ -984,7 +984,7 @@ MainWindow::closeSession()
     m_timeRulerLayer = 0; // document owned this
 
     m_sessionFile = "";
-    setWindowTitle(tr("Vect"));
+    setWindowTitle(tr("Sonic Vector"));
 
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
@@ -1484,7 +1484,7 @@ MainWindow::saveSessionAs()
 	QMessageBox::critical(this, tr("Failed to save file"),
 			      tr("Session file \"%1\" could not be saved.").arg(path));
     } else {
-	setWindowTitle(tr("Vect: %1")
+	setWindowTitle(tr("Sonic Vector: %1")
 		       .arg(QFileInfo(path).fileName()));
 	m_sessionFile = path;
 	CommandHistory::getInstance()->documentSaved();
