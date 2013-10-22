@@ -71,6 +71,7 @@ public slots:
     virtual bool commitData(bool mayAskUser); // on session shutdown
 
     void goFullScreen();
+    void endFullScreen();
 
 protected slots:
     virtual void openFile();
