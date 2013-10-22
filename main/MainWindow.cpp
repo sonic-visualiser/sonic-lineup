@@ -202,13 +202,13 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     QGridLayout *layout = new QGridLayout;
     
-    QScrollArea *scroll = new QScrollArea(frame);
-    scroll->setWidgetResizable(true);
-    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setFrameShape(QFrame::NoFrame);
+    m_mainScroll = new QScrollArea(frame);
+    m_mainScroll->setWidgetResizable(true);
+    m_mainScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_mainScroll->setFrameShape(QFrame::NoFrame);
 
     m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
-    scroll->setWidget(m_paneStack);
+    m_mainScroll->setWidget(m_paneStack);
     
     QButtonGroup *bg = new QButtonGroup;
     IconLoader il;
@@ -305,7 +305,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
     layout->setSpacing(4);
-    layout->addWidget(scroll, 0, 0, 1, 6);
+    layout->addWidget(m_mainScroll, 0, 0, 1, 6);
     layout->addWidget(m_overview, 1, 1);
     layout->addWidget(m_fader, 1, 2);
     layout->addWidget(m_playSpeed, 1, 3);
@@ -365,6 +365,13 @@ MainWindow::setupMenus()
 void
 MainWindow::goFullScreen()
 {
+    if (!m_viewManager) return;
+
+    if (m_viewManager->getZoomWheelsEnabled()) {
+        // The wheels seem to end up in the wrong place in full-screen mode
+        toggleZoomWheels();
+    }
+
     QWidget *ps = m_mainScroll->takeWidget();
     ps->setParent(0);
 
@@ -399,6 +406,7 @@ MainWindow::endFullScreen()
         if (sc) delete sc;
     }
 
+    m_paneStack->showNormal();
     m_mainScroll->setWidget(m_paneStack);
 }
 
@@ -647,6 +655,15 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Go Full-Screen"), this);
+    action->setShortcut(tr("F11"));
+    action->setStatusTip(tr("Expand the pane area to the whole screen"));
+    connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
 }
 
 void
@@ -741,15 +758,15 @@ MainWindow::setupToolbars()
     connect(m_rwdAction, SIGNAL(triggered()), this, SLOT(rewind()));
     connect(this, SIGNAL(canRewind(bool)), m_rwdAction, SLOT(setEnabled(bool)));
 
-    QAction *playAction = toolbar->addAction(il.load("playpause"),
-                                             tr("Play / Pause"));
-    playAction->setCheckable(true);
-    playAction->setShortcut(tr("Space"));
-    playAction->setStatusTip(tr("Start or stop playback from the current position"));
-    connect(playAction, SIGNAL(triggered()), this, SLOT(play()));
+    m_playAction = toolbar->addAction(il.load("playpause"),
+                                      tr("Play / Pause"));
+    m_playAction->setCheckable(true);
+    m_playAction->setShortcut(tr("Space"));
+    m_playAction->setStatusTip(tr("Start or stop playback from the current position"));
+    connect(m_playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
-	    playAction, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(canPlay(bool)), playAction, SLOT(setEnabled(bool)));
+	    m_playAction, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
 
     m_ffwdAction = toolbar->addAction(il.load("ffwd"),
                                               tr("Fast Forward"));
@@ -816,7 +833,7 @@ MainWindow::setupToolbars()
             alAction, SLOT(setChecked(bool)));
     connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
 
-    m_keyReference->registerShortcut(playAction);
+    m_keyReference->registerShortcut(m_playAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(rwdStartAction);
@@ -827,7 +844,7 @@ MainWindow::setupToolbars()
     menu->addAction(plAction);
     menu->addAction(soAction);
 */
-    menu->addAction(playAction);
+    menu->addAction(m_playAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
@@ -838,7 +855,7 @@ MainWindow::setupToolbars()
     menu->addAction(alAction);
     menu->addSeparator();
 
-    m_rightButtonPlaybackMenu->addAction(playAction);
+    m_rightButtonPlaybackMenu->addAction(m_playAction);
 /*
     m_rightButtonPlaybackMenu->addAction(psAction);
     m_rightButtonPlaybackMenu->addAction(plAction);
