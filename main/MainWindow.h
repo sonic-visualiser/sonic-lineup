@@ -55,7 +55,7 @@ class QPushButton;
 class OSCQueue;
 class OSCMessage;
 class KeyReference;
-
+class QScrollArea;
 
 class MainWindow : public MainWindowBase
 {
@@ -69,6 +69,9 @@ public:
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
     virtual bool commitData(bool mayAskUser); // on session shutdown
+
+    void goFullScreen();
+    void endFullScreen();
 
 protected slots:
     virtual void openFile();
@@ -93,6 +96,7 @@ protected slots:
     virtual void paneDropAccepted(Pane *, QStringList);
     virtual void paneDropAccepted(Pane *, QString);
 
+    virtual void alignToggled();
     virtual void playSpeedChanged(int);
     virtual void playSharpenToggled();
     virtual void playMonoToggled();
@@ -150,6 +154,8 @@ protected:
     QPushButton             *m_playSharpen;
     QPushButton             *m_playMono;
     WaveformLayer           *m_panLayer;
+    
+    QScrollArea             *m_mainScroll;
 
     bool                     m_mainMenusCreated;
     QMenu                   *m_playbackMenu;
@@ -160,6 +166,16 @@ protected:
     QAction                 *m_deleteSelectedAction;
     QAction                 *m_ffwdAction;
     QAction                 *m_rwdAction;
+
+    QAction                 *m_playAction;
+    QAction                 *m_zoomInAction;
+    QAction                 *m_zoomOutAction;
+    QAction                 *m_zoomFitAction;
+    QAction                 *m_scrollLeftAction;
+    QAction                 *m_scrollRightAction;
+    QAction                 *m_showPropertyBoxesAction;
+
+    bool                     m_exiting;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<QTreeView>      m_layerTreeView;

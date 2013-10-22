@@ -125,6 +125,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_deleteSelectedAction(0),
     m_ffwdAction(0),
     m_rwdAction(0),
+    m_exiting(false),
     m_preferencesDialog(0),
     m_layerTreeView(0),
     m_keyReference(new KeyReference()),
@@ -208,13 +209,13 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     QGridLayout *layout = new QGridLayout;
     
-    QScrollArea *scroll = new QScrollArea(frame);
-    scroll->setWidgetResizable(true);
-    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setFrameShape(QFrame::NoFrame);
+    m_mainScroll = new QScrollArea(frame);
+    m_mainScroll->setWidgetResizable(true);
+    m_mainScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_mainScroll->setFrameShape(QFrame::NoFrame);
 
     m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
-    scroll->setWidget(m_paneStack);
+    m_mainScroll->setWidget(m_paneStack);
     
     QButtonGroup *bg = new QButtonGroup;
     IconLoader il;
@@ -311,7 +312,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
     layout->setSpacing(4);
-    layout->addWidget(scroll, 0, 0, 1, 6);
+    layout->addWidget(m_mainScroll, 0, 0, 1, 6);
     layout->addWidget(m_overview, 1, 1);
     layout->addWidget(m_fader, 1, 2);
     layout->addWidget(m_playSpeed, 1, 3);
@@ -366,6 +367,54 @@ MainWindow::setupMenus()
     setupViewMenu();
 
     m_mainMenusCreated = true;
+}
+
+void
+MainWindow::goFullScreen()
+{
+    if (!m_viewManager) return;
+
+    if (m_viewManager->getZoomWheelsEnabled()) {
+        // The wheels seem to end up in the wrong place in full-screen mode
+        toggleZoomWheels();
+    }
+
+    QWidget *ps = m_mainScroll->takeWidget();
+    ps->setParent(0);
+
+    QShortcut *sc;
+
+    sc = new QShortcut(QKeySequence("Esc"), ps);
+    connect(sc, SIGNAL(activated()), this, SLOT(endFullScreen()));
+
+    sc = new QShortcut(QKeySequence("F11"), ps);
+    connect(sc, SIGNAL(activated()), this, SLOT(endFullScreen()));
+
+    QAction *acts[] = {
+        m_playAction, m_zoomInAction, m_zoomOutAction, m_zoomFitAction,
+        m_scrollLeftAction, m_scrollRightAction, m_showPropertyBoxesAction
+    };
+
+    for (int i = 0; i < sizeof(acts)/sizeof(acts[0]); ++i) {
+        sc = new QShortcut(acts[i]->shortcut(), ps);
+        connect(sc, SIGNAL(activated()), acts[i], SLOT(trigger()));
+    }
+
+    ps->showFullScreen();
+}
+
+void
+MainWindow::endFullScreen()
+{
+    // these were only created in goFullScreen:
+    QObjectList cl = m_paneStack->children();
+    foreach (QObject *o, cl) {
+        QShortcut *sc = qobject_cast<QShortcut *>(o);
+        if (sc) delete sc;
+    }
+
+    m_paneStack->showNormal();
+    m_mainScroll->setWidget(m_paneStack);
 }
 
 void
@@ -454,21 +503,21 @@ MainWindow::setupViewMenu()
 
     QMenu *menu = menuBar()->addMenu(tr("&View"));
     menu->setTearOffEnabled(true);
-    action = new QAction(tr("Scroll &Left"), this);
-    action->setShortcut(tr("Left"));
-    action->setStatusTip(tr("Scroll the current pane to the left"));
-    connect(action, SIGNAL(triggered()), this, SLOT(scrollLeft()));
-    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_scrollLeftAction = new QAction(tr("Scroll &Left"), this);
+    m_scrollLeftAction->setShortcut(tr("Left"));
+    m_scrollLeftAction->setStatusTip(tr("Scroll the current pane to the left"));
+    connect(m_scrollLeftAction, SIGNAL(triggered()), this, SLOT(scrollLeft()));
+    connect(this, SIGNAL(canScroll(bool)), m_scrollLeftAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_scrollLeftAction);
+    menu->addAction(m_scrollLeftAction);
 	
-    action = new QAction(tr("Scroll &Right"), this);
-    action->setShortcut(tr("Right"));
-    action->setStatusTip(tr("Scroll the current pane to the right"));
-    connect(action, SIGNAL(triggered()), this, SLOT(scrollRight()));
-    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_scrollRightAction = new QAction(tr("Scroll &Right"), this);
+    m_scrollRightAction->setShortcut(tr("Right"));
+    m_scrollRightAction->setStatusTip(tr("Scroll the current pane to the right"));
+    connect(m_scrollRightAction, SIGNAL(triggered()), this, SLOT(scrollRight()));
+    connect(this, SIGNAL(canScroll(bool)), m_scrollRightAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_scrollRightAction);
+    menu->addAction(m_scrollRightAction);
 	
     action = new QAction(tr("&Jump Left"), this);
     action->setShortcut(tr("Ctrl+Left"));
@@ -490,23 +539,23 @@ MainWindow::setupViewMenu()
 
     m_keyReference->setCategory(tr("Zoom"));
 
-    action = new QAction(il.load("zoom-in"),
-                         tr("Zoom &In"), this);
-    action->setShortcut(tr("Up"));
-    action->setStatusTip(tr("Increase the zoom level"));
-    connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
-    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_zoomInAction = new QAction(il.load("zoom-in"),
+                                 tr("Zoom &In"), this);
+    m_zoomInAction->setShortcut(tr("Up"));
+    m_zoomInAction->setStatusTip(tr("Increase the zoom level"));
+    connect(m_zoomInAction, SIGNAL(triggered()), this, SLOT(zoomIn()));
+    connect(this, SIGNAL(canZoom(bool)), m_zoomInAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_zoomInAction);
+    menu->addAction(m_zoomInAction);
 	
-    action = new QAction(il.load("zoom-out"),
-                         tr("Zoom &Out"), this);
-    action->setShortcut(tr("Down"));
-    action->setStatusTip(tr("Decrease the zoom level"));
-    connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
-    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_zoomOutAction = new QAction(il.load("zoom-out"),
+                                  tr("Zoom &Out"), this);
+    m_zoomOutAction->setShortcut(tr("Down"));
+    m_zoomOutAction->setStatusTip(tr("Decrease the zoom level"));
+    connect(m_zoomOutAction, SIGNAL(triggered()), this, SLOT(zoomOut()));
+    connect(this, SIGNAL(canZoom(bool)), m_zoomOutAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_zoomOutAction);
+    menu->addAction(m_zoomOutAction);
 	
     action = new QAction(tr("Restore &Default Zoom"), this);
     action->setStatusTip(tr("Restore the zoom level to the default"));
@@ -514,24 +563,42 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    action = new QAction(il.load("zoom-fit"),
-                         tr("Zoom to &Fit"), this);
-    action->setShortcut(tr("F"));
-    action->setStatusTip(tr("Zoom to show the whole file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
-    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_zoomFitAction = new QAction(il.load("zoom-fit"),
+                                  tr("Zoom to &Fit"), this);
+    m_zoomFitAction->setShortcut(tr("F"));
+    m_zoomFitAction->setStatusTip(tr("Zoom to show the whole file"));
+    connect(m_zoomFitAction, SIGNAL(triggered()), this, SLOT(zoomToFit()));
+    connect(this, SIGNAL(canZoom(bool)), m_zoomFitAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_zoomFitAction);
+    menu->addAction(m_zoomFitAction);
 
     menu->addSeparator();
 
     m_keyReference->setCategory(tr("Display Features"));
 
+    action = new QAction(tr("Show &Centre Line"), this);
+    action->setShortcut(tr("'"));
+    action->setStatusTip(tr("Show or hide the centre line"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleCentreLine()));
+    action->setCheckable(true);
+    action->setChecked(true);
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    action = new QAction(tr("Toggle All Time Rulers"), this);
+    action->setShortcut(tr("#"));
+    action->setStatusTip(tr("Show or hide all time rulers"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleTimeRulers()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    menu->addSeparator();
+
     QActionGroup *overlayGroup = new QActionGroup(this);
         
     action = new QAction(tr("Show &No Overlays"), this);
     action->setShortcut(tr("0"));
-    action->setStatusTip(tr("Hide centre indicator, frame times, layer names and scale"));
+    action->setStatusTip(tr("Hide times, layer names, and scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
     action->setCheckable(true);
     action->setChecked(false);
@@ -541,18 +608,8 @@ MainWindow::setupViewMenu()
         
     action = new QAction(tr("Show &Minimal Overlays"), this);
     action->setShortcut(tr("9"));
-    action->setStatusTip(tr("Show centre indicator only"));
+    action->setStatusTip(tr("Show times and basic scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showMinimalOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-        
-    action = new QAction(tr("Show &Standard Overlays"), this);
-    action->setShortcut(tr("8"));
-    action->setStatusTip(tr("Show centre indicator, frame times and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showStandardOverlays()));
     action->setCheckable(true);
     action->setChecked(true);
     overlayGroup->addAction(action);
@@ -560,8 +617,8 @@ MainWindow::setupViewMenu()
     menu->addAction(action);
         
     action = new QAction(tr("Show &All Overlays"), this);
-    action->setShortcut(tr("7"));
-    action->setStatusTip(tr("Show all texts and scale"));
+    action->setShortcut(tr("8"));
+    action->setStatusTip(tr("Show times, layer names, and scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
     action->setCheckable(true);
     action->setChecked(false);
@@ -580,14 +637,14 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
         
-    action = new QAction(tr("Show Property Bo&xes"), this);
-    action->setShortcut(tr("X"));
-    action->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
-    connect(action, SIGNAL(triggered()), this, SLOT(togglePropertyBoxes()));
-    action->setCheckable(true);
-    action->setChecked(false); //!!!
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showPropertyBoxesAction = new QAction(tr("Show Property Bo&xes"), this);
+    m_showPropertyBoxesAction->setShortcut(tr("X"));
+    m_showPropertyBoxesAction->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
+    connect(m_showPropertyBoxesAction, SIGNAL(triggered()), this, SLOT(togglePropertyBoxes()));
+    m_showPropertyBoxesAction->setCheckable(true);
+    m_showPropertyBoxesAction->setChecked(false);
+    m_keyReference->registerShortcut(m_showPropertyBoxesAction);
+    menu->addAction(m_showPropertyBoxesAction);
 
     action = new QAction(tr("Show Status &Bar"), this);
     action->setStatusTip(tr("Show context help information in the status bar at the bottom of the window"));
@@ -611,6 +668,15 @@ MainWindow::setupViewMenu()
     action->setShortcut(tr("H"));
     action->setStatusTip(tr("Open a window displaying the hierarchy of panes and layers in this session"));
     connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Go Full-Screen"), this);
+    action->setShortcut(tr("F11"));
+    action->setStatusTip(tr("Expand the pane area to the whole screen"));
+    connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 }
@@ -648,6 +714,15 @@ MainWindow::setupHelpMenu()
     action = new QAction(tr("&About Sonic Vector"), this); 
     action->setStatusTip(tr("Show information about Sonic Vector")); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Go Full-Screen"), this);
+    action->setShortcut(tr("F11"));
+    action->setStatusTip(tr("Expand the pane area to the whole screen"));
+    connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
+    m_keyReference->registerShortcut(action);
     menu->addAction(action);
 }
 
@@ -698,15 +773,15 @@ MainWindow::setupToolbars()
     connect(m_rwdAction, SIGNAL(triggered()), this, SLOT(rewind()));
     connect(this, SIGNAL(canRewind(bool)), m_rwdAction, SLOT(setEnabled(bool)));
 
-    QAction *playAction = toolbar->addAction(il.load("playpause"),
-                                             tr("Play / Pause"));
-    playAction->setCheckable(true);
-    playAction->setShortcut(tr("Space"));
-    playAction->setStatusTip(tr("Start or stop playback from the current position"));
-    connect(playAction, SIGNAL(triggered()), this, SLOT(play()));
+    m_playAction = toolbar->addAction(il.load("playpause"),
+                                      tr("Play / Pause"));
+    m_playAction->setCheckable(true);
+    m_playAction->setShortcut(tr("Space"));
+    m_playAction->setStatusTip(tr("Start or stop playback from the current position"));
+    connect(m_playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
-	    playAction, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(canPlay(bool)), playAction, SLOT(setEnabled(bool)));
+	    m_playAction, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
 
     m_ffwdAction = toolbar->addAction(il.load("ffwd"),
                                               tr("Fast Forward"));
@@ -761,7 +836,19 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(plAction);
     m_keyReference->registerShortcut(soAction);
 */
-    m_keyReference->registerShortcut(playAction);
+
+
+    QAction *alAction = 0;
+    alAction = toolbar->addAction(il.load("align"),
+                                  tr("Align File Timelines"));
+    alAction->setCheckable(true);
+    alAction->setChecked(m_viewManager->getAlignMode());
+    alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
+    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
+            alAction, SLOT(setChecked(bool)));
+    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+
+    m_keyReference->registerShortcut(m_playAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(rwdStartAction);
@@ -772,7 +859,7 @@ MainWindow::setupToolbars()
     menu->addAction(plAction);
     menu->addAction(soAction);
 */
-    menu->addAction(playAction);
+    menu->addAction(m_playAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
@@ -780,8 +867,10 @@ MainWindow::setupToolbars()
     menu->addAction(rwdStartAction);
     menu->addAction(ffwdEndAction);
     menu->addSeparator();
+    menu->addAction(alAction);
+    menu->addSeparator();
 
-    m_rightButtonPlaybackMenu->addAction(playAction);
+    m_rightButtonPlaybackMenu->addAction(m_playAction);
 /*
     m_rightButtonPlaybackMenu->addAction(psAction);
     m_rightButtonPlaybackMenu->addAction(plAction);
@@ -793,6 +882,8 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(rwdStartAction);
     m_rightButtonPlaybackMenu->addAction(ffwdEndAction);
+    m_rightButtonPlaybackMenu->addSeparator();
+    m_rightButtonPlaybackMenu->addAction(alAction);
     m_rightButtonPlaybackMenu->addSeparator();
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
@@ -1330,6 +1421,11 @@ MainWindow::configureNewPane(Pane *pane)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
+    if (m_exiting) {
+        e->accept();
+        return;
+    }
+
 //    std::cerr << "MainWindow::closeEvent" << std::endl;
 
     if (m_openingAudioFile) {
@@ -1346,8 +1442,11 @@ MainWindow::closeEvent(QCloseEvent *e)
 
     QSettings settings;
     settings.beginGroup("MainWindow");
-    settings.setValue("size", size());
-    settings.setValue("position", pos());
+    settings.setValue("maximised", isMaximized());
+    if (!isMaximized()) {
+        settings.setValue("size", size());
+        settings.setValue("position", pos());
+    }
     settings.endGroup();
 
     delete m_keyReference;
@@ -1367,6 +1466,10 @@ MainWindow::closeEvent(QCloseEvent *e)
     closeSession();
 
     e->accept();
+
+    m_exiting = true;
+    qApp->closeAllWindows();
+    
     return;
 }
 
@@ -1525,6 +1628,33 @@ MainWindow::renameCurrentLayer()
 		layer->setObjectName(newName);
 	    }
 	}
+    }
+}
+
+void
+MainWindow::alignToggled()
+{
+    QAction *action = dynamic_cast<QAction *>(sender());
+    
+    if (!m_viewManager) return;
+
+    if (action) {
+	m_viewManager->setAlignMode(action->isChecked());
+    } else {
+	m_viewManager->setAlignMode(!m_viewManager->getAlignMode());
+    }
+
+    if (m_viewManager->getAlignMode()) {
+        m_document->alignModels();
+        m_document->setAutoAlignment(true);
+    } else {
+        m_document->setAutoAlignment(false);
+    }
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+	Pane *pane = m_paneStack->getPane(i);
+	if (!pane) continue;
+        pane->update();
     }
 }
 
