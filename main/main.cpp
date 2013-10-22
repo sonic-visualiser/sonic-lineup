@@ -179,7 +179,6 @@ main(int argc, char **argv)
     settings.endGroup();
     
     gui->show();
-    gui->goFullScreen();
 
     bool haveSession = false;
     bool haveMainModel = false;
