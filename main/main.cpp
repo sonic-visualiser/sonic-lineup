@@ -97,7 +97,6 @@ main(int argc, char **argv)
     svSystemSpecificInitialisation();
 
     bool audioOutput = true;
-    bool oscSupport = false;
 
     if (args.contains("--help") || args.contains("-h") || args.contains("-?")) {
         std::cerr << QApplication::tr(
@@ -106,7 +105,6 @@ main(int argc, char **argv)
     }
 
     if (args.contains("--no-audio")) audioOutput = false;
-//    if (args.contains("--no-osc")) oscSupport = false;
 
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
@@ -148,7 +146,7 @@ main(int argc, char **argv)
     qRegisterMetaType<size_t>("size_t");
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
-    MainWindow *gui = new MainWindow(audioOutput, oscSupport);
+    MainWindow *gui = new MainWindow(audioOutput);
     application.setMainWindow(gui);
 
     QDesktopWidget *desktop = QApplication::desktop();

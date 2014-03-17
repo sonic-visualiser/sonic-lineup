@@ -52,18 +52,16 @@ class QCheckBox;
 class PreferencesDialog;
 class QTreeView;
 class QPushButton;
-class OSCQueue;
-class OSCMessage;
 class KeyReference;
 class QScrollArea;
+class OSCMessage;
 
 class MainWindow : public MainWindowBase
 {
     Q_OBJECT
 
 public:
-    MainWindow(bool withAudioOutput = true,
-               bool withOSCSupport = true);
+    MainWindow(bool withAudioOutput = true);
     virtual ~MainWindow();
 
 public slots:

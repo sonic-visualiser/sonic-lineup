@@ -114,8 +114,8 @@ using std::map;
 using std::set;
 
 
-MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
-    MainWindowBase(withAudioOutput, withOSCSupport, false),
+MainWindow::MainWindow(bool withAudioOutput) :
+    MainWindowBase(withAudioOutput, false),
     m_overview(0),
     m_mainMenusCreated(false),
     m_playbackMenu(0),
