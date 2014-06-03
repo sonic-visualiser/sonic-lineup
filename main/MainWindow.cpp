@@ -331,6 +331,8 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     statusBar();
 
+    finaliseMenus();
+
     newSession();
 }
 
