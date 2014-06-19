@@ -103,7 +103,7 @@ protected slots:
     virtual void slowDownPlayback();
     virtual void restoreNormalPlayback();
 
-    virtual void sampleRateMismatch(size_t, size_t, bool);
+    virtual void sampleRateMismatch(int, int, bool);
     virtual void audioOverloadPluginDisabled();
     virtual void audioTimeStretchMultiChannelDisabled();
 

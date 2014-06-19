@@ -397,7 +397,7 @@ MainWindow::goFullScreen()
         m_scrollLeftAction, m_scrollRightAction, m_showPropertyBoxesAction
     };
 
-    for (int i = 0; i < sizeof(acts)/sizeof(acts[0]); ++i) {
+    for (int i = 0; i < int(sizeof(acts)/sizeof(acts[0])); ++i) {
         sc = new QShortcut(acts[i]->shortcut(), ps);
         connect(sc, SIGNAL(activated()), acts[i], SLOT(trigger()));
     }
@@ -937,12 +937,6 @@ MainWindow::updateMenuStates()
     bool haveCurrentLayer =
         (haveCurrentPane &&
          (currentLayer != 0));
-    bool haveSelection = 
-	(m_viewManager &&
-	 !m_viewManager->getSelections().empty());
-    bool haveCurrentEditableLayer =
-	(haveCurrentLayer &&
-	 currentLayer->isLayerEditable());
     bool haveCurrentTimeInstantsLayer = 
 	(haveCurrentLayer &&
 	 dynamic_cast<TimeInstantLayer *>(currentLayer));
@@ -984,8 +978,8 @@ MainWindow::updateDescriptionLabel()
 
     QString description;
 
-    size_t ssr = getMainModel()->getSampleRate();
-    size_t tsr = ssr;
+    int ssr = getMainModel()->getSampleRate();
+    int tsr = ssr;
     if (m_playSource) tsr = m_playSource->getTargetSampleRate();
 
     if (ssr != tsr) {
@@ -1358,7 +1352,7 @@ MainWindow::paneAboutToBeDeleted(Pane *pane)
 }    
 
 void
-MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
+MainWindow::paneDropAccepted(Pane * /* pane */, QStringList uriList)
 {
 //    if (pane) m_paneStack->setCurrentPane(pane);
 
@@ -1741,7 +1735,7 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
     }
 
     bool haveSelection = false;
-    size_t startFrame = 0, endFrame = 0;
+    int startFrame = 0, endFrame = 0;
 
     if (m_viewManager && m_viewManager->haveInProgressSelection()) {
 
@@ -1799,7 +1793,7 @@ MainWindow::outputLevelsChanged(float left, float right)
 }
 
 void
-MainWindow::sampleRateMismatch(size_t requested, size_t actual,
+MainWindow::sampleRateMismatch(int requested, int actual,
                                bool willResample)
 {
     if (!willResample) {
@@ -1946,7 +1940,7 @@ MainWindow::modelGenerationFailed(QString transformName, QString message)
 }
 
 void
-MainWindow::modelGenerationWarning(QString transformName, QString message)
+MainWindow::modelGenerationWarning(QString /* transformName */, QString message)
 {
     QMessageBox::warning
         (this, tr("Warning"), message, QMessageBox::Ok);
@@ -1976,7 +1970,8 @@ MainWindow::modelRegenerationFailed(QString layerName,
 
 void
 MainWindow::modelRegenerationWarning(QString layerName,
-                                     QString transformName, QString message)
+                                     QString /* transformName */,
+                                     QString message)
 {
     QMessageBox::warning
         (this, tr("Warning"), tr("<b>Warning when regenerating layer</b><p>When regenerating the derived layer \"%1\" using new data model as input:<p>%2").arg(layerName).arg(message), QMessageBox::Ok);
@@ -2021,7 +2016,7 @@ MainWindow::showLayerTree()
 }
 
 void
-MainWindow::handleOSCMessage(const OSCMessage &message)
+MainWindow::handleOSCMessage(const OSCMessage & /* message */)
 {
     std::cerr << "MainWindow::handleOSCMessage: Not implemented" << std::endl;
 }
