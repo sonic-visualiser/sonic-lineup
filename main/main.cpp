@@ -57,7 +57,7 @@ signalHandler(int /* signal */)
 class VectApplication : public QApplication
 {
 public:
-    VectApplication(int argc, char **argv) :
+    VectApplication(int &argc, char **argv) :
         QApplication(argc, argv),
         m_mainWindow(0) { }
     virtual ~VectApplication() { }
@@ -80,7 +80,7 @@ protected:
 int
 main(int argc, char **argv)
 {
-    StoreStartupLocale();
+    svSystemSpecificInitialisation();
 
     VectApplication application(argc, argv);
 
@@ -142,8 +142,9 @@ main(int argc, char **argv)
     svTranslator.load(svTrName, ":i18n");
     application.installTranslator(&svTranslator);
 
+    StoreStartupLocale();
+
     // Permit size_t and PropertyName to be used as args in queued signal calls
-    qRegisterMetaType<size_t>("size_t");
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
     MainWindow *gui = new MainWindow(audioOutput);
@@ -199,7 +200,7 @@ main(int argc, char **argv)
 
         if (path.endsWith("sv")) {
             if (!haveSession) {
-                status = gui->openSessionFile(path);
+                status = gui->openSessionPath(path);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveSession = true;
                     haveMainModel = true;
@@ -211,18 +212,18 @@ main(int argc, char **argv)
         }
         if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
-                status = gui->open(path, MainWindow::ReplaceMainModel);
+                status = gui->openPath(path, MainWindow::ReplaceMainModel);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveMainModel = true;
                 }
             } else {
                 if (haveSession && !havePriorCommandLineModel) {
-                    status = gui->open(path, MainWindow::AskUser);
+                    status = gui->openPath(path, MainWindow::AskUser);
                     if (status == MainWindow::FileOpenSucceeded) {
                         havePriorCommandLineModel = true;
                     }
                 } else {
-                    status = gui->open(path, MainWindow::CreateAdditionalModel);
+                    status = gui->openPath(path, MainWindow::CreateAdditionalModel);
                 }
             }
         }
