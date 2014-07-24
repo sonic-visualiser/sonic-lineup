@@ -1013,6 +1013,8 @@ MainWindow::newSession()
 {
     if (!checkSaveModified()) return;
 
+    cerr << "MainWindow::newSession" << endl;
+
     closeSession();
     createDocument();
     m_document->setAutoAlignment(true);
@@ -1141,15 +1143,20 @@ MainWindow::openRecentFile()
     QAction *action = dynamic_cast<QAction *>(obj);
     
     if (!action) {
-	std::cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
-		  << std::endl;
+	cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
+		  << endl;
 	return;
     }
 
     QString path = action->text();
     if (path == "") return;
 
+
+    cerr << "about to call open(), have " << m_paneStack->getPaneCount() << " panes" << endl;
+
     FileOpenStatus status = open(path, CreateAdditionalModel);
+
+    cerr << "called open(), have " << m_paneStack->getPaneCount() << " panes" << endl;
 
     if (status == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open location"),
@@ -1243,7 +1250,7 @@ MainWindow::curveModeSelected()
             }
             
         } else {
-            std::cerr << "No Aubio onset detector plugin available" << std::endl;
+            cerr << "No Aubio onset detector plugin available" << endl;
         }
     }
 
@@ -1394,7 +1401,7 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::configureNewPane(Pane *pane)
 {
-    std::cerr << "MainWindow::configureNewPane(" << pane << ")" << std::endl;
+    cerr << "MainWindow::configureNewPane(" << pane << ")" << endl;
 
     if (!pane) return;
 
@@ -1422,16 +1429,16 @@ MainWindow::closeEvent(QCloseEvent *e)
         return;
     }
 
-//    std::cerr << "MainWindow::closeEvent" << std::endl;
+//    cerr << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
-//        std::cerr << "Busy - ignoring close event" << std::endl;
+//        cerr << "Busy - ignoring close event" << endl;
 	e->ignore();
 	return;
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-//        std::cerr << "Ignoring close event" << std::endl;
+//        cerr << "Ignoring close event" << endl;
 	e->ignore();
 	return;
     }
@@ -1662,7 +1669,7 @@ MainWindow::playSpeedChanged(int position)
     float percent = m_playSpeed->mappedValue();
     float factor = mapper.getFactorForValue(percent);
 
-    std::cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << std::endl;
+    cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << endl;
 
     bool something = (position != 100);
 
@@ -1870,7 +1877,7 @@ void
 MainWindow::modelReady()
 {
     QObject *s = sender();
-    std::cerr << "MainWindow::modelReady(" << s << ")" << std::endl;
+    cerr << "MainWindow::modelReady(" << s << ")" << endl;
     if (s) {
         DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(s);
         if (dtvm) {
@@ -1890,7 +1897,7 @@ MainWindow::modelReady()
             m_fftModelMap[dtvm] = fftmodel;
             fftmodel->resume();
         } else {
-            std::cerr << "Not a DenseTimeValueModel!" << std::endl;
+            cerr << "Not a DenseTimeValueModel!" << endl;
         }
     }
 }            
@@ -1991,7 +1998,7 @@ MainWindow::alignmentFailed(QString transformName, QString message)
 void
 MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
 {
-//    std::cerr << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << std::endl;
+//    cerr << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << endl;
     m_paneStack->setCurrentPane(pane);
     m_rightButtonMenu->popup(position);
 }
@@ -2018,7 +2025,7 @@ MainWindow::showLayerTree()
 void
 MainWindow::handleOSCMessage(const OSCMessage & /* message */)
 {
-    std::cerr << "MainWindow::handleOSCMessage: Not implemented" << std::endl;
+    cerr << "MainWindow::handleOSCMessage: Not implemented" << endl;
 }
 
 void
