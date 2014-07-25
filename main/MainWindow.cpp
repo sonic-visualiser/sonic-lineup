@@ -1017,17 +1017,10 @@ MainWindow::newSession()
 
     closeSession();
     createDocument();
-    m_document->setAutoAlignment(true);
 
-    Pane *pane = m_paneStack->addPane();
+    SVDEBUG << "MainWindow::newSession: setting auto-alignment on document " << m_document << endl;
 
-    connect(pane, SIGNAL(contextHelpChanged(const QString &)),
-            this, SLOT(contextHelpChanged(const QString &)));
-
-    Layer *waveform = m_document->createMainModelLayer(LayerFactory::Waveform);
-    m_document->addLayerToView(pane, waveform);
-
-    m_overview->registerView(pane);
+    m_document->setAutoAlignment(m_viewManager->getAlignMode());
 
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
@@ -1915,6 +1908,8 @@ MainWindow::modelAboutToBeDeleted(Model *model)
 void
 MainWindow::mainModelChanged(WaveFileModel *model)
 {
+    SVDEBUG << "MainWindow::mainModelChanged(" << model << ")" << endl;
+
     m_panLayer->setModel(model);
 
     MainWindowBase::mainModelChanged(model);
@@ -1923,6 +1918,19 @@ MainWindow::mainModelChanged(WaveFileModel *model)
         connect(m_fader, SIGNAL(valueChanged(float)),
                 m_playTarget, SLOT(setOutputGain(float)));
     }
+
+    SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
+    if (model && m_paneStack && (m_paneStack->getPaneCount() == 0)) {
+	AddPaneCommand *command = new AddPaneCommand(this);
+	CommandHistory::getInstance()->addCommand(command);
+	Pane *pane = command->getPane();
+	Layer *newLayer = m_document->createImportedLayer(model);
+	if (newLayer) {
+	    m_document->addLayerToView(pane, newLayer);
+	}
+    }
+
+    m_document->setAutoAlignment(m_viewManager->getAlignMode());
 }
 
 void
