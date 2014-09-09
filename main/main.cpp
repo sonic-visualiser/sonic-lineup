@@ -192,7 +192,7 @@ main(int argc, char **argv)
 
         if (i->startsWith("http:") || i->startsWith("ftp:")) {
             std::cerr << "opening URL: \"" << i->toStdString() << "\"..." << std::endl;
-            status = gui->open(*i);
+            status = gui->openPath(*i);
             continue;
         }
 

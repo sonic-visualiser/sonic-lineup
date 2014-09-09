@@ -1084,7 +1084,7 @@ MainWindow::openFile()
 
     if (path.isEmpty()) return;
 
-    FileOpenStatus status = open(path, CreateAdditionalModel);
+    FileOpenStatus status = openPath(path, CreateAdditionalModel);
 
     if (status == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open file"),
@@ -1116,7 +1116,7 @@ MainWindow::openLocation()
 
     if (text.isEmpty()) return;
 
-    FileOpenStatus status = open(text, CreateAdditionalModel);
+    FileOpenStatus status = openPath(text, CreateAdditionalModel);
 
     if (status == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open location"),
@@ -1147,7 +1147,7 @@ MainWindow::openRecentFile()
 
     cerr << "about to call open(), have " << m_paneStack->getPaneCount() << " panes" << endl;
 
-    FileOpenStatus status = open(path, CreateAdditionalModel);
+    FileOpenStatus status = openPath(path, CreateAdditionalModel);
 
     cerr << "called open(), have " << m_paneStack->getPaneCount() << " panes" << endl;
 
@@ -1358,7 +1358,7 @@ MainWindow::paneDropAccepted(Pane * /* pane */, QStringList uriList)
 
     for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
 
-        FileOpenStatus status = open(*i, CreateAdditionalModel);
+        FileOpenStatus status = openPath(*i, CreateAdditionalModel);
 
         if (status == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
