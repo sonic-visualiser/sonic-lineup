@@ -229,6 +229,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     QToolButton *button = new QToolButton;
     button->setIcon(il.load("waveform"));
+    button->setToolTip(tr("Waveform"));
     button->setCheckable(true);
     button->setChecked(true);
     button->setAutoRaise(true);
@@ -238,6 +239,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     button = new QToolButton;
     button->setIcon(il.load("values"));
+    button->setToolTip(tr("Novelty Curve"));
     button->setCheckable(true);
     button->setChecked(false);
     button->setAutoRaise(true);
@@ -247,6 +249,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     button = new QToolButton;
     button->setIcon(il.load("spectrogram"));
+    button->setToolTip(tr("Full-Range Spectrogram"));
     button->setCheckable(true);
     button->setChecked(false);
     button->setAutoRaise(true);
@@ -256,6 +259,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     button = new QToolButton;
     button->setIcon(il.load("melodogram"));
+    button->setToolTip(tr("Melodic-Range Spectrogram"));
     button->setCheckable(true);
     button->setChecked(false);
     button->setAutoRaise(true);
@@ -1177,6 +1181,13 @@ MainWindow::openRecentFile()
 Model *
 MainWindow::selectExistingModeLayer(Pane *pane, QString name)
 {   
+    // Hides all layers in the given pane that have names differing
+    // from the given name, except for time instants layers (which are
+    // assumed to be used for segment display). If a layer is found
+    // that has the given name, shows that layer and returns 0. If no
+    // layer is found with the given name, returns a pointer to the
+    // model from which such a layer should be constructed.
+
     Model *model = 0;
 
     bool have = false;
@@ -1184,11 +1195,11 @@ MainWindow::selectExistingModeLayer(Pane *pane, QString name)
     for (int i = 0; i < pane->getLayerCount(); ++i) {
         
         Layer *layer = pane->getLayer(i);
-        if (!layer) continue;
+        if (!layer || qobject_cast<TimeInstantLayer *>(layer)) continue;
         
         Model *lm = layer->getModel();
         while (lm && lm->getSourceModel()) lm = lm->getSourceModel();
-        if (dynamic_cast<WaveFileModel *>(lm)) model = lm;
+        if (qobject_cast<WaveFileModel *>(lm)) model = lm;
         
         QString ln = layer->objectName();
         if (ln != name) {
@@ -1297,7 +1308,7 @@ MainWindow::spectrogramModeSelected()
 
         Model *model = selectExistingModeLayer(pane, name);
         if (!model) continue;
-
+        
         Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
         newLayer->setObjectName(name);
         m_document->setModel(newLayer, model);
