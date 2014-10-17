@@ -215,6 +215,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_mainScroll->setFrameShape(QFrame::NoFrame);
 
     m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
+    m_paneStack->setShowAlignmentViews(true);
     m_mainScroll->setWidget(m_paneStack);
     
     QButtonGroup *bg = new QButtonGroup;
