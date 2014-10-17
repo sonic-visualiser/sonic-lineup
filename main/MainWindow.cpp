@@ -1230,6 +1230,36 @@ MainWindow::selectExistingModeLayer(Pane *pane, QString name)
 }
 
 void
+MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
+{
+    //!!! what if there already is one? could have changed the main
+    //!!! model for example
+
+    TransformId id = "vamp:qm-vamp-plugins:qm-onsetdetector:onsets";
+    TransformFactory *tf = TransformFactory::getInstance();
+
+    if (!tf->haveTransform(id)) {
+        cerr << "No onset detector plugin available" << endl;
+        return;
+    }
+
+    Transform transform = tf->getDefaultTransformFor
+        (id, model->getSampleRate());
+
+    transform.setStepSize(1024);
+    transform.setBlockSize(2048);
+
+    ModelTransformer::Input input(model, -1);
+
+    Layer *newLayer = m_document->createDerivedLayer(transform, model);
+
+    if (newLayer) {
+        m_document->addLayerToView(pane, newLayer);
+        m_paneStack->setCurrentLayer(pane, newLayer);
+    }
+}
+
+void
 MainWindow::curveModeSelected()
 {
     QString name = tr("Curve");
@@ -1266,7 +1296,7 @@ MainWindow::curveModeSelected()
             }
             
         } else {
-            cerr << "No Aubio onset detector plugin available" << endl;
+            cerr << "No onset detector plugin available" << endl;
         }
     }
 
@@ -1953,6 +1983,8 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 	}
     }
 
+    addSalientFeatureLayer(m_paneStack->getCurrentPane(), model);
+
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
 }
 
@@ -2146,7 +2178,7 @@ MainWindow::about()
         .arg(debug ? tr("Debug") : tr("Release"));
 
     aboutText += 
-        "<p>Sonic Vector Copyright &copy; 2005 - 2013 Chris Cannam and<br>"
+        "<p>Sonic Vector Copyright &copy; 2005 - 2014 Chris Cannam and<br>"
         "Queen Mary, University of London.</p>"
         "<p>This program uses library code from many other authors. Please<br>"
         "refer to the accompanying documentation for more information.</p>"

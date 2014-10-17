@@ -208,6 +208,7 @@ protected:
 
     virtual void configureNewPane(Pane *p);
     virtual Model *selectExistingModeLayer(Pane *, QString);
+    virtual void addSalientFeatureLayer(Pane *, WaveFileModel *);
 
     virtual void updateVisibleRangeDisplay(Pane *p) const;
     virtual void updatePositionStatusDisplays() const;
