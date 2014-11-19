@@ -1235,9 +1235,19 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
     //!!! what if there already is one? could have changed the main
     //!!! model for example
 
+    if (!model) {
+        cerr << "MainWindow::addSalientFeatureLayer: No model" << endl;
+        return;
+    }
+    
     TransformId id = "vamp:qm-vamp-plugins:qm-onsetdetector:onsets";
     TransformFactory *tf = TransformFactory::getInstance();
 
+    if (!tf) {
+        cerr << "Failed to locate a transform factory!" << endl;
+        return;
+    }
+    
     if (!tf->haveTransform(id)) {
         cerr << "No onset detector plugin available" << endl;
         return;
@@ -1977,6 +1987,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     }
 
     SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
+
     if (model && m_paneStack && (m_paneStack->getPaneCount() == 0)) {
 	AddPaneCommand *command = new AddPaneCommand(this);
 	CommandHistory::getInstance()->addCommand(command);
@@ -1985,9 +1996,10 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 	if (newLayer) {
 	    m_document->addLayerToView(pane, newLayer);
 	}
+        addSalientFeatureLayer(pane, model);
+    } else {
+        addSalientFeatureLayer(m_paneStack->getCurrentPane(), model);
     }
-
-    addSalientFeatureLayer(m_paneStack->getCurrentPane(), model);
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
 }
@@ -2052,13 +2064,13 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
-MainWindow::alignmentFailed(QString transformName, QString message)
+MainWindow::alignmentFailed(QString message)
 {
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
-         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment using transform \"%1\":<p>%2")
-         .arg(transformName).arg(message),
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%2")
+         .arg(message),
          QMessageBox::Ok);
 }
 
