@@ -1243,6 +1243,10 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
         return;
     }
 
+    if (!model) {
+        return;
+    }
+    
     Transform transform = tf->getDefaultTransformFor
         (id, model->getSampleRate());
 
