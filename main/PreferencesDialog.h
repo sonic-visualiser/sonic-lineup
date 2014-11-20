@@ -36,12 +36,7 @@ public slots:
     void applicationClosing(bool quickly);
 
 protected slots:
-    void windowTypeChanged(WindowType type);
-    void spectrogramSmoothingChanged(int state);
-    void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
-    void resampleQualityChanged(int quality);
-    void resampleOnLoadChanged(int state);
     void tempDirRootChanged(QString root);
     void backgroundModeChanged(int mode);
 
@@ -52,17 +47,11 @@ protected slots:
     void cancelClicked();
 
 protected:
-    WindowTypeSelector *m_windowTypeSelector;
     QPushButton *m_applyButton;
 
     QLineEdit *m_tempDirRootEdit;
     
-    WindowType m_windowType;
-    int m_spectrogramSmoothing;
-    int m_propertyLayout;
     float m_tuningFrequency;
-    int m_resampleQuality;
-    bool m_resampleOnLoad;
     QString m_tempDirRoot;
     int m_backgroundMode;
 

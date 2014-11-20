@@ -59,44 +59,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     // individual tab widgets and place the preferences in their
     // appropriate places in one go afterwards
 
-    int min, max, deflt, i;
-
-    m_windowType = WindowType(prefs->getPropertyRangeAndValue
-                              ("Window Type", &min, &max, &deflt));
-    m_windowTypeSelector = new WindowTypeSelector(m_windowType);
-
-    connect(m_windowTypeSelector, SIGNAL(windowTypeChanged(WindowType)),
-            this, SLOT(windowTypeChanged(WindowType)));
-
-    QComboBox *smoothing = new QComboBox;
-    
-    int sm = prefs->getPropertyRangeAndValue("Spectrogram Smoothing", &min, &max,
-                                             &deflt);
-    m_spectrogramSmoothing = sm;
-
-    for (i = min; i <= max; ++i) {
-        smoothing->addItem(prefs->getPropertyValueLabel("Spectrogram Smoothing", i));
-    }
-
-    smoothing->setCurrentIndex(sm);
-
-    connect(smoothing, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(spectrogramSmoothingChanged(int)));
-
-    QComboBox *propertyLayout = new QComboBox;
-    int pl = prefs->getPropertyRangeAndValue("Property Box Layout", &min, &max,
-                                         &deflt);
-    m_propertyLayout = pl;
-
-    for (i = min; i <= max; ++i) {
-        propertyLayout->addItem(prefs->getPropertyValueLabel("Property Box Layout", i));
-    }
-
-    propertyLayout->setCurrentIndex(pl);
-
-    connect(propertyLayout, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(propertyLayoutChanged(int)));
-
     m_tuningFrequency = prefs->getTuningFrequency();
 
     QDoubleSpinBox *frequency = new QDoubleSpinBox;
@@ -110,28 +72,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(frequency, SIGNAL(valueChanged(double)),
             this, SLOT(tuningFrequencyChanged(double)));
 
-    QComboBox *resampleQuality = new QComboBox;
-
-    int rsq = prefs->getPropertyRangeAndValue("Resample Quality", &min, &max,
-                                              &deflt);
-    m_resampleQuality = rsq;
-
-    for (i = min; i <= max; ++i) {
-        resampleQuality->addItem(prefs->getPropertyValueLabel("Resample Quality", i));
-    }
-
-    resampleQuality->setCurrentIndex(rsq);
-
-    connect(resampleQuality, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(resampleQualityChanged(int)));
-
-    QCheckBox *resampleOnLoad = new QCheckBox;
-    m_resampleOnLoad = prefs->getResampleOnLoad();
-    resampleOnLoad->setCheckState(m_resampleOnLoad ? Qt::Checked :
-                                  Qt::Unchecked);
-    connect(resampleOnLoad, SIGNAL(stateChanged(int)),
-            this, SLOT(resampleOnLoadChanged(int)));
-
     m_tempDirRootEdit = new QLineEdit;
     QString dir = prefs->getTemporaryDirectoryRoot();
     m_tempDirRoot = dir;
@@ -143,7 +83,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(tempDirButton, SIGNAL(clicked()),
             this, SLOT(tempDirButtonClicked()));
     tempDirButton->setFixedSize(QSize(24, 24));
-
+/*
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
                                              &deflt);
@@ -155,7 +95,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     connect(bgMode, SIGNAL(currentIndexChanged(int)),
             this, SLOT(backgroundModeChanged(int)));
-
+*/
     // General tab
 
     QFrame *frame = new QFrame;
@@ -164,26 +104,17 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     frame->setLayout(subgrid);
 
     int row = 0;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Property Box Layout"))),
-                       row, 0);
-    subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
-
+/*
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Background Mode"))),
                        row, 0);
     subgrid->addWidget(bgMode, row++, 1, 1, 2);
+*/
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Resample On Load"))),
+                                                ("Tuning Frequency"))),
                        row, 0);
-    subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Resample Quality"))),
-                       row, 0);
-    subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
+    subgrid->addWidget(frequency, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Temporary Directory Root"))),
@@ -195,34 +126,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->setRowStretch(row, 10);
     
     tab->addTab(frame, tr("&General"));
-
-    // Analysis tab
-
-    frame = new QFrame;
-    subgrid = new QGridLayout;
-    frame->setLayout(subgrid);
-    row = 0;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Tuning Frequency"))),
-                       row, 0);
-    subgrid->addWidget(frequency, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(prefs->getPropertyLabel
-                                  ("Spectrogram Smoothing")),
-                       row, 0);
-    subgrid->addWidget(smoothing, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Window Type"))),
-                       row, 0);
-    subgrid->addWidget(m_windowTypeSelector, row++, 1, 2, 2);
-    subgrid->setRowStretch(row, 10);
-    row++;
-    
-    subgrid->setRowStretch(row, 10);
-    
-    tab->addTab(frame, tr("&Analysis"));
 
     QDialogButtonBox *bb = new QDialogButtonBox(Qt::Horizontal);
     grid->addWidget(bb, 1, 0);
@@ -245,46 +148,10 @@ PreferencesDialog::~PreferencesDialog()
 }
 
 void
-PreferencesDialog::windowTypeChanged(WindowType type)
-{
-    m_windowType = type;
-    m_applyButton->setEnabled(true);
-}
-
-void
-PreferencesDialog::spectrogramSmoothingChanged(int smoothing)
-{
-    m_spectrogramSmoothing = smoothing;
-    m_applyButton->setEnabled(true);
-}
-
-void
-PreferencesDialog::propertyLayoutChanged(int layout)
-{
-    m_propertyLayout = layout;
-    m_applyButton->setEnabled(true);
-}
-
-void
 PreferencesDialog::tuningFrequencyChanged(double freq)
 {
     m_tuningFrequency = freq;
     m_applyButton->setEnabled(true);
-}
-
-void
-PreferencesDialog::resampleQualityChanged(int q)
-{
-    m_resampleQuality = q;
-    m_applyButton->setEnabled(true);
-}
-
-void
-PreferencesDialog::resampleOnLoadChanged(int state)
-{
-    m_resampleOnLoad = (state == Qt::Checked);
-    m_applyButton->setEnabled(true);
-    m_changesOnRestart = true;
 }
 
 void
@@ -325,14 +192,7 @@ void
 PreferencesDialog::applyClicked()
 {
     Preferences *prefs = Preferences::getInstance();
-    prefs->setWindowType(WindowType(m_windowType));
-    prefs->setSpectrogramSmoothing(Preferences::SpectrogramSmoothing
-                                   (m_spectrogramSmoothing));
-    prefs->setPropertyBoxLayout(Preferences::PropertyBoxLayout
-                                (m_propertyLayout));
     prefs->setTuningFrequency(m_tuningFrequency);
-    prefs->setResampleQuality(m_resampleQuality);
-    prefs->setResampleOnLoad(m_resampleOnLoad);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
 

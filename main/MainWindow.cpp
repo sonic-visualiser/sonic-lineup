@@ -160,12 +160,12 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
 
     Preferences::getInstance()->setSpectrogramSmoothing
-//        (Preferences::SpectrogramInterpolated);
-        (Preferences::NoSpectrogramSmoothing);
+        (Preferences::SpectrogramInterpolated);
+//        (Preferences::NoSpectrogramSmoothing);
 
     Preferences::getInstance()->setSpectrogramXSmoothing
-//        (Preferences::SpectrogramXInterpolated);
-        (Preferences::NoSpectrogramXSmoothing);
+        (Preferences::SpectrogramXInterpolated);
+//        (Preferences::NoSpectrogramXSmoothing);
 
     QSettings settings;
 
@@ -482,13 +482,13 @@ MainWindow::setupFileMenu()
     setupRecentFilesMenu();
     connect(&m_recentFiles, SIGNAL(recentChanged()),
             this, SLOT(setupRecentFilesMenu()));
-/*
+
     menu->addSeparator();
     action = new QAction(tr("&Preferences..."), this);
     action->setStatusTip(tr("Adjust the application preferences"));
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
     menu->addAction(action);
-*/
+
     menu->addSeparator();
     action = new QAction(il.load("exit"), tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
