@@ -30,6 +30,7 @@
 #include <QLineEdit>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSettings>
 
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
@@ -83,6 +84,30 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(tempDirButton, SIGNAL(clicked()),
             this, SLOT(tempDirButtonClicked()));
     tempDirButton->setFixedSize(QSize(24, 24));
+
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    m_useAlignmentProgram = settings.value("use-external-alignment", false).toBool();
+    QString program = settings.value("external-alignment-program", "").toString();
+    m_alignmentProgram = program;
+    program.replace("$HOME", tr("<home directory>"));
+    settings.endGroup();
+
+    m_alignmentProgramToggle = new QCheckBox();
+    connect(m_alignmentProgramToggle, SIGNAL(clicked()),
+            this, SLOT(alignmentProgramToggleClicked()));
+    m_alignmentProgramToggle->setChecked(m_useAlignmentProgram);
+    m_alignmentProgramEdit = new QLineEdit;
+    m_alignmentProgramEdit->setText(program);
+    m_alignmentProgramEdit->setReadOnly(true);
+    m_alignmentProgramEdit->setEnabled(m_useAlignmentProgram);
+    m_alignmentProgramButton = new QPushButton();
+    m_alignmentProgramButton->setIcon(IconLoader().load("fileopen"));
+    connect(m_alignmentProgramButton, SIGNAL(clicked()),
+            this, SLOT(alignmentProgramButtonClicked()));
+    m_alignmentProgramButton->setFixedSize(QSize(24, 24));
+    m_alignmentProgramButton->setEnabled(m_useAlignmentProgram);
+    
 /*
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
@@ -108,21 +133,30 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Background Mode"))),
                        row, 0);
-    subgrid->addWidget(bgMode, row++, 1, 1, 2);
+    subgrid->addWidget(bgMode, row++, 1, 1, 3);
 */
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Tuning Frequency"))),
                        row, 0);
-    subgrid->addWidget(frequency, row++, 1, 1, 2);
+    subgrid->addWidget(frequency, row++, 1, 1, 3);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Use External Aligner"))),
+                       row, 0);
+    subgrid->addWidget(m_alignmentProgramToggle, row, 1, 1, 1);
+    subgrid->addWidget(m_alignmentProgramEdit, row, 2, 1, 1);
+    subgrid->addWidget(m_alignmentProgramButton, row, 3, 1, 1);
+    row++;
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Temporary Directory Root"))),
-                       row, 0);
-    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
-    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
+                       row, 0, 1, 2);
+    subgrid->addWidget(m_tempDirRootEdit, row, 2, 1, 1);
+    subgrid->addWidget(tempDirButton, row, 3, 1, 1);
     row++;
 
+    subgrid->setColumnStretch(2, 10);
     subgrid->setRowStretch(row, 10);
     
     tab->addTab(frame, tr("&General"));
@@ -174,6 +208,30 @@ PreferencesDialog::tempDirButtonClicked()
 }
 
 void
+PreferencesDialog::alignmentProgramToggleClicked()
+{
+    m_useAlignmentProgram = m_alignmentProgramToggle->isChecked();
+    m_alignmentProgramEdit->setEnabled(m_useAlignmentProgram);
+    m_alignmentProgramButton->setEnabled(m_useAlignmentProgram);
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+    
+void
+PreferencesDialog::alignmentProgramButtonClicked()
+{
+    QString file = QFileDialog::getOpenFileName
+        (this, tr("Select an external alignment program to run"),
+         m_alignmentProgram);
+    if (file == "") return;
+    m_alignmentProgram = file;
+    file.replace("$HOME", tr("<home directory>"));
+    m_alignmentProgramEdit->setText(file);
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::backgroundModeChanged(int mode)
 {
     m_backgroundMode = mode;
@@ -196,6 +254,12 @@ PreferencesDialog::applyClicked()
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
 
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    settings.setValue("use-external-alignment", m_useAlignmentProgram);
+    settings.setValue("external-alignment-program", m_alignmentProgram);
+    settings.endGroup();
+    
     m_applyButton->setEnabled(false);
 
     if (m_changesOnRestart) {

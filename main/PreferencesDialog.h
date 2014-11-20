@@ -23,6 +23,7 @@
 class WindowTypeSelector;
 class QPushButton;
 class QLineEdit;
+class QCheckBox;
 
 class PreferencesDialog : public QDialog
 {
@@ -41,6 +42,8 @@ protected slots:
     void backgroundModeChanged(int mode);
 
     void tempDirButtonClicked();
+    void alignmentProgramToggleClicked();
+    void alignmentProgramButtonClicked();
 
     void okClicked();
     void applyClicked();
@@ -50,9 +53,15 @@ protected:
     QPushButton *m_applyButton;
 
     QLineEdit *m_tempDirRootEdit;
+
+    QCheckBox *m_alignmentProgramToggle;
+    QLineEdit *m_alignmentProgramEdit;
+    QPushButton *m_alignmentProgramButton;
     
     float m_tuningFrequency;
     QString m_tempDirRoot;
+    bool m_useAlignmentProgram;
+    QString m_alignmentProgram;
     int m_backgroundMode;
 
     bool m_changesOnRestart;
