@@ -212,6 +212,8 @@ protected:
 
     virtual void updateVisibleRangeDisplay(Pane *p) const;
     virtual void updatePositionStatusDisplays() const;
+
+    void loadStyle();
 };
 
 

@@ -90,5 +90,6 @@
     <file>i18n/sonic-visualiser_ru.qm</file>
     <file>i18n/sonic-visualiser_en_GB.qm</file>
     <file>i18n/tips_en.xml</file>
+    <file>vect.qss</file>
 </qresource>
 </RCC>

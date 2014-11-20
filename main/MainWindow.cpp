@@ -200,9 +200,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_viewManager->setIlluminateLocalFeatures(false);
     m_viewManager->setShowWorkTitle(true);
 
-#ifndef __APPLE__
-    m_viewManager->setGlobalDarkBackground(true);
-#endif
+    loadStyle();
     
     QFrame *frame = new QFrame;
     setCentralWidget(frame);
@@ -2212,5 +2210,24 @@ MainWindow::keyReference()
 {
     m_keyReference->show();
 }
+
+void
+MainWindow::loadStyle()
+{
+    m_viewManager->setGlobalDarkBackground(true);
+    
+    QString stylepath = ":vect.qss";
+    QFile file(stylepath);
+    if (!file.open(QFile::ReadOnly)) {
+        std::cerr << "WARNING: Failed to open style file " << stylepath
+                  << std::endl;
+    } else {
+        QString styleSheet = QLatin1String(file.readAll());
+        qApp->setStyleSheet(styleSheet);
+        QPalette pal(Qt::white, Qt::gray, Qt::white, Qt::black, Qt::gray, Qt::white, Qt::white, Qt::black, Qt::black);
+        qApp->setPalette(pal);
+    }
+}
+
 
 
