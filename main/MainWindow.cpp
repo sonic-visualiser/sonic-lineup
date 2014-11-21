@@ -2081,6 +2081,12 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
+MainWindow::alignmentComplete(AlignmentModel *model)
+{
+    cerr << "MainWindow::alignmentComplete(" << model << ")" << endl;
+}
+
+void
 MainWindow::alignmentFailed(QString message)
 {
     QMessageBox::warning
