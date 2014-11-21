@@ -131,7 +131,8 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_preferencesDialog(0),
     m_layerTreeView(0),
     m_keyReference(new KeyReference()),
-    m_displayMode(WaveformMode)
+    m_displayMode(WaveformMode),
+    m_salientCalculating(false)
 {
     setWindowTitle(tr("Sonic Vector"));
 
@@ -1251,7 +1252,9 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
     if (!model) {
         return;
     }
-    
+
+    m_salientCalculating = true;
+
     Transform transform = tf->getDefaultTransformFor
         (id, model->getSampleRate());
 
@@ -1266,9 +1269,27 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
 
         TimeInstantLayer *til = qobject_cast<TimeInstantLayer *>(newLayer);
         if (til) til->setPlotStyle(TimeInstantLayer::PlotInstants);
+
+        connect(til, SIGNAL(modelCompletionChanged()),
+                this, SLOT(salientLayerCompletionChanged()));
         
         m_document->addLayerToView(pane, newLayer);
         m_paneStack->setCurrentLayer(pane, newLayer);
+    }
+}
+
+void
+MainWindow::salientLayerCompletionChanged()
+{
+    Layer *layer = qobject_cast<Layer *>(sender());
+    cerr << "MainWindow::salientLayerCompletionChanged: layer = " << layer << endl;
+    if (layer && layer->getCompletion(0) == 100) {
+        m_salientCalculating = false;
+        cerr << "mapping " << m_salientPending.size() << " salient layer(s)" << endl;
+        foreach (AlignmentModel *am, m_salientPending) {
+            mapSalientFeatureLayer(am);
+        }
+        m_salientPending.clear();
     }
 }
 
@@ -1293,11 +1314,31 @@ MainWindow::findSalientFeatureLayer()
             }
         }
     }
+
+    return 0;
 }
 
 void
 MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 {
+    if (m_salientCalculating) {
+        m_salientPending.insert(am);
+        return;
+    }
+
+    TimeInstantLayer *salient = findSalientFeatureLayer();
+    if (!salient) {
+        cerr << "MainWindow::mapSalientFeatureLayer: No salient layer found"
+             << endl;
+        m_salientPending.insert(am);
+        return;
+    }
+
+    if (!am) {
+        cerr << "MainWindow::mapSalientFeatureLayer: AlignmentModel is null!" << endl;
+        return;
+    }
+    
     const Model *model = am->getAlignedModel();
 
     Pane *pane = 0;
@@ -1307,7 +1348,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         Pane *p = m_paneStack->getPane(i);
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
-            if (l->getModel() == model) {
+            if (l && (l->getModel() == model)) {
                 pane = p;
                 layer = l;
                 break;
@@ -1321,17 +1362,15 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         return;
     }
 
-    TimeInstantLayer *salient = findSalientFeatureLayer();
-    if (!salient) {
-        cerr << "MainWindow::mapSalientFeatureLayer: No salient layer found"
-             << endl;
-        return;
-    }
-
     //!!! command?
 
     const SparseOneDimensionalModel *from =
         qobject_cast<const SparseOneDimensionalModel *>(salient->getModel());
+    if (!from) {
+        cerr << "MainWindow::mapSalientFeatureLayer: Salient layer lacks SparseOneDimensionalModel" << endl;
+        return;
+    }
+        
     SparseOneDimensionalModel *to = new SparseOneDimensionalModel
         (model->getSampleRate(), from->getResolution(), false);
     
@@ -2077,6 +2116,9 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 {
     SVDEBUG << "MainWindow::mainModelChanged(" << model << ")" << endl;
 
+    m_salientPending.clear();
+    m_salientCalculating = false;
+    
     m_panLayer->setModel(model);
 
     MainWindowBase::mainModelChanged(model);

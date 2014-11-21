@@ -131,6 +131,7 @@ protected slots:
 
     virtual void alignmentComplete(AlignmentModel *);
     virtual void alignmentFailed(QString);
+    virtual void salientLayerCompletionChanged();
 
     virtual void rightButtonMenuRequested(Pane *, QPoint point);
 
@@ -215,6 +216,8 @@ protected:
     virtual void addSalientFeatureLayer(Pane *, WaveFileModel *);
     virtual void mapSalientFeatureLayer(AlignmentModel *);
     virtual TimeInstantLayer *findSalientFeatureLayer();
+    bool m_salientCalculating;
+    std::set<AlignmentModel *> m_salientPending;
     
     virtual void updateVisibleRangeDisplay(Pane *p) const;
     virtual void updatePositionStatusDisplays() const;
