@@ -1232,16 +1232,17 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
         return;
     }
     
-    TransformId id = "vamp:qm-vamp-plugins:qm-onsetdetector:onsets";
     TransformFactory *tf = TransformFactory::getInstance();
-
     if (!tf) {
         cerr << "Failed to locate a transform factory!" << endl;
         return;
     }
     
+//    TransformId id = "vamp:qm-vamp-plugins:qm-keydetector:key";
+    TransformId id = "vamp:nnls-chroma:chordino:simplechord";
     if (!tf->haveTransform(id)) {
-        cerr << "No onset detector plugin available" << endl;
+        cerr << "No plugin available for salient feature layer; transform is: "
+             << id << endl;
         return;
     }
 
@@ -1260,6 +1261,10 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
     Layer *newLayer = m_document->createDerivedLayer(transform, model);
 
     if (newLayer) {
+
+        TimeInstantLayer *til = qobject_cast<TimeInstantLayer *>(newLayer);
+        if (til) til->setPlotStyle(TimeInstantLayer::PlotInstants);
+        
         m_document->addLayerToView(pane, newLayer);
         m_paneStack->setCurrentLayer(pane, newLayer);
     }
