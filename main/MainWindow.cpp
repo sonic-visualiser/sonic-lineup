@@ -24,6 +24,8 @@
 #include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "data/model/FFTModel.h"
+#include "data/model/AlignmentModel.h"
+#include "data/model/SparseOneDimensionalModel.h"
 #include "base/StorageAdviser.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
@@ -1270,6 +1272,87 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
     }
 }
 
+TimeInstantLayer *
+MainWindow::findSalientFeatureLayer()
+{
+    if (!getMainModel()) return 0;
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+        Pane *p = m_paneStack->getPane(i);
+
+        for (int j = 0; j < p->getLayerCount(); ++j) {
+            Layer *l = p->getLayer(j);
+
+            if (l->getModel() == getMainModel()) {
+
+                for (int k = 0; k < p->getLayerCount(); ++k) {
+                    TimeInstantLayer *ll = qobject_cast<TimeInstantLayer *>
+                        (p->getLayer(k));
+                    if (ll) return ll;
+                }
+            }
+        }
+    }
+}
+
+void
+MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
+{
+    const Model *model = am->getAlignedModel();
+
+    Pane *pane = 0;
+    Layer *layer = 0;
+    
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+        Pane *p = m_paneStack->getPane(i);
+        for (int j = 0; j < p->getLayerCount(); ++j) {
+            Layer *l = p->getLayer(j);
+            if (l->getModel() == model) {
+                pane = p;
+                layer = l;
+                break;
+            }
+        }
+    }
+
+    if (!pane || !layer) {
+        cerr << "MainWindow::mapSalientFeatureLayer: Failed to find model "
+             << model << " in any layer" << endl;
+        return;
+    }
+
+    TimeInstantLayer *salient = findSalientFeatureLayer();
+    if (!salient) {
+        cerr << "MainWindow::mapSalientFeatureLayer: No salient layer found"
+             << endl;
+        return;
+    }
+
+    //!!! command?
+
+    const SparseOneDimensionalModel *from =
+        qobject_cast<const SparseOneDimensionalModel *>(salient->getModel());
+    SparseOneDimensionalModel *to = new SparseOneDimensionalModel
+        (model->getSampleRate(), from->getResolution(), false);
+    
+    SparseOneDimensionalModel::PointList pp = from->getPoints();
+    foreach (SparseOneDimensionalModel::Point p, pp) {
+        p.frame = am->fromReference(p.frame);
+        to->addPoint(p);
+    }
+
+    Layer *newLayer = m_document->createImportedLayer(to);
+
+    if (newLayer) {
+
+        TimeInstantLayer *til = qobject_cast<TimeInstantLayer *>(newLayer);
+        if (til) til->setPlotStyle(TimeInstantLayer::PlotInstants);
+        
+        m_document->addLayerToView(pane, newLayer);
+        m_paneStack->setCurrentLayer(pane, newLayer);
+    }
+}
+
 void
 MainWindow::curveModeSelected()
 {
@@ -2084,6 +2167,7 @@ void
 MainWindow::alignmentComplete(AlignmentModel *model)
 {
     cerr << "MainWindow::alignmentComplete(" << model << ")" << endl;
+    if (model) mapSalientFeatureLayer(model);
 }
 
 void

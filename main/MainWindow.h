@@ -41,6 +41,7 @@ class Fader;
 class Overview;
 class Layer;
 class WaveformLayer;
+class TimeInstantLayer;
 class WaveFileModel;
 class AudioCallbackPlaySource;
 class AudioCallbackPlayTarget;
@@ -210,8 +211,11 @@ protected:
 
     virtual void configureNewPane(Pane *p);
     virtual Model *selectExistingLayerForMode(Pane *, QString);
-    virtual void addSalientFeatureLayer(Pane *, WaveFileModel *);
 
+    virtual void addSalientFeatureLayer(Pane *, WaveFileModel *);
+    virtual void mapSalientFeatureLayer(AlignmentModel *);
+    virtual TimeInstantLayer *findSalientFeatureLayer();
+    
     virtual void updateVisibleRangeDisplay(Pane *p) const;
     virtual void updatePositionStatusDisplays() const;
 
