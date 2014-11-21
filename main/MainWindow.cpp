@@ -185,7 +185,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
                       QString("<layer channel=\"-1\" windowSize=\"1024\" windowHopLevel=\"2\"/>"));
 
     settings.setValue("melodicrange",
-                      QString("<layer channel=\"-1\" gain=\"10\" normalizeVisibleArea=\"false\" normalizeColumns=\"false\" minFrequency=\"100\" maxFrequency=\"1200\" windowSize=\"4096\" windowOverlap=\"75\" binDisplay=\"0\" />"));
+                      QString("<layer channel=\"-1\" gain=\"150\" normalizeVisibleArea=\"false\" normalizeColumns=\"false\" normalizeHybrid=\"true\" minFrequency=\"100\" maxFrequency=\"1200\" windowSize=\"4096\" windowOverlap=\"75\" binDisplay=\"0\" />"));
 
     settings.endGroup();
 
