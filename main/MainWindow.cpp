@@ -727,15 +727,6 @@ MainWindow::setupHelpMenu()
     action->setStatusTip(tr("Show information about Sonic Vector")); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
-
-    menu->addSeparator();
-
-    action = new QAction(tr("Go Full-Screen"), this);
-    action->setShortcut(tr("F11"));
-    action->setStatusTip(tr("Expand the pane area to the whole screen"));
-    connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
 }
 
 void
