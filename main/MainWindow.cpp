@@ -334,6 +334,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     statusBar();
 
+    setIconsVisibleInMenus(false);
     finaliseMenus();
 
     newSession();
@@ -439,7 +440,7 @@ MainWindow::setupFileMenu()
     if (m_mainMenusCreated) return;
 
     QMenu *menu = menuBar()->addMenu(tr("&File"));
-    menu->setTearOffEnabled(true);
+    menu->setTearOffEnabled(false);
     QToolBar *toolbar = addToolBar(tr("File Toolbar"));
 
     m_keyReference->setCategory(tr("File and Session Management"));
@@ -476,7 +477,7 @@ MainWindow::setupFileMenu()
     menu->addSeparator();
 
     m_recentFilesMenu = menu->addMenu(tr("&Recent Locations"));
-    m_recentFilesMenu->setTearOffEnabled(true);
+    m_recentFilesMenu->setTearOffEnabled(false);
     setupRecentFilesMenu();
     connect(&m_recentFiles, SIGNAL(recentChanged()),
             this, SLOT(setupRecentFilesMenu()));
@@ -502,7 +503,7 @@ MainWindow::setupEditMenu()
     if (m_mainMenusCreated) return;
 
     QMenu *menu = menuBar()->addMenu(tr("&Edit"));
-    menu->setTearOffEnabled(true);
+    menu->setTearOffEnabled(false);
     CommandHistory::getInstance()->registerMenu(menu);
 }
 
@@ -518,7 +519,7 @@ MainWindow::setupViewMenu()
     m_keyReference->setCategory(tr("Panning and Navigation"));
 
     QMenu *menu = menuBar()->addMenu(tr("&View"));
-    menu->setTearOffEnabled(true);
+    menu->setTearOffEnabled(false);
     m_scrollLeftAction = new QAction(tr("Scroll &Left"), this);
     m_scrollLeftAction->setShortcut(tr("Left"));
     m_scrollLeftAction->setStatusTip(tr("Scroll the current pane to the left"));
@@ -701,7 +702,7 @@ void
 MainWindow::setupHelpMenu()
 {
     QMenu *menu = menuBar()->addMenu(tr("&Help"));
-    menu->setTearOffEnabled(true);
+    menu->setTearOffEnabled(false);
     
     m_keyReference->setCategory(tr("Help"));
 
@@ -769,7 +770,7 @@ MainWindow::setupToolbars()
     IconLoader il;
 
     QMenu *menu = m_playbackMenu = menuBar()->addMenu(tr("Play&back"));
-    menu->setTearOffEnabled(true);
+    menu->setTearOffEnabled(false);
     m_rightButtonMenu->addSeparator();
     m_rightButtonPlaybackMenu = m_rightButtonMenu->addMenu(tr("Playback"));
 

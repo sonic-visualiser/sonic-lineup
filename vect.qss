@@ -39,8 +39,8 @@ QMainWindow::separator:hover
 QDockWidget
 {
     border: none;
-    titlebar-close-icon: url(:pixmaps/style/title-close.png);
-    titlebar-normal-icon: url(:pixmaps/style/title-undock.png);
+    titlebar-close-icon: url(:icons/style/title-close.png);
+    titlebar-normal-icon: url(:icons/style/title-undock.png);
 }
 
 QDockWidget::close-button,
@@ -86,30 +86,30 @@ QTabBar::scroller
 
 QTabBar QToolButton
 { /* the scroll buttons are tool buttons */
-    border-image: url(:pixmaps/style/tab-scroll-button.png) 1;
+    border-image: url(:icons/style/tab-scroll-button.png) 1;
     border-width: 1px;
 }
 
 QTabBar QToolButton:hover
 {
-    border-image: url(:pixmaps/style/tab-scroll-button-hover.png) 1;
+    border-image: url(:icons/style/tab-scroll-button-hover.png) 1;
     border-width: 1px;
 }
 
 QTabBar QToolButton:!enabled
 {
-    border-image: url(:pixmaps/style/tab-scroll-button-disabled.png) 1;
+    border-image: url(:icons/style/tab-scroll-button-disabled.png) 1;
     border-width: 1px;
 }
 
 QTabBar QToolButton::right-arrow
 { /* the arrow mark in the tool buttons */
-    image: url(:pixmaps/style/arrow-right-small.png);
+    image: url(:icons/style/arrow-right-small.png);
 }
 
 QTabBar QToolButton::left-arrow
 {
-    image: url(:pixmaps/style/arrow-left-small.png);
+    image: url(:icons/style/arrow-left-small.png);
 }
 
 QTabWidget::pane
@@ -219,8 +219,8 @@ toolbar) is styled using the ::handle subcontrol. */
 QToolBar:top,
 QToolBar:bottom
 {
-    border-image: url(:pixmaps/style/toolbar-horiz-pixmap.png) 0;
-/*  border-image: url(:pixmaps/style/toolbar-pixmap.png) 0;*/
+    border-image: url(:icons/style/toolbar-horiz-pixmap.png) 0;
+/*  border-image: url(:icons/style/toolbar-pixmap.png) 0;*/
 /*  background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);*/
     color: #000000;
 }
@@ -228,7 +228,7 @@ QToolBar:bottom
 QToolBar:left,
 QToolBar:right 
 {
-    border-image: url(:pixmaps/style/toolbar-vert-pixmap.png) 0;
+    border-image: url(:icons/style/toolbar-vert-pixmap.png) 0;
 /*  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DDDDDD, stop:1 #999999);*/
     color: #000000;
 }
@@ -247,13 +247,13 @@ QToolBar:bottom QLabel
 QToolBar::handle:top,
 QToolBar::handle:bottom
 {
-    image: url(:/pixmaps/style/htoolbar-separator.png);
+    image: url(:/icons/style/htoolbar-separator.png);
 }
 
 QToolBar::handle:left,
 QToolBar::handle:right
 {
-    image: url(:pixmaps/style/vtoolbar-separator.png);
+    image: url(:icons/style/vtoolbar-separator.png);
 }
 
 
@@ -290,12 +290,7 @@ items with a sub menu, the arrow marks are styled using the right-arrow and
 left-arrow.  The scroller is styled using the ::scroller.  The tear-off is
 styled using the ::tear-off. */
 
-QMenu,
-#MixerWindow QPushButton QMenu,
-#tempoview QMenu,
-#matrixview QMenu,
-#App QMenu,
-#View QMenu
+QMenu
 {
 /*    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #AAAAAA stop:1 #999999);*/
     background-color: #EEEEEE;
@@ -310,12 +305,7 @@ QMenu::separator
     margin-right: 5px;
 }
 
-QMenu::item:enabled,
-#MixerWindow QPushButton QMenu::item:enabled,
-#tempoview QMenu::item:enabled,
-#matrixview QMenu::item:enabled,
-#App QMenu::item:enabled,
-#View QMenu::item:enabled
+QMenu::item:enabled
 {
     /* sets background of menu item. set this to something non-transparent
     if you want menu color and menu item color to be different */
@@ -326,12 +316,7 @@ QMenu::item:enabled,
     min-width: 12em; /* leaves room for space between item and hotkey */
 }
 
-QMenu::item:!enabled,
-#MixerWindow QPushButton QMenu::item:!enabled,
-#tempoview QMenu::item:!enabled,
-#matrixview QMenu::item:!enabled,
-#App QMenu::item:!enabled,
-#View QMenu::item:!enabled
+QMenu::item:!enabled
 {
     color: #AAAAAA;
     padding: 2px 25px 2px 20px;
@@ -341,11 +326,7 @@ QMenu::item:!enabled,
 
 /* Menu selection background color
  */
-QMenu::item:selected,
-#tempoview QMenu::item:selected,
-#matrixview QMenu::item:selected,
-#App QMenu::item:selected,
-#View QMenu::item:selected
+QMenu::item:selected
 {
     background-color: #80AFFF;
     color: #FFFFFF;
@@ -354,43 +335,43 @@ QMenu::item:selected,
 /* non-exclusive indicator = check box style indicator (see QActionGroup::setExclusive) */
 QMenu::indicator:non-exclusive:unchecked
 {
-    image: url(:pixmaps/style/checkbox_unchecked.png);
+    image: url(:icons/style/checkbox_unchecked.png);
 }
 
 QMenu::indicator:non-exclusive:unchecked:selected
 {
-    image: url(:pixmaps/style/checkbox_unchecked_hover.png);
+    image: url(:icons/style/checkbox_unchecked_hover.png);
 }
 
 QMenu::indicator:non-exclusive:checked
 {
-    image: url(:pixmaps/style/checkbox_checked.png);
+    image: url(:icons/style/checkbox_checked.png);
 }
 
 QMenu::indicator:non-exclusive:checked:selected
 {
-    image: url(:pixmaps/style/checkbox_checked_hover.png);
+    image: url(:icons/style/checkbox_checked_hover.png);
 }
 
 /* exclusive indicator = radio button style indicator (see QActionGroup::setExclusive) */
 QMenu::indicator:exclusive:unchecked
 {
-    image: url(:pixmaps/style/radiobutton_unchecked.png);
+    image: url(:icons/style/radiobutton_unchecked.png);
 }
 
 QMenu::indicator:exclusive:unchecked:selected
 {
-    image: url(:pixmaps/style/radiobutton_unchecked_hover.png);
+    image: url(:icons/style/radiobutton_unchecked_hover.png);
 }
 
 QMenu::indicator:exclusive:checked
 {
-    image: url(:pixmaps/style/radiobutton_checked.png);
+    image: url(:icons/style/radiobutton_checked.png);
 }
 
 QMenu::indicator:exclusive:checked:selected
 {
-    image: url(:pixmaps/style/radiobutton_checked_hover.png);
+    image: url(:icons/style/radiobutton_checked_hover.png);
 }
 
 /*  QCheckBox
@@ -414,7 +395,7 @@ QCheckBox:!enabled
 
 QCheckBox::indicator:enabled
 {
-/*    background: url(:pixmaps/style/checkbox-checked.png); */
+/*    background: url(:icons/style/checkbox-checked.png); */
 }
 
 QCheckBox
@@ -430,57 +411,57 @@ QCheckBox::indicator
 /*
 QCheckBox::indicator:unchecked
 {
-    image: url(:pixmaps/style/checkbox_unchecked.png);
+    image: url(:icons/style/checkbox_unchecked.png);
 }
 
 QCheckBox::indicator:!enabled
 {
-    image: url(:pixmaps/style/checkbox_disabled.png);
+    image: url(:icons/style/checkbox_disabled.png);
 }
 
 QCheckBox::indicator:checked:!enabled
 {
-    image: url(:pixmaps/style/checkbox_checked_disabled.png);
+    image: url(:icons/style/checkbox_checked_disabled.png);
 }
 
 QCheckBox::indicator:unchecked:hover
 {
-    image: url(:pixmaps/style/checkbox_unchecked_hover.png);
+    image: url(:icons/style/checkbox_unchecked_hover.png);
 }
 
 QCheckBox::indicator:unchecked:pressed
 {
-    image: url(:pixmaps/style/checkbox_unchecked_pressed.png);
+    image: url(:icons/style/checkbox_unchecked_pressed.png);
 }
 
 QCheckBox::indicator:checked
 {
-    image: url(:pixmaps/style/checkbox_checked.png);
+    image: url(:icons/style/checkbox_checked.png);
 }
 
 QCheckBox::indicator:checked:hover
 {
-    image: url(:pixmaps/style/checkbox_checked_hover.png);
+    image: url(:icons/style/checkbox_checked_hover.png);
 }
 
 QCheckBox::indicator:checked:pressed
 {
-    image: url(:pixmaps/style/checkbox_checked_pressed.png);
+    image: url(:icons/style/checkbox_checked_pressed.png);
 }
 
 QCheckBox::indicator:indeterminate
 {
-    image: url(:pixmaps/style/checkbox_indeterminate.png);
+    image: url(:icons/style/checkbox_indeterminate.png);
 }
 
 QCheckBox::indicator:indeterminate:hover
 {
-    image: url(:pixmaps/style/checkbox_indeterminate_hover.png);
+    image: url(:icons/style/checkbox_indeterminate_hover.png);
 }
 
 QCheckBox::indicator:indeterminate:pressed
 {
-    image: url(:pixmaps/style/checkbox_indeterminate_pressed.png);
+    image: url(:icons/style/checkbox_indeterminate_pressed.png);
 }
 */
 
@@ -508,67 +489,67 @@ QRadioButton::indicator
     width: 13px;
     height: 13px;
 }
-/*
+
 QRadioButton::indicator::unchecked:enabled
 {
-    image: url(:pixmaps/style/radiobutton_unchecked.png);
+    image: url(:icons/style/radiobutton_unchecked.png);
 }
 
 QRadioButton::indicator::unchecked:!enabled
 {
-    image: url(:pixmaps/style/radiobutton_unchecked_disabled.png);
+    image: url(:icons/style/radiobutton_unchecked_disabled.png);
 }
 
 QRadioButton::indicator:unchecked:hover:enabled
 {
-    image: url(:pixmaps/style/radiobutton_unchecked_hover.png);
+    image: url(:icons/style/radiobutton_unchecked_hover.png);
 }
 
 QRadioButton::indicator:unchecked:hover:!enabled
 {
-    image: url(:pixmaps/style/radiobutton_unchecked_hover_disabled.png);
+    image: url(:icons/style/radiobutton_unchecked_hover_disabled.png);
 }
 
 QRadioButton::indicator:unchecked:pressed:enabled
 {
-    image: url(:pixmaps/style/radiobutton_unchecked_pressed.png);
+    image: url(:icons/style/radiobutton_unchecked_pressed.png);
 }
 
 QRadioButton::indicator:unchecked:pressed:!enabled
 {
-    image: url(:pixmaps/style/radiobutton_unchecked_pressed_disabled.png);
+    image: url(:icons/style/radiobutton_unchecked_pressed_disabled.png);
 }
 
 QRadioButton::indicator::checked:enabled
 {
-    image: url(:pixmaps/style/radiobutton_checked.png);
+    image: url(:icons/style/radiobutton_checked.png);
 }
 
 QRadioButton::indicator::checked:!enabled
 {
-    image: url(:pixmaps/style/radiobutton_checked_disabled.png);
+    image: url(:icons/style/radiobutton_checked_disabled.png);
 }
 
 QRadioButton::indicator:checked:hover:enabled
 {
-    image: url(:pixmaps/style/radiobutton_checked_hover.png);
+    image: url(:icons/style/radiobutton_checked_hover.png);
 }
 
 QRadioButton::indicator:checked:hover:!enabled
 {
-    image: url(:pixmaps/style/radiobutton_checked_hover_disabled.png);
+    image: url(:icons/style/radiobutton_checked_hover_disabled.png);
 }
 
 QRadioButton::indicator:checked:pressed:enabled
 {
-    image: url(:pixmaps/style/radiobutton_checked_pressed.png);
+    image: url(:icons/style/radiobutton_checked_pressed.png);
 }
 
 QRadioButton::indicator:checked:pressed:!enabled
 {
-    image: url(:pixmaps/style/radiobutton_checked_pressed_disabled.png);
+    image: url(:icons/style/radiobutton_checked_pressed_disabled.png);
 }
-*/
+
 /*  QColumnView
 
 The grip can be styled be using the image property. The arrow indicators can by
@@ -645,12 +626,12 @@ QHeaderView::section
 /* style the sort indicator */
 QHeaderView::down-arrow
 {
-/*    image: url(:pixmaps/style/arrow-down-small-inverted.png); */
+    image: url(:icons/style/arrow-down-small-inverted.png); 
 }
 
 QHeaderView::up-arrow
 {
-/*    image: url(:pixmaps/style/arrow-up-small-inverted.png); */
+    image: url(:icons/style/arrow-up-small-inverted.png); 
 }
 
 
@@ -681,16 +662,12 @@ QListView,
 Supports the box model. The spacing property specifies the spacing between menu
 items. Individual items are styled using the ::item subcontrol. */
 
-QMenuBar,
-#tempoview QMenuBar,
-#App QMenuBar
+QMenuBar
 {
     background-color: #404040;
 }
 
-QMenuBar::item,
-#tempoview QMenuBar::item,
-#App QMenuBar::item
+QMenuBar::item
 {
     spacing: 3px; /* spacing between menu bar items */
     padding: 1px 4px;
@@ -700,17 +677,13 @@ QMenuBar::item,
 
 /* Selected item background
  */
-QMenuBar::item:selected,
-#tempoview QMenuBar::item:selected,
-#App QMenuBar::item:selected
+QMenuBar::item:selected
 {
     background-color: #80AFFF;
     color: #FFFFFF;
 }
 
-QMenuBar::item:pressed,
-#tempoview QMenuBar::item:pressed,
-#App QMenuBar::item:pressed
+QMenuBar::item:pressed
 {
 /*    background: #EEEEEE;*/
     background-color: #BBCEFF;
@@ -855,7 +828,6 @@ QTextEdit
 }
 
 
-
 QWidget#LED
 {
     background-color: transparent;
@@ -969,7 +941,7 @@ QToolButton[popupMode="1"]
 
 QToolButton::menu-arrow
 {
-/*    image: url(:pixmaps/style/arrow-down-small.png); */
+    image: url(:icons/style/arrow-down-small.png); 
 }
 
 QToolButton::menu-arrow:open
@@ -985,13 +957,13 @@ QToolButton::menu-button
 
 QToolButton::up-arrow
 { 
-/*    image: url(:pixmaps/style/arrow-up-small.png); */
+    image: url(:icons/style/arrow-up-small.png); 
 }
 
 QToolButton::down-arrow
 {
     subcontrol-position: right bottom;
-/*    image: url(:pixmaps/style/arrow-down-small.png); */
+    image: url(:icons/style/arrow-down-small.png); 
 }
 
 QToolButton,
@@ -1060,11 +1032,10 @@ Supports the box model.  The color and background of the selected item is styled
 using selection-color and selection-background-color respectively.  The password
 character can be styled using the lineedit-password-character property. */
 
-QLineEdit,
 /* thanks be to Gaia this override actually works, for once!, and I dodged a
  * very nasty bullet here:
  */
-QFileDialog QLineEdit
+QLineEdit, QFileDialog QLineEdit, QDialog QLineEdit
 {
     border: 1px solid #AAAAAA;
     background-color: #FFFFFF;
@@ -1109,7 +1080,7 @@ QDoubleSpinBox
     /* we will use the stock demo frame image after all, since it was suitable,
      * and actually fixes background problems that would otherwise be annoying
      * to solve*/
-    border-image: url(:pixmaps/style/frame.png) 4;
+    border-image: url(:icons/style/frame.png) 4;
     border-width: 3;
     color: #000000;
     selection-color: #FFFFFF;
@@ -1123,26 +1094,26 @@ QDoubleSpinBox::up-button
     subcontrol-position: top right; /* position at the top right corner */
 
     width: 16px; /* 16 + 2*1px border-width = 15px padding + 3px parent border */
-    border-image: url(:pixmaps/style/spinup.png) 1;
+    border-image: url(:icons/style/spinup.png) 1;
     border-width: 1px;
 }
 
 QSpinBox::up-button:hover,
 QDoubleSpinBox::up-button:hover
 {
-    border-image: url(:pixmaps/style/spinup_hover.png) 1;
+    border-image: url(:icons/style/spinup_hover.png) 1;
 }
 
 QSpinBox::up-button:pressed,
 QDoubleSpinBox::up-button:pressed
 {
-    border-image: url(:pixmaps/style/spinup_pressed.png) 1;
+    border-image: url(:icons/style/spinup_pressed.png) 1;
 }
 
 QSpinBox::up-arrow,
 QDoubleSpinBox::up-arrow
 {
-    image: url(:pixmaps/style/arrow-up-small.png);
+    image: url(:icons/style/arrow-up-small.png);
     width: 7px;
     height: 7px;
 }
@@ -1152,7 +1123,7 @@ QSpinBox::up-arrow:off,
 QDoubleSpinBox::up-arrow:disabled,
 QDoubleSpinBox::up-arrow:off
 {  /* off state when value is max */
-   image: url(:pixmaps/style/arrow-up-small-inverted.png);
+   image: url(:icons/style/arrow-up-small-inverted.png);
 }
 
 QSpinBox::down-button,
@@ -1162,7 +1133,7 @@ QDoubleSpinBox::down-button
     subcontrol-position: bottom right; /* position at bottom right corner */
 
     width: 16px;
-    border-image: url(:pixmaps/style/spindown.png) 1;
+    border-image: url(:icons/style/spindown.png) 1;
     border-width: 1px;
     border-top-width: 0;
 }
@@ -1170,19 +1141,19 @@ QDoubleSpinBox::down-button
 QSpinBox::down-button:hover,
 QDoubleSpinBox::down-button:hover
 {
-    border-image: url(:pixmaps/style/spindown_hover.png) 1;
+    border-image: url(:icons/style/spindown_hover.png) 1;
 }
 
 QSpinBox::down-button:pressed,
 QDoubleSpinBox::down-button:pressed
 {
-    border-image: url(:pixmaps/style/spindown_pressed.png) 1;
+    border-image: url(:icons/style/spindown_pressed.png) 1;
 }
 
 QSpinBox::down-arrow,
 QDoubleSpinBox::down-arrow
 {
-    image: url(:pixmaps/style/arrow-down-small.png);
+    image: url(:icons/style/arrow-down-small.png);
     width: 7px;
     height: 7px;
 }
@@ -1192,7 +1163,7 @@ QSpinBox::down-arrow:off,
 QDoubleSpinBox::down-arrow:disabled,
 QDoubleSpinBox::down-arrow:off
 {  /* off state when value in min */
-   image: url(:pixmaps/style/arrow-down-small-inverted.png);
+   image: url(:icons/style/arrow-down-small-inverted.png);
 }
 
 
@@ -1206,27 +1177,6 @@ styled using the ::branch subcontrol. The ::branch Sub-control supports the
 :open, :closed, :has-sibling and :has-children pseudo states.  See
 QAbsractScrollArea to style scrollable backgrounds. */
 
-#tempoview QTreeView,
-QTreeView
-{
-    background-color: #FFFFFF;
-    alternate-background-color: #EEEEFF;
-    color: #000000;
-    selection-background-color: #80AFFF;
-    selection-color: #FFFFFF;
-}
-
-/* I don't really get this, and I don't guess I care anymore.  It just makes
- * utterly no sense.  I can make the backgrounds any color I want with a pixmap,
- * so I know I'm selecting for these, but the foreground color has had a sticky
- * override on it since a few sweeping changes ago, and I have no idea how to
- * solve it without resorting to this.
- */
-QLabel#Humbug
-{
-    color: #000000;
-}
-
 /* Hrm.  Has no effect at all.  Probably not worth much more bother, since Qt
  * automatically inverts the stock arrow pixmaps, and they're sort of legible,
  * but it might ultimately be worth subclassing QPlastiqueStyle in order to
@@ -1234,7 +1184,27 @@ QLabel#Humbug
  */
 QFileDialog
 {
-    leftarrow-icon: url(:pixmaps/style/arrow-left-inverted.png);
-    rightarrow-icon: url(:pixmaps/style/arrow-right-inverted.png);
-    uparrow-icon: url(:pixmaps/style/arrow-up-inverted.png);
+    leftarrow-icon: url(:icons/style/arrow-left-inverted.png);
+    rightarrow-icon: url(:icons/style/arrow-right-inverted.png);
+    uparrow-icon: url(:icons/style/arrow-up-inverted.png);
+}
+
+QFileDialog QPushButton, QDialog QPushButton
+{
+    border: 1px solid #AAAAAA;
+    border-radius: 3px;
+    padding: 0.18em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin: 0.3em;
+}
+
+QFileDialog QPushButton:disabled, QDialog QPushButton:disabled
+{
+    color: #909090;
+}
+
+QFileDialog QPushButton:pressed, QDialog QPushButton:pressed, QFileDialog QPushButton:on, QDialog QPushButton:on
+{
+    background-color: #404040;
 }

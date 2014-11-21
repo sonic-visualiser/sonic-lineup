@@ -91,5 +91,57 @@
     <file>i18n/sonic-visualiser_en_GB.qm</file>
     <file>i18n/tips_en.xml</file>
     <file>vect.qss</file>
+    <file>icons/style/arrow-down.png</file>
+    <file>icons/style/arrow-down-small-inverted.png</file>
+    <file>icons/style/arrow-down-small.png</file>
+    <file>icons/style/arrow-left-inverted.png</file>
+    <file>icons/style/arrow-left.png</file>
+    <file>icons/style/arrow-left-small-inverted.png</file>
+    <file>icons/style/arrow-left-small.png</file>
+    <file>icons/style/arrow-right-inverted.png</file>
+    <file>icons/style/arrow-right.png</file>
+    <file>icons/style/arrow-right-small-inverted.png</file>
+    <file>icons/style/arrow-right-small.png</file>
+    <file>icons/style/arrow-up-inverted.png</file>
+    <file>icons/style/arrow-up.png</file>
+    <file>icons/style/arrow-up-small-inverted.png</file>
+    <file>icons/style/arrow-up-small.png</file>
+    <file>icons/style/checkbox_checked_disabled.png</file>
+    <file>icons/style/checkbox_checked_hover.png</file>
+    <file>icons/style/checkbox_checked.png</file>
+    <file>icons/style/checkbox_checked_pressed.png</file>
+    <file>icons/style/checkbox_disabled.png</file>
+    <file>icons/style/checkbox_indeterminate_hover.png</file>
+    <file>icons/style/checkbox_indeterminate.png</file>
+    <file>icons/style/checkbox_indeterminate_pressed.png</file>
+    <file>icons/style/checkbox_unchecked_hover.png</file>
+    <file>icons/style/checkbox_unchecked.png</file>
+    <file>icons/style/checkbox_unchecked_pressed.png</file>
+    <file>icons/style/combo-dropdown.png</file>
+    <file>icons/style/connect-button-arrow.png</file>
+    <file>icons/style/down_arrow_disabled.png</file>
+    <file>icons/style/down_arrow.png</file>
+    <file>icons/style/frame.png</file>
+    <file>icons/style/golden-arrow-left.png</file>
+    <file>icons/style/golden-arrow-left-up.png</file>
+    <file>icons/style/golden-arrow-right.png</file>
+    <file>icons/style/golden-arrow-up.png</file>
+    <file>icons/style/header-close-button.png</file>
+    <file>icons/style/htoolbar-separator.png</file>
+    <file>icons/style/messagebox-critical.png</file>
+    <file>icons/style/messagebox-information.png</file>
+    <file>icons/style/messagebox-question.png</file>
+    <file>icons/style/pagefold.png</file>
+    <file>icons/style/radiobutton_checked_disabled.png</file>
+    <file>icons/style/radiobutton_checked_hover_disabled.png</file>
+    <file>icons/style/radiobutton_checked_hover.png</file>
+    <file>icons/style/radiobutton_checked.png</file>
+    <file>icons/style/radiobutton_checked_pressed_disabled.png</file>
+    <file>icons/style/radiobutton_checked_pressed.png</file>
+    <file>icons/style/radiobutton_unchecked_disabled.png</file>
+    <file>icons/style/radiobutton_unchecked_hover_disabled.png</file>
+    <file>icons/style/radiobutton_unchecked_hover.png</file>
+    <file>icons/style/radiobutton_unchecked.png</file>
+    <file>icons/style/radiobutton_unchecked_pressed_disabled.png</file>
 </qresource>
 </RCC>

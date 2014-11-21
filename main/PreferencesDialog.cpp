@@ -139,10 +139,9 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Tuning Frequency"))),
                        row, 0);
-    subgrid->addWidget(frequency, row++, 1, 1, 3);
+    subgrid->addWidget(frequency, row++, 2, 1, 1);
 
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Use External Aligner"))),
+    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("Use external alignment program"))),
                        row, 0);
     subgrid->addWidget(m_alignmentProgramToggle, row, 1, 1, 1);
     subgrid->addWidget(m_alignmentProgramEdit, row, 2, 1, 1);
@@ -151,7 +150,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Temporary Directory Root"))),
-                       row, 0, 1, 2);
+                       row, 0);
     subgrid->addWidget(m_tempDirRootEdit, row, 2, 1, 1);
     subgrid->addWidget(tempDirButton, row, 3, 1, 1);
     row++;
