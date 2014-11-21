@@ -207,7 +207,7 @@ protected:
     bool checkSaveModified();
 
     virtual void configureNewPane(Pane *p);
-    virtual Model *selectExistingModeLayer(Pane *, QString);
+    virtual Model *selectExistingLayerForMode(Pane *, QString);
     virtual void addSalientFeatureLayer(Pane *, WaveFileModel *);
 
     virtual void updateVisibleRangeDisplay(Pane *p) const;

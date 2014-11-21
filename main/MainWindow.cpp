@@ -1171,7 +1171,7 @@ MainWindow::openRecentFile()
 }
 
 Model *
-MainWindow::selectExistingModeLayer(Pane *pane, QString name)
+MainWindow::selectExistingLayerForMode(Pane *pane, QString name)
 {   
     // Hides all layers in the given pane that have names differing
     // from the given name, except for time instants layers (which are
@@ -1280,7 +1280,7 @@ MainWindow::curveModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *model = selectExistingModeLayer(pane, name);
+        Model *model = selectExistingLayerForMode(pane, name);
         if (!model) continue;
 
         TransformId id = "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn";
@@ -1324,7 +1324,7 @@ MainWindow::waveformModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *model = selectExistingModeLayer(pane, name);
+        Model *model = selectExistingLayerForMode(pane, name);
         if (!model) continue;
 
         Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
@@ -1347,7 +1347,7 @@ MainWindow::spectrogramModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *model = selectExistingModeLayer(pane, name);
+        Model *model = selectExistingLayerForMode(pane, name);
         if (!model) continue;
         
         Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
@@ -1370,7 +1370,7 @@ MainWindow::melodogramModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *model = selectExistingModeLayer(pane, name);
+        Model *model = selectExistingLayerForMode(pane, name);
         if (!model) continue;
 
         Layer *newLayer = m_document->createLayer
