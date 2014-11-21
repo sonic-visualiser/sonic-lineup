@@ -198,18 +198,25 @@ main(int argc, char **argv)
 
         QString path = *i;
 
-        if (path.endsWith("sv")) {
-            if (!haveSession) {
-                status = gui->openSessionPath(path);
-                if (status == MainWindow::FileOpenSucceeded) {
-                    haveSession = true;
-                    haveMainModel = true;
+        if (QFileInfo(path).isDir()) {
+            status = gui->openDirOfAudio(path);
+        }
+
+        if (status != MainWindow::FileOpenSucceeded) {
+            if (path.endsWith("sv")) {
+                if (!haveSession) {
+                    status = gui->openSessionPath(path);
+                    if (status == MainWindow::FileOpenSucceeded) {
+                        haveSession = true;
+                        haveMainModel = true;
+                    }
+                } else {
+                    std::cerr << "WARNING: Ignoring additional session file argument \"" << path.toStdString() << "\"" << std::endl;
+                    status = MainWindow::FileOpenSucceeded;
                 }
-            } else {
-                std::cerr << "WARNING: Ignoring additional session file argument \"" << path.toStdString() << "\"" << std::endl;
-                status = MainWindow::FileOpenSucceeded;
             }
         }
+        
         if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
                 status = gui->openPath(path, MainWindow::ReplaceMainModel);
@@ -227,6 +234,7 @@ main(int argc, char **argv)
                 }
             }
         }
+        
         if (status == MainWindow::FileOpenFailed) {
 	    QMessageBox::critical
                 (gui, QMessageBox::tr("Failed to open file"),

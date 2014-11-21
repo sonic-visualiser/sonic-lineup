@@ -292,7 +292,6 @@ styled using the ::tear-off. */
 
 QMenu
 {
-/*    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #AAAAAA stop:1 #999999);*/
     background-color: #EEEEEE;
     border: 1px solid black;
 }
@@ -869,11 +868,7 @@ case of a checkable QGroupBox, the title includes the check indicator. The
 indicator is styled using the the ::indicator subcontrol. The spacing property
 can be used to control the spacing between the text and indicator. */
 
-QGroupBox,
-#View QGroupBox,
-#App QGroupBox,
-#App QWidget QGroupBox,
-#RosegardenParameterArea QGroupBox
+QGroupBox
 {
     background: #404040;
     color: #FFFFFF;
@@ -884,11 +879,7 @@ QGroupBox,
 }
 
 
-QGroupBox::title,
-#View QGroupBox::title,
-#App QGroupBox:title,
-#App QWidget QGroupBox:title,
-#RosegardenParameterArea QGroupBox::title
+QGroupBox::title
 {
     color: #FFFFFF;
     subcontrol-origin: margin;
@@ -896,19 +887,12 @@ QGroupBox::title,
     padding: 0 5px;
 }
 
-QGroupBox::title:!enabled,
-#View QGroupBox::title:!enabled,
-#App QGroupBox:title:!enabled,
-#App QWidget QGroupBox:title:!enabled,
-#RosegardenParameterArea QGroupBox::title:!enabled
+QGroupBox::title:!enabled
 {
     color: #000000;
 }
 
-QGroupBox QWidget,
-#MinorDialog QGroupBox QWidget,
-#tempoview QGroupBox QWidget,
-#App QGroupBox QWidget
+QGroupBox QWidget
 {
     background: #404040;
 }
@@ -967,15 +951,7 @@ QToolButton::down-arrow
 }
 
 QToolButton,
-QToolButton::enabled,
-#tempoview QToolButton,
-#tempoview QToolButton::enabled,
-#View QToolButton,
-#View QToolButton::enabled,
-#App QToolButton,
-#App QToolButton::enabled,
-#RosegardenParameterArea QToolButton,
-#RosegardenParameterArea QToolButton::enabled
+QToolButton::enabled
 {
     color: #FFFFFF;
     background-color: transparent;
@@ -984,36 +960,21 @@ QToolButton::enabled,
 }
 
 QToolButton::pressed,
-QToolButton::checked,
-#tempoview QToolButton::pressed,
-#tempoview QToolButton::checked,
-#View QToolButton::pressed,
-#View QToolButton::checked,
-#App QToolButton::pressed,
-#App QToolButton::checked,
-#RosegardenParameterArea QToolButton::pressed,
-#RosegardenParameterArea QToolButton::checked
+QToolButton::checked
 {
     border: 1px solid #AAAAAA;
     border-radius: 2px;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
 
-QToolButton::enabled:hover,
-#View QToolButton::enabled:hover,
-#App QToolButton::enabled:hover,
-#RosegardenParameterArea QToolButton::enabled:hover
+QToolButton::enabled:hover
 {
     border: 1px solid #AAAAAA;
     border-radius: 2px;
     background-color: #CCDFFF;
 }
 
-QToolButton::!enabled,
-#tempoview QToolButton::!enabled,
-#View QToolButton::!enabled,
-#App QToolButton::!enabled,
-#RosegardenParameterArea QToolButton::!enabled
+QToolButton::!enabled
 {
     color: #FFFFFF;
     background-color: transparent;
@@ -1166,6 +1127,66 @@ QDoubleSpinBox::down-arrow:off
    image: url(:icons/style/arrow-down-small-inverted.png);
 }
 
+/* QComboBox
+The frame around the combobox can be styled using the box model. The drop-down button can be styled using the ::drop-down subcontrol. By default, the drop-down button is placed in the top right corner of the padding rectangle of the widget. The arrow mark inside the drop-down button can be styled using the ::down-arrow subcontrol. By default, the arrow is placed in the center of the contents rectangle of the drop-down subcontrol.
+
+The pop-up of the QComboBox is a QAbstractItemView and is styled using the descendant selector.
+*/
+
+QComboBox {
+    border: 1px solid #AAAAAA;
+    border-radius: 3px;
+    color: #FFFFFF;
+}
+
+QComboBox:enabled {
+    color: #FFFFFF;
+}
+
+QComboBox:disabled {
+    color: #909090;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #EEEEEE;
+    border: 1px solid black;
+    color: #000000;
+}
+
+QComboBox QAbstractItemView::separator
+{
+    height: 2px;
+    background: #AAAAAA;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+QComboBox QAbstractItemView::item:enabled
+{
+    /* sets background of menu item. set this to something non-transparent
+    if you want menu color and menu item color to be different */
+    background-color: transparent;
+    color: #000000;
+    padding: 2px 25px 2px 20px;
+    border: 1px solid transparent;
+    min-width: 12em; /* leaves room for space between item and hotkey */
+}
+
+QComboBox QAbstractItemView::item:!enabled
+{
+    color: #AAAAAA;
+    padding: 2px 25px 2px 20px;
+    border: 1px solid transparent;
+    min-width: 12em; /* leaves room for space between item and hotkey */
+}
+
+/* Menu selection background color
+ */
+QComboBox QAbstractItemView::item:selected
+{
+    background-color: #80AFFF;
+    color: #FFFFFF;
+}
 
 /*  QTreeView (affects QTreeWidget)
 

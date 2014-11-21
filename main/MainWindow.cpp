@@ -319,11 +319,6 @@ MainWindow::MainWindow(bool withAudioOutput) :
     layout->addWidget(m_overview, 1, 1);
     layout->addWidget(m_fader, 1, 2);
     layout->addWidget(m_playSpeed, 1, 3);
-
-    m_paneStack->setPropertyStackMinWidth
-        (m_fader->width() + m_playSpeed->width() +
-         layout->spacing() * 4);
-
     layout->setColumnStretch(1, 10);
 
     frame->setLayout(layout);
@@ -1033,7 +1028,14 @@ MainWindow::newSession()
     closeSession();
     createDocument();
 
-    SVDEBUG << "MainWindow::newSession: setting auto-alignment on document " << m_document << endl;
+    // We need a pane, so that we have something to receive drop events
+    
+    Pane *pane = m_paneStack->addPane();
+
+    connect(pane, SIGNAL(contextHelpChanged(const QString &)),
+            this, SLOT(contextHelpChanged(const QString &)));
+
+    m_overview->registerView(pane);
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
 
@@ -1420,8 +1422,28 @@ MainWindow::paneAboutToBeDeleted(Pane *pane)
 void
 MainWindow::paneDropAccepted(Pane * /* pane */, QStringList uriList)
 {
-//    if (pane) m_paneStack->setCurrentPane(pane);
+    if (uriList.empty()) return;
 
+    QUrl first(uriList[0]);
+
+    cerr << "uriList.size() == " << uriList.size() << endl;
+    cerr << "first.isLocalFile() == " << first.isLocalFile() << endl;
+    cerr << "QFileInfo(first.path()).isDir() == " << QFileInfo(first.path()).isDir() << endl;
+    
+    if (uriList.size() == 1 &&
+        first.isLocalFile() &&
+        QFileInfo(first.path()).isDir()) {
+
+        FileOpenStatus status = openDirOfAudio(first.path());
+
+        if (status != FileOpenSucceeded) {
+            QMessageBox::critical(this, tr("Failed to open dropped URL"),
+                                  tr("<b>Open failed</b><p>Dropped URL \"%1\" could not be opened").arg(uriList[0]));
+        }
+
+        return;
+    }
+    
     for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
 
         FileOpenStatus status = openPath(*i, CreateAdditionalModel);
