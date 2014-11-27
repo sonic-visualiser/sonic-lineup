@@ -219,7 +219,7 @@ main(int argc, char **argv)
         
         if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
-                status = gui->openPath(path, MainWindow::ReplaceMainModel);
+                status = gui->openPath(path, MainWindow::ReplaceSession);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveMainModel = true;
                 }
