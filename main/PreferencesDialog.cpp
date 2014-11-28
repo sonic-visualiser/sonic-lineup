@@ -107,20 +107,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
             this, SLOT(alignmentProgramButtonClicked()));
     m_alignmentProgramButton->setFixedSize(QSize(24, 24));
     m_alignmentProgramButton->setEnabled(m_useAlignmentProgram);
-    
-/*
-    QComboBox *bgMode = new QComboBox;
-    int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
-                                             &deflt);
-    m_backgroundMode = bg;
-    for (i = min; i <= max; ++i) {
-        bgMode->addItem(prefs->getPropertyValueLabel("Background Mode", i));
-    }
-    bgMode->setCurrentIndex(bg);
 
-    connect(bgMode, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(backgroundModeChanged(int)));
-*/
     // General tab
 
     QFrame *frame = new QFrame;
@@ -129,12 +116,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     frame->setLayout(subgrid);
 
     int row = 0;
-/*
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Background Mode"))),
-                       row, 0);
-    subgrid->addWidget(bgMode, row++, 1, 1, 3);
-*/
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Tuning Frequency"))),
@@ -231,14 +212,6 @@ PreferencesDialog::alignmentProgramButtonClicked()
 }
 
 void
-PreferencesDialog::backgroundModeChanged(int mode)
-{
-    m_backgroundMode = mode;
-    m_applyButton->setEnabled(true);
-    m_changesOnRestart = true;
-}
-
-void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -251,7 +224,6 @@ PreferencesDialog::applyClicked()
     Preferences *prefs = Preferences::getInstance();
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
-    prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
 
     QSettings settings;
     settings.beginGroup("Preferences");

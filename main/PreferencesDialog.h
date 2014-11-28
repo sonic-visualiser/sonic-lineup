@@ -39,7 +39,6 @@ public slots:
 protected slots:
     void tuningFrequencyChanged(double freq);
     void tempDirRootChanged(QString root);
-    void backgroundModeChanged(int mode);
 
     void tempDirButtonClicked();
     void alignmentProgramToggleClicked();
@@ -62,7 +61,6 @@ protected:
     QString m_tempDirRoot;
     bool m_useAlignmentProgram;
     QString m_alignmentProgram;
-    int m_backgroundMode;
 
     bool m_changesOnRestart;
 };
