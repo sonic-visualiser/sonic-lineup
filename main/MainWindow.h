@@ -72,6 +72,8 @@ public slots:
     void goFullScreen();
     void endFullScreen();
 
+    void selectMainPane();
+
 protected slots:
     virtual void openFile();
     virtual void openLocation();

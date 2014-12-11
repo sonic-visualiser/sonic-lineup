@@ -224,6 +224,7 @@ main(int argc, char **argv)
                     haveMainModel = true;
                 }
             } else {
+                gui->selectMainPane();
                 if (haveSession && !havePriorCommandLineModel) {
                     status = gui->openPath(path, MainWindow::AskUser);
                     if (status == MainWindow::FileOpenSucceeded) {

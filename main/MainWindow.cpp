@@ -1013,6 +1013,14 @@ MainWindow::documentRestored()
 }
 
 void
+MainWindow::selectMainPane()
+{
+    if (m_paneStack && m_paneStack->getPaneCount() > 0) {
+        m_paneStack->setCurrentPane(m_paneStack->getPane(0));
+    }
+}
+
+void
 MainWindow::newSession()
 {
     if (!checkSaveModified()) return;
