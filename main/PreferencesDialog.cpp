@@ -108,8 +108,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     m_alignmentProgramButton->setFixedSize(QSize(24, 24));
     m_alignmentProgramButton->setEnabled(m_useAlignmentProgram);
 
-    // General tab
-
+    m_normaliseAudio = prefs->getNormaliseAudio();
+    m_normaliseAudioToggle = new QCheckBox();
+    m_normaliseAudioToggle->setChecked(m_normaliseAudio);
+    connect(m_normaliseAudioToggle, SIGNAL(clicked()),
+            this, SLOT(normaliseAudioToggleClicked()));
+    
     QFrame *frame = new QFrame;
     
     QGridLayout *subgrid = new QGridLayout;
@@ -136,6 +140,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(tempDirButton, row, 3, 1, 1);
     row++;
 
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Normalise Audio"))),
+                       row, 0);
+    subgrid->addWidget(m_normaliseAudioToggle, row, 1, 1, 1);
+    row++;
+    
     subgrid->setColumnStretch(2, 10);
     subgrid->setRowStretch(row, 10);
     
@@ -212,6 +222,14 @@ PreferencesDialog::alignmentProgramButtonClicked()
 }
 
 void
+PreferencesDialog::normaliseAudioToggleClicked()
+{
+    m_normaliseAudio = m_normaliseAudioToggle->isChecked();
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -224,6 +242,7 @@ PreferencesDialog::applyClicked()
     Preferences *prefs = Preferences::getInstance();
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
+    prefs->setNormaliseAudio(m_normaliseAudio);
 
     QSettings settings;
     settings.beginGroup("Preferences");

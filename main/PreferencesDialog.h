@@ -43,6 +43,7 @@ protected slots:
     void tempDirButtonClicked();
     void alignmentProgramToggleClicked();
     void alignmentProgramButtonClicked();
+    void normaliseAudioToggleClicked();
 
     void okClicked();
     void applyClicked();
@@ -56,11 +57,13 @@ protected:
     QCheckBox *m_alignmentProgramToggle;
     QLineEdit *m_alignmentProgramEdit;
     QPushButton *m_alignmentProgramButton;
+    QCheckBox *m_normaliseAudioToggle;
     
     float m_tuningFrequency;
     QString m_tempDirRoot;
     bool m_useAlignmentProgram;
     QString m_alignmentProgram;
+    bool m_normaliseAudio;
 
     bool m_changesOnRestart;
 };
