@@ -1,5 +1,5 @@
 
-AC_INIT([Vect], [0.1], cannam@all-day-breakfast.com)
+AC_INIT([Vect], [], cannam@all-day-breakfast.com)
 
 AC_CONFIG_SRCDIR(main/main.cpp)
 
@@ -24,6 +24,9 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
+
+# We are daringly making use of C++11 now
+AX_CXX_COMPILE_STDCXX_11(noext)
 
 AC_HEADER_STDC
 
@@ -117,7 +120,7 @@ AC_SUBST(CXX)
 AC_SUBST(QMAKE_CONFIG)
 
 AC_CONFIG_SUBDIRS([svcore svgui svapp])
-AC_CONFIG_FILES([config.pri version.h])
+AC_CONFIG_FILES([config.pri])
 
 AC_OUTPUT
 

@@ -1797,7 +1797,8 @@ MainWindow::saveSessionAs()
 	QMessageBox::critical(this, tr("Failed to save file"),
 			      tr("Session file \"%1\" could not be saved.").arg(path));
     } else {
-	setWindowTitle(tr("Sonic Vector: %1")
+	setWindowTitle(tr("%1: %2")
+                       .arg(QApplication::applicationName())
 		       .arg(QFileInfo(path).fileName()));
 	m_sessionFile = path;
 	CommandHistory::getInstance()->documentSaved();
@@ -2007,7 +2008,8 @@ MainWindow::outputLevelsChanged(float left, float right)
 }
 
 void
-MainWindow::sampleRateMismatch(int requested, int actual,
+MainWindow::sampleRateMismatch(sv_samplerate_t requested,
+                               sv_samplerate_t actual,
                                bool willResample)
 {
     if (!willResample) {
