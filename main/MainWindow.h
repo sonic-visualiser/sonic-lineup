@@ -123,7 +123,6 @@ protected slots:
 
     virtual void mainModelChanged(WaveFileModel *);
     virtual void modelAdded(Model *);
-    virtual void modelReady();
     virtual void modelAboutToBeDeleted(Model *);
 
     virtual void modelGenerationFailed(QString, QString);
@@ -205,9 +204,6 @@ protected:
     };
     virtual void reselectMode();
     DisplayMode m_displayMode;
-
-    typedef std::map<Model *, Model *> ModelPairMap;
-    ModelPairMap m_fftModelMap;
 
     virtual void closeEvent(QCloseEvent *e);
     bool checkSaveModified();

@@ -23,7 +23,6 @@
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
-#include "data/model/FFTModel.h"
 #include "data/model/AlignmentModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "base/StorageAdviser.h"
@@ -57,7 +56,6 @@
 #include "data/fileio/CSVFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
 #include "data/fileio/FileSource.h"
-#include "data/fft/FFTDataServer.h"
 #include "base/RecentFiles.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
@@ -2058,66 +2056,11 @@ void
 MainWindow::modelAdded(Model *model)
 {
     MainWindowBase::modelAdded(model);
-    DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(model);
-    if (dtvm) {
-        if (!model->isReady()) {
-            connect(dtvm, SIGNAL(ready()), this, SLOT(modelReady()));
-        } else {
-            StorageAdviser::Criteria criteria = StorageAdviser::NoCriteria;
-            if (dtvm == getMainModel()) {
-                criteria = StorageAdviser::SpeedCritical;
-            }
-
-            FFTModel *fftmodel = new FFTModel
-                (dtvm,
-                 -1,
-                 HanningWindow,
-                 2048, 1024, 2048,
-                 false,
-                 criteria);
-
-            m_fftModelMap[dtvm] = fftmodel;
-            fftmodel->resume();
-        }
-    }
 }
-
-void
-MainWindow::modelReady()
-{
-    QObject *s = sender();
-    cerr << "MainWindow::modelReady(" << s << ")" << endl;
-    if (s) {
-        DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(s);
-        if (dtvm) {
-            StorageAdviser::Criteria criteria = StorageAdviser::NoCriteria;
-            if (dtvm == getMainModel()) {
-                criteria = StorageAdviser::SpeedCritical;
-            }
-
-            FFTModel *fftmodel = new FFTModel
-                (dtvm,
-                 -1,
-                 HanningWindow,
-                 2048, 1024, 2048,
-                 false,
-                 criteria);
-
-            m_fftModelMap[dtvm] = fftmodel;
-            fftmodel->resume();
-        } else {
-            cerr << "Not a DenseTimeValueModel!" << endl;
-        }
-    }
-}            
 
 void
 MainWindow::modelAboutToBeDeleted(Model *model)
 {
-    if (m_fftModelMap.find(model) != m_fftModelMap.end()) {
-        delete m_fftModelMap[model];
-        m_fftModelMap.erase(model);
-    }
     MainWindowBase::modelAboutToBeDeleted(model);
 }
 
