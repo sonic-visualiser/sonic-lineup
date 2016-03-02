@@ -122,6 +122,7 @@ protected slots:
     virtual void layerInAView(Layer *, bool);
 
     virtual void mainModelChanged(WaveFileModel *);
+    virtual void mainModelGainChanged(float);
     virtual void modelAdded(Model *);
     virtual void modelAboutToBeDeleted(Model *);
 
