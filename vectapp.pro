@@ -1,6 +1,8 @@
 
 TEMPLATE = app
 
+INCLUDEPATH += vamp-plugin-sdk
+
 win32-g++ {
     INCLUDEPATH += sv-dependency-builds/win32-mingw/include
     LIBS += -Lsv-dependency-builds/win32-mingw/lib
@@ -51,15 +53,15 @@ MOC_DIR = o
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-MY_LIBS = -Lsvapp -Lsvgui -Lsvcore -Ldataquay -L. \
-          -lsvapp -lsvgui -lsvcore -ldataquay -lbq
+MY_LIBS = -Lsvapp -Lsvgui -Lsvcore -Lchecker -Ldataquay -L. \
+          -lsvapp -lsvgui -lsvcore -lchecker -ldataquay -lbq
 
 linux* {
 MY_LIBS = -Wl,-Bstatic $$MY_LIBS -Wl,-Bdynamic
 }
 
 win* {
-MY_LIBS = -Lsvapp/release -Lsvgui/release -Lsvcore/release -Ldataquay/release $$MY_LIBS
+MY_LIBS = -Lsvapp/release -Lsvgui/release -Lsvcore/release -Lchecker/release -Ldataquay/release $$MY_LIBS
 }
 
 LIBS = $$MY_LIBS $$LIBS
@@ -68,22 +70,48 @@ win* {
 PRE_TARGETDEPS += svapp/release/libsvapp.a \
                   svgui/release/libsvgui.a \
                   svcore/release/libsvcore.a \
-                  dataquay/release/libdataquay.a
+                  dataquay/release/libdataquay.a \
+                  checker/release/libchecker.a
 }
 !win* {
 PRE_TARGETDEPS += svapp/libsvapp.a \
                   svgui/libsvgui.a \
                   svcore/libsvcore.a \
-                  dataquay/libdataquay.a
+                  dataquay/libdataquay.a \
+                  checker/libchecker.a
+
 }
 
 RESOURCES += vect.qrc
 
-HEADERS += main/MainWindow.h \
-           main/PreferencesDialog.h
-SOURCES += main/main.cpp \
-           main/MainWindow.cpp \
-           main/PreferencesDialog.cpp
+HEADERS += \
+        vamp-plugin-sdk/vamp-hostsdk/PluginBase.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginBufferingAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginChannelAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/Plugin.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginHostAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginInputDomainAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginLoader.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginSummarisingAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginWrapper.h \
+        vamp-plugin-sdk/vamp-hostsdk/RealTime.h \
+        vamp-plugin-sdk/src/vamp-hostsdk/Window.h \
+        main/MainWindow.h \
+        main/PreferencesDialog.h
+        
+SOURCES += \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginBufferingAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginChannelAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginHostAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginInputDomainAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginLoader.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginSummarisingAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginWrapper.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/RealTime.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/Files.cpp \
+        main/main.cpp \
+	main/MainWindow.cpp \
+	main/PreferencesDialog.cpp
 
 QMAKE_INFO_PLIST = deploy/osx/Info.plist
 

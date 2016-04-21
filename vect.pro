@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = sub_bq sub_dataquay svcore svgui svapp sub_vect
+SUBDIRS = sub_bq sub_dataquay svcore svgui svapp checker sub_vect
 
 sub_bq.file = bq.pro
 sub_vect.file = vectapp.pro
