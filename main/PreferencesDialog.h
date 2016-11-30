@@ -59,7 +59,7 @@ protected:
     QPushButton *m_alignmentProgramButton;
     QCheckBox *m_normaliseAudioToggle;
     
-    float m_tuningFrequency;
+    double m_tuningFrequency;
     QString m_tempDirRoot;
     bool m_useAlignmentProgram;
     QString m_alignmentProgram;

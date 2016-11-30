@@ -979,8 +979,8 @@ MainWindow::updateDescriptionLabel()
 
     QString description;
 
-    int ssr = getMainModel()->getSampleRate();
-    int tsr = ssr;
+    sv_samplerate_t ssr = getMainModel()->getSampleRate();
+    sv_samplerate_t tsr = ssr;
     if (m_playSource) tsr = m_playSource->getTargetSampleRate();
 
     if (ssr != tsr) {
@@ -993,6 +993,8 @@ MainWindow::updateDescriptionLabel()
 	.arg(RealTime::frame2RealTime(getMainModel()->getEndFrame(), ssr)
 	     .toText(false).c_str())
 	.arg(description);
+
+    //!!! but we don't actually have a description label
 }
 
 void
@@ -1959,7 +1961,7 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
     }
 
     bool haveSelection = false;
-    int startFrame = 0, endFrame = 0;
+    sv_frame_t startFrame = 0, endFrame = 0;
 
     if (m_viewManager && m_viewManager->haveInProgressSelection()) {
 
@@ -2190,7 +2192,7 @@ MainWindow::alignmentFailed(QString message)
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
-         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%2")
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
          .arg(message),
          QMessageBox::Ok);
 }
