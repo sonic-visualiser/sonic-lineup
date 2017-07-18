@@ -53,9 +53,9 @@ CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 
 if test "x$GCC" = "xyes"; then
-   	CXXFLAGS_ANY="-Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
+   	CXXFLAGS_ANY="-std=c++11 -fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
-   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O2"
+   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
 fi
 
@@ -86,8 +86,23 @@ SV_MODULE_REQUIRED([samplerate],[samplerate >= 0.1.2],[samplerate.h],[samplerate
 SV_MODULE_REQUIRED([rubberband],[rubberband],[rubberband/RubberBandStretcher.h],[rubberband],[rubberband_new])
 SV_MODULE_REQUIRED([sord],[sord-0 >= 0.5],[sord/sord.h],[sord-0],[sord_world_new])
 SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_read_file])
-SV_MODULE_REQUIRED([capnp],[capnp >= 0.6],[capnp/common.h],[capnp],[])
-SV_MODULE_REQUIRED([kj],[kj >= 0.6],[kj/common.h],[kj],[])
+
+# We need a Cap'n Proto version with the expectedSizeInWordsFromPrefix
+# function, which appeared in v0.6. If we can't find at least that
+# version with pkg-config, we check for the symbol with the compiler.
+PKG_CHECK_MODULES([capnp],[capnp >= 0.6],[HAVES="$HAVES HAVE_CAPNP";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS"],[AC_MSG_NOTICE([Failed to find required module capnp using pkg-config, trying again by old-fashioned means])])
+if test -z "$capnp_LIBS" ; then
+    AC_COMPILE_IFELSE([
+        AC_LANG_SOURCE([[
+        #include <capnp/serialize.h>
+        int main() {
+            kj::Array<capnp::word> prefix;
+            return capnp::expectedSizeInWordsFromPrefix(prefix.asPtr());
+        }]])],
+        [HAVES="$HAVES HAVE_CAPNP";LIBS="$LIBS -lcapnp -lkj"],
+        [AC_MSG_ERROR([Failed to find appropriate capnp library])]
+    )
+fi
 
 SV_MODULE_OPTIONAL([liblo],[],[lo/lo.h],[lo],[lo_address_new])
 SV_MODULE_OPTIONAL([portaudio_2_0],[portaudio-2.0 >= 19],[portaudio.h],[portaudio],[Pa_IsFormatSupported])
@@ -123,6 +138,24 @@ AC_SUBST(QMAKE_CONFIG)
 AC_CONFIG_FILES([config.pri])
 
 AC_OUTPUT
+
+if test -x vext ; then
+   if test -d .hg -o -d .git ; then 
+      if ! ./vext install; then
+         AC_MSG_ERROR([Vext failed; please fix any reported errors and try again])
+      fi
+   else
+      AC_MSG_NOTICE([Vext executable found but not in an Hg or Git working-copy: not running it])
+      if ! test -d vamp-plugin-sdk ; then
+          AC_MSG_WARN([No vamp-plugin-sdk directory present, so external libraries might not have been updated])
+      fi
+   fi
+else
+   AC_MSG_NOTICE([No Vext executable found: assuming external libraries are already here])
+   if ! test -d vamp-plugin-sdk ; then
+      AC_MSG_WARN([No vamp-plugin-sdk directory present, so external libraries might not have been updated])
+   fi
+fi
 
 if ! $QMAKE -r vect.pro; then
    AC_MSG_ERROR([qmake failed: Command was "$QMAKE -r"])

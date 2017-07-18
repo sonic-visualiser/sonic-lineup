@@ -5,7 +5,7 @@ CONFIG += release
 #CONFIG += debug
 
 DEFINES += NDEBUG BUILD_RELEASE
-DEFINES += NO_TIMING
+DEFINES += NO_TIMING NO_HIT_COUNTS
 
 DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER
 
@@ -58,7 +58,7 @@ win32-g++ {
 
     LIBS += -Lrelease -Lsv-dependency-builds/win32-mingw/lib -L../sonic-visualiser/sv-dependency-builds/win32-mingw/lib
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES USE_OWN_ALIGNED_MALLOC CAPNP_LITE
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
 
     QMAKE_CXXFLAGS_RELEASE += -ffast-math
 
@@ -89,7 +89,7 @@ win32-msvc* {
             -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib
     }
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES USE_OWN_ALIGNED_MALLOC CAPNP_LITE
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
 
     QMAKE_CXXFLAGS_RELEASE += -fp:fast
 
@@ -114,9 +114,9 @@ macx* {
     INCLUDEPATH += sv-dependency-builds/osx/include
     LIBS += -Lsv-dependency-builds/osx/lib
 
-    QMAKE_CXXFLAGS_RELEASE += -ffast-math
+    QMAKE_CXXFLAGS_RELEASE += -O3 -ffast-math
 
-    DEFINES += HAVE_COREAUDIO MALLOC_IS_ALIGNED HAVE_VDSP
+    DEFINES += HAVE_COREAUDIO HAVE_VDSP
     LIBS += \
         -framework CoreAudio \
 	-framework CoreMidi \

@@ -35,11 +35,12 @@
 #include "layer/Colour3DPlotLayer.h"
 #include "layer/SliceLayer.h"
 #include "layer/SliceableLayer.h"
-#include "widgets/Fader.h"
 #include "view/Overview.h"
 #include "widgets/PropertyBox.h"
 #include "widgets/PropertyStack.h"
 #include "widgets/AudioDial.h"
+#include "widgets/LevelPanWidget.h"
+#include "widgets/LevelPanToolButton.h"
 #include "widgets/IconLoader.h"
 #include "widgets/LayerTree.h"
 #include "widgets/ListInputDialog.h"
@@ -102,6 +103,7 @@
 #include <QCheckBox>
 #include <QRegExp>
 #include <QScrollArea>
+#include <QCloseEvent>
 
 #include <iostream>
 #include <cstdio>
@@ -271,7 +273,9 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
-    m_overview->setFixedHeight(40);
+    int overviewHeight = m_viewManager->scalePixelSize(35);
+    if (overviewHeight < 40) overviewHeight = 40;
+    m_overview->setFixedHeight(overviewHeight);
 #ifndef _WIN32
     // For some reason, the contents of the overview never appear if we
     // make this setting on Windows.  I have no inclination at the moment
@@ -295,34 +299,43 @@ MainWindow::MainWindow(bool withAudioOutput) :
             (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
     }        
 
-    m_fader = new Fader(frame, false);
-    connect(m_fader, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_fader, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
-    m_playSpeed->setMaximum(200);
-    m_playSpeed->setValue(100);
-    m_playSpeed->setFixedWidth(24);
-    m_playSpeed->setFixedHeight(24);
+    m_playSpeed->setMaximum(120);
+    m_playSpeed->setValue(60);
+    m_playSpeed->setFixedWidth(overviewHeight);
+    m_playSpeed->setFixedHeight(overviewHeight);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
-    m_playSpeed->setObjectName(tr("Playback Speedup"));
-    m_playSpeed->setDefaultValue(100);
+    m_playSpeed->setObjectName(tr("Playback Speed"));
     m_playSpeed->setRangeMapper(new PlaySpeedRangeMapper);
+    m_playSpeed->setDefaultValue(60);
     m_playSpeed->setShowToolTip(true);
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    layout->setSpacing(4);
+    m_mainLevelPan = new LevelPanToolButton(frame);
+    connect(m_mainLevelPan, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_mainLevelPan, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
+    m_mainLevelPan->setFixedHeight(overviewHeight);
+    m_mainLevelPan->setFixedWidth(overviewHeight);
+    m_mainLevelPan->setImageSize((overviewHeight * 3) / 4);
+    m_mainLevelPan->setBigImageSize(overviewHeight * 3);
+
+    m_playControlsSpacer = new QFrame;
+
+    layout->setSpacing(m_viewManager->scalePixelSize(4));
     layout->addWidget(m_mainScroll, 0, 0, 1, 6);
     layout->addWidget(m_overview, 1, 1);
-    layout->addWidget(m_fader, 1, 2);
-    layout->addWidget(m_playSpeed, 1, 3);
-    layout->setColumnStretch(1, 10);
+    layout->addWidget(m_playSpeed, 1, 1);
+    layout->addWidget(m_playControlsSpacer, 1, 2);
+    layout->addWidget(m_mainLevelPan, 1, 3);
 
+    m_playControlsSpacer->setFixedSize(QSize(2, 2));
+    layout->setColumnStretch(0, 10);
+    
     frame->setLayout(layout);
 
     setupMenus();
@@ -981,7 +994,7 @@ MainWindow::updateDescriptionLabel()
 
     sv_samplerate_t ssr = getMainModel()->getSampleRate();
     sv_samplerate_t tsr = ssr;
-    if (m_playSource) tsr = m_playSource->getTargetSampleRate();
+    if (m_playSource) tsr = m_playSource->getDeviceSampleRate();
 
     if (ssr != tsr) {
 	description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
@@ -1908,28 +1921,6 @@ MainWindow::playSpeedChanged(int position)
 }
 
 void
-MainWindow::playSharpenToggled()
-{
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("playsharpen", m_playSharpen->isChecked());
-    settings.endGroup();
-
-    playSpeedChanged(m_playSpeed->value());
-}
-
-void
-MainWindow::playMonoToggled()
-{
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("playmono", m_playMono->isChecked());
-    settings.endGroup();
-
-    playSpeedChanged(m_playSpeed->value());
-}    
-
-void
 MainWindow::speedUpPlayback()
 {
     int value = m_playSpeed->value();
@@ -2012,10 +2003,9 @@ MainWindow::updatePositionStatusDisplays() const
 }
 
 void
-MainWindow::outputLevelsChanged(float left, float right)
+MainWindow::monitoringLevelsChanged(float left, float right)
 {
-    m_fader->setPeakLeft(left);
-    m_fader->setPeakRight(right);
+    m_mainLevelPan->setMonitoringLevels(left, right);
 }
 
 void
@@ -2089,9 +2079,11 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     MainWindowBase::mainModelChanged(model);
 
-    if (m_playTarget) {
-        connect(m_fader, SIGNAL(valueChanged(float)),
+    if (m_playTarget || m_audioIO) {
+        connect(m_mainLevelPan, SIGNAL(levelChanged(float)),
                 this, SLOT(mainModelGainChanged(float)));
+        connect(m_mainLevelPan, SIGNAL(panChanged(float)),
+                this, SLOT(mainModelPanChanged(float)));
     }
 
     SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
@@ -2117,6 +2109,19 @@ MainWindow::mainModelGainChanged(float gain)
 {
     if (m_playTarget) {
         m_playTarget->setOutputGain(gain);
+    } else if (m_audioIO) {
+        m_audioIO->setOutputGain(gain);
+    }
+}
+
+void
+MainWindow::mainModelPanChanged(float balance)
+{
+    // this is indeed stereo balance rather than pan
+    if (m_playTarget) {
+        m_playTarget->setOutputBalance(balance);
+    } else if (m_audioIO) {
+        m_audioIO->setOutputBalance(balance);
     }
 }
 
@@ -2258,14 +2263,10 @@ MainWindow::mouseEnteredWidget()
     QWidget *w = dynamic_cast<QWidget *>(sender());
     if (!w) return;
 
-    if (w == m_fader) {
+    if (w == m_mainLevelPan) {
         contextHelpChanged(tr("Adjust the master playback level"));
     } else if (w == m_playSpeed) {
         contextHelpChanged(tr("Adjust the master playback speed"));
-    } else if (w == m_playSharpen && w->isEnabled()) {
-        contextHelpChanged(tr("Toggle transient sharpening for playback time scaling"));
-    } else if (w == m_playMono && w->isEnabled()) {
-        contextHelpChanged(tr("Toggle mono mode for playback time scaling"));
     }
 }
 

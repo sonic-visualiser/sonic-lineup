@@ -99,18 +99,16 @@ protected slots:
 
     virtual void alignToggled();
     virtual void playSpeedChanged(int);
-    virtual void playSharpenToggled();
-    virtual void playMonoToggled();
 
     virtual void speedUpPlayback();
     virtual void slowDownPlayback();
     virtual void restoreNormalPlayback();
 
+    virtual void monitoringLevelsChanged(float, float);
+    
     virtual void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool);
     virtual void audioOverloadPluginDisabled();
     virtual void audioTimeStretchMultiChannelDisabled();
-
-    virtual void outputLevelsChanged(float, float);
 
     virtual void documentModified();
     virtual void documentRestored();
@@ -123,6 +121,7 @@ protected slots:
 
     virtual void mainModelChanged(WaveFileModel *);
     virtual void mainModelGainChanged(float);
+    virtual void mainModelPanChanged(float);
     virtual void modelAdded(Model *);
     virtual void modelAboutToBeDeleted(Model *);
 
@@ -153,10 +152,8 @@ protected slots:
 
 protected:
     Overview                *m_overview;
-    Fader                   *m_fader;
+    LevelPanToolButton      *m_mainLevelPan;
     AudioDial               *m_playSpeed;
-    QPushButton             *m_playSharpen;
-    QPushButton             *m_playMono;
     WaveformLayer           *m_panLayer;
     
     QScrollArea             *m_mainScroll;
@@ -180,6 +177,9 @@ protected:
     QAction                 *m_showPropertyBoxesAction;
 
     bool                     m_exiting;
+
+    QFrame                  *m_playControlsSpacer;
+    int                      m_playControlsWidth;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<QTreeView>      m_layerTreeView;
