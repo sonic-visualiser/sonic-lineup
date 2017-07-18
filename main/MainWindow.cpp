@@ -329,12 +329,12 @@ MainWindow::MainWindow(bool withAudioOutput) :
     layout->setSpacing(m_viewManager->scalePixelSize(4));
     layout->addWidget(m_mainScroll, 0, 0, 1, 6);
     layout->addWidget(m_overview, 1, 1);
-    layout->addWidget(m_playSpeed, 1, 1);
-    layout->addWidget(m_playControlsSpacer, 1, 2);
-    layout->addWidget(m_mainLevelPan, 1, 3);
+    layout->addWidget(m_playSpeed, 1, 2);
+    layout->addWidget(m_playControlsSpacer, 1, 3);
+    layout->addWidget(m_mainLevelPan, 1, 4);
 
     m_playControlsSpacer->setFixedSize(QSize(2, 2));
-    layout->setColumnStretch(0, 10);
+    layout->setColumnStretch(1, 10);
     
     frame->setLayout(layout);
 
