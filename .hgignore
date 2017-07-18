@@ -1,6 +1,6 @@
 syntax: glob
 Makefile
-Makefile.vectapp
+Makefile.*
 */Makefile
 o/*
 */o/*
@@ -18,7 +18,34 @@ doc/html/
 re:^autom4te\.cache/
 re:^qrc_vect\.cpp$
 re:^vect$
+re:^sonic-vector$
 re:^aclocal\.m4$
 re:^config\.log$
 re:^config\.pri$
 re:^config\.status$
+*.app
+Sonic Vector*
+.DS_Store
+*.stash
+cov-int/*
+*.deb
+test-svcore-base
+test-svcore-data-fileio
+test-svcore-data-model
+vamp-plugin-sdk
+svcore
+svgui
+svapp
+checker
+piper
+piper-cpp
+dataquay
+bqvec
+bqfft
+bqresample
+bqaudioio
+sv-dependency-builds
+icons/scalable
+vamp-plugin-load-checker
+piper-vamp-simple-server
+piper-convert
