@@ -23,7 +23,6 @@
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
-#include "data/model/FFTModel.h"
 #include "data/model/AlignmentModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "base/StorageAdviser.h"
@@ -47,17 +46,14 @@
 #include "widgets/SubdividingMenu.h"
 #include "widgets/NotifyingPushButton.h"
 #include "widgets/KeyReference.h"
-#include "audioio/AudioCallbackPlaySource.h"
-#include "audioio/AudioCallbackPlayTarget.h"
-#include "audioio/AudioTargetFactory.h"
-#include "audioio/PlaySpeedRangeMapper.h"
+#include "audio/AudioCallbackPlaySource.h"
+#include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/PlaylistFileReader.h"
 #include "data/fileio/WavFileWriter.h"
 #include "data/fileio/CSVFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
 #include "data/fileio/FileSource.h"
-#include "data/fft/FFTDataServer.h"
 #include "base/RecentFiles.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
@@ -78,6 +74,9 @@
 #include "vamp-sdk/PluginBase.h"
 #include "plugin/api/ladspa.h"
 #include "plugin/api/dssi.h"
+
+#include <bqaudioio/SystemPlaybackTarget.h>
+#include <bqaudioio/SystemAudioIO.h>
 
 #include <QApplication>
 #include <QMessageBox>
@@ -117,7 +116,7 @@ using std::set;
 
 
 MainWindow::MainWindow(bool withAudioOutput) :
-    MainWindowBase(withAudioOutput, false),
+    MainWindowBase(withAudioOutput ? WithAudioOutput : WithNothing),
     m_overview(0),
     m_mainMenusCreated(false),
     m_playbackMenu(0),
@@ -310,7 +309,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speedup"));
     m_playSpeed->setDefaultValue(100);
-    m_playSpeed->setRangeMapper(new PlaySpeedRangeMapper(0, 200));
+    m_playSpeed->setRangeMapper(new PlaySpeedRangeMapper);
     m_playSpeed->setShowToolTip(true);
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
@@ -446,7 +445,6 @@ MainWindow::setupFileMenu()
     IconLoader il;
 
     QIcon icon = il.load("filenew");
-    icon.addPixmap(il.loadPixmap("filenew-22"));
     QAction *action = new QAction(icon, tr("&Clear Session"), this);
     action->setShortcut(tr("Ctrl+N"));
     action->setStatusTip(tr("Abandon the current session and start a new one"));
@@ -456,7 +454,6 @@ MainWindow::setupFileMenu()
     toolbar->addAction(action);
 
     icon = il.load("fileopen");
-    icon.addPixmap(il.loadPixmap("fileopen-22"));
     action = new QAction(icon, tr("&Add File..."), this);
     action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Add a file"));
@@ -982,8 +979,8 @@ MainWindow::updateDescriptionLabel()
 
     QString description;
 
-    int ssr = getMainModel()->getSampleRate();
-    int tsr = ssr;
+    sv_samplerate_t ssr = getMainModel()->getSampleRate();
+    sv_samplerate_t tsr = ssr;
     if (m_playSource) tsr = m_playSource->getTargetSampleRate();
 
     if (ssr != tsr) {
@@ -996,6 +993,8 @@ MainWindow::updateDescriptionLabel()
 	.arg(RealTime::frame2RealTime(getMainModel()->getEndFrame(), ssr)
 	     .toText(false).c_str())
 	.arg(description);
+
+    //!!! but we don't actually have a description label
 }
 
 void
@@ -1872,26 +1871,38 @@ MainWindow::alignToggled()
 void
 MainWindow::playSpeedChanged(int position)
 {
-    PlaySpeedRangeMapper mapper(0, 200);
+    PlaySpeedRangeMapper mapper;
 
-    float percent = m_playSpeed->mappedValue();
-    float factor = mapper.getFactorForValue(percent);
+    double percent = m_playSpeed->mappedValue();
+    double factor = mapper.getFactorForValue(percent);
 
-    cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << endl;
+//    cerr << "play speed position = " << position << " (range 0-120) percent = " << percent << " factor = " << factor << endl;
 
-    bool something = (position != 100);
+    int centre = m_playSpeed->defaultValue();
 
-    int pc = lrintf(percent);
+    // Percentage is shown to 0dp if >100, to 1dp if <100; factor is
+    // shown to 3sf
 
-    if (!something) {
+    char pcbuf[30];
+    char facbuf[30];
+    
+    if (position == centre) {
         contextHelpChanged(tr("Playback speed: Normal"));
+    } else if (position < centre) {
+        sprintf(pcbuf, "%.1f", percent);
+        sprintf(facbuf, "%.3g", 1.0 / factor);
+        contextHelpChanged(tr("Playback speed: %1% (%2x slower)")
+                           .arg(pcbuf)
+                           .arg(facbuf));
     } else {
-        contextHelpChanged(tr("Playback speed: %1%2%")
-                           .arg(position > 100 ? "+" : "")
-                           .arg(pc));
+        sprintf(pcbuf, "%.0f", percent);
+        sprintf(facbuf, "%.3g", factor);
+        contextHelpChanged(tr("Playback speed: %1% (%2x faster)")
+                           .arg(pcbuf)
+                           .arg(facbuf));
     }
 
-    m_playSource->setTimeStretch(factor);
+    m_playSource->setTimeStretch(1.0 / factor); // factor is a speedup
 
     updateMenuStates();
 }
@@ -1950,7 +1961,7 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
     }
 
     bool haveSelection = false;
-    int startFrame = 0, endFrame = 0;
+    sv_frame_t startFrame = 0, endFrame = 0;
 
     if (m_viewManager && m_viewManager->haveInProgressSelection()) {
 
@@ -2058,66 +2069,11 @@ void
 MainWindow::modelAdded(Model *model)
 {
     MainWindowBase::modelAdded(model);
-    DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(model);
-    if (dtvm) {
-        if (!model->isReady()) {
-            connect(dtvm, SIGNAL(ready()), this, SLOT(modelReady()));
-        } else {
-            StorageAdviser::Criteria criteria = StorageAdviser::NoCriteria;
-            if (dtvm == getMainModel()) {
-                criteria = StorageAdviser::SpeedCritical;
-            }
-
-            FFTModel *fftmodel = new FFTModel
-                (dtvm,
-                 -1,
-                 HanningWindow,
-                 2048, 1024, 2048,
-                 false,
-                 criteria);
-
-            m_fftModelMap[dtvm] = fftmodel;
-            fftmodel->resume();
-        }
-    }
 }
-
-void
-MainWindow::modelReady()
-{
-    QObject *s = sender();
-    cerr << "MainWindow::modelReady(" << s << ")" << endl;
-    if (s) {
-        DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(s);
-        if (dtvm) {
-            StorageAdviser::Criteria criteria = StorageAdviser::NoCriteria;
-            if (dtvm == getMainModel()) {
-                criteria = StorageAdviser::SpeedCritical;
-            }
-
-            FFTModel *fftmodel = new FFTModel
-                (dtvm,
-                 -1,
-                 HanningWindow,
-                 2048, 1024, 2048,
-                 false,
-                 criteria);
-
-            m_fftModelMap[dtvm] = fftmodel;
-            fftmodel->resume();
-        } else {
-            cerr << "Not a DenseTimeValueModel!" << endl;
-        }
-    }
-}            
 
 void
 MainWindow::modelAboutToBeDeleted(Model *model)
 {
-    if (m_fftModelMap.find(model) != m_fftModelMap.end()) {
-        delete m_fftModelMap[model];
-        m_fftModelMap.erase(model);
-    }
     MainWindowBase::modelAboutToBeDeleted(model);
 }
 
@@ -2135,7 +2091,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     if (m_playTarget) {
         connect(m_fader, SIGNAL(valueChanged(float)),
-                m_playTarget, SLOT(setOutputGain(float)));
+                this, SLOT(mainModelGainChanged(float)));
     }
 
     SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
@@ -2154,6 +2110,14 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     }
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
+}
+
+void
+MainWindow::mainModelGainChanged(float gain)
+{
+    if (m_playTarget) {
+        m_playTarget->setOutputGain(gain);
+    }
 }
 
 void
@@ -2228,7 +2192,7 @@ MainWindow::alignmentFailed(QString message)
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
-         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%2")
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
          .arg(message),
          QMessageBox::Ok);
 }

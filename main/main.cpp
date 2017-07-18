@@ -21,6 +21,7 @@
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
 #include "widgets/TipDialog.h"
+#include "svcore/plugin/PluginScan.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -123,11 +124,11 @@ main(int argc, char **argv)
     QString qtTrName = QString("qt_%1").arg(language);
     std::cerr << "Loading " << qtTrName.toStdString() << "..." << std::endl;
     bool success = false;
-    if (!(success = qtTranslator.load(qtTrName))) {
+    if (!(success = qtTranslator.load(QLocale(), qtTrName))) {
         QString qtDir = getenv("QTDIR");
         if (qtDir != "") {
             success = qtTranslator.load
-                (qtTrName, QDir(qtDir).filePath("translations"));
+                (QLocale(), qtTrName, QDir(qtDir).filePath("translations"));
         }
     }
     if (!success) {
@@ -135,15 +136,21 @@ main(int argc, char **argv)
     }
     application.installTranslator(&qtTranslator);
 
-    //!!! load sv translations, plus vect translations
-    QTranslator svTranslator;
-    QString svTrName = QString("sonic-vector_%1").arg(language);
-    std::cerr << "Loading " << svTrName.toStdString() << "..." << std::endl;
-    svTranslator.load(svTrName, ":i18n");
-    application.installTranslator(&svTranslator);
+    QTranslator svisTranslator, svecTranslator;
+    QString svisTrName = QString("sonic-visualiser_%1").arg(language);
+    QString svecTrName = QString("sonic-vector_%1").arg(language);
+    std::cerr << "Loading " << svisTrName.toStdString() << "..." << std::endl;
+    svisTranslator.load(QLocale(), svisTrName, ":i18n");
+    std::cerr << "Loading " << svisTrName.toStdString() << "..." << std::endl;
+    svecTranslator.load(QLocale(), svecTrName, ":i18n");
+    application.installTranslator(&svisTranslator);
+    application.installTranslator(&svecTranslator);
 
     StoreStartupLocale();
 
+    // Make known-plugins query as early as possible
+    PluginScan::getInstance()->scan();
+    
     // Permit size_t and PropertyName to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
