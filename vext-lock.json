@@ -1,40 +1,46 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "0eebd22a081a"
+      "pin": "5d9af3140f05"
     },
     "svcore": {
-      "pin": "079e553dc16e"
+      "pin": "a533662c17f4"
     },
     "svgui": {
-      "pin": "db90fee630bc"
+      "pin": "f683b191dbe6"
     },
     "svapp": {
-      "pin": "630c4a9885ca"
+      "pin": "72b4870f0e6b"
     },
     "checker": {
-      "pin": "1eefc20919cd"
+      "pin": "cf18645ff411"
+    },
+    "piper": {
+      "pin": "1beb47e41a2a02d75d0fb9204e1b7b95440f3ceb"
+    },
+    "piper-cpp": {
+      "pin": "85394095a5b04f99a0785ccd32a5a98c90d984b2"
     },
     "dataquay": {
-      "pin": "3768bdde6fdf"
+      "pin": "807b55408d9e"
     },
     "bqvec": {
-      "pin": "68f8e88d6d76"
+      "pin": "e345a5e32c53"
     },
     "bqfft": {
-      "pin": "95f8864b38ad"
+      "pin": "81b50ec12d9a"
     },
     "bqresample": {
-      "pin": "6b0cbfca8fb7"
+      "pin": "39a30cdbb421"
     },
     "bqaudioio": {
-      "pin": "43e8f13fb835"
+      "pin": "d90244c003be"
     },
     "sv-dependency-builds": {
-      "pin": "e1712f7d74a4"
+      "pin": "a69c1527268d"
     },
     "icons/scalable": {
-      "pin": "c37b5598a4be"
+      "pin": "3d2cde3b1ab3"
     }
   }
 }
