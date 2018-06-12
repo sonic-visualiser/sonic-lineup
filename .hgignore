@@ -30,6 +30,7 @@ Sonic Vector*
 cov-int/*
 *.deb
 test-svcore-base
+test-svcore-system
 test-svcore-data-fileio
 test-svcore-data-model
 vamp-plugin-sdk
@@ -49,3 +50,4 @@ icons/scalable
 vamp-plugin-load-checker
 piper-vamp-simple-server
 piper-convert
+.repoint*
