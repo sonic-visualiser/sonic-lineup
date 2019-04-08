@@ -1,0 +1,314 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+<!-- TODO: rewrite GUIDs, these are still those from (other) SV -->
+
+  <Product
+      Name="Sonic Vector" 
+      Id="*"
+      Language="1033"
+      Codepage="1252" 
+      Version="3.2"
+      UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
+      Manufacturer="Queen Mary, University of London">
+    
+    <Package
+        Id="*"
+        Keywords="Installer"
+        Description="Sonic Vector 64-bit Installer" 
+        Comments="Copyright (c) 2018 Queen Mary, University of London and others."
+        Manufacturer="Queen Mary, University of London" 
+        InstallerVersion="200"
+        Languages="1033" 
+        Compressed="yes" 
+        Platform="x64"
+        SummaryCodepage="1252"/>
+
+    <MajorUpgrade DowngradeErrorMessage="A later version of Sonic Vector is already installed. Setup will now exit."/>
+
+    <Media Id="1" Cabinet="SonicVector.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1"/>
+    <Property Id="DiskPrompt" Value="Sonic Vector Installation [1]"/>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <Directory Id="ProgramFiles64Folder" Name="PFiles64">
+        <Directory Id="VampPlugins" Name="Vamp Plugins">
+          <Component Win64="yes"
+              Id="VampPlugins"
+              Guid="528C7D7E-5A06-4E7D-89BB-7C16431DF82F">
+            <File
+                Id="VampREADME"
+                Name="README.txt"
+                Source="..\deploy\win64\README-Vamp.txt"/>
+          </Component>
+        </Directory>
+
+        <Directory Id="APPLICATIONFOLDER" Name="Sonic Vector">
+
+          <Component Win64="yes"
+              Id="MainExecutable"
+              Guid="65E1EBDF-4C8F-47B8-BCD6-981667F5946D">
+
+            <File
+                Id="SVExecutable"
+                Name="Sonic Vector.exe"
+                Source="release\Sonic Vector.exe"
+                KeyPath="yes">
+
+              <Shortcut
+                  Id="SVStartEntry"
+                  Directory="ProgramMenuDir"
+                  Name="Sonic Vector"
+                  WorkingDirectory="APPLICATIONFOLDER"
+                  Icon="winicon.ico"
+                  IconIndex="0"
+                  Advertise="yes"/>
+
+              <Shortcut
+                  Id="SVDesktop"
+                  Directory="DesktopFolder"
+                  Name="Sonic Vector"
+                  WorkingDirectory="APPLICATIONFOLDER"
+                  Icon="winicon.ico"
+                  IconIndex="0"
+                  Advertise="yes"/>
+            </File>
+
+            <File
+                Id="COPYING"
+                Name="COPYING.txt"
+                Source="..\COPYING"/>
+            <File
+                Id="README"
+                Name="README.txt"
+                Source="..\README.md"/>
+            <File
+                Id="CHANGELOG"
+                Name="CHANGELOG.txt"
+                Source="..\CHANGELOG"/>
+            <File
+                Id="CITATION"
+                Name="CITATION.txt"
+                Source="..\CITATION"/>
+
+            <File
+                Id="winicon.ico"
+                Name="sv-winicon.ico"
+                Source="..\icons\sv-winicon.ico"/>
+          </Component>
+          
+          <Component Win64="yes"
+	      Id="SVFileAssociation"
+	      Guid="F07C5CC1-0209-4C1A-8D52-C40B50A2B964">
+            
+            <CreateFolder/>
+
+            <ProgId 
+                Id='SonicVector.svfile' 
+                Description='Sonic Vector project file'
+                Icon="SVExecutable">
+              <Extension 
+                  Id='sv' 
+                  ContentType='application/sonicvector'>
+                <Verb 
+                    Id='open' 
+                    Command='Open' 
+                    TargetFile='SVExecutable' 
+                    Argument='"%1"' />
+              </Extension>
+            </ProgId>
+            
+          </Component>
+          
+          <Component Win64="yes"
+              Id="Qt5"
+              Guid="5495ED5E-939A-4BE8-9000-D55F2A7A2E90">
+            <File
+                Id="QtCore"
+                Name="Qt5Core.dll"
+                Source="release\Qt5Core.dll"
+		KeyPath="yes"/>
+            <File
+                Id="QtGui"
+                Name="Qt5Gui.dll"
+                Source="release\Qt5Gui.dll"/>
+            <File
+                Id="QtNetwork"
+                Name="Qt5Network.dll"
+                Source="release\Qt5Network.dll"/>
+            <File
+                Id="QtWidgets"
+                Name="Qt5Widgets.dll"
+                Source="release\Qt5Widgets.dll"/>
+            <File
+                Id="QtXml"
+                Name="Qt5Xml.dll"
+                Source="release\Qt5Xml.dll"/>
+            <File
+                Id="QtSvg"
+                Name="Qt5Svg.dll"
+                Source="release\Qt5Svg.dll"/>
+          </Component>
+
+          <Component Win64="yes"
+                     Id="Sndfile"
+                     Guid="04533516-6460-4155-A0D4-E9BA4D31E95C">
+            <File
+                Id="libsndfile"
+                Name="libsndfile-1.dll"
+                Source="..\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll"
+                KeyPath="yes"/>
+          </Component>
+
+          <Component Win64="yes"
+               Id="VCRuntime"
+               Guid="251D9513-BBD2-47CF-BE78-EF79446F7683">
+
+            <!-- Redistributables are handled by the Visual Studio
+                 installer (a separate program from VS itself) and are
+                 installed into C:\Program Files (x86)\Microsoft
+                 Visual Studio\2017\Community\VC\Redist\MSVC\...  NB
+                 this is not the same thing as the Windows SDKs, which
+                 consist of build tools etc - they have their own
+                 installers and get installed by default to C:\Program
+                 Files (x86)\Windows Kits\... -->
+               
+               <File
+                   Id="concrt140"
+                   Name="concrt140.dll"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\concrt140.DLL"
+                   KeyPath="yes"/>
+               <File
+                   Id="msvcp140"
+                   Name="msvcp140.dll"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\msvcp140.DLL"/>
+               <File
+                   Id="vccorlib140"
+                   Name="vccorlib140.dll"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\vccorlib140.DLL"/>
+               <File
+                   Id="vcruntime140"
+                   Name="vcruntime140.dll"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\vcruntime140.DLL"/>
+          </Component>
+
+	  <Directory Id="Platforms" Name="platforms">
+            <Component Win64="yes"
+                Id="Qt5PlatformPlugins"
+                Guid="1FFB773E-6D6D-4C0E-832B-F0FFEA959CA5">
+	      <File
+                  Id="qminimal"
+                  Name="qminimal.dll"
+                  Source="release\qminimal.dll"/>
+	      <File
+                  Id="qwindows"
+                  Name="qwindows.dll"
+                  Source="release\qwindows.dll"/>
+            </Component>
+	  </Directory>
+
+	  <Directory Id="Styles" Name="styles">
+            <Component Win64="yes"
+                Id="Qt5StylePlugins"
+                Guid="7A676FC1-B139-432C-A7D3-F33984934B79">
+	      <File
+                  Id="qwindowsvistastyle"
+                  Name="qwindowsvistastyle.dll"
+                  Source="release\qwindowsvistastyle.dll"/>
+            </Component>
+	  </Directory>
+
+	  <Directory Id="Helpers" Name="helpers">
+            <Component Win64="yes"
+                Id="Piper64"
+                Guid="6385BD86-A5D3-4C77-AD41-B2DCA5B34E48">
+	      <File
+		  Id="piperconv64"
+		  Name="piper-convert.exe"
+		  Source="release\piper-convert.exe"/>
+	      <File
+		  Id="piper64"
+		  Name="piper-vamp-simple-server.exe"
+		  Source="release\piper-vamp-simple-server.exe"/>
+              <File
+                  Id="concrt140h"
+                  Name="concrt140.dll"
+                  Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\concrt140.DLL"
+                  KeyPath="yes"/>
+              <File
+                  Id="msvcp140h"
+                  Name="msvcp140.dll"
+                  Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\msvcp140.DLL"/>
+              <File
+                  Id="vccorlib140h"
+                  Name="vccorlib140.dll"
+                  Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\vccorlib140.DLL"/>
+              <File
+                  Id="vcruntime140h"
+                  Name="vcruntime140.dll"
+                  Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\vcruntime140.DLL"/>
+	    </Component>
+            <Component Win64="yes"
+                Id="Checker64"
+                Guid="19A400D9-D5B2-4CB5-AF84-7C1DEA11D7B5">
+	      <File
+		  Id="checker64"
+		  Name="vamp-plugin-load-checker.exe"
+		  Source="release\vamp-plugin-load-checker.exe"/>
+	    </Component>
+	    
+	  </Directory> <!-- helpers -->
+	</Directory> <!-- sv -->
+      </Directory> <!-- pfiles64 -->
+
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ProgramMenuDir" Name="Sonic Vector">
+          <Component Id="ProgramMenuDir" Guid="C1980FF3-D135-46F8-8542-F937748721E6">
+            <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
+            <RegistryValue Root="HKMU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="DesktopFolder" Name="Desktop"/>
+
+    </Directory>
+
+    <Feature 
+	Id="Complete"
+	Title="Required files"
+	Description="Installs the required files for running Sonic Vector."
+	AllowAdvertise="no"
+	Absent="disallow"
+	ConfigurableDirectory="APPLICATIONFOLDER"
+	Level="1">
+      <ComponentRef Id="VampPlugins"/>
+      <ComponentRef Id="MainExecutable"/>
+      <ComponentRef Id="SVFileAssociation"/>
+      <ComponentRef Id="Sndfile"/>
+      <ComponentRef Id="Qt5"/>
+      <ComponentRef Id="VCRuntime"/>
+      <ComponentRef Id="Qt5PlatformPlugins"/>
+      <ComponentRef Id="Qt5StylePlugins"/>
+      <ComponentRef Id="Piper64"/>
+      <ComponentRef Id="Checker64"/>
+      <ComponentRef Id="ProgramMenuDir"/>
+    </Feature>
+
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+    <Property Id="WIXUI_DONTVALIDATEPATH" Value="1" />
+    <Property Id="ApplicationFolderName" Value="Sonic Vector" />
+    <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\deploy\win64\License.rtf" />
+    
+    <Icon Id="winicon.ico" SourceFile="..\icons\sv-winicon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
+
+    <WixVariable Id="WixUIBannerBmp" Value="..\deploy\win64\top.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="..\deploy\win64\main.bmp"/>
+
+  </Product> </Wix>
