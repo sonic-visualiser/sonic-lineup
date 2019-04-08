@@ -39,7 +39,7 @@ svgui
 svapp
 checker
 piper
-piper-cpp
+piper-vamp-cpp
 dataquay
 bqvec
 bqfft
@@ -51,3 +51,4 @@ vamp-plugin-load-checker
 piper-vamp-simple-server
 piper-convert
 .repoint*
+glob:.repoint*

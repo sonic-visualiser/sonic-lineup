@@ -165,11 +165,9 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     Preferences::getInstance()->setSpectrogramSmoothing
         (Preferences::SpectrogramInterpolated);
-//        (Preferences::NoSpectrogramSmoothing);
 
     Preferences::getInstance()->setSpectrogramXSmoothing
         (Preferences::SpectrogramXInterpolated);
-//        (Preferences::NoSpectrogramXSmoothing);
 
     QSettings settings;
 
@@ -178,7 +176,6 @@ MainWindow::MainWindow(bool withAudioOutput) :
     settings.setValue("waveform",
                       QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
                       .arg(int(WaveformLayer::MeterScale))
-//                      .arg(int(WaveformLayer::LinearScale))
                       .arg(int(WaveformLayer::MergeChannels)));
 
     settings.setValue("timevalues",
@@ -186,10 +183,10 @@ MainWindow::MainWindow(bool withAudioOutput) :
                       .arg(int(TimeValueLayer::PlotStems)));
 
     settings.setValue("spectrogram",
-                      QString("<layer channel=\"-1\" windowSize=\"1024\" windowHopLevel=\"2\"/>"));
+                      QString("<layer channel=\"-1\" windowSize=\"1024\" colourMap=\"Cividis\" windowHopLevel=\"2\"/>"));
 
     settings.setValue("melodicrange",
-                      QString("<layer channel=\"-1\" gain=\"150\" normalizeVisibleArea=\"false\" normalizeColumns=\"false\" normalizeHybrid=\"true\" minFrequency=\"100\" maxFrequency=\"1200\" windowSize=\"4096\" windowOverlap=\"75\" binDisplay=\"0\" />"));
+                      QString("<layer channel=\"-1\" gain=\"1\" normalizeVisibleArea=\"false\" columnNormalization=\"hybrid\" colourMap=\"Ice\" minFrequency=\"80\" maxFrequency=\"1500\" windowSize=\"8192\" windowOverlap=\"75\" binDisplay=\"0\" />"));
 
     settings.endGroup();
 

@@ -20,6 +20,10 @@ TARGET = base
 OBJECTS_DIR = o
 MOC_DIR = o
 
+exists(repoint.pri) {
+    include(repoint.pri)
+}
+
 include(bq-files.pri)
 include(vamp-plugin-sdk-files.pri)
 include(svcore/files.pri)
@@ -31,7 +35,7 @@ DATAQUAY_HEADERS=$$fromfile(dataquay/lib.pro, HEADERS)
 CHECKER_SOURCES=$$fromfile(checker/checker.pri, SOURCES)
 CHECKER_HEADERS=$$fromfile(checker/checker.pri, HEADERS)
                  
-CLIENT_HEADERS=$$fromfile(piper-cpp/vamp-client/qt/test.pro, HEADERS)
+CLIENT_HEADERS=$$fromfile(piper-vamp-cpp/vamp-client/qt/test.pro, HEADERS)
 
 for (file, BQ_SOURCES)       { SOURCES += $$file }
 for (file, BQ_HEADERS)       { HEADERS += $$file }
@@ -49,8 +53,8 @@ for (file, SVCORE_SOURCES)   { SOURCES += $$sprintf("svcore/%1", $$file) }
 for (file, SVCORE_HEADERS)   { HEADERS += $$sprintf("svcore/%1", $$file) }
              
 for (file, CLIENT_HEADERS) {
-    HEADERS += $$sprintf("piper-cpp/vamp-client/qt/%1",  $$file)
+    HEADERS += $$sprintf("piper-vamp-cpp/vamp-client/qt/%1",  $$file)
 }
 
-SOURCES += piper-cpp/vamp-capnp/piper-capnp.cpp
+SOURCES += piper-vamp-cpp/vamp-capnp/piper-capnp.cpp
 
