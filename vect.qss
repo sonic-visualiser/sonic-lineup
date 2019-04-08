@@ -16,13 +16,13 @@
     COPYING included with this distribution for more information.
 */
 
-/* Start off with a global black background, because it has proven impossible to
+/* Start off with a global dark background, because it has proven impossible to
  * address every last bit of background color without resorting to this.
  */
 QWidget
 {
-    background: #000000; 
-    color: #FFFFFF; /* undocumented, but it works, and it's necessary */
+    background: #222222;
+    color: #FAFAFA; /* undocumented, but it works, and it's necessary */
 }
 
 QMainWindow::separator
