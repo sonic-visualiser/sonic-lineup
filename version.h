@@ -1,1 +1,1 @@
-#define VECT_VERSION "[vect] 0.1"
+#define VECT_VERSION "0.1"

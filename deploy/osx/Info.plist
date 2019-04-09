@@ -5,15 +5,15 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleName</key>
-	<string>Vect</string>
+	<string>Sonic Vector</string>
 	<key>CFBundleExecutable</key>
-	<string>Vect</string>
+	<string>Sonic Vector</string>
 	<key>CFBundleIconFile</key>
-	<string>sv-macicon.icns</string>
+	<string>sv-macicon.icns</string> <!-- todo -->
 	<key>CFBundleIdentifier</key>
-	<string>org.sonicvisualiser.SonicVisualiser</string>
+	<string>org.sonicvisualiser.SonicVector</string>
 	<key>CFBundleShortVersionString</key>
-	<string>SV_VERSION</string>
+	<string>VECT_VERSION</string>
 
 	<!-- enable HiDPI -->
 	<key>NSPrincipalClass</key>
@@ -27,17 +27,17 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>sv</string>
+				<string>vect</string>
 			</array>
 			<!-- TODO
 			<key>CFBundleTypeIconFile</key>
 			<string>SVProject.icns</string> -->
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/x-sonic-visualiser-session</string>
+				<string>application/x-sonic-vector-session</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Vect Session</string>
+			<string>Sonic Vector Session</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>****</string>
