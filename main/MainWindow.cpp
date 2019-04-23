@@ -464,10 +464,10 @@ MainWindow::setupFileMenu()
     toolbar->addAction(action);
 
     icon = il.load("fileopen");
-    action = new QAction(icon, tr("&Add File..."), this);
+    action = new QAction(icon, tr("&Add Files..."), this);
     action->setShortcut(tr("Ctrl+O"));
-    action->setStatusTip(tr("Add a file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(openFile()));
+    action->setStatusTip(tr("Add one or more audio files"));
+    connect(action, SIGNAL(triggered()), this, SLOT(openFiles()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     toolbar->addAction(action);
@@ -1102,26 +1102,30 @@ MainWindow::closeSession()
 }
 
 void
-MainWindow::openFile()
+MainWindow::openFiles()
 {
     QString orig = m_audioFile;
     if (orig == "") orig = ".";
     else orig = QFileInfo(orig).absoluteDir().canonicalPath();
 
-    QString path = getOpenFileName(FileFinder::AnyFile);
+    FileFinder *ff = FileFinder::getInstance();
 
-    if (path.isEmpty()) return;
+    QStringList paths = ff->getOpenFileNames(FileFinder::AudioFile,
+                                             m_audioFile);
 
-    FileOpenStatus status = openPath(path, CreateAdditionalModel);
+    FileOpenStatus overallStatus = FileOpenSucceeded;
+    
+    for (QString path: paths) {
+        
+        FileOpenStatus status = openPath(path, CreateAdditionalModel);
 
-    if (status == FileOpenFailed) {
-        QMessageBox::critical(this, tr("Failed to open file"),
-                              tr("<b>File open failed</b><p>File \"%1\" could not be opened").arg(path));
-    } else if (status == FileOpenWrongMode) {
-        QMessageBox::critical(this, tr("Failed to open file"),
-                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
-    } else {
-        configureNewPane(m_paneStack->getCurrentPane());
+        if (status != FileOpenSucceeded) {
+            QMessageBox::critical(this, tr("Failed to open file"),
+                                  tr("<b>File open failed</b><p>File \"%1\" could not be opened").arg(path));
+            overallStatus = status;
+        } else {
+            configureNewPane(m_paneStack->getCurrentPane());
+        }
     }
 }
 
@@ -2315,7 +2319,7 @@ MainWindow::about()
         .arg(debug ? tr("Debug") : tr("Release"));
 
     aboutText += 
-        "<p>Sonic Vector Copyright &copy; 2005 - 2014 Chris Cannam and<br>"
+        "<p>Sonic Vector Copyright &copy; 2005 - 2019 Chris Cannam and<br>"
         "Queen Mary, University of London.</p>"
         "<p>This program uses library code from many other authors. Please<br>"
         "refer to the accompanying documentation for more information.</p>"
@@ -2342,8 +2346,7 @@ MainWindow::loadStyle()
     QString stylepath = ":vect.qss";
     QFile file(stylepath);
     if (!file.open(QFile::ReadOnly)) {
-        std::cerr << "WARNING: Failed to open style file " << stylepath
-                  << std::endl;
+        SVCERR << "WARNING: Failed to open style file " << stylepath << endl;
     } else {
         QString styleSheet = QLatin1String(file.readAll());
         qApp->setStyleSheet(styleSheet);

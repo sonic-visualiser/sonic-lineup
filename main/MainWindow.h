@@ -75,7 +75,7 @@ public slots:
     void selectMainPane();
 
 protected slots:
-    virtual void openFile();
+    virtual void openFiles();
     virtual void openLocation();
     virtual void openRecentFile();
     virtual void saveSession();
