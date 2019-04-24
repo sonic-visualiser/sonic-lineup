@@ -89,6 +89,8 @@ protected slots:
     virtual void spectrogramModeSelected();
     virtual void melodogramModeSelected();
 
+    virtual void toggleSalientFeatures();
+
     virtual void renameCurrentLayer();
 
     virtual void paneAdded(Pane *);
@@ -210,11 +212,18 @@ protected:
     bool checkSaveModified();
 
     virtual void configureNewPane(Pane *p);
-    virtual Model *selectExistingLayerForMode(Pane *, QString);
+    virtual bool selectExistingLayerForMode(Pane *, QString,
+                                            Model **createFrom);
 
     virtual void addSalientFeatureLayer(Pane *, WaveFileModel *);
     virtual void mapSalientFeatureLayer(AlignmentModel *);
-    virtual TimeInstantLayer *findSalientFeatureLayer();
+
+    // Return the salient-feature layer in the given pane. If pane is
+    // unspecified, return the main salient-feature layer, i.e. the
+    // first one found in any pane that is associated with the main
+    // model. If none is found, return nullptr.
+    virtual TimeInstantLayer *findSalientFeatureLayer(Pane *pane = nullptr);
+    
     bool m_salientCalculating;
     std::set<AlignmentModel *> m_salientPending;
     

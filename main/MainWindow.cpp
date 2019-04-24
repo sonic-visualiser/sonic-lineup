@@ -607,10 +607,12 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    action = new QAction(tr("Toggle All Time Rulers"), this);
+    action = new QAction(tr("Show Salient Feature Layers"), this);
     action->setShortcut(tr("#"));
-    action->setStatusTip(tr("Show or hide all time rulers"));
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleTimeRulers()));
+    action->setStatusTip(tr("Show or hide all salient-feature layers"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleSalientFeatures()));
+    action->setCheckable(true);
+    action->setChecked(true);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
@@ -683,15 +685,6 @@ MainWindow::setupViewMenu()
         statusBar()->hide();
     }
     settings.endGroup();
-
-    menu->addSeparator();
-
-    action = new QAction(tr("Show La&yer Hierarchy"), this);
-    action->setShortcut(tr("H"));
-    action->setStatusTip(tr("Open a window displaying the hierarchy of panes and layers in this session"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
 
     menu->addSeparator();
 
@@ -1194,15 +1187,20 @@ MainWindow::openRecentFile()
     }
 }
 
-Model *
-MainWindow::selectExistingLayerForMode(Pane *pane, QString name)
-{   
-    // Hides all layers in the given pane that have names differing
-    // from the given name, except for time instants layers (which are
-    // assumed to be used for segment display). If a layer is found
-    // that has the given name, shows that layer and returns 0. If no
-    // layer is found with the given name, returns a pointer to the
-    // model from which such a layer should be constructed.
+bool
+MainWindow::selectExistingLayerForMode(Pane *pane,
+                                       QString modeName,
+                                       Model **createFrom)
+{
+    // Search the given pane for any layer whose object name matches
+    // modeName, showing it if it exists, and hiding all other layers
+    // (except for time-instants layers, which are assumed to be used
+    // for persistent segment display and are left unmodified).
+
+    // In the case where no such layer is found and false is returned,
+    // then if the return parameter createFrom is non-null, the value
+    // it points to will be set to a pointer to the model from which
+    // such a layer should be constructed.
 
     Model *model = 0;
 
@@ -1218,7 +1216,7 @@ MainWindow::selectExistingLayerForMode(Pane *pane, QString name)
         if (qobject_cast<WaveFileModel *>(lm)) model = lm;
         
         QString ln = layer->objectName();
-        if (ln != name) {
+        if (ln != modeName) {
             m_hiddenLayers[pane].insert(layer);
             m_document->removeLayerFromView(pane, layer);
             continue;
@@ -1227,12 +1225,12 @@ MainWindow::selectExistingLayerForMode(Pane *pane, QString name)
         have = true;
     }
     
-    if (have) return 0;
+    if (have) return true;
 
     LayerSet &ls = m_hiddenLayers[pane];
     bool found = false;
     for (LayerSet::iterator i = ls.begin(); i != ls.end(); ++i) {
-        if ((*i)->objectName() == name) {
+        if ((*i)->objectName() == modeName) {
             m_document->addLayerToView(pane, *i);
             ls.erase(i);
             found = true;
@@ -1240,9 +1238,12 @@ MainWindow::selectExistingLayerForMode(Pane *pane, QString name)
         }
     }
 
-    if (found) return 0;
+    if (found) return true;
 
-    return model;
+    if (createFrom) {
+        *createFrom = model;
+    }
+    return false;
 }
 
 void
@@ -1315,28 +1316,74 @@ MainWindow::salientLayerCompletionChanged()
 }
 
 TimeInstantLayer *
-MainWindow::findSalientFeatureLayer()
+MainWindow::findSalientFeatureLayer(Pane *pane)
 {
-    if (!getMainModel()) return 0;
+    if (!getMainModel()) return nullptr;
+    
+    if (!pane) {
+        for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+            Pane *p = m_paneStack->getPane(i);
+            bool isAssociatedWithMainModel = false;
+
+            for (int j = 0; j < p->getLayerCount(); ++j) {
+                Layer *l = p->getLayer(j);
+                if (l->getModel() == getMainModel()) {
+                    isAssociatedWithMainModel = true;
+                    break;
+                }
+            }
+
+            if (isAssociatedWithMainModel) {
+                TimeInstantLayer *layerHere = findSalientFeatureLayer(p);
+                if (layerHere) return layerHere;
+            }
+        }
+
+        return nullptr;
+    }
+
+    for (int i = 0; i < pane->getLayerCount(); ++i) {
+        TimeInstantLayer *ll = qobject_cast<TimeInstantLayer *>
+            (pane->getLayer(i));
+        if (ll) return ll;
+    }
+
+    return nullptr;
+}
+
+void
+MainWindow::toggleSalientFeatures()
+{
+    bool targetDormantState = false;
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
         Pane *p = m_paneStack->getPane(i);
-
-        for (int j = 0; j < p->getLayerCount(); ++j) {
-            Layer *l = p->getLayer(j);
-
-            if (l->getModel() == getMainModel()) {
-
-                for (int k = 0; k < p->getLayerCount(); ++k) {
-                    TimeInstantLayer *ll = qobject_cast<TimeInstantLayer *>
-                        (p->getLayer(k));
-                    if (ll) return ll;
-                }
-            }
+        TimeInstantLayer *layer = findSalientFeatureLayer(p);
+        if (layer) {
+            targetDormantState = !(layer->isLayerDormant(p));
+            break;
         }
     }
 
-    return 0;
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+        Pane *p = m_paneStack->getPane(i);
+        TimeInstantLayer *salient = findSalientFeatureLayer(p);
+        if (salient) {
+            salient->setLayerDormant(p, targetDormantState);
+        }
+        if (targetDormantState) {
+            for (int j = 0; j < p->getLayerCount(); ++j) {
+                Layer *l = p->getLayer(j);
+                if (l != salient) {
+                    p->propertyContainerSelected(p, l);
+                    break;
+                }
+            }
+        } else {
+            p->propertyContainerSelected(p, salient);
+        }
+    }
 }
 
 void
@@ -1423,34 +1470,40 @@ MainWindow::curveModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *model = selectExistingLayerForMode(pane, name);
-        if (!model) continue;
+        Model *createFrom = nullptr;
+        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
+            createFrom) {
 
-        TransformId id = "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn";
-        TransformFactory *tf = TransformFactory::getInstance();
+            TransformId id = "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn";
+            TransformFactory *tf = TransformFactory::getInstance();
 
-        if (tf->haveTransform(id)) {
+            if (tf->haveTransform(id)) {
 
-            Transform transform = tf->getDefaultTransformFor
-                (id, model->getSampleRate());
+                Transform transform = tf->getDefaultTransformFor
+                    (id, createFrom->getSampleRate());
 
-            transform.setStepSize(1024);
-            transform.setBlockSize(2048);
+                transform.setStepSize(1024);
+                transform.setBlockSize(2048);
 
-            ModelTransformer::Input input(model, -1);
+                ModelTransformer::Input input(createFrom, -1);
+                
+                Layer *newLayer =
+                    m_document->createDerivedLayer(transform, createFrom);
 
-//!!! no equivalent for this yet            context.updates = false;
-
-            Layer *newLayer = m_document->createDerivedLayer(transform, model);
-
-            if (newLayer) {
-                newLayer->setObjectName(name);
-                m_document->addLayerToView(pane, newLayer);
-                m_paneStack->setCurrentLayer(pane, newLayer);
-            }
+                if (newLayer) {
+                    newLayer->setObjectName(name);
+                    m_document->addLayerToView(pane, newLayer);
+                    m_paneStack->setCurrentLayer(pane, newLayer);
+                }
             
-        } else {
-            cerr << "No onset detector plugin available" << endl;
+            } else {
+                SVCERR << "ERROR: No onset detector plugin available" << endl;
+            }
+        }
+
+        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+        if (salient) {
+            pane->propertyContainerSelected(pane, salient);
         }
     }
 
@@ -1467,14 +1520,20 @@ MainWindow::waveformModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *model = selectExistingLayerForMode(pane, name);
-        if (!model) continue;
+        Model *createFrom = nullptr;
+        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
+            createFrom) {
+            Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
+            newLayer->setObjectName(name);
+            m_document->setModel(newLayer, createFrom);
+            m_document->addLayerToView(pane, newLayer);
+            m_paneStack->setCurrentLayer(pane, newLayer);
+        }
 
-        Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
-        newLayer->setObjectName(name);
-        m_document->setModel(newLayer, model);
-        m_document->addLayerToView(pane, newLayer);
-        m_paneStack->setCurrentLayer(pane, newLayer);
+        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+        if (salient) {
+            pane->propertyContainerSelected(pane, salient);
+        }
     }
 
     m_displayMode = WaveformMode;
@@ -1490,14 +1549,20 @@ MainWindow::spectrogramModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *model = selectExistingLayerForMode(pane, name);
-        if (!model) continue;
-        
-        Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
-        newLayer->setObjectName(name);
-        m_document->setModel(newLayer, model);
-        m_document->addLayerToView(pane, newLayer);
-        m_paneStack->setCurrentLayer(pane, newLayer);
+        Model *createFrom = nullptr;
+        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
+            createFrom) {
+            Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
+            newLayer->setObjectName(name);
+            m_document->setModel(newLayer, createFrom);
+            m_document->addLayerToView(pane, newLayer);
+            m_paneStack->setCurrentLayer(pane, newLayer);
+        }
+
+        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+        if (salient) {
+            pane->propertyContainerSelected(pane, salient);
+        }
     }
 
     m_displayMode = SpectrogramMode;
@@ -1513,15 +1578,21 @@ MainWindow::melodogramModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *model = selectExistingLayerForMode(pane, name);
-        if (!model) continue;
+        Model *createFrom = nullptr;
+        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
+            createFrom) {
+            Layer *newLayer = m_document->createLayer
+                (LayerFactory::MelodicRangeSpectrogram);
+            newLayer->setObjectName(name);
+            m_document->setModel(newLayer, createFrom);
+            m_document->addLayerToView(pane, newLayer);
+            m_paneStack->setCurrentLayer(pane, newLayer);
+        }
 
-        Layer *newLayer = m_document->createLayer
-            (LayerFactory::MelodicRangeSpectrogram);
-        newLayer->setObjectName(name);
-        m_document->setModel(newLayer, model);
-        m_document->addLayerToView(pane, newLayer);
-        m_paneStack->setCurrentLayer(pane, newLayer);
+        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+        if (salient) {
+            pane->propertyContainerSelected(pane, salient);
+        }
     }
 
     m_displayMode = MelodogramMode;
