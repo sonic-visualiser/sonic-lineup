@@ -1106,8 +1106,6 @@ MainWindow::openFiles()
     QStringList paths = ff->getOpenFileNames(FileFinder::AudioFile,
                                              m_audioFile);
 
-    FileOpenStatus overallStatus = FileOpenSucceeded;
-    
     for (QString path: paths) {
         
         FileOpenStatus status = openPath(path, CreateAdditionalModel);
@@ -1115,7 +1113,6 @@ MainWindow::openFiles()
         if (status != FileOpenSucceeded) {
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("<b>File open failed</b><p>File \"%1\" could not be opened").arg(path));
-            overallStatus = status;
         } else {
             configureNewPane(m_paneStack->getCurrentPane());
         }
@@ -1441,11 +1438,14 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         
     SparseOneDimensionalModel *to = new SparseOneDimensionalModel
         (model->getSampleRate(), from->getResolution(), false);
-    
-    SparseOneDimensionalModel::PointList pp = from->getPoints();
-    foreach (SparseOneDimensionalModel::Point p, pp) {
-        p.frame = am->fromReference(p.frame);
-        to->addPoint(p);
+
+    EventVector pp = from->getAllEvents();
+    for (const auto &p: pp) {
+        Event aligned = p
+            .withFrame(am->fromReference(p.getFrame()))
+            .withLabel(""); // remove label, as the analysis was not
+                            // conducted on the audio we're mapping to
+        to->add(aligned);
     }
 
     Layer *newLayer = m_document->createImportedLayer(to);
