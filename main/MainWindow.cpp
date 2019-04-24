@@ -1406,11 +1406,14 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     
     const Model *model = am->getAlignedModel();
 
-    Pane *pane = 0;
-    Layer *layer = 0;
+    Pane *pane = nullptr;
+    Layer *layer = nullptr;
+
+    Pane *firstPane = nullptr;
     
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
         Pane *p = m_paneStack->getPane(i);
+        if (p && !firstPane) firstPane = p;
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
             if (l && (l->getModel() == model)) {
@@ -1427,6 +1430,8 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         return;
     }
 
+    pane->setCentreFrame(am->fromReference(firstPane->getCentreFrame()));
+    
     //!!! command?
 
     const SparseOneDimensionalModel *from =
