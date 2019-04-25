@@ -16,19 +16,16 @@
     COPYING included with this distribution for more information.
 */
 
-/* Start off with a global dark background, because it has proven impossible to
- * address every last bit of background color without resorting to this.
- */
 QWidget
 {
-    background: #222222;
+    background: #333333;
     color: #FAFAFA; /* undocumented, but it works, and it's necessary */
 }
-
+/*
 QMainWindow::separator
 {
-    width: 5px; /* when vertical */
-    height: 5px; /* when horizontal */
+    width: 5px;
+    height: 5px;
 }
 
 QMainWindow::separator:hover
@@ -51,153 +48,13 @@ QDockWidget::float-button
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
     color: #000000;
     padding: 0px;
-    icon-size: 16px; /* maximum icon size */
+    icon-size: 16px;
 }
+*/
 
-
-/*  QTabBar
-  
-Individual tabs may be styled using the ::tab subcontrol. The tabs support the
-:only-one, :first, :last, :middle, :previous--selected, :next-selected,
-:selected pseudo states.  The :top, :left, :right, :bottom pseudo states
-depending on the orientation of the tabs.  Overlapping tabs for the selected
-state are created by using negative margins or using the absolute position
-scheme.  The tear indicator of the QTabBar is styled using the ::tear
-subcontrol.  QTabBar used two QToolButtons for its scrollers that can be styled
-using the QTabBar QToolButton selector. To specify the width of the scroll
-button use the ::scroller subcontrol.  The alignment of the tabs within the
-QTabBar is styled using the alignment property.  Warning: To change the position
-of the QTabBar within a QTabWidget, use the tab-bar subcontrol (and set
-subcontrol-position). */
-
-/* Style this early so hopefully a lot of it will be overridden without even
- * more special code
- */
-
-QTabBar::tear
+QDialog
 {
-    image: url(tear_indicator.png);
-}
-
-QTabBar::scroller
-{ /* the width of the scroll buttons */
-    width: 13px;
-}
-
-QTabBar QToolButton
-{ /* the scroll buttons are tool buttons */
-    border-image: url(:icons/style/tab-scroll-button.png) 1;
-    border-width: 1px;
-}
-
-QTabBar QToolButton:hover
-{
-    border-image: url(:icons/style/tab-scroll-button-hover.png) 1;
-    border-width: 1px;
-}
-
-QTabBar QToolButton:!enabled
-{
-    border-image: url(:icons/style/tab-scroll-button-disabled.png) 1;
-    border-width: 1px;
-}
-
-QTabBar QToolButton::right-arrow
-{ /* the arrow mark in the tool buttons */
-    image: url(:icons/style/arrow-right-small.png);
-}
-
-QTabBar QToolButton::left-arrow
-{
-    image: url(:icons/style/arrow-left-small.png);
-}
-
-QTabWidget::pane
-{ /* The tab widget frame */
-    color: #FFFFFF;
-    border: 2px solid #BBBBBB;
-    border-radius: 4px;
-    padding: 2px;
-/*    margin-top: 1ex;*/
-}
-
-/* the background of the pane requires a QWidget hack to take the groupbox
- * background, because ::pane's background-color: doesn't work */
-QTabWidget::pane QWidget
-{
-    background: #404040;
-}
-
-QTabWidget::tab-bar
-{
-    left: 5px; /* move to the right by 5px */
-}
-
-/* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */
-QTabBar::tab:top
-{
-    border: 1px solid #AAAAAA;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: #000000;
-    border-bottom-color: #BBBBBB; /* same as the pane color */
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    min-width: 8ex;
-    padding: 2px;
-}
-
-/* flipped version for upside down tab bars (MIDI mixer window, control
- * rulers)
- */
-QTabBar::tab:bottom
-{
-    border: 1px solid #AAAAAA;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: #000000;
-    border-top-color: #BBBBBB; /* same as the pane color */
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    min-width: 8ex;
-    padding: 2px;
-}
-
-QTabBar::tab:hover
-{
-    background-color: #CCDFFF;
-}
-
-QTabBar::tab:top:selected
-{
-    border: 1px solid #E0E0E0;
-    border-bottom-color: #BBBBBB; /*same as pane color */
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
-}
-
-QTabBar::tab:bottom:selected
-{
-    border: 1px solid #E0E0E0;
-    border-top-color: #BBBBBB; /*same as pane color */
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
-}
-
-QTabBar::tab:top:!selected
-{
-    margin-top: 2px; /* make non-selected tabs look smaller*/
-}
-
-
-QTabBar::tab:bottom:!selected
-{
-    margin-bottom: 2px; /* make non-selected tabs look smaller*/
-}
-
-
-QDialog,
-#View QDialog QWidget,
-#MinorDialog QWidget,
-#tempoview QWidget
-{
-    background-color: #000000;
+    background-color: #333333;
 }
 
 
@@ -214,14 +71,10 @@ toolbar) is styled using the ::handle subcontrol. */
  * with black icons.  Top/bottom and left/right require different gradients to
  * get the proper look.
  */
-#tempoview QToolBar:top,
-#tempoview QToolBar:bottom,
 QToolBar:top,
 QToolBar:bottom
 {
     border-image: url(:icons/style/toolbar-horiz-pixmap.png) 0;
-/*  border-image: url(:icons/style/toolbar-pixmap.png) 0;*/
-/*  background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);*/
     color: #000000;
 }
 
@@ -229,7 +82,6 @@ QToolBar:left,
 QToolBar:right 
 {
     border-image: url(:icons/style/toolbar-vert-pixmap.png) 0;
-/*  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DDDDDD, stop:1 #999999);*/
     color: #000000;
 }
 
@@ -243,11 +95,10 @@ QToolBar:bottom QLabel
     color: #000000;
 }
 
-
 QToolBar::handle:top,
 QToolBar::handle:bottom
 {
-    image: url(:/icons/style/htoolbar-separator.png);
+    image: url(:icons/style/htoolbar-separator.png);
 }
 
 QToolBar::handle:left,
@@ -263,17 +114,7 @@ Supports the box model. Does not support the :hover pseudo-state.  Since 4.3,
 setting a stylesheet on a QLabel automatically sets the QFrame::frameStyle
 property to QFrame::StyledPanel. */
 
-/* QLabel is an awful lot of foreground text throughout the application,
- * including the contents of message boxes and various other texts one wouldn't
- * necessarily expect to be QLabel per se.
- */
-QLabel,
-#View QLabel,
-#MinorDialog QLabel,
-#tempoview QLabel,
-#matrixview QLabel,
-#RosegardenParameterArea QLabel,
-#App QLabel
+QLabel
 {
     background: transparent;
     color: white;
@@ -394,7 +235,7 @@ QCheckBox:!enabled
 
 QCheckBox::indicator:enabled
 {
-/*    background: url(:icons/style/checkbox-checked.png); */
+    background: url(:icons/style/checkbox-checked.png); 
 }
 
 QCheckBox
@@ -407,7 +248,7 @@ QCheckBox::indicator
     width: 13px;
     height: 13px;
 }
-/*
+
 QCheckBox::indicator:unchecked
 {
     image: url(:icons/style/checkbox_unchecked.png);
@@ -462,7 +303,6 @@ QCheckBox::indicator:indeterminate:pressed
 {
     image: url(:icons/style/checkbox_indeterminate_pressed.png);
 }
-*/
 
 /*  QRadioButton
 
@@ -547,113 +387,6 @@ QRadioButton::indicator:checked:pressed:enabled
 QRadioButton::indicator:checked:pressed:!enabled
 {
     image: url(:icons/style/radiobutton_checked_pressed_disabled.png);
-}
-
-/*  QColumnView
-
-The grip can be styled be using the image property. The arrow indicators can by
-styled using the ::left-arrow subcontrol and the ::right-arrow subcontrol. */
-
-QColumnView
-{
-}
-
-
-/*  QDialog
-
-Supports only the background, background-clip and background-origin properties.
-If you subclass from QDialog, you need to provide a paintEvent for your custom
-QDialog as below:
-
-void CustomDialog::paintEvent(QPaintEvent *) { QStyleOption opt; opt.init(this);
-QPainter p(this); style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this); }
-
-The above code is a no-operation if there is no stylesheet set.  Warning: Make
-sure you define the Q_OBJECT macro for your custom widget. */
-
-QDialog
-{
-    /*background: green; */
-}
-
-
-/*  QDialogButtonBox 
-
-  The layout of buttons can be altered using the button-layout property. */
-
-QDialogButtonBox
-{
-    background-color: yellow;
-    color: red;
-}
-
-
-/*  QFrame
-
-Supports the box model.  Since 4.3, setting a stylesheet on a QLabel
-automatically sets the QFrame::frameStyle property to QFrame::StyledPanel. */
-
-QFrame
-{
-    /* We probably want these to remain invisible, and not style them.  If there
-     * are exceptions, they'll have to be addressed on a case by case basis,
-     * because styling QFrame in general is definitely a BAD idea */
-}
-
-
-/*  QHeaderView 
-
-Supports the box model. The sections of the header view are styled using the
-::section sub control. The section Sub-control supports the :middle, :first,
-:last, :only-one, :next-selected, :previous-selected, :selected pseudo states.
-Sort indicator in can be styled using the ::up-arrow and the ::down-arrow
-Sub-control. */
-
-/* This is the headers for various list views and tables.  The "sort indicators"
- * appear on the segment summary for one thing, allowing you to sort the table
- * by the column you click on.
- */
-QHeaderView::section
-{
-    border: 1px solid #AAAAAA;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #707070, stop:1 #808080);
-    color: #FFFFFF;
-    padding-left: 4px;
-    padding-right: 1em;
-}
-
-/* style the sort indicator */
-QHeaderView::down-arrow
-{
-    image: url(:icons/style/arrow-down-small-inverted.png); 
-}
-
-QHeaderView::up-arrow
-{
-    image: url(:icons/style/arrow-up-small-inverted.png); 
-}
-
-
-/*  QListView (affects QListWidget)
-  
-Supports the box model. When alternating row colors is enabled, the alternating
-colors can be styled using the alternate-background-color property.  The color
-and background of the selected item is styled using selection-color and
-selection-background-color respectively.  The selection behavior is controlled
-by the #show-decoration-selected-prop property.  See QAbsractScrollArea to style
-scrollable backgrounds. */
-
-/* file dialogs */
-
-QListView,
-#tempoview QListView,
-#App QListView
-{
-    background-color: #FFFFFF;
-    alternate-background-color: #EEEEFF;
-    color: #000000;
-    selection-background-color: #80AFFF;
-    selection-color: #FFFFFF;
 }
 
 /*  QMenuBar
@@ -781,82 +514,6 @@ subcontrol. */
 QSplitter
 {
     background: #000000;
-}
-
-
-/*   QTableView (affects QTableWidget)
-
-Supports the box model. When alternating row colors is enabled, the alternating
-colors can be styled using the alternate-background-color property.  The color
-and background of the selected item is styled using selection-color and
-selection-background-color respectively.  The corner widget in a QTableView is
-implemented as a QAbstractButton and can be styled using the "QTableView
-QTableCornerButton::section" selector.  The color of the grid can be specified
-using the gridline-color property.  See QAbsractScrollArea to style scrollable
-backgrounds. */
-
-QTableView,
-#StyledTable
-{
-    background: #FFFFFF;
-    alternate-background-color: #EEEEFF;
-    color: #000000;
-    gridline-color: #202020;
-    selection-background-color: #80AFFF;
-    selection-color: #FFFFFF;
-}
-
-/* I don't think we actually want/need to style this corner button
-#StyledTable QTableCornerButton::section
-{
-    background: green;
-}*/
-
-
-/*  QTextEdit
-
-Supports the box model.  The color and background of selected text is styled
-using selection-color and selection-background-color respectively.  See
-QAbsractScrollArea to style scrollable backgrounds.  QTimeEdit   See QSpinBox.
-*/
-
-QTextEdit
-{
-    background: #FFFFFF;
-    color: #000000;
-}
-
-
-QWidget#LED
-{
-    background-color: transparent;
-}
-
-#Fader
-{
-    background-color: #404040;
-}
-
-/*QWidget##matrixview
-{
-    background-color: #000000;
-}*/
-
-/* the audio and MIDI mixer windows */
-/* (actually only affects audio, because the MIDI mixer window is more
- * complicated) */
-QWidget#MIXER_WINDOW
-{
-    background-color: #000000;
-}
-
-/* internal fader widgets need a style-set transparent background at a minimum
- * */
-QWidget#FADER
-{
-    /* or maybe not...  this is actually too simplistic to work, and needs
-     * further investigation */
-    background-color: transparent;
 }
 
 
@@ -1003,20 +660,6 @@ QLineEdit, QFileDialog QLineEdit, QDialog QLineEdit
     selection-background-color: #80AFFF;
     color: #000000;
     selection-color: #FFFFFF;
-}
-
-/* make frames visible for sorting out layout problems */
-/*QFrame { border: 1px solid red; }*/
-
-#PluginControl QWidget
-{
-  margin-bottom: -25px;
-  margin-top: -25px;
-}
-
-#MinorDialog
-{
-  background-color: #000000;
 }
 
 
@@ -1188,15 +831,6 @@ QComboBox QAbstractItemView::item:selected
     color: #FFFFFF;
 }
 
-/*  QTreeView (affects QTreeWidget)
-
-Supports the box model. When alternating row colors is enabled, the alternating
-colors can be styled using the alternate-background-color property.  The color
-and background of the selected item is styled using selection-color and
-selection-background-color respectively.  The branches of the tree view can be
-styled using the ::branch subcontrol. The ::branch Sub-control supports the
-:open, :closed, :has-sibling and :has-children pseudo states.  See
-QAbsractScrollArea to style scrollable backgrounds. */
 
 /* Hrm.  Has no effect at all.  Probably not worth much more bother, since Qt
  * automatically inverts the stock arrow pixmaps, and they're sort of legible,

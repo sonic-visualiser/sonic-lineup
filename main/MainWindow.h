@@ -153,10 +153,8 @@ protected slots:
     virtual void keyReference();
 
 protected:
-    Overview                *m_overview;
     LevelPanToolButton      *m_mainLevelPan;
     AudioDial               *m_playSpeed;
-    WaveformLayer           *m_panLayer;
     
     QScrollArea             *m_mainScroll;
 

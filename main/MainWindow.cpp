@@ -119,7 +119,6 @@ using std::set;
 
 MainWindow::MainWindow(bool withAudioOutput) :
     MainWindowBase(withAudioOutput ? WithAudioOutput : WithNothing),
-    m_overview(0),
     m_mainMenusCreated(false),
     m_playbackMenu(0),
     m_recentFilesMenu(0),
@@ -203,12 +202,12 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     loadStyle();
     
-    QFrame *frame = new QFrame;
-    setCentralWidget(frame);
+    QFrame *mainFrame = new QFrame;
+    QGridLayout *mainLayout = new QGridLayout;
 
-    QGridLayout *layout = new QGridLayout;
+    setCentralWidget(mainFrame);
     
-    m_mainScroll = new QScrollArea(frame);
+    m_mainScroll = new QScrollArea(mainFrame);
     m_mainScroll->setWidgetResizable(true);
     m_mainScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_mainScroll->setFrameShape(QFrame::NoFrame);
@@ -216,11 +215,18 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
     m_paneStack->setShowAlignmentViews(true);
     m_mainScroll->setWidget(m_paneStack);
+
+    QFrame *bottomFrame = new QFrame(mainFrame);
+    QGridLayout *bottomLayout = new QGridLayout;
+
+    int bottomElementHeight = m_viewManager->scalePixelSize(35);
+    if (bottomElementHeight < 40) bottomElementHeight = 40;
+    int bottomButtonHeight = (bottomElementHeight * 3) / 4;
     
     QButtonGroup *bg = new QButtonGroup;
     IconLoader il;
 
-    QFrame *buttonFrame = new QFrame;
+    QFrame *buttonFrame = new QFrame(bottomFrame);
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->setSpacing(0);
     buttonLayout->setMargin(0);
@@ -232,6 +238,8 @@ MainWindow::MainWindow(bool withAudioOutput) :
     button->setCheckable(true);
     button->setChecked(true);
     button->setAutoRaise(true);
+    button->setFixedWidth(bottomButtonHeight);
+    button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(waveformModeSelected()));
@@ -242,6 +250,8 @@ MainWindow::MainWindow(bool withAudioOutput) :
     button->setCheckable(true);
     button->setChecked(false);
     button->setAutoRaise(true);
+    button->setFixedWidth(bottomButtonHeight);
+    button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
@@ -252,6 +262,8 @@ MainWindow::MainWindow(bool withAudioOutput) :
     button->setCheckable(true);
     button->setChecked(false);
     button->setAutoRaise(true);
+    button->setFixedWidth(bottomButtonHeight);
+    button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(spectrogramModeSelected()));
@@ -262,46 +274,18 @@ MainWindow::MainWindow(bool withAudioOutput) :
     button->setCheckable(true);
     button->setChecked(false);
     button->setAutoRaise(true);
+    button->setFixedWidth(bottomButtonHeight);
+    button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(melodogramModeSelected()));
 
-    layout->addWidget(buttonFrame, 1, 0);
-
-    m_overview = new Overview(frame);
-    m_overview->setViewManager(m_viewManager);
-    int overviewHeight = m_viewManager->scalePixelSize(35);
-    if (overviewHeight < 40) overviewHeight = 40;
-    m_overview->setFixedHeight(overviewHeight);
-#ifndef _WIN32
-    // For some reason, the contents of the overview never appear if we
-    // make this setting on Windows.  I have no inclination at the moment
-    // to track down the reason why.
-    m_overview->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-#endif
-    connect(m_overview, SIGNAL(contextHelpChanged(const QString &)),
-            this, SLOT(contextHelpChanged(const QString &)));
-    m_overview->hide();
-
-    m_panLayer = new WaveformLayer;
-    m_panLayer->setChannelMode(WaveformLayer::MergeChannels);
-    m_panLayer->setAggressiveCacheing(true);
-    m_overview->addLayer(m_panLayer);
-
-    if (m_viewManager->getGlobalDarkBackground()) {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-    } else {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-    }        
-
-    m_playSpeed = new AudioDial(frame);
+    m_playSpeed = new AudioDial(bottomFrame);
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(overviewHeight);
-    m_playSpeed->setFixedHeight(overviewHeight);
+    m_playSpeed->setFixedWidth(bottomElementHeight);
+    m_playSpeed->setFixedHeight(bottomElementHeight);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -313,27 +297,25 @@ MainWindow::MainWindow(bool withAudioOutput) :
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    m_mainLevelPan = new LevelPanToolButton(frame);
+    m_mainLevelPan = new LevelPanToolButton(bottomFrame);
     connect(m_mainLevelPan, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_mainLevelPan, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-    m_mainLevelPan->setFixedHeight(overviewHeight);
-    m_mainLevelPan->setFixedWidth(overviewHeight);
-    m_mainLevelPan->setImageSize((overviewHeight * 3) / 4);
-    m_mainLevelPan->setBigImageSize(overviewHeight * 3);
+    m_mainLevelPan->setFixedHeight(bottomElementHeight);
+    m_mainLevelPan->setFixedWidth(bottomElementHeight);
+    m_mainLevelPan->setImageSize((bottomElementHeight * 3) / 4);
+    m_mainLevelPan->setBigImageSize(bottomElementHeight * 3);
 
-    m_playControlsSpacer = new QFrame;
-
-    layout->setSpacing(m_viewManager->scalePixelSize(4));
-    layout->addWidget(m_mainScroll, 0, 0, 1, 6);
-    layout->addWidget(m_overview, 1, 1);
-    layout->addWidget(m_playSpeed, 1, 2);
-    layout->addWidget(m_playControlsSpacer, 1, 3);
-    layout->addWidget(m_mainLevelPan, 1, 4);
-
-    m_playControlsSpacer->setFixedSize(QSize(2, 2));
-    layout->setColumnStretch(1, 10);
+    bottomLayout->setSpacing(m_viewManager->scalePixelSize(4));
+    bottomLayout->addWidget(buttonFrame, 1, 0);
+    bottomLayout->setColumnStretch(1, 10);
+    bottomLayout->addWidget(m_playSpeed, 1, 2);
+    bottomLayout->addWidget(m_mainLevelPan, 1, 3);
+    bottomFrame->setLayout(bottomLayout);
     
-    frame->setLayout(layout);
+    mainLayout->setSpacing(m_viewManager->scalePixelSize(4));
+    mainLayout->addWidget(m_mainScroll, 0, 0);
+    mainLayout->addWidget(bottomFrame, 1, 0);
+    mainFrame->setLayout(mainLayout);
 
     setupMenus();
     setupToolbars();
@@ -1039,8 +1021,6 @@ MainWindow::newSession()
     connect(pane, SIGNAL(contextHelpChanged(const QString &)),
             this, SLOT(contextHelpChanged(const QString &)));
 
-    m_overview->registerView(pane);
-
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
 
     CommandHistory::getInstance()->clear();
@@ -1063,7 +1043,6 @@ MainWindow::closeSession()
 		(pane, pane->getLayer(pane->getLayerCount() - 1));
 	}
 
-	m_overview->unregisterView(pane);
 	m_paneStack->deletePane(pane);
     }
 
@@ -1077,7 +1056,6 @@ MainWindow::closeSession()
 		(pane, pane->getLayer(pane->getLayerCount() - 1));
 	}
 
-	m_overview->unregisterView(pane);
 	m_paneStack->deletePane(pane);
     }
 
@@ -1619,19 +1597,16 @@ MainWindow::paneAdded(Pane *pane)
 {
     pane->setPlaybackFollow(PlaybackScrollContinuous);
     m_paneStack->sizePanesEqually();
-    if (m_overview) m_overview->registerView(pane);
 }    
 
 void
-MainWindow::paneHidden(Pane *pane)
+MainWindow::paneHidden(Pane *)
 {
-    if (m_overview) m_overview->unregisterView(pane); 
 }    
 
 void
-MainWindow::paneAboutToBeDeleted(Pane *pane)
+MainWindow::paneAboutToBeDeleted(Pane *)
 {
-    if (m_overview) m_overview->unregisterView(pane); 
 }    
 
 void
@@ -1900,16 +1875,6 @@ void
 MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 {
     MainWindowBase::preferenceChanged(name);
-
-    if (name == "Background Mode" && m_viewManager) {
-        if (m_viewManager->getGlobalDarkBackground()) {
-            m_panLayer->setBaseColour
-                (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-        } else {
-            m_panLayer->setBaseColour
-                (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-        }      
-    }    
 }
 
 void
@@ -2151,8 +2116,6 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     m_salientPending.clear();
     m_salientCalculating = false;
-    
-    m_panLayer->setModel(model);
 
     MainWindowBase::mainModelChanged(model);
 

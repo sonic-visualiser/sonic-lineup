@@ -184,6 +184,8 @@
     <file>icons/style/golden-arrow-up.png</file>
     <file>icons/style/header-close-button.png</file>
     <file>icons/style/htoolbar-separator.png</file>
+    <file>icons/style/vtoolbar-separator.png</file>
+    <file>icons/style/toolbar-horiz-pixmap.png</file>
     <file>icons/style/messagebox-critical.png</file>
     <file>icons/style/messagebox-information.png</file>
     <file>icons/style/messagebox-question.png</file>
