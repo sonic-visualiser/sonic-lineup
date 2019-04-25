@@ -305,14 +305,18 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_mainLevelPan->setImageSize((bottomElementHeight * 3) / 4);
     m_mainLevelPan->setBigImageSize(bottomElementHeight * 3);
 
-    bottomLayout->setSpacing(m_viewManager->scalePixelSize(4));
-    bottomLayout->addWidget(buttonFrame, 1, 0);
+    int spacing = m_viewManager->scalePixelSize(4);
+
+    bottomLayout->setSpacing(spacing);
+    bottomLayout->setMargin(spacing);
+    bottomLayout->addWidget(buttonFrame, 0, 0);
     bottomLayout->setColumnStretch(1, 10);
-    bottomLayout->addWidget(m_playSpeed, 1, 2);
-    bottomLayout->addWidget(m_mainLevelPan, 1, 3);
+    bottomLayout->addWidget(m_playSpeed, 0, 2);
+    bottomLayout->addWidget(m_mainLevelPan, 0, 3);
     bottomFrame->setLayout(bottomLayout);
     
-    mainLayout->setSpacing(m_viewManager->scalePixelSize(4));
+    mainLayout->setSpacing(spacing);
+    mainLayout->setMargin(spacing);
     mainLayout->addWidget(m_mainScroll, 0, 0);
     mainLayout->addWidget(bottomFrame, 1, 0);
     mainFrame->setLayout(mainLayout);
