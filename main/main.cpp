@@ -34,6 +34,8 @@
 #include <QSessionManager>
 #include <QDir>
 
+#include "style/ThornStyle.h"
+
 #include <iostream>
 #include <signal.h>
 
@@ -112,6 +114,7 @@ main(int argc, char **argv)
     QApplication::setApplicationName("Sonic Vector");
 
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    ThornStyle::setEnabled(true);
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };

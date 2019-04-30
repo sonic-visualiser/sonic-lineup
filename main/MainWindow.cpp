@@ -2385,7 +2385,7 @@ void
 MainWindow::loadStyle()
 {
     m_viewManager->setGlobalDarkBackground(true);
-    
+/*!!!    
     QString stylepath = ":vect.qss";
     QFile file(stylepath);
     if (!file.open(QFile::ReadOnly)) {
@@ -2396,6 +2396,7 @@ MainWindow::loadStyle()
         QPalette pal(Qt::white, Qt::gray, Qt::white, Qt::black, Qt::gray, Qt::white, Qt::white, Qt::black, Qt::black);
         qApp->setPalette(pal);
     }
+*/
 }
 
 

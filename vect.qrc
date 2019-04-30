@@ -146,7 +146,6 @@
     <file>i18n/sonic-visualiser_ru.qm</file>
     <file>i18n/sonic-visualiser_en_GB.qm</file>
     <file>i18n/tips_en.xml</file>
-    <file>vect.qss</file>
     <file>icons/style/arrow-down.png</file>
     <file>icons/style/arrow-down-small-inverted.png</file>
     <file>icons/style/arrow-down-small.png</file>
@@ -184,8 +183,6 @@
     <file>icons/style/golden-arrow-up.png</file>
     <file>icons/style/header-close-button.png</file>
     <file>icons/style/htoolbar-separator.png</file>
-    <file>icons/style/vtoolbar-separator.png</file>
-    <file>icons/style/toolbar-horiz-pixmap.png</file>
     <file>icons/style/messagebox-critical.png</file>
     <file>icons/style/messagebox-information.png</file>
     <file>icons/style/messagebox-question.png</file>
@@ -201,5 +198,28 @@
     <file>icons/style/radiobutton_unchecked_hover.png</file>
     <file>icons/style/radiobutton_unchecked.png</file>
     <file>icons/style/radiobutton_unchecked_pressed_disabled.png</file>
+    <file>icons/style/radiobutton_unchecked_pressed.png</file>
+    <file>icons/style/sizegrip.png</file>
+    <file>icons/style/spindown_hover.png</file>
+    <file>icons/style/spindown_off.png</file>
+    <file>icons/style/spindown.png</file>
+    <file>icons/style/spindown_pressed.png</file>
+    <file>icons/style/spinup_hover.png</file>
+    <file>icons/style/spinup_off.png</file>
+    <file>icons/style/spinup.png</file>
+    <file>icons/style/spinup_pressed.png</file>
+    <file>icons/style/tab-close.png</file>
+    <file>icons/style/tab-scroll-button-disabled.png</file>
+    <file>icons/style/tab-scroll-button-hover.png</file>
+    <file>icons/style/tab-scroll-button.png</file>
+    <file>icons/style/title-close.png</file>
+    <file>icons/style/title-undock.png</file>
+    <file>icons/style/toolbar-horiz-pixmap.png</file>
+    <file>icons/style/toolbar-vert-pixmap.png</file>
+    <file>icons/style/tooltip.png</file>
+    <file>icons/style/up_arrow_disabled.png</file>
+    <file>icons/style/up_arrow.png</file>
+    <file>icons/style/vtoolbar-separator.png</file>
+    <file>icons/style/warning.png</file>
 </qresource>
 </RCC>

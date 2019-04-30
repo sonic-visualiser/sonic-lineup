@@ -27,7 +27,7 @@
         "svapp": {
             "vcs": "hg",
 	    "service": "soundsoftware",
-            "branch": "single-point"
+            "branch": "thorn-cpp"
         },
         "checker": {
             "vcs": "hg",
