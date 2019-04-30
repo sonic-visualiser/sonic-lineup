@@ -146,18 +146,13 @@ MainWindow::MainWindow(bool withAudioOutput) :
     udb->registerUnit("s");
 
     ColourDatabase *cdb = ColourDatabase::getInstance();
-    cdb->addColour(Qt::black, tr("Black"));
-    cdb->addColour(Qt::darkRed, tr("Red"));
-    cdb->addColour(Qt::darkBlue, tr("Blue"));
-    cdb->addColour(Qt::darkGreen, tr("Green"));
-    cdb->addColour(QColor(200, 50, 255), tr("Purple"));
-    cdb->addColour(QColor(255, 150, 50), tr("Orange"));
-    cdb->setUseDarkBackground(cdb->addColour(Qt::white, tr("White")), true);
-    cdb->setUseDarkBackground(cdb->addColour(Qt::red, tr("Bright Red")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(30, 150, 255), tr("Bright Blue")), true);
+    cdb->setUseDarkBackground(cdb->addColour(Qt::red, tr("Bright Red")), true);
     cdb->setUseDarkBackground(cdb->addColour(Qt::green, tr("Bright Green")), true);
+    cdb->setUseDarkBackground(cdb->addColour(Qt::white, tr("White")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
+    cdb->setUseDarkBackground(cdb->addColour(Qt::yellow, tr("Bright Yellow")), true);
 
     Preferences::getInstance()->setResampleOnLoad(true);
 
@@ -1391,6 +1386,10 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     Pane *pane = nullptr;
     Layer *layer = nullptr;
 
+    ColourDatabase *cdb = ColourDatabase::getInstance();
+    int baseColourIndex = cdb->getColourIndex(tr("White"));
+    if (baseColourIndex < 0) baseColourIndex = 0;
+
     Pane *firstPane = nullptr;
     
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
@@ -1398,12 +1397,20 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         if (p && !firstPane) firstPane = p;
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
-            if (l && (l->getModel() == model)) {
+            if (!l) return;
+            WaveformLayer *w = qobject_cast<WaveformLayer *>(l);
+            if (w) {
+                baseColourIndex = w->getBaseColour();
+                SVDEBUG << "found a waveform in this pane: its colour is "
+                        << cdb->getColour(baseColourIndex).name() << endl;
+            }
+            if (l->getModel() == model) {
                 pane = p;
                 layer = l;
                 break;
             }
         }
+        if (layer) break;
     }
 
     if (!pane || !layer) {
@@ -1414,8 +1421,6 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 
     pane->setCentreFrame(am->fromReference(firstPane->getCentreFrame()));
     
-    //!!! command?
-
     const SparseOneDimensionalModel *from =
         qobject_cast<const SparseOneDimensionalModel *>(salient->getModel());
     if (!from) {
@@ -1440,7 +1445,11 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     if (newLayer) {
 
         TimeInstantLayer *til = qobject_cast<TimeInstantLayer *>(newLayer);
-        if (til) til->setPlotStyle(TimeInstantLayer::PlotInstants);
+        if (til) {
+            til->setPlotStyle(TimeInstantLayer::PlotInstants);
+            til->setBaseColour(cdb->getNearbyColourIndex
+                               (cdb->getContrastingColour(baseColourIndex)));
+        }
         
         m_document->addLayerToView(pane, newLayer);
         m_paneStack->setCurrentLayer(pane, newLayer);
