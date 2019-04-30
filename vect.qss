@@ -21,36 +21,6 @@ QWidget
     background: #333333;
     color: #FAFAFA; /* undocumented, but it works, and it's necessary */
 }
-/*
-QMainWindow::separator
-{
-    width: 5px;
-    height: 5px;
-}
-
-QMainWindow::separator:hover
-{
-    background-color: #CCDFFF;
-}
-
-QDockWidget
-{
-    border: none;
-    titlebar-close-icon: url(:icons/style/title-close.png);
-    titlebar-normal-icon: url(:icons/style/title-undock.png);
-}
-
-QDockWidget::close-button,
-QDockWidget::float-button
-{
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: #000000;
-    padding: 0px;
-    icon-size: 16px;
-}
-*/
 
 QDialog
 {
