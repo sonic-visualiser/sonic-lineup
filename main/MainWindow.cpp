@@ -132,7 +132,8 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_layerTreeView(0),
     m_keyReference(new KeyReference()),
     m_displayMode(WaveformMode),
-    m_salientCalculating(false)
+    m_salientCalculating(false),
+    m_salientColour(0)
 {
     setWindowTitle(tr("Sonic Vector"));
 
@@ -207,6 +208,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_mainScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_mainScroll->setFrameShape(QFrame::NoFrame);
 
+    m_paneStack->setResizeMode(PaneStack::AutoResizeOnly);
     m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
     m_paneStack->setShowAlignmentViews(true);
     m_mainScroll->setWidget(m_paneStack);
@@ -1264,7 +1266,10 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
     if (newLayer) {
 
         TimeInstantLayer *til = qobject_cast<TimeInstantLayer *>(newLayer);
-        if (til) til->setPlotStyle(TimeInstantLayer::PlotInstants);
+        if (til) {
+            til->setPlotStyle(TimeInstantLayer::PlotInstants);
+            til->setBaseColour(m_salientColour);
+        }
 
         connect(til, SIGNAL(modelCompletionChanged()),
                 this, SLOT(salientLayerCompletionChanged()));
@@ -1385,11 +1390,6 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 
     Pane *pane = nullptr;
     Layer *layer = nullptr;
-
-    ColourDatabase *cdb = ColourDatabase::getInstance();
-    int baseColourIndex = cdb->getColourIndex(tr("White"));
-    if (baseColourIndex < 0) baseColourIndex = 0;
-
     Pane *firstPane = nullptr;
     
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
@@ -1397,13 +1397,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         if (p && !firstPane) firstPane = p;
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
-            if (!l) return;
-            WaveformLayer *w = qobject_cast<WaveformLayer *>(l);
-            if (w) {
-                baseColourIndex = w->getBaseColour();
-                SVDEBUG << "found a waveform in this pane: its colour is "
-                        << cdb->getColour(baseColourIndex).name() << endl;
-            }
+            if (!l) continue;
             if (l->getModel() == model) {
                 pane = p;
                 layer = l;
@@ -1447,8 +1441,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         TimeInstantLayer *til = qobject_cast<TimeInstantLayer *>(newLayer);
         if (til) {
             til->setPlotStyle(TimeInstantLayer::PlotInstants);
-            til->setBaseColour(cdb->getNearbyColourIndex
-                               (cdb->getContrastingColour(baseColourIndex)));
+            til->setBaseColour(m_salientColour);
         }
         
         m_document->addLayerToView(pane, newLayer);
@@ -1685,9 +1678,12 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::configureNewPane(Pane *pane)
 {
-    cerr << "MainWindow::configureNewPane(" << pane << ")" << endl;
+    SVCERR << "MainWindow::configureNewPane(" << pane << ")" << endl;
 
     if (!pane) return;
+
+    zoomToFit();
+    reselectMode();
 
     Layer *waveformLayer = 0;
 
@@ -1700,9 +1696,6 @@ MainWindow::configureNewPane(Pane *pane)
     if (!waveformLayer) return;
 
     waveformLayer->setObjectName(tr("Waveform"));
-
-    zoomToFit();
-    reselectMode();
 }
 
 void

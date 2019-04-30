@@ -224,6 +224,7 @@ protected:
     
     bool m_salientCalculating;
     std::set<AlignmentModel *> m_salientPending;
+    int m_salientColour;
     
     virtual void updateVisibleRangeDisplay(Pane *p) const;
     virtual void updatePositionStatusDisplays() const;
