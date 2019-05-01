@@ -210,6 +210,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_mainScroll->setWidget(m_paneStack);
 
     QFrame *bottomFrame = new QFrame(mainFrame);
+    bottomFrame->setObjectName("BottomFrame");
     QGridLayout *bottomLayout = new QGridLayout;
 
     int bottomElementHeight = m_viewManager->scalePixelSize(35);

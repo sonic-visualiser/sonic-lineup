@@ -45,6 +45,7 @@ QToolBar:top,
 QToolBar:bottom
 {
     border-image: url(:icons/style/toolbar-horiz-pixmap.png) 0;
+    background: #cccccc;
     color: #000000;
 }
 
@@ -52,6 +53,7 @@ QToolBar:left,
 QToolBar:right 
 {
     border-image: url(:icons/style/toolbar-vert-pixmap.png) 0;
+    background: #cccccc;
     color: #000000;
 }
 
@@ -77,6 +79,12 @@ QToolBar::handle:right
     image: url(:icons/style/vtoolbar-separator.png);
 }
 
+QFrame#BottomFrame,
+QFrame#BottomFrame > QFrame
+{
+    border-image: url(:icons/style/toolbar-horiz-pixmap.png) 0;
+    background: #cccccc;
+}
 
 /*  QLabel
  
