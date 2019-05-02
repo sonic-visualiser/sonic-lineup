@@ -26,6 +26,7 @@
 #include "data/model/AlignmentModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "base/StorageAdviser.h"
+#include "base/TempDirectory.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "layer/WaveformLayer.h"
@@ -1005,10 +1006,12 @@ MainWindow::selectMainPane()
 void
 MainWindow::newSession()
 {
-    if (!checkSaveModified()) return;
+//!!!    if (!checkSaveModified()) return;
 
     cerr << "MainWindow::newSession" << endl;
 
+    checkpoint();
+    
     closeSession();
     createDocument();
 
@@ -1600,11 +1603,13 @@ MainWindow::paneAdded(Pane *pane)
 {
     pane->setPlaybackFollow(PlaybackScrollContinuous);
     m_paneStack->sizePanesEqually();
+    checkpoint();
 }    
 
 void
 MainWindow::paneHidden(Pane *)
 {
+    checkpoint();
 }    
 
 void
@@ -1773,6 +1778,8 @@ MainWindow::commitData(bool mayAskUser)
         // to the original session file (even if we have it) -- have
         // to use a temporary file
 
+//!!! revise all this for vect
+        
         QString svDirBase = ".sv1";
         QString svDir = QDir::home().filePath(svDirBase);
 
@@ -2112,11 +2119,76 @@ MainWindow::modelAboutToBeDeleted(Model *model)
     MainWindowBase::modelAboutToBeDeleted(model);
 }
 
+QString
+MainWindow::generateSessionFilename()
+{
+    SVCERR << "MainWindow::generateSessionFilename called" << endl;
+    
+    //!!! can refactor in common with RecordDirectory
+    
+    QDir parentDir(TempDirectory::getInstance()->getContainingPath());
+    QString sessionDirName("session");
+
+    if (!parentDir.mkpath(sessionDirName)) {
+        SVCERR << "ERROR: generateSessionFilename: Failed to create session dir in \"" << parentDir.canonicalPath() << "\"" << endl;
+        QMessageBox::critical(this, tr("Failed to create session directory"),
+                              tr("<p>Failed to create directory \"%1\" for session files</p>")
+                              .arg(parentDir.filePath(sessionDirName)));
+        return QString();
+    }
+
+    QDir sessionDir(parentDir.filePath(sessionDirName));
+    
+    QDateTime now = QDateTime::currentDateTime();
+    QString dateDirName = QString("%1").arg(now.toString("yyyyMMdd"));
+
+    if (!sessionDir.mkpath(dateDirName)) {
+        SVCERR << "ERROR: generateSessionFilename: Failed to create datestamped session dir in \"" << sessionDir.canonicalPath() << "\"" << endl;
+        QMessageBox::critical(this, tr("Failed to create session directory"),
+                              tr("<p>Failed to create date directory \"%1\" for session files</p>")
+                              .arg(sessionDir.filePath(dateDirName)));
+        return QString();
+    }
+
+    QDir dateDir(sessionDir.filePath(dateDirName));
+
+    Model *mainModel = getMainModel();
+    if (!mainModel) return QString();
+    
+    QString sessionName = mainModel->getTitle();
+    if (sessionName == "") {
+        sessionName = "session"; //!!!
+//        sessionName = mainModel->getLocation(); //!!! how to handle this?
+    }
+
+    QString filePath = dateDir.filePath(QString("%1.sv").arg(sessionName));
+    int suffix = 0;
+    while (QFile(filePath).exists()) {
+        if (++suffix == 100) {
+            SVCERR << "ERROR: generateSessionFilename: Failed to come up with unique suffix for " << filePath << " ???" << endl;
+            return QString();
+        }
+        filePath = dateDir.filePath(QString("%1-%2.sv").arg(sessionName));
+    }
+
+    return filePath;
+}
+
+void
+MainWindow::checkpoint()
+{
+    if (m_sessionFile != "") {
+        saveSessionFile(m_sessionFile);
+    }
+}
+
 void
 MainWindow::mainModelChanged(WaveFileModel *model)
 {
     SVDEBUG << "MainWindow::mainModelChanged(" << model << ")" << endl;
 
+    m_sessionFile = generateSessionFilename();
+    
     m_salientPending.clear();
     m_salientCalculating = false;
 
@@ -2145,6 +2217,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     }
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
+    checkpoint();
 }
 
 void
@@ -2232,6 +2305,7 @@ MainWindow::alignmentComplete(AlignmentModel *model)
 {
     cerr << "MainWindow::alignmentComplete(" << model << ")" << endl;
     if (model) mapSalientFeatureLayer(model);
+    checkpoint();
 }
 
 void

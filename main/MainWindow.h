@@ -229,6 +229,13 @@ protected:
     virtual void updateVisibleRangeDisplay(Pane *p) const;
     virtual void updatePositionStatusDisplays() const;
 
+    // Generate and return a filename into which to save the session,
+    // based on the identity of the main model.
+    QString generateSessionFilename();
+
+    // Save the session to the current session file.
+    void checkpoint();
+
     void loadStyle();
 };
 
