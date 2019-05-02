@@ -77,9 +77,9 @@ public slots:
 protected slots:
     virtual void openFiles();
     virtual void openLocation();
-    virtual void openRecentFile();
-    virtual void saveSession();
-    virtual void saveSessionAs();
+    virtual void openRecentSession();
+    virtual void openMostRecentSession();
+    virtual void checkpointSession();
     virtual void newSession();
     virtual void closeSession();
     virtual void preferences();
@@ -207,7 +207,7 @@ protected:
     DisplayMode m_displayMode;
 
     virtual void closeEvent(QCloseEvent *e);
-    bool checkSaveModified();
+    virtual bool checkSaveModified();
 
     virtual void configureNewPane(Pane *p);
     virtual bool selectExistingLayerForMode(Pane *, QString,
@@ -231,10 +231,14 @@ protected:
 
     // Generate and return a filename into which to save the session,
     // based on the identity of the main model.
-    QString generateSessionFilename();
+    QString makeSessionFilename();
 
-    // Save the session to the current session file.
-    void checkpoint();
+    enum SessionState {
+        NoSession,
+        SessionLoading,
+        SessionActive
+    };
+    SessionState m_sessionState;
 
     void loadStyle();
 };

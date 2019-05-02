@@ -134,7 +134,8 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_keyReference(new KeyReference()),
     m_displayMode(WaveformMode),
     m_salientCalculating(false),
-    m_salientColour(0)
+    m_salientColour(0),
+    m_sessionState(NoSession)
 {
     setWindowTitle(tr("Sonic Vector"));
 
@@ -325,7 +326,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     setIconsVisibleInMenus(false);
     finaliseMenus();
 
-    newSession();
+    openMostRecentSession();
 }
 
 MainWindow::~MainWindow()
@@ -719,14 +720,16 @@ MainWindow::setupRecentFilesMenu()
     m_recentFilesMenu->clear();
     vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
-	QAction *action = new QAction(files[i], this);
-	connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+        QString path = files[i];
+        QAction *action = new QAction(path, this);
+        action->setObjectName(path);
+	connect(action, SIGNAL(triggered()), this, SLOT(openRecentSession()));
         if (i == 0) {
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
                 (tr("Re-open"),
                  action->shortcut().toString(),
-                 tr("Re-open the current or most recently opened file"));
+                 tr("Re-open the current or most recently opened session"));
         }
 	m_recentFilesMenu->addAction(action);
     }
@@ -984,14 +987,13 @@ MainWindow::updateDescriptionLabel()
 void
 MainWindow::documentModified()
 {
-    //!!!
     MainWindowBase::documentModified();
+    checkpointSession();
 }
 
 void
 MainWindow::documentRestored()
 {
-    //!!!
     MainWindowBase::documentRestored();
 }
 
@@ -1006,12 +1008,8 @@ MainWindow::selectMainPane()
 void
 MainWindow::newSession()
 {
-//!!!    if (!checkSaveModified()) return;
-
     cerr << "MainWindow::newSession" << endl;
 
-    checkpoint();
-    
     closeSession();
     createDocument();
 
@@ -1033,7 +1031,11 @@ MainWindow::newSession()
 void
 MainWindow::closeSession()
 {
-    if (!checkSaveModified()) return;
+    checkpointSession();
+    if (m_sessionState != SessionLoading) {
+        m_sessionFile = "";
+        m_sessionState = NoSession;
+    }
 
     while (m_paneStack->getPaneCount() > 0) {
 
@@ -1065,7 +1067,6 @@ MainWindow::closeSession()
     m_viewManager->clearSelections();
     m_timeRulerLayer = 0; // document owned this
 
-    m_sessionFile = "";
     setWindowTitle(tr("Sonic Vector"));
 
     CommandHistory::getInstance()->clear();
@@ -1131,35 +1132,79 @@ MainWindow::openLocation()
 }
 
 void
-MainWindow::openRecentFile()
+MainWindow::openRecentSession()
 {
     QObject *obj = sender();
     QAction *action = dynamic_cast<QAction *>(obj);
     
     if (!action) {
-	cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
+	cerr << "WARNING: MainWindow::openRecentSession: sender is not an action"
 		  << endl;
 	return;
     }
 
-    QString path = action->text();
+    QString path = action->objectName();
+    
+    if (path == "") {
+        cerr << "WARNING: MainWindow::openRecentSession: action incorrectly named"
+             << endl;
+        return;
+    }
+
+    m_sessionFile = path;
+    m_sessionState = SessionLoading;
+
+    SVDEBUG << "MainWindow::openRecentSession: m_sessionFile is now "
+            << m_sessionFile << endl;
+    
+    FileOpenStatus status = openPath(path, ReplaceSession);
+
+    if (status == FileOpenSucceeded) {
+        m_sessionState = SessionActive;
+    } else {
+        m_sessionFile = "";
+        m_sessionState = NoSession;
+
+        if (status == FileOpenFailed) {
+            QMessageBox::critical(this, tr("Failed to open location"),
+                                  tr("<b>Open failed</b><p>File or URL \"%1\" could not be opened").arg(path));
+        } else if (status == FileOpenWrongMode) {
+            QMessageBox::critical(this, tr("Failed to open location"),
+                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+        }
+    }
+}
+
+void
+MainWindow::openMostRecentSession()
+{
+    vector<QString> files = m_recentFiles.getRecent();
+    if (files.empty()) return;
+
+    QString path = files[0];
     if (path == "") return;
 
+    m_sessionFile = path;
+    m_sessionState = SessionLoading;
 
-    cerr << "about to call open(), have " << m_paneStack->getPaneCount() << " panes" << endl;
+    SVDEBUG << "MainWindow::openMostRecentSession: m_sessionFile is now "
+            << m_sessionFile << endl;
+    
+    FileOpenStatus status = openPath(path, ReplaceSession);
 
-    FileOpenStatus status = openPath(path, CreateAdditionalModel);
-
-    cerr << "called open(), have " << m_paneStack->getPaneCount() << " panes" << endl;
-
-    if (status == FileOpenFailed) {
-        QMessageBox::critical(this, tr("Failed to open location"),
-                              tr("<b>Open failed</b><p>File or URL \"%1\" could not be opened").arg(path));
-    } else if (status == FileOpenWrongMode) {
-        QMessageBox::critical(this, tr("Failed to open location"),
-                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+    if (status == FileOpenSucceeded) {
+        m_sessionState = SessionActive;
     } else {
-        configureNewPane(m_paneStack->getCurrentPane());
+        m_sessionFile = "";
+        m_sessionState = NoSession;
+
+        if (status == FileOpenFailed) {
+            QMessageBox::critical(this, tr("Failed to open location"),
+                                  tr("<b>Open failed</b><p>File or URL \"%1\" could not be opened").arg(path));
+        } else if (status == FileOpenWrongMode) {
+            QMessageBox::critical(this, tr("Failed to open location"),
+                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+        }
     }
 }
 
@@ -1603,13 +1648,13 @@ MainWindow::paneAdded(Pane *pane)
 {
     pane->setPlaybackFollow(PlaybackScrollContinuous);
     m_paneStack->sizePanesEqually();
-    checkpoint();
+    checkpointSession();
 }    
 
 void
 MainWindow::paneHidden(Pane *)
 {
-    checkpoint();
+    checkpointSession();
 }    
 
 void
@@ -1716,11 +1761,7 @@ MainWindow::closeEvent(QCloseEvent *e)
 	return;
     }
 
-    if (!m_abandoning && !checkSaveModified()) {
-//        cerr << "Ignoring close event" << endl;
-	e->ignore();
-	return;
-    }
+    closeSession();
 
     QSettings settings;
     settings.beginGroup("MainWindow");
@@ -1745,8 +1786,6 @@ MainWindow::closeEvent(QCloseEvent *e)
         delete m_layerTreeView;
     }
 
-    closeSession();
-
     e->accept();
 
     m_exiting = true;
@@ -1756,129 +1795,21 @@ MainWindow::closeEvent(QCloseEvent *e)
 }
 
 bool
-MainWindow::commitData(bool mayAskUser)
+MainWindow::checkSaveModified()
 {
-    if (mayAskUser) {
-        bool rv = checkSaveModified();
-        if (rv) {
-            if (m_preferencesDialog &&
-                m_preferencesDialog->isVisible()) {
-                m_preferencesDialog->applicationClosing(false);
-            }
-        }
-        return rv;
-    } else {
-        if (m_preferencesDialog &&
-            m_preferencesDialog->isVisible()) {
-            m_preferencesDialog->applicationClosing(true);
-        }
-        if (!m_documentModified) return true;
-
-        // If we can't check with the user first, then we can't save
-        // to the original session file (even if we have it) -- have
-        // to use a temporary file
-
-//!!! revise all this for vect
-        
-        QString svDirBase = ".sv1";
-        QString svDir = QDir::home().filePath(svDirBase);
-
-        if (!QFileInfo(svDir).exists()) {
-            if (!QDir::home().mkdir(svDirBase)) return false;
-        } else {
-            if (!QFileInfo(svDir).isDir()) return false;
-        }
-        
-        // This name doesn't have to be unguessable
-#ifndef _WIN32
-        QString fname = QString("tmp-%1-%2.sv")
-            .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"))
-            .arg(QProcess().pid());
-#else
-        QString fname = QString("tmp-%1.sv")
-            .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"));
-#endif
-        QString fpath = QDir(svDir).filePath(fname);
-        if (saveSessionFile(fpath)) {
-            m_recentFiles.addFile(fpath);
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // It should always be OK to save, with our active-session paradigm
+    return true;
 }
 
 bool
-MainWindow::checkSaveModified()
+MainWindow::commitData(bool /* mayAskUser */)
 {
-    // Called before some destructive operation (e.g. new session,
-    // exit program).  Return true if we can safely proceed, false to
-    // cancel.
-
-    if (!m_documentModified) return true;
-
-    int button = 
-	QMessageBox::warning(this,
-			     tr("Session modified"),
-			     tr("The current session has been modified.\nDo you want to save it?"),
-			     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                             QMessageBox::Yes);
-
-    if (button == QMessageBox::Yes) {
-	saveSession();
-	if (m_documentModified) { // save failed -- don't proceed!
-	    return false;
-	} else {
-            return true; // saved, so it's safe to continue now
-        }
-    } else if (button == QMessageBox::No) {
-	m_documentModified = false; // so we know to abandon it
-	return true;
+    if (m_preferencesDialog &&
+        m_preferencesDialog->isVisible()) {
+        m_preferencesDialog->applicationClosing(true);
     }
-
-    // else cancel
-    return false;
-}
-
-void
-MainWindow::saveSession()
-{
-    if (m_sessionFile != "") {
-	if (!saveSessionFile(m_sessionFile)) {
-	    QMessageBox::critical(this, tr("Failed to save file"),
-				  tr("Session file \"%1\" could not be saved.").arg(m_sessionFile));
-	} else {
-	    CommandHistory::getInstance()->documentSaved();
-	    documentRestored();
-	}
-    } else {
-	saveSessionAs();
-    }
-}
-
-void
-MainWindow::saveSessionAs()
-{
-    QString orig = m_audioFile;
-    if (orig == "") orig = ".";
-    else orig = QFileInfo(orig).absoluteDir().canonicalPath();
-
-    QString path = getSaveFileName(FileFinder::SessionFile);
-
-    if (path == "") return;
-
-    if (!saveSessionFile(path)) {
-	QMessageBox::critical(this, tr("Failed to save file"),
-			      tr("Session file \"%1\" could not be saved.").arg(path));
-    } else {
-	setWindowTitle(tr("%1: %2")
-                       .arg(QApplication::applicationName())
-		       .arg(QFileInfo(path).fileName()));
-	m_sessionFile = path;
-	CommandHistory::getInstance()->documentSaved();
-	documentRestored();
-        m_recentFiles.addFile(path);
-    }
+    checkpointSession();
+    return true;
 }
 
 void
@@ -2120,9 +2051,13 @@ MainWindow::modelAboutToBeDeleted(Model *model)
 }
 
 QString
-MainWindow::generateSessionFilename()
+MainWindow::makeSessionFilename()
 {
-    SVCERR << "MainWindow::generateSessionFilename called" << endl;
+    Model *mainModel = getMainModel();
+    if (!mainModel) {
+        SVDEBUG << "MainWindow::makeSessionFilename: No main model, returning empty filename" << endl;
+        return "";
+    }
     
     //!!! can refactor in common with RecordDirectory
     
@@ -2130,7 +2065,7 @@ MainWindow::generateSessionFilename()
     QString sessionDirName("session");
 
     if (!parentDir.mkpath(sessionDirName)) {
-        SVCERR << "ERROR: generateSessionFilename: Failed to create session dir in \"" << parentDir.canonicalPath() << "\"" << endl;
+        SVCERR << "ERROR: makeSessionFilename: Failed to create session dir in \"" << parentDir.canonicalPath() << "\"" << endl;
         QMessageBox::critical(this, tr("Failed to create session directory"),
                               tr("<p>Failed to create directory \"%1\" for session files</p>")
                               .arg(parentDir.filePath(sessionDirName)));
@@ -2143,7 +2078,7 @@ MainWindow::generateSessionFilename()
     QString dateDirName = QString("%1").arg(now.toString("yyyyMMdd"));
 
     if (!sessionDir.mkpath(dateDirName)) {
-        SVCERR << "ERROR: generateSessionFilename: Failed to create datestamped session dir in \"" << sessionDir.canonicalPath() << "\"" << endl;
+        SVCERR << "ERROR: makeSessionFilename: Failed to create datestamped session dir in \"" << sessionDir.canonicalPath() << "\"" << endl;
         QMessageBox::critical(this, tr("Failed to create session directory"),
                               tr("<p>Failed to create date directory \"%1\" for session files</p>")
                               .arg(sessionDir.filePath(dateDirName)));
@@ -2152,33 +2087,54 @@ MainWindow::generateSessionFilename()
 
     QDir dateDir(sessionDir.filePath(dateDirName));
 
-    Model *mainModel = getMainModel();
-    if (!mainModel) return QString();
-    
     QString sessionName = mainModel->getTitle();
     if (sessionName == "") {
-        sessionName = "session"; //!!!
-//        sessionName = mainModel->getLocation(); //!!! how to handle this?
+        sessionName = mainModel->getLocation();
     }
+    sessionName = QFileInfo(sessionName).baseName();
 
     QString filePath = dateDir.filePath(QString("%1.sv").arg(sessionName));
     int suffix = 0;
     while (QFile(filePath).exists()) {
         if (++suffix == 100) {
-            SVCERR << "ERROR: generateSessionFilename: Failed to come up with unique suffix for " << filePath << " ???" << endl;
-            return QString();
+            SVCERR << "ERROR: makeSessionFilename: Failed to come up with unique session filename for " << sessionName << endl;
+            return "";
         }
-        filePath = dateDir.filePath(QString("%1-%2.sv").arg(sessionName));
+        filePath = dateDir.filePath(QString("%1-%2.sv")
+                                    .arg(sessionName).arg(suffix));
     }
+
+    SVDEBUG << "MainWindow::makeSessionFilename: returning "
+            << filePath << endl;
 
     return filePath;
 }
 
 void
-MainWindow::checkpoint()
+MainWindow::checkpointSession()
 {
-    if (m_sessionFile != "") {
-        saveSessionFile(m_sessionFile);
+    // This check is necessary, so that we don't get into a nasty loop
+    // when checkpointing on closeSession called when opening a new
+    // session file
+    if (!m_documentModified) {
+        SVCERR << "MainWindow::checkpointSession: nothing to save" << endl;
+        return;
+    }
+    
+    if (m_sessionFile == "") {
+        SVCERR << "MainWindow::checkpointSession: no current session file" << endl;
+        return;
+    }
+    
+    SVCERR << "MainWindow::checkpointSession: saving to session file: "
+           << m_sessionFile << endl;
+
+    if (saveSessionFile(m_sessionFile)) {
+        CommandHistory::getInstance()->documentSaved();
+        documentRestored();
+        SVCERR << "MainWindow::checkpointSession complete" << endl;
+    } else {
+        SVCERR << "MainWindow::checkpointSession: save failed!" << endl;
     }
 }
 
@@ -2187,7 +2143,11 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 {
     SVDEBUG << "MainWindow::mainModelChanged(" << model << ")" << endl;
 
-    m_sessionFile = generateSessionFilename();
+    if (m_sessionFile == "" && m_sessionState == SessionActive && model) {
+        SVDEBUG << "MainWindow::mainModelChanged: No session file set, calling makeSessionFilename" << endl;
+        m_sessionFile = makeSessionFilename();
+        m_recentFiles.addFile(m_sessionFile);
+    }
     
     m_salientPending.clear();
     m_salientCalculating = false;
@@ -2217,7 +2177,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     }
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
-    checkpoint();
+    checkpointSession();
 }
 
 void
@@ -2305,7 +2265,7 @@ MainWindow::alignmentComplete(AlignmentModel *model)
 {
     cerr << "MainWindow::alignmentComplete(" << model << ")" << endl;
     if (model) mapSalientFeatureLayer(model);
-    checkpoint();
+    checkpointSession();
 }
 
 void
