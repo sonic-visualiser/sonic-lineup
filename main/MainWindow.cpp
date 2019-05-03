@@ -188,6 +188,10 @@ MainWindow::MainWindow(bool withAudioOutput) :
     settings.setValue("showstatusbar", false);
     settings.endGroup();
 
+    settings.beginGroup("IconLoader");
+    settings.setValue("invert-icons-on-dark-background", false);
+    settings.endGroup();
+
     m_viewManager->setAlignMode(true);
     m_viewManager->setPlaySoloMode(true);
     m_viewManager->setToolMode(ViewManager::NavigateMode);
