@@ -1,7 +1,7 @@
 
-CONFIG += release
+CONFIG += c++14
 
-#CONFIG -= release
+CONFIG += release
 #CONFIG += debug
 
 PREFIX_PATH = /usr/local
@@ -24,6 +24,7 @@ DEFINES += \
 	HAVE_LIBLO \
 	HAVE_MAD \
 	HAVE_ID3TAG \
+        HAVE_OPUS \
 	HAVE_PORTAUDIO
 
 # Default set of libs for the above. Config sections below may update
@@ -32,7 +33,7 @@ DEFINES += \
 LIBS += \
         -lbase \
         -lbz2 \
-	-lrubberband \
+        -lrubberband \
 	-lfftw3 \
 	-lfftw3f \
 	-lsndfile \
@@ -41,6 +42,8 @@ LIBS += \
 	-lvorbis \
 	-lvorbisenc \
 	-lvorbisfile \
+        -lopusfile \
+        -lopus \
 	-logg \
 	-lmad \
 	-lid3tag \
@@ -57,7 +60,7 @@ win32-g++ {
 
     # This config is currently used for 32-bit Windows builds.
 
-    INCLUDEPATH += $$PWD/sv-dependency-builds/win32-mingw/include
+    INCLUDEPATH += $$PWD/sv-dependency-builds/win32-mingw/include $$PWD/sv-dependency-builds/win32-mingw/include/opus
 
     LIBS += -Lrelease -L$$PWD/sv-dependency-builds/win32-mingw/lib
 
@@ -68,8 +71,10 @@ win32-g++ {
     # Don't have liblo
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
+
+    # (We don't have MediaFoundation support either, with this build sadly)
     
-    LIBS += -lwinmm -lws2_32
+    LIBS += -lwinmm -lws2_32 
 }
 
 win32-msvc* {
@@ -79,25 +84,25 @@ win32-msvc* {
     # we want to do 32-bit builds with MSVC as well, then we'll
     # need to add a way to distinguish the two.
     
-    INCLUDEPATH += $$PWD/sv-dependency-builds/win64-msvc/include
+    INCLUDEPATH += $$PWD/sv-dependency-builds/win64-msvc/include $$PWD/sv-dependency-builds/win64-msvc/include/opus
 
-## This seems to be intruding even when we're supposed to be release
+    # This seems to be intruding even when we're supposed to be release
 #    CONFIG(debug) {
 #        LIBS += -NODEFAULTLIB:MSVCRT -Ldebug \
 #            -L$$PWD/sv-dependency-builds/win64-msvc/lib/debug \
 #            -L$$PWD/sv-dependency-builds/win64-msvc/lib
 #    }
     CONFIG(release) {
-        LIBS += -Lrelease \
+        LIBS += -NODEFAULTLIB:LIBCMT -Lrelease \
             -L$$PWD/sv-dependency-builds/win64-msvc/lib
     }
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION
 
-    QMAKE_CXXFLAGS_RELEASE += -fp:fast
+    QMAKE_CXXFLAGS_RELEASE += -fp:fast -gl
+    QMAKE_LFLAGS_RELEASE += -ltcg
 
-    # No Ogg/FLAC support in the sndfile build on this platform yet
-    LIBS -= -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile
+    LIBS -= -lFLAC -lvorbis -lvorbisenc -lvorbisfile
 
     # These have different names
     LIBS -= -lsord-0 -lserd-0
@@ -107,17 +112,18 @@ win32-msvc* {
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
     
-    LIBS += -ladvapi32 -lwinmm -lws2_32
+    LIBS += -lmfplat -lmfreadwrite -lmfuuid -lpropsys -ladvapi32 -lwinmm -lws2_32
 }
 
 macx* {
 
     # All Mac builds are 64-bit these days.
 
-    INCLUDEPATH += $$PWD/sv-dependency-builds/osx/include
+    INCLUDEPATH += $$PWD/sv-dependency-builds/osx/include $$PWD/sv-dependency-builds/osx/include/opus
     LIBS += -L$$PWD/sv-dependency-builds/osx/lib -L$$PWD
 
-    QMAKE_CXXFLAGS_RELEASE += -O3 -ffast-math
+    QMAKE_CXXFLAGS_RELEASE += -O3 -ffast-math -flto
+    QMAKE_LFLAGS_RELEASE += -O3 -flto
 
     DEFINES += HAVE_COREAUDIO HAVE_VDSP
     LIBS += \
