@@ -122,12 +122,13 @@ MainWindow::MainWindow(bool withAudioOutput) :
     MainWindowBase(withAudioOutput ? WithAudioOutput : WithNothing),
     m_mainMenusCreated(false),
     m_playbackMenu(0),
-    m_recentFilesMenu(0),
+    m_recentSessionsMenu(0),
     m_rightButtonMenu(0),
     m_rightButtonPlaybackMenu(0),
     m_deleteSelectedAction(0),
     m_ffwdAction(0),
     m_rwdAction(0),
+    m_recentSessions("RecentSessions", 20),
     m_exiting(false),
     m_preferencesDialog(0),
     m_layerTreeView(0),
@@ -463,11 +464,11 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-    m_recentFilesMenu = menu->addMenu(tr("&Recent Locations"));
-    m_recentFilesMenu->setTearOffEnabled(false);
-    setupRecentFilesMenu();
-    connect(&m_recentFiles, SIGNAL(recentChanged()),
-            this, SLOT(setupRecentFilesMenu()));
+    m_recentSessionsMenu = menu->addMenu(tr("&Recent Sessions"));
+    m_recentSessionsMenu->setTearOffEnabled(false);
+    setupRecentSessionsMenu();
+    connect(&m_recentSessions, SIGNAL(recentChanged()),
+            this, SLOT(setupRecentSessionsMenu()));
 
     menu->addSeparator();
     action = new QAction(tr("&Preferences..."), this);
@@ -715,10 +716,10 @@ MainWindow::setupHelpMenu()
 }
 
 void
-MainWindow::setupRecentFilesMenu()
+MainWindow::setupRecentSessionsMenu()
 {
-    m_recentFilesMenu->clear();
-    vector<QString> files = m_recentFiles.getRecent();
+    m_recentSessionsMenu->clear();
+    vector<QString> files = m_recentSessions.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
         QString path = files[i];
         QAction *action = new QAction(path, this);
@@ -731,7 +732,7 @@ MainWindow::setupRecentFilesMenu()
                  action->shortcut().toString(),
                  tr("Re-open the current or most recently opened session"));
         }
-	m_recentFilesMenu->addAction(action);
+	m_recentSessionsMenu->addAction(action);
     }
 }
 
@@ -1086,6 +1087,8 @@ MainWindow::openFiles()
     QStringList paths = ff->getOpenFileNames(FileFinder::AudioFile,
                                              m_audioFile);
 
+    m_sessionState = SessionActive;
+    
     for (QString path: paths) {
         
         FileOpenStatus status = openPath(path, CreateAdditionalModel);
@@ -1118,6 +1121,8 @@ MainWindow::openLocation()
 
     if (text.isEmpty()) return;
 
+    m_sessionState = SessionActive;
+    
     FileOpenStatus status = openPath(text, CreateAdditionalModel);
 
     if (status == FileOpenFailed) {
@@ -1178,7 +1183,7 @@ MainWindow::openRecentSession()
 void
 MainWindow::openMostRecentSession()
 {
-    vector<QString> files = m_recentFiles.getRecent();
+    vector<QString> files = m_recentSessions.getRecent();
     if (files.empty()) return;
 
     QString path = files[0];
@@ -1328,10 +1333,8 @@ void
 MainWindow::salientLayerCompletionChanged()
 {
     Layer *layer = qobject_cast<Layer *>(sender());
-    cerr << "MainWindow::salientLayerCompletionChanged: layer = " << layer << endl;
     if (layer && layer->getCompletion(0) == 100) {
         m_salientCalculating = false;
-        cerr << "mapping " << m_salientPending.size() << " salient layer(s)" << endl;
         foreach (AlignmentModel *am, m_salientPending) {
             mapSalientFeatureLayer(am);
         }
@@ -2093,15 +2096,22 @@ MainWindow::makeSessionFilename()
     }
     sessionName = QFileInfo(sessionName).baseName();
 
-    QString filePath = dateDir.filePath(QString("%1.sv").arg(sessionName));
+    QString sessionExt = 
+        InteractiveFileFinder::getInstance()->getApplicationSessionExtension();
+
+    QString filePath = dateDir.filePath(QString("%1.%2")
+                                        .arg(sessionName)
+                                        .arg(sessionExt));
     int suffix = 0;
     while (QFile(filePath).exists()) {
         if (++suffix == 100) {
             SVCERR << "ERROR: makeSessionFilename: Failed to come up with unique session filename for " << sessionName << endl;
             return "";
         }
-        filePath = dateDir.filePath(QString("%1-%2.sv")
-                                    .arg(sessionName).arg(suffix));
+        filePath = dateDir.filePath(QString("%1-%2.%3")
+                                    .arg(sessionName)
+                                    .arg(suffix)
+                                    .arg(sessionExt));
     }
 
     SVDEBUG << "MainWindow::makeSessionFilename: returning "
@@ -2113,6 +2123,16 @@ MainWindow::makeSessionFilename()
 void
 MainWindow::checkpointSession()
 {
+    if (m_sessionState == NoSession) {
+        SVCERR << "MainWindow::checkpointSession: no current session" << endl;
+        return;
+    }
+
+    if (m_sessionState == SessionLoading) {
+        SVCERR << "MainWindow::checkpointSession: session is loading" << endl;
+        return;
+    }
+
     // This check is necessary, so that we don't get into a nasty loop
     // when checkpointing on closeSession called when opening a new
     // session file
@@ -2123,6 +2143,19 @@ MainWindow::checkpointSession()
     
     if (m_sessionFile == "") {
         SVCERR << "MainWindow::checkpointSession: no current session file" << endl;
+        return;
+    }
+
+    QString sessionExt = 
+        InteractiveFileFinder::getInstance()->getApplicationSessionExtension();
+
+    if (!m_sessionFile.endsWith("." + sessionExt)) {
+        // At one point in development we had a nasty situation where
+        // we loaded an audio file from the recent files list, then
+        // immediately saved the session over the top of it! This is
+        // just an additional guard against that kind of thing
+        SVCERR << "MainWindow::checkpointSession: suspicious session filename "
+               << m_sessionFile << ", not saving to it" << endl;
         return;
     }
     
@@ -2143,10 +2176,22 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 {
     SVDEBUG << "MainWindow::mainModelChanged(" << model << ")" << endl;
 
-    if (m_sessionFile == "" && m_sessionState == SessionActive && model) {
-        SVDEBUG << "MainWindow::mainModelChanged: No session file set, calling makeSessionFilename" << endl;
-        m_sessionFile = makeSessionFilename();
-        m_recentFiles.addFile(m_sessionFile);
+    if (m_sessionState == SessionLoading) {
+        SVDEBUG << "MainWindow::mainModelChanged: Session is loading, not (re)making session filename" << endl;
+    } else if (!model) {
+        SVDEBUG << "MainWindow::mainModelChanged: Null model, not (re)making session filename" << endl;
+    } else {
+        if (m_sessionState == NoSession) {
+            SVDEBUG << "MainWindow::mainModelChanged: Marking session as active" << endl;
+            m_sessionState = SessionActive;
+        } else {
+            SVDEBUG << "MainWindow::mainModelChanged: Session is active" << endl;
+        }
+        if (m_sessionFile == "") {
+            SVDEBUG << "MainWindow::mainModelChanged: No session file set, calling makeSessionFilename" << endl;
+            m_sessionFile = makeSessionFilename();
+            m_recentSessions.addFile(m_sessionFile);
+        }
     }
     
     m_salientPending.clear();
@@ -2163,21 +2208,28 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
 
-    if (model && m_paneStack && (m_paneStack->getPaneCount() == 0)) {
-	AddPaneCommand *command = new AddPaneCommand(this);
-	CommandHistory::getInstance()->addCommand(command);
-	Pane *pane = command->getPane();
-	Layer *newLayer = m_document->createImportedLayer(model);
-	if (newLayer) {
-	    m_document->addLayerToView(pane, newLayer);
-	}
-        addSalientFeatureLayer(pane, model);
-    } else {
-        addSalientFeatureLayer(m_paneStack->getCurrentPane(), model);
+    if (m_sessionState != SessionLoading) {
+
+        if (model &&
+            m_paneStack &&
+            (m_paneStack->getPaneCount() == 0)) {
+        
+            AddPaneCommand *command = new AddPaneCommand(this);
+            CommandHistory::getInstance()->addCommand(command);
+            Pane *pane = command->getPane();
+            Layer *newLayer = m_document->createMainModelLayer
+                (LayerFactory::Waveform);
+            if (newLayer) {
+                m_document->addLayerToView(pane, newLayer);
+            }
+            addSalientFeatureLayer(pane, model);
+        
+        } else {
+            addSalientFeatureLayer(m_paneStack->getCurrentPane(), model);
+        }
     }
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
-    checkpointSession();
 }
 
 void

@@ -111,6 +111,8 @@ main(int argc, char **argv)
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName("Sonic Vector");
 
+    InteractiveFileFinder::getInstance()->setApplicationSessionExtension("vect");
+
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 

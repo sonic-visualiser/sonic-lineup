@@ -138,7 +138,7 @@ protected slots:
 
     virtual void rightButtonMenuRequested(Pane *, QPoint point);
 
-    virtual void setupRecentFilesMenu();
+    virtual void setupRecentSessionsMenu();
 
     virtual void showLayerTree();
 
@@ -160,7 +160,7 @@ protected:
 
     bool                     m_mainMenusCreated;
     QMenu                   *m_playbackMenu;
-    QMenu                   *m_recentFilesMenu;
+    QMenu                   *m_recentSessionsMenu;
     QMenu                   *m_rightButtonMenu;
     QMenu                   *m_rightButtonPlaybackMenu;
 
@@ -176,6 +176,8 @@ protected:
     QAction                 *m_scrollRightAction;
     QAction                 *m_showPropertyBoxesAction;
 
+    RecentFiles              m_recentSessions;
+    
     bool                     m_exiting;
 
     QFrame                  *m_playControlsSpacer;
