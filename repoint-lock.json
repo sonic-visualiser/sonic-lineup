@@ -4,7 +4,7 @@
       "pin": "b650289c47b4"
     },
     "svcore": {
-      "pin": "c1208b211d8c"
+      "pin": "81f50b70bdef"
     },
     "svgui": {
       "pin": "8b7f797bca86"
@@ -47,6 +47,24 @@
     },
     "icons/scalable": {
       "pin": "1c8844bfa946"
+    },
+    "match": {
+      "pin": "4b272c839f7e"
+    },
+    "pyin": {
+      "pin": "550d5f186abb"
+    },
+    "nnls-chroma": {
+      "pin": "6bfce96d87b4"
+    },
+    "qm-vamp-plugins": {
+      "pin": "8dc31a0e3210"
+    },
+    "qm-vamp-plugins/qm-dsp": {
+      "pin": "852c5ba16bb0"
+    },
+    "azi": {
+      "pin": "23f79cf72f4e"
     }
   }
 }

@@ -182,6 +182,9 @@ MainWindow::MainWindow(bool withAudioOutput) :
     settings.setValue("melodicrange",
                       QString("<layer channel=\"-1\" gain=\"1\" normalizeVisibleArea=\"false\" columnNormalization=\"hybrid\" colourMap=\"Ice\" minFrequency=\"80\" maxFrequency=\"1500\" windowSize=\"8192\" windowOverlap=\"75\" binDisplay=\"0\" />"));
 
+    settings.setValue("colour3dplot",
+                      QString("<layer channel=\"-1\" colourMap=\"Ice\" opaque=\"true\" smooth=\"true\" binScale=\"0\" columnNormalization=\"hybrid\"/>"));
+
     settings.endGroup();
 
     settings.beginGroup("MainWindow");
@@ -256,6 +259,30 @@ MainWindow::MainWindow(bool withAudioOutput) :
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
+
+    button = new QToolButton;
+    button->setIcon(il.load("pitch"));
+    button->setToolTip(tr("Pitch Plot"));
+    button->setCheckable(true);
+    button->setChecked(false);
+    button->setAutoRaise(true);
+    button->setFixedWidth(bottomButtonHeight);
+    button->setFixedHeight(bottomButtonHeight);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(pitchModeSelected()));
+
+    button = new QToolButton;
+    button->setIcon(il.load("azimuth"));
+    button->setToolTip(tr("Stereo Azimuth Plot"));
+    button->setCheckable(true);
+    button->setChecked(false);
+    button->setAutoRaise(true);
+    button->setFixedWidth(bottomButtonHeight);
+    button->setFixedHeight(bottomButtonHeight);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(azimuthModeSelected()));
 
     button = new QToolButton;
     button->setIcon(il.load("spectrogram"));
@@ -1640,6 +1667,107 @@ MainWindow::melodogramModeSelected()
 }
 
 void
+MainWindow::pitchModeSelected()
+{
+    QString name = tr("Pitch");
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
+
+        Model *createFrom = nullptr;
+        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
+            createFrom) {
+
+            TransformId id = "vamp:pyin:pyin:smoothedpitchtrack";
+            TransformFactory *tf = TransformFactory::getInstance();
+
+            if (tf->haveTransform(id)) {
+
+                Transform transform = tf->getDefaultTransformFor
+                    (id, createFrom->getSampleRate());
+
+                ModelTransformer::Input input(createFrom, -1);
+                
+                Layer *newLayer =
+                    m_document->createDerivedLayer(transform, createFrom);
+
+                TimeValueLayer *values =
+                    qobject_cast<TimeValueLayer *>(newLayer);
+
+                if (values) {
+                    values->setPlotStyle(TimeValueLayer::PlotDiscreteCurves);
+                }
+                
+                if (newLayer) {
+                    newLayer->setObjectName(name);
+                    m_document->addLayerToView(pane, newLayer);
+                    m_paneStack->setCurrentLayer(pane, newLayer);
+                }
+            
+            } else {
+                SVCERR << "ERROR: No PYin plugin available" << endl;
+            }
+        }
+
+        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+        if (salient) {
+            pane->propertyContainerSelected(pane, salient);
+        }
+    }
+
+    m_displayMode = PitchMode;
+}
+
+void
+MainWindow::azimuthModeSelected()
+{
+    QString name = tr("Azimuth");
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
+
+        Model *createFrom = nullptr;
+        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
+            createFrom) {
+
+            TransformId id = "vamp:azi:azi:plan";
+            TransformFactory *tf = TransformFactory::getInstance();
+
+            if (tf->haveTransform(id)) {
+
+                Transform transform = tf->getDefaultTransformFor
+                    (id, createFrom->getSampleRate());
+
+                ModelTransformer::Input input(createFrom, -1);
+                
+                Layer *newLayer =
+                    m_document->createDerivedLayer(transform, createFrom);
+
+                if (newLayer) {
+                    newLayer->setObjectName(name);
+                    m_document->addLayerToView(pane, newLayer);
+                    m_paneStack->setCurrentLayer(pane, newLayer);
+                }
+            
+            } else {
+                SVCERR << "ERROR: No Azimuth plugin available" << endl;
+            }
+        }
+
+        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+        if (salient) {
+            pane->propertyContainerSelected(pane, salient);
+        }
+    }
+
+    m_displayMode = AzimuthMode;
+}
+
+void
 MainWindow::reselectMode()
 {
     switch (m_displayMode) {
@@ -1647,6 +1775,7 @@ MainWindow::reselectMode()
     case WaveformMode: waveformModeSelected(); break;
     case SpectrogramMode: spectrogramModeSelected(); break;
     case MelodogramMode: melodogramModeSelected(); break;
+    case AzimuthMode: azimuthModeSelected(); break;
     }
 }
 

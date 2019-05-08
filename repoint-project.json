@@ -87,6 +87,32 @@
             "vcs": "hg",
 	    "service": "soundsoftware",
 	    "repository": "sv-iconset"
+        },
+        "match": {
+            "vcs": "hg",
+	    "service": "soundsoftware",
+            "repository": "match-vamp"
+        },
+        "pyin": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
+        },
+        "nnls-chroma": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
+        },
+        "qm-vamp-plugins": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
+        },
+        "qm-vamp-plugins/qm-dsp": {
+            "vcs": "hg",
+	    "service": "soundsoftware",
+            "repository": "qm-dsp"
+        },
+        "azi": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
         }
     }
 }

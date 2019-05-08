@@ -88,6 +88,8 @@ protected slots:
     virtual void waveformModeSelected();
     virtual void spectrogramModeSelected();
     virtual void melodogramModeSelected();
+    virtual void azimuthModeSelected();
+    virtual void pitchModeSelected();
 
     virtual void toggleSalientFeatures();
 
@@ -203,7 +205,9 @@ protected:
         CurveMode,
         WaveformMode,
         SpectrogramMode,
-        MelodogramMode
+        MelodogramMode,
+        AzimuthMode,
+        PitchMode
     };
     virtual void reselectMode();
     DisplayMode m_displayMode;
