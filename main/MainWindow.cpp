@@ -1020,7 +1020,6 @@ void
 MainWindow::documentModified()
 {
     MainWindowBase::documentModified();
-    checkpointSession();
 }
 
 void
@@ -1528,6 +1527,8 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     }
 }
 
+//!!! todo: tidy up the common bits of the following functions
+
 void
 MainWindow::curveModeSelected()
 {
@@ -1576,6 +1577,7 @@ MainWindow::curveModeSelected()
     }
 
     m_displayMode = CurveMode;
+    checkpointSession();
 }
 
 void
@@ -1605,6 +1607,7 @@ MainWindow::waveformModeSelected()
     }
 
     m_displayMode = WaveformMode;
+    checkpointSession();
 }
 
 void
@@ -1634,6 +1637,7 @@ MainWindow::spectrogramModeSelected()
     }
 
     m_displayMode = SpectrogramMode;
+    checkpointSession();
 }
 
 void
@@ -1664,6 +1668,7 @@ MainWindow::melodogramModeSelected()
     }
 
     m_displayMode = MelodogramMode;
+    checkpointSession();
 }
 
 void
@@ -1698,6 +1703,7 @@ MainWindow::pitchModeSelected()
 
                 if (values) {
                     values->setPlotStyle(TimeValueLayer::PlotDiscreteCurves);
+                    values->setVerticalScale(TimeValueLayer::LogScale);
                 }
                 
                 if (newLayer) {
@@ -1718,6 +1724,7 @@ MainWindow::pitchModeSelected()
     }
 
     m_displayMode = PitchMode;
+    checkpointSession();
 }
 
 void
@@ -1765,6 +1772,7 @@ MainWindow::azimuthModeSelected()
     }
 
     m_displayMode = AzimuthMode;
+    checkpointSession();
 }
 
 void
@@ -2266,7 +2274,12 @@ MainWindow::checkpointSession()
         return;
     }
 
-    // This check is necessary, so that we don't get into a nasty loop
+    if (ModelTransformerFactory::getInstance()->haveRunningTransformers()) {
+        SVCERR << "MainWindow::checkpointSession: some transformers are still running" << endl;
+        return;
+    }
+    
+    // This test is necessary, so that we don't get into a nasty loop
     // when checkpointing on closeSession called when opening a new
     // session file
     if (!m_documentModified) {
