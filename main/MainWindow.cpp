@@ -172,18 +172,11 @@ MainWindow::MainWindow(bool withAudioOutput) :
                       .arg(int(WaveformLayer::MeterScale))
                       .arg(int(WaveformLayer::MergeChannels)));
 
-    settings.setValue("timevalues",
-                      QString("<layer plotStyle=\"%1\"/>")
-                      .arg(int(TimeValueLayer::PlotStems)));
-
     settings.setValue("spectrogram",
                       QString("<layer channel=\"-1\" windowSize=\"1024\" colourMap=\"Cividis\" windowHopLevel=\"2\"/>"));
 
     settings.setValue("melodicrange",
                       QString("<layer channel=\"-1\" gain=\"1\" normalizeVisibleArea=\"false\" columnNormalization=\"hybrid\" colourMap=\"Ice\" minFrequency=\"80\" maxFrequency=\"1500\" windowSize=\"8192\" windowOverlap=\"75\" binDisplay=\"0\" />"));
-
-    settings.setValue("colour3dplot",
-                      QString("<layer channel=\"-1\" colourMap=\"Ice\" opaque=\"true\" smooth=\"true\" binScale=\"0\" columnNormalization=\"hybrid\"/>"));
 
     settings.endGroup();
 
@@ -192,7 +185,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     settings.endGroup();
 
     settings.beginGroup("IconLoader");
-    settings.setValue("invert-icons-on-dark-background", false);
+    settings.setValue("invert-icons-on-dark-background", true);
     settings.endGroup();
 
     m_viewManager->setAlignMode(true);
@@ -353,7 +346,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     setupToolbars();
     setupHelpMenu();
 
-    statusBar();
+    statusBar()->hide();
 
     setIconsVisibleInMenus(false);
     finaliseMenus();
@@ -1641,10 +1634,15 @@ MainWindow::selectTransformDrivenMode(QString name,
 void
 MainWindow::curveModeSelected()
 {
-    selectTransformDrivenMode(tr("Curve"),
-                              CurveMode,
-                              "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
-                              "<layer/>");
+    QString propertyXml =
+        QString("<layer plotStyle=\"%1\"/>")
+        .arg(int(TimeValueLayer::PlotStems));
+
+    selectTransformDrivenMode
+        (tr("Curve"),
+         CurveMode,
+         "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
+         propertyXml);
 }
 
 void
@@ -1655,19 +1653,26 @@ MainWindow::pitchModeSelected()
         .arg(int(TimeValueLayer::PlotDiscreteCurves))
         .arg(int(TimeValueLayer::LogScale));
     
-    selectTransformDrivenMode(tr("Pitch"),
-                              PitchMode,
-                              "vamp:pyin:pyin:smoothedpitchtrack",
-                              propertyXml);
+    selectTransformDrivenMode
+        (tr("Pitch"),
+         PitchMode,
+         "vamp:pyin:pyin:smoothedpitchtrack",
+         propertyXml);
 }
 
 void
 MainWindow::azimuthModeSelected()
 {
-    selectTransformDrivenMode(tr("Azimuth"),
-                              AzimuthMode,
-                              "vamp:azi:azi:plan",
-                              "<layer/>");
+    QString propertyXml =
+        QString("<layer colourMap=\"Ice\" opaque=\"true\" smooth=\"true\" "
+                "binScale=\"%1\" columnNormalization=\"hybrid\"/>")
+        .arg(int(BinScale::Linear));
+
+    selectTransformDrivenMode
+        (tr("Azimuth"),
+         AzimuthMode,
+         "vamp:azi:azi:plan",
+         propertyXml);
 }
 
 void

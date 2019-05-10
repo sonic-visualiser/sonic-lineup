@@ -38,9 +38,7 @@ public slots:
 
 protected slots:
     void tuningFrequencyChanged(double freq);
-    void tempDirRootChanged(QString root);
 
-    void tempDirButtonClicked();
     void alignmentProgramToggleClicked();
     void alignmentProgramButtonClicked();
     void normaliseAudioToggleClicked();
@@ -52,15 +50,12 @@ protected slots:
 protected:
     QPushButton *m_applyButton;
 
-    QLineEdit *m_tempDirRootEdit;
-
     QCheckBox *m_alignmentProgramToggle;
     QLineEdit *m_alignmentProgramEdit;
     QPushButton *m_alignmentProgramButton;
     QCheckBox *m_normaliseAudioToggle;
     
     double m_tuningFrequency;
-    QString m_tempDirRoot;
     bool m_useAlignmentProgram;
     QString m_alignmentProgram;
     bool m_normaliseAudio;

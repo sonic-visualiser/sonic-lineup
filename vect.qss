@@ -44,17 +44,13 @@ toolbar) is styled using the ::handle subcontrol. */
 QToolBar:top,
 QToolBar:bottom
 {
-    border-image: url(:icons/style/toolbar-horiz-pixmap.png) 0;
-    background: #cccccc;
-    color: #000000;
+    background-color: #333333;
 }
 
 QToolBar:left,
 QToolBar:right 
 {
-    border-image: url(:icons/style/toolbar-vert-pixmap.png) 0;
-    background: #cccccc;
-    color: #000000;
+    background-color: #333333;
 }
 
 /* Toolbars must be light enough for black icons, therefore black text on their
@@ -82,8 +78,7 @@ QToolBar::handle:right
 QFrame#BottomFrame,
 QFrame#BottomFrame > QFrame
 {
-    border-image: url(:icons/style/toolbar-horiz-pixmap.png) 0;
-    background: #cccccc;
+    background-color: #333333;
 }
 
 /*  QLabel
@@ -151,6 +146,7 @@ QMenu::item:selected
 }
 
 /* non-exclusive indicator = check box style indicator (see QActionGroup::setExclusive) */
+/*
 QMenu::indicator:non-exclusive:unchecked
 {
     image: url(:icons/style/checkbox_unchecked.png);
@@ -170,8 +166,10 @@ QMenu::indicator:non-exclusive:checked:selected
 {
     image: url(:icons/style/checkbox_checked_hover.png);
 }
+*/
 
 /* exclusive indicator = radio button style indicator (see QActionGroup::setExclusive) */
+/*
 QMenu::indicator:exclusive:unchecked
 {
     image: url(:icons/style/radiobutton_unchecked.png);
@@ -191,7 +189,7 @@ QMenu::indicator:exclusive:checked:selected
 {
     image: url(:icons/style/radiobutton_checked_hover.png);
 }
-
+*/
 /*  QCheckBox
 
 Supports the box model. The check indicator can be styled using the ::indicator
@@ -597,16 +595,15 @@ QToolButton::enabled
 QToolButton::pressed,
 QToolButton::checked
 {
-    border: 1px solid #AAAAAA;
+    border: 2px solid #AAAAAA;
     border-radius: 2px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
 
 QToolButton::enabled:hover
 {
-    border: 1px solid #AAAAAA;
+    border: 2px solid #AAAAAA;
     border-radius: 2px;
-    background-color: #CCDFFF;
+    background-color: #666666;
 }
 
 QToolButton::!enabled
@@ -822,22 +819,35 @@ QFileDialog
     uparrow-icon: url(:icons/style/arrow-up-inverted.png);
 }
 
-QFileDialog QPushButton, QDialog QPushButton
+QPushButton,
+QFileDialog QPushButton,
+QDialog QPushButton
 {
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
+    border: 2px solid #AAAAAA;
+    border-radius: 2px;
     padding: 0.18em;
     padding-left: 0.5em;
     padding-right: 0.5em;
     margin: 0.3em;
 }
 
-QFileDialog QPushButton:disabled, QDialog QPushButton:disabled
+QPushButton:disabled,
+QFileDialog QPushButton:disabled,
+QDialog QPushButton:disabled
 {
-    color: #909090;
+    color: #AAAAAA;
 }
 
-QFileDialog QPushButton:pressed, QDialog QPushButton:pressed, QFileDialog QPushButton:on, QDialog QPushButton:on
+QPushButton:pressed,
+QFileDialog QPushButton:pressed,
+QDialog QPushButton:pressed,
+QFileDialog QPushButton:on,
+QDialog QPushButton:on
 {
-    background-color: #404040;
+    background-color: #BBCEFF;
+}
+
+QPushButton::enabled:hover
+{
+    background-color: #666666;
 }

@@ -73,18 +73,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(frequency, SIGNAL(valueChanged(double)),
             this, SLOT(tuningFrequencyChanged(double)));
 
-    m_tempDirRootEdit = new QLineEdit;
-    QString dir = prefs->getTemporaryDirectoryRoot();
-    m_tempDirRoot = dir;
-    dir.replace("$HOME", tr("<home directory>"));
-    m_tempDirRootEdit->setText(dir);
-    m_tempDirRootEdit->setReadOnly(true);
-    QPushButton *tempDirButton = new QPushButton;
-    tempDirButton->setIcon(IconLoader().load("fileopen"));
-    connect(tempDirButton, SIGNAL(clicked()),
-            this, SLOT(tempDirButtonClicked()));
-    tempDirButton->setFixedSize(QSize(24, 24));
-
     QSettings settings;
     settings.beginGroup("Preferences");
     m_useAlignmentProgram = settings.value("use-external-alignment", false).toBool();
@@ -133,16 +121,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(m_alignmentProgramButton, row, 3, 1, 1);
     row++;
 
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Temporary Directory Root"))),
-                       row, 0);
-    subgrid->addWidget(m_tempDirRootEdit, row, 2, 1, 1);
-    subgrid->addWidget(tempDirButton, row, 3, 1, 1);
-    row++;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Normalise Audio"))),
-                       row, 0);
+    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("Normalise audio"))), row, 0);
     subgrid->addWidget(m_normaliseAudioToggle, row, 1, 1, 1);
     row++;
     
@@ -176,25 +155,6 @@ PreferencesDialog::tuningFrequencyChanged(double freq)
 {
     m_tuningFrequency = freq;
     m_applyButton->setEnabled(true);
-}
-
-void
-PreferencesDialog::tempDirRootChanged(QString r)
-{
-    m_tempDirRoot = r;
-    m_applyButton->setEnabled(true);
-}
-
-void
-PreferencesDialog::tempDirButtonClicked()
-{
-    QString dir = QFileDialog::getExistingDirectory
-        (this, tr("Select a directory to create cache subdirectory in"),
-         m_tempDirRoot);
-    if (dir == "") return;
-    m_tempDirRootEdit->setText(dir);
-    tempDirRootChanged(dir);
-    m_changesOnRestart = true;
 }
 
 void
@@ -241,7 +201,6 @@ PreferencesDialog::applyClicked()
 {
     Preferences *prefs = Preferences::getInstance();
     prefs->setTuningFrequency(m_tuningFrequency);
-    prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setNormaliseAudio(m_normaliseAudio);
 
     QSettings settings;
