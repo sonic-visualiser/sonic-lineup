@@ -210,6 +210,10 @@ protected:
         PitchMode
     };
     virtual void reselectMode();
+    virtual void selectTransformDrivenMode(QString name,
+                                           DisplayMode mode,
+                                           QString transformId,
+                                           QString layerPropertyXml);
     DisplayMode m_displayMode;
 
     virtual void closeEvent(QCloseEvent *e);

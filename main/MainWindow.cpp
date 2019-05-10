@@ -666,48 +666,16 @@ MainWindow::setupViewMenu()
         
     menu->addSeparator();
 
-    action = new QAction(tr("Show &Zoom Wheels"), this);
-    action->setShortcut(tr("Z"));
-    action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleZoomWheels()));
-    action->setCheckable(true);
-    action->setChecked(m_viewManager->getZoomWheelsEnabled());
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-        
-    m_showPropertyBoxesAction = new QAction(tr("Show Property Bo&xes"), this);
-    m_showPropertyBoxesAction->setShortcut(tr("X"));
-    m_showPropertyBoxesAction->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
-    connect(m_showPropertyBoxesAction, SIGNAL(triggered()), this, SLOT(togglePropertyBoxes()));
-    m_showPropertyBoxesAction->setCheckable(true);
-    m_showPropertyBoxesAction->setChecked(false);
-    m_keyReference->registerShortcut(m_showPropertyBoxesAction);
-    menu->addAction(m_showPropertyBoxesAction);
-
-    action = new QAction(tr("Show Status &Bar"), this);
-    action->setStatusTip(tr("Show context help information in the status bar at the bottom of the window"));
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleStatusBar()));
-    action->setCheckable(true);
-    action->setChecked(true);
-    menu->addAction(action);
-
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    bool sb = settings.value("showstatusbar", true).toBool();
-    if (!sb) {
-        action->setChecked(false);
-        statusBar()->hide();
-    }
-    settings.endGroup();
-
-    menu->addSeparator();
-
+#ifndef Q_OS_MAC
+    // Only on non-Mac platforms -- on the Mac this interacts very
+    // badly with the "native" full-screen mode
     action = new QAction(tr("Go Full-Screen"), this);
     action->setShortcut(tr("F11"));
     action->setStatusTip(tr("Expand the pane area to the whole screen"));
     connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+#endif
 }
 
 void
@@ -1527,59 +1495,6 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     }
 }
 
-//!!! todo: tidy up the common bits of the following functions
-
-void
-MainWindow::curveModeSelected()
-{
-    QString name = tr("Curve");
-
-    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
-
-        Pane *pane = m_paneStack->getPane(i);
-        if (!pane) continue;
-
-        Model *createFrom = nullptr;
-        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
-
-            TransformId id = "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn";
-            TransformFactory *tf = TransformFactory::getInstance();
-
-            if (tf->haveTransform(id)) {
-
-                Transform transform = tf->getDefaultTransformFor
-                    (id, createFrom->getSampleRate());
-
-                transform.setStepSize(1024);
-                transform.setBlockSize(2048);
-
-                ModelTransformer::Input input(createFrom, -1);
-                
-                Layer *newLayer =
-                    m_document->createDerivedLayer(transform, createFrom);
-
-                if (newLayer) {
-                    newLayer->setObjectName(name);
-                    m_document->addLayerToView(pane, newLayer);
-                    m_paneStack->setCurrentLayer(pane, newLayer);
-                }
-            
-            } else {
-                SVCERR << "ERROR: No onset detector plugin available" << endl;
-            }
-        }
-
-        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
-        if (salient) {
-            pane->propertyContainerSelected(pane, salient);
-        }
-    }
-
-    m_displayMode = CurveMode;
-    checkpointSession();
-}
-
 void
 MainWindow::waveformModeSelected()
 {
@@ -1672,10 +1587,11 @@ MainWindow::melodogramModeSelected()
 }
 
 void
-MainWindow::pitchModeSelected()
+MainWindow::selectTransformDrivenMode(QString name,
+                                      DisplayMode mode,
+                                      QString transformId,
+                                      QString layerPropertyXml)
 {
-    QString name = tr("Pitch");
-
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
@@ -1685,31 +1601,26 @@ MainWindow::pitchModeSelected()
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
             createFrom) {
 
-            TransformId id = "vamp:pyin:pyin:smoothedpitchtrack";
             TransformFactory *tf = TransformFactory::getInstance();
 
-            if (tf->haveTransform(id)) {
+            if (tf->haveTransform(transformId)) {
 
                 Transform transform = tf->getDefaultTransformFor
-                    (id, createFrom->getSampleRate());
+                    (transformId, createFrom->getSampleRate());
 
                 ModelTransformer::Input input(createFrom, -1);
                 
                 Layer *newLayer =
                     m_document->createDerivedLayer(transform, createFrom);
 
-                TimeValueLayer *values =
-                    qobject_cast<TimeValueLayer *>(newLayer);
-
-                if (values) {
-                    values->setPlotStyle(TimeValueLayer::PlotDiscreteCurves);
-                    values->setVerticalScale(TimeValueLayer::LogScale);
-                }
-                
                 if (newLayer) {
                     newLayer->setObjectName(name);
+                    LayerFactory::getInstance()->setLayerProperties
+                        (newLayer, layerPropertyXml);
                     m_document->addLayerToView(pane, newLayer);
                     m_paneStack->setCurrentLayer(pane, newLayer);
+                } else {
+                    SVCERR << "ERROR: Failed to create derived layer" << endl;
                 }
             
             } else {
@@ -1723,56 +1634,40 @@ MainWindow::pitchModeSelected()
         }
     }
 
-    m_displayMode = PitchMode;
+    m_displayMode = mode;
     checkpointSession();
+}
+
+void
+MainWindow::curveModeSelected()
+{
+    selectTransformDrivenMode(tr("Curve"),
+                              CurveMode,
+                              "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
+                              "<layer/>");
+}
+
+void
+MainWindow::pitchModeSelected()
+{
+    QString propertyXml =
+        QString("<layer plotStyle=\"%1\" verticalScale=\"%2\"/>")
+        .arg(int(TimeValueLayer::PlotDiscreteCurves))
+        .arg(int(TimeValueLayer::LogScale));
+    
+    selectTransformDrivenMode(tr("Pitch"),
+                              PitchMode,
+                              "vamp:pyin:pyin:smoothedpitchtrack",
+                              propertyXml);
 }
 
 void
 MainWindow::azimuthModeSelected()
 {
-    QString name = tr("Azimuth");
-
-    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
-
-        Pane *pane = m_paneStack->getPane(i);
-        if (!pane) continue;
-
-        Model *createFrom = nullptr;
-        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
-
-            TransformId id = "vamp:azi:azi:plan";
-            TransformFactory *tf = TransformFactory::getInstance();
-
-            if (tf->haveTransform(id)) {
-
-                Transform transform = tf->getDefaultTransformFor
-                    (id, createFrom->getSampleRate());
-
-                ModelTransformer::Input input(createFrom, -1);
-                
-                Layer *newLayer =
-                    m_document->createDerivedLayer(transform, createFrom);
-
-                if (newLayer) {
-                    newLayer->setObjectName(name);
-                    m_document->addLayerToView(pane, newLayer);
-                    m_paneStack->setCurrentLayer(pane, newLayer);
-                }
-            
-            } else {
-                SVCERR << "ERROR: No Azimuth plugin available" << endl;
-            }
-        }
-
-        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
-        if (salient) {
-            pane->propertyContainerSelected(pane, salient);
-        }
-    }
-
-    m_displayMode = AzimuthMode;
-    checkpointSession();
+    selectTransformDrivenMode(tr("Azimuth"),
+                              AzimuthMode,
+                              "vamp:azi:azi:plan",
+                              "<layer/>");
 }
 
 void
@@ -1784,6 +1679,7 @@ MainWindow::reselectMode()
     case SpectrogramMode: spectrogramModeSelected(); break;
     case MelodogramMode: melodogramModeSelected(); break;
     case AzimuthMode: azimuthModeSelected(); break;
+    case PitchMode: pitchModeSelected(); break;
     }
 }
 
