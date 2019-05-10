@@ -56,6 +56,7 @@ class QPushButton;
 class KeyReference;
 class QScrollArea;
 class OSCMessage;
+class QToolButton;
 
 class MainWindow : public MainWindowBase
 {
@@ -190,10 +191,6 @@ protected:
 
     KeyReference            *m_keyReference;
 
-    typedef std::set<Layer *> LayerSet;
-    typedef std::map<Pane *, LayerSet> PaneLayerMap;
-    PaneLayerMap             m_hiddenLayers;
-
     virtual void setupMenus();
     virtual void setupFileMenu();
     virtual void setupEditMenu();
@@ -209,7 +206,10 @@ protected:
         AzimuthMode,
         PitchMode
     };
+    std::map<DisplayMode, QToolButton *> m_modeButtons;
+    
     virtual void reselectMode();
+    virtual void updateModeFromLayers(); // after loading a session
     virtual void selectTransformDrivenMode(QString name,
                                            DisplayMode mode,
                                            QString transformId,

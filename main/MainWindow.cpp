@@ -146,10 +146,10 @@ MainWindow::MainWindow(bool withAudioOutput) :
     udb->registerUnit("s");
 
     ColourDatabase *cdb = ColourDatabase::getInstance();
+    cdb->setUseDarkBackground(cdb->addColour(Qt::white, tr("White")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(30, 150, 255), tr("Bright Blue")), true);
     cdb->setUseDarkBackground(cdb->addColour(Qt::red, tr("Bright Red")), true);
     cdb->setUseDarkBackground(cdb->addColour(Qt::green, tr("Bright Green")), true);
-    cdb->setUseDarkBackground(cdb->addColour(Qt::white, tr("White")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
     cdb->setUseDarkBackground(cdb->addColour(Qt::yellow, tr("Bright Yellow")), true);
@@ -166,11 +166,6 @@ MainWindow::MainWindow(bool withAudioOutput) :
     QSettings settings;
 
     settings.beginGroup("LayerDefaults");
-
-    settings.setValue("waveform",
-                      QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
-                      .arg(int(WaveformLayer::MeterScale))
-                      .arg(int(WaveformLayer::MergeChannels)));
 
     settings.setValue("spectrogram",
                       QString("<layer channel=\"-1\" windowSize=\"1024\" colourMap=\"Cividis\" windowHopLevel=\"2\"/>"));
@@ -240,6 +235,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(waveformModeSelected()));
+    m_modeButtons[WaveformMode] = button;
 
     button = new QToolButton;
     button->setIcon(il.load("values"));
@@ -252,6 +248,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
+    m_modeButtons[CurveMode] = button;
 
     button = new QToolButton;
     button->setIcon(il.load("pitch"));
@@ -264,6 +261,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(pitchModeSelected()));
+    m_modeButtons[PitchMode] = button;
 
     button = new QToolButton;
     button->setIcon(il.load("azimuth"));
@@ -276,6 +274,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(azimuthModeSelected()));
+    m_modeButtons[AzimuthMode] = button;
 
     button = new QToolButton;
     button->setIcon(il.load("spectrogram"));
@@ -288,6 +287,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(spectrogramModeSelected()));
+    m_modeButtons[SpectrogramMode] = button;
 
     button = new QToolButton;
     button->setIcon(il.load("melodogram"));
@@ -300,6 +300,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(melodogramModeSelected()));
+    m_modeButtons[MelodogramMode] = button;
 
     m_playSpeed = new AudioDial(bottomFrame);
     m_playSpeed->setMinimum(0);
@@ -1005,6 +1006,18 @@ MainWindow::newSession()
     closeSession();
     createDocument();
 
+    // Reset to waveform mode; this is because it takes less time to
+    // process & render than other modes, so we will be able to
+    // checkpoint sooner - the result of starting out in e.g. pitch
+    // mode can be quite strange because of the near-eternity before a
+    // safe checkpoint can be made
+    
+    m_displayMode = WaveformMode;
+    for (auto &bp : m_modeButtons) {
+        bp.second->setChecked(false);
+    }
+    m_modeButtons[m_displayMode]->setChecked(true);
+    
     // We need a pane, so that we have something to receive drop events
     
     Pane *pane = m_paneStack->addPane();
@@ -1157,6 +1170,8 @@ MainWindow::openRecentSession()
 
     if (status == FileOpenSucceeded) {
         m_sessionState = SessionActive;
+        updateModeFromLayers(); // get the mode from session, then...
+        reselectMode();         // ...ensure there are no stragglers
     } else {
         m_sessionFile = "";
         m_sessionState = NoSession;
@@ -1190,6 +1205,8 @@ MainWindow::openMostRecentSession()
 
     if (status == FileOpenSucceeded) {
         m_sessionState = SessionActive;
+        updateModeFromLayers(); // get the mode from session, then...
+        reselectMode();         // ...ensure there are no stragglers
     } else {
         m_sessionFile = "";
         m_sessionState = NoSession;
@@ -1226,36 +1243,25 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
     for (int i = 0; i < pane->getLayerCount(); ++i) {
         
         Layer *layer = pane->getLayer(i);
-        if (!layer || qobject_cast<TimeInstantLayer *>(layer)) continue;
+        if (!layer || qobject_cast<TimeInstantLayer *>(layer)) {
+            continue;
+        }
         
         Model *lm = layer->getModel();
         while (lm && lm->getSourceModel()) lm = lm->getSourceModel();
         if (qobject_cast<WaveFileModel *>(lm)) model = lm;
         
         QString ln = layer->objectName();
-        if (ln != modeName) {
-            m_hiddenLayers[pane].insert(layer);
-            m_document->removeLayerFromView(pane, layer);
-            continue;
+
+        if (ln == modeName) {
+            layer->showLayer(pane, true);
+            have = true;
+        } else {
+            layer->showLayer(pane, false);
         }
-        
-        have = true;
     }
     
     if (have) return true;
-
-    LayerSet &ls = m_hiddenLayers[pane];
-    bool found = false;
-    for (LayerSet::iterator i = ls.begin(); i != ls.end(); ++i) {
-        if ((*i)->objectName() == modeName) {
-            m_document->addLayerToView(pane, *i);
-            ls.erase(i);
-            found = true;
-            break;
-        }
-    }
-
-    if (found) return true;
 
     if (createFrom) {
         *createFrom = model;
@@ -1280,7 +1286,6 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
         return;
     }
     
-//    TransformId id = "vamp:qm-vamp-plugins:qm-keydetector:key";
     TransformId id = "vamp:nnls-chroma:chordino:simplechord";
     if (!tf->haveTransform(id)) {
         cerr << "No plugin available for salient feature layer; transform is: "
@@ -1297,9 +1302,6 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
     Transform transform = tf->getDefaultTransformFor
         (id, model->getSampleRate());
 
-    transform.setStepSize(1024);
-    transform.setBlockSize(2048);
-
     ModelTransformer::Input input(model, -1);
 
     Layer *newLayer = m_document->createDerivedLayer(transform, model);
@@ -1310,6 +1312,11 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
         if (til) {
             til->setPlotStyle(TimeInstantLayer::PlotInstants);
             til->setBaseColour(m_salientColour);
+        }
+
+        PlayParameters *params = newLayer->getPlayParameters();
+        if (params) {
+            params->setPlayAudible(false);
         }
 
         connect(til, SIGNAL(modelCompletionChanged()),
@@ -1483,6 +1490,11 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
             til->setBaseColour(m_salientColour);
         }
         
+        PlayParameters *params = newLayer->getPlayParameters();
+        if (params) {
+            params->setPlayAudible(false);
+        }
+
         m_document->addLayerToView(pane, newLayer);
         m_paneStack->setCurrentLayer(pane, newLayer);
     }
@@ -1501,8 +1513,25 @@ MainWindow::waveformModeSelected()
         Model *createFrom = nullptr;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
             createFrom) {
+
             Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
             newLayer->setObjectName(name);
+
+            bool mono = true;
+            WaveFileModel *wfm = qobject_cast<WaveFileModel *>(createFrom);
+            if (wfm) {
+                mono = (wfm->getChannelCount() == 1);
+            }
+
+            QString layerPropertyXml =
+                QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
+                .arg(int(WaveformLayer::LinearScale))
+                .arg(int(mono ?
+                         WaveformLayer::SeparateChannels :
+                         WaveformLayer::MergeChannels));
+            LayerFactory::getInstance()->setLayerProperties
+                (newLayer, layerPropertyXml);
+            
             m_document->setModel(newLayer, createFrom);
             m_document->addLayerToView(pane, newLayer);
             m_paneStack->setCurrentLayer(pane, newLayer);
@@ -1673,6 +1702,74 @@ MainWindow::azimuthModeSelected()
          AzimuthMode,
          "vamp:azi:azi:plan",
          propertyXml);
+}
+
+void
+MainWindow::updateModeFromLayers()
+{
+    for (auto &bp : m_modeButtons) {
+        bp.second->setChecked(false);
+    }
+
+    SVCERR << "MainWindow::updateModeFromLayers" << endl;
+    
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
+
+        SVCERR << "MainWindow::updateModeFromLayers: pane " << i << "..." << endl;
+        
+        bool found = false;
+        
+        for (int j = 0; j < pane->getLayerCount(); ++j) {
+
+            Layer *layer = pane->getLayer(j);
+            if (!layer || qobject_cast<TimeInstantLayer *>(layer)) {
+                continue;
+            }
+            if (layer->isLayerDormant(pane)) {
+                continue;
+            }
+
+            QString ln = layer->objectName();
+
+            SVCERR << "MainWindow::updateModeFromLayers: layer " << j << " has name " << ln << endl;
+            
+            //!!! todo: store layer names in a map against layer types, so
+            //!!! as to ensure consistency
+        
+            if (ln == tr("Waveform")) {
+                m_displayMode = WaveformMode;
+                found = true;
+                break;
+            } else if (ln == tr("Melodic Range Spectrogram")) {
+                m_displayMode = MelodogramMode;
+                found = true;
+                break;
+            } else if (ln == tr("Spectrogram")) {
+                m_displayMode = SpectrogramMode;
+                found = true;
+                break;
+            } else if (ln == tr("Curve")) {
+                m_displayMode = CurveMode;
+                found = true;
+                break;
+            } else if (ln == tr("Pitch")) {
+                m_displayMode = PitchMode;
+                found = true;
+                break;
+            } else if (ln == tr("Azimuth")) {
+                m_displayMode = AzimuthMode;
+                found = true;
+                break;
+            }
+        }
+
+        if (found) break;
+    }
+
+    m_modeButtons[m_displayMode]->setChecked(true);
 }
 
 void
@@ -2266,9 +2363,19 @@ MainWindow::mainModelChanged(WaveFileModel *model)
             Pane *pane = command->getPane();
             Layer *newLayer = m_document->createMainModelLayer
                 (LayerFactory::Waveform);
-            if (newLayer) {
-                m_document->addLayerToView(pane, newLayer);
-            }
+            
+            bool mono = (model->getChannelCount() == 1);
+            QString layerPropertyXml =
+                QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
+                .arg(int(WaveformLayer::LinearScale))
+                .arg(int(mono ?
+                         WaveformLayer::SeparateChannels :
+                         WaveformLayer::MergeChannels));
+            LayerFactory::getInstance()->setLayerProperties
+                (newLayer, layerPropertyXml);
+            
+            m_document->addLayerToView(pane, newLayer);
+
             addSalientFeatureLayer(pane, model);
         
         } else {
