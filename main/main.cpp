@@ -217,14 +217,10 @@ main(int argc, char **argv)
     }
     application.installTranslator(&qtTranslator);
 
-    QTranslator svisTranslator, svecTranslator;
-    QString svisTrName = QString("sonic-visualiser_%1").arg(language);
-    QString svecTrName = QString("sonic-vector_%1").arg(language);
-    std::cerr << "Loading " << svisTrName.toStdString() << "..." << std::endl;
-    svisTranslator.load(QLocale(), svisTrName, ":i18n");
-    std::cerr << "Loading " << svisTrName.toStdString() << "..." << std::endl;
+    QTranslator svecTranslator;
+    QString svecTrName = QString("vect_%1").arg(language);
+    std::cerr << "Loading " << svecTrName.toStdString() << "..." << std::endl;
     svecTranslator.load(QLocale(), svecTrName, ":i18n");
-    application.installTranslator(&svisTranslator);
     application.installTranslator(&svecTranslator);
 
     StoreStartupLocale();

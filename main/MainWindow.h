@@ -240,8 +240,16 @@ protected:
     virtual void updatePositionStatusDisplays() const;
 
     // Generate and return a filename into which to save the session,
-    // based on the identity of the main model.
+    // based on the identity of the main model. This should be fixed
+    // from the point where the identity of the main model is first
+    // known.
     QString makeSessionFilename();
+
+    // Generate and return a label to associate with the session in
+    // the recent-sessions menu. This may depend on factors other than
+    // the identity of the main model, such as the number of files
+    // open, and so may change during the lifetime of the session.
+    QString makeSessionLabel();
 
     enum SessionState {
         NoSession,

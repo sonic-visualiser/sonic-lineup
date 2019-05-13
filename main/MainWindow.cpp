@@ -116,6 +116,7 @@ using std::endl;
 using std::vector;
 using std::map;
 using std::set;
+using std::pair;
 
 
 MainWindow::MainWindow(bool withAudioOutput) :
@@ -712,10 +713,12 @@ void
 MainWindow::setupRecentSessionsMenu()
 {
     m_recentSessionsMenu->clear();
-    vector<QString> files = m_recentSessions.getRecent();
-    for (size_t i = 0; i < files.size(); ++i) {
-        QString path = files[i];
-        QAction *action = new QAction(path, this);
+    vector<pair<QString, QString>> sessions = m_recentSessions.getRecentEntries();
+    for (size_t i = 0; i < sessions.size(); ++i) {
+        QString path = sessions[i].first;
+        QString label = sessions[i].second;
+        if (label == "") label = path;
+        QAction *action = new QAction(label, this);
         action->setObjectName(path);
 	connect(action, SIGNAL(triggered()), this, SLOT(openRecentSession()));
         if (i == 0) {
@@ -1189,7 +1192,7 @@ MainWindow::openRecentSession()
 void
 MainWindow::openMostRecentSession()
 {
-    vector<QString> files = m_recentSessions.getRecent();
+    vector<QString> files = m_recentSessions.getRecentIdentifiers();
     if (files.empty()) return;
 
     QString path = files[0];
@@ -2198,10 +2201,10 @@ MainWindow::makeSessionFilename()
     Model *mainModel = getMainModel();
     if (!mainModel) {
         SVDEBUG << "MainWindow::makeSessionFilename: No main model, returning empty filename" << endl;
-        return "";
+        return {};
     }
     
-    //!!! can refactor in common with RecordDirectory
+    //!!! can refactor in common with RecordDirectory?
     
     QDir parentDir(TempDirectory::getInstance()->getContainingPath());
     QString sessionDirName("session");
@@ -2211,7 +2214,7 @@ MainWindow::makeSessionFilename()
         QMessageBox::critical(this, tr("Failed to create session directory"),
                               tr("<p>Failed to create directory \"%1\" for session files</p>")
                               .arg(parentDir.filePath(sessionDirName)));
-        return QString();
+        return {};
     }
 
     QDir sessionDir(parentDir.filePath(sessionDirName));
@@ -2224,7 +2227,7 @@ MainWindow::makeSessionFilename()
         QMessageBox::critical(this, tr("Failed to create session directory"),
                               tr("<p>Failed to create date directory \"%1\" for session files</p>")
                               .arg(sessionDir.filePath(dateDirName)));
-        return QString();
+        return {};
     }
 
     QDir dateDir(sessionDir.filePath(dateDirName));
@@ -2245,7 +2248,7 @@ MainWindow::makeSessionFilename()
     while (QFile(filePath).exists()) {
         if (++suffix == 100) {
             SVCERR << "ERROR: makeSessionFilename: Failed to come up with unique session filename for " << sessionName << endl;
-            return "";
+            return {};
         }
         filePath = dateDir.filePath(QString("%1-%2.%3")
                                     .arg(sessionName)
@@ -2257,6 +2260,31 @@ MainWindow::makeSessionFilename()
             << filePath << endl;
 
     return filePath;
+}
+
+QString
+MainWindow::makeSessionLabel()
+{
+    Model *mainModel = getMainModel();
+    if (!mainModel) {
+        SVDEBUG << "MainWindow::makeSessionFilename: No main model, returning empty filename" << endl;
+        return {};
+    }
+
+    QString sessionName = mainModel->getTitle();
+    if (sessionName == "") {
+        sessionName = mainModel->getLocation();
+        sessionName = QFileInfo(sessionName).baseName();
+    }
+
+    int paneCount = 1;
+    if (m_paneStack) paneCount = m_paneStack->getPaneCount();
+    QString label = tr("%1 - %n file(s)", "", paneCount).arg(sessionName);
+    
+    SVDEBUG << "MainWindow::makeSessionLabel: returning "
+            << label << endl;
+
+    return label;
 }
 
 void
@@ -2301,12 +2329,16 @@ MainWindow::checkpointSession()
         SVCERR << "MainWindow::checkpointSession: suspicious session filename "
                << m_sessionFile << ", not saving to it" << endl;
         return;
+
+        //!!! + we should also check that it is actually in our
+        //!!! auto-save session directory
     }
     
     SVCERR << "MainWindow::checkpointSession: saving to session file: "
            << m_sessionFile << endl;
 
     if (saveSessionFile(m_sessionFile)) {
+        m_recentSessions.addFile(m_sessionFile, makeSessionLabel());
         CommandHistory::getInstance()->documentSaved();
         documentRestored();
         SVCERR << "MainWindow::checkpointSession complete" << endl;
@@ -2334,7 +2366,6 @@ MainWindow::mainModelChanged(WaveFileModel *model)
         if (m_sessionFile == "") {
             SVDEBUG << "MainWindow::mainModelChanged: No session file set, calling makeSessionFilename" << endl;
             m_sessionFile = makeSessionFilename();
-            m_recentSessions.addFile(m_sessionFile);
         }
     }
     
