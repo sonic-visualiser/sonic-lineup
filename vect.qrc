@@ -142,8 +142,9 @@
     <file>samples/stick.wav</file>
     <file>samples/strike.wav</file>
     <file>samples/tap.wav</file>
-    <file>i18n/sonic-visualiser_ru.qm</file>
-    <file>i18n/sonic-visualiser_en_GB.qm</file>
+    <file>i18n/vect_ru.qm</file>
+    <file>i18n/vect_cs_CZ.qm</file>
+    <file>i18n/vect_en_GB.qm</file>
     <file>i18n/tips_en.xml</file>
     <file>vect.qss</file>
     <file>icons/style/arrow-down.png</file>

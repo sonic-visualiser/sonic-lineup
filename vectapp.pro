@@ -41,10 +41,10 @@ linux* {
 }
 
 TRANSLATIONS += \
-        i18n/sonic-visualiser_ru.ts \
-	i18n/sonic-visualiser_en_GB.ts \
-	i18n/sonic-visualiser_en_US.ts \
-	i18n/sonic-visualiser_cs_CZ.ts
+        i18n/vect_ru.ts \
+	i18n/vect_en_GB.ts \
+	i18n/vect_en_US.ts \
+	i18n/vect_cs_CZ.ts
 
 OBJECTS_DIR = o
 MOC_DIR = o
