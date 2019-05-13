@@ -6893,12 +6893,12 @@ viewing of multiple recordings of the same music or other related material.
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../main/main.cpp" line="329"/>
+        <location filename="../main/main.cpp" line="325"/>
         <source>Failed to open file</source>
         <translation>Не удалось открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="330"/>
+        <location filename="../main/main.cpp" line="326"/>
         <source>File &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>

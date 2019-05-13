@@ -2301,8 +2301,8 @@ The file will play at the wrong speed and pitch.</source>
         <location filename="../main/MainWindow.cpp" line="2282"/>
         <source>%1 - %n file(s)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>%1 - %n file</numerusform>
+            <numerusform>%1 - %n files</numerusform>
         </translation>
     </message>
     <message>
@@ -4724,12 +4724,12 @@ viewing of multiple recordings of the same music or other related material.
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../main/main.cpp" line="329"/>
+        <location filename="../main/main.cpp" line="325"/>
         <source>Failed to open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="330"/>
+        <location filename="../main/main.cpp" line="326"/>
         <source>File &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
