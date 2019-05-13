@@ -37,6 +37,8 @@
 #include <iostream>
 #include <signal.h>
 
+#include <vamp-hostsdk/PluginHostAdapter.h>
+
 static QMutex cleanupMutex;
 static bool cleanedUp = false;
 
@@ -78,12 +80,86 @@ protected:
     MainWindow *m_mainWindow;
 };
 
+static QString
+getEnvQStr(QString variable)
+{
+#ifdef Q_OS_WIN32
+    std::wstring wvar = variable.toStdWString();
+    wchar_t *value = _wgetenv(wvar.c_str());
+    if (!value) return QString();
+    else return QString::fromStdWString(std::wstring(value));
+#else
+    std::string var = variable.toStdString();
+    return QString::fromUtf8(qgetenv(var.c_str()));
+#endif
+}
+
+static void
+putEnvQStr(QString assignment)
+{
+#ifdef Q_OS_WIN32
+    std::wstring wassignment = assignment.toStdWString();
+    _wputenv(_wcsdup(wassignment.c_str()));
+#else
+    putenv(strdup(assignment.toUtf8().data()));
+#endif
+}
+
+static void
+setupVectVampPath()
+{
+    // This based on similar logic from the Tony application
+    
+    QString vectVampPath = getEnvQStr("VECT_VAMP_PATH");
+
+#ifdef Q_OS_WIN32
+    QChar sep(';');
+#else
+    QChar sep(':');
+#endif
+    
+    if (vectVampPath == "") {
+        vectVampPath = QApplication::applicationDirPath();
+
+#ifdef Q_OS_WIN32
+        QString programFiles = getEnvQStr("ProgramFiles");
+        if (programFiles == "") programFiles = "C:\\Program Files";
+        QString defaultVectPath(programFiles + "\\Vect");
+        vectVampPath = vectVampPath + sep + defaultVectPath;
+#else
+#ifdef Q_OS_MAC
+        vectVampPath = vectVampPath + "/../Resources:" + vectVampPath;
+#else
+        QString defaultVectPath("/usr/local/lib/sonic-vector:/usr/lib/sonic-vector");
+        vectVampPath = vectVampPath + sep + defaultVectPath;
+#endif
+#endif
+    }
+
+    std::vector<std::string> vampPathList = 
+        Vamp::PluginHostAdapter::getPluginPath();
+
+    for (auto p: vampPathList) {
+        vectVampPath = vectVampPath + sep + QString::fromUtf8(p.c_str());
+    }
+
+    SVCERR << "Setting VAMP_PATH to " << vectVampPath
+           << " for Vect plugins" << endl;
+
+    QString env = "VAMP_PATH=" + vectVampPath;
+
+    // Windows lacks setenv, must use putenv (different arg convention)
+    putEnvQStr(env);
+}
+
 int
 main(int argc, char **argv)
 {
     svSystemSpecificInitialisation();
 
     VectApplication application(argc, argv);
+
+    setupVectVampPath();
 
     QStringList args = application.arguments();
 
