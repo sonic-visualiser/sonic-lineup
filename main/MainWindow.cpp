@@ -139,7 +139,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_salientColour(0),
     m_sessionState(NoSession)
 {
-    setWindowTitle(tr("Sonic Vector"));
+    setWindowTitle(QApplication::applicationName());
 
     UnitDatabase *udb = UnitDatabase::getInstance();
     udb->registerUnit("Hz");
@@ -898,10 +898,6 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addAction(fastAction);
     m_rightButtonPlaybackMenu->addAction(slowAction);
     m_rightButtonPlaybackMenu->addAction(normalAction);
-/*
-    toolbar = addToolBar(tr("Edit Toolbar"));
-    CommandHistory::getInstance()->registerToolbar(toolbar);
-*/
 
     Pane::registerShortcuts(*m_keyReference);
 }
@@ -957,28 +953,25 @@ MainWindow::updateMenuStates()
 void
 MainWindow::updateDescriptionLabel()
 {
-    if (!getMainModel()) {
-	return;
-    }
+    // we don't actually have a description label
+}
 
-    QString description;
+void
+MainWindow::updateWindowTitle()
+{
+    QString title;
 
-    sv_samplerate_t ssr = getMainModel()->getSampleRate();
-    sv_samplerate_t tsr = ssr;
-    if (m_playSource) tsr = m_playSource->getDeviceSampleRate();
-
-    if (ssr != tsr) {
-	description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
+    QString sessionLabel = makeSessionLabel();
+    
+    if (sessionLabel != "") {
+        title = tr("%1: %2")
+            .arg(QApplication::applicationName())
+            .arg(sessionLabel);
     } else {
-	description = QString("%1Hz").arg(ssr);
+        title = QApplication::applicationName();
     }
-
-    description = QString("%1 - %2")
-	.arg(RealTime::frame2RealTime(getMainModel()->getEndFrame(), ssr)
-	     .toText(false).c_str())
-	.arg(description);
-
-    //!!! but we don't actually have a description label
+    
+    setWindowTitle(title);
 }
 
 void
@@ -2279,7 +2272,7 @@ MainWindow::makeSessionLabel()
 
     int paneCount = 1;
     if (m_paneStack) paneCount = m_paneStack->getPaneCount();
-    QString label = tr("%1 - %n file(s)", "", paneCount).arg(sessionName);
+    QString label = tr("%1: %n file(s)", "", paneCount).arg(sessionName);
     
     SVDEBUG << "MainWindow::makeSessionLabel: returning "
             << label << endl;

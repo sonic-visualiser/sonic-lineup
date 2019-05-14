@@ -2299,10 +2299,10 @@ The file will play at the wrong speed and pitch.</source>
     </message>
     <message numerus="yes">
         <location filename="../main/MainWindow.cpp" line="2282"/>
-        <source>%1 - %n file(s)</source>
+        <source>%1: %n file(s)</source>
         <translation type="unfinished">
-            <numerusform>%1 - %n file</numerusform>
-            <numerusform>%1 - %n files</numerusform>
+            <numerusform>%1: %n file</numerusform>
+            <numerusform>%1: %n files</numerusform>
         </translation>
     </message>
     <message>

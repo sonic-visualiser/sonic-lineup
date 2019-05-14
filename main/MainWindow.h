@@ -120,6 +120,7 @@ protected slots:
 
     void updateMenuStates() override;
     void updateDescriptionLabel() override;
+    void updateWindowTitle() override;
 
     void layerRemoved(Layer *) override;
     void layerInAView(Layer *, bool) override;

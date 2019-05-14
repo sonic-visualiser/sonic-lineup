@@ -203,7 +203,7 @@ main(int argc, char **argv)
 
     QTranslator qtTranslator;
     QString qtTrName = QString("qt_%1").arg(language);
-    std::cerr << "Loading " << qtTrName.toStdString() << "..." << std::endl;
+    SVCERR << "Loading " << qtTrName.toStdString() << "..." << endl;
     bool success = false;
     if (!(success = qtTranslator.load(QLocale(), qtTrName))) {
         QString qtDir = getenv("QTDIR");
@@ -213,15 +213,18 @@ main(int argc, char **argv)
         }
     }
     if (!success) {
-        std::cerr << "Failed to load Qt translation for locale" << std::endl;
+        SVCERR << "Failed to load Qt translation for locale" << endl;
     }
     application.installTranslator(&qtTranslator);
 
     QTranslator svecTranslator;
     QString svecTrName = QString("vect_%1").arg(language);
-    std::cerr << "Loading " << svecTrName.toStdString() << "..." << std::endl;
-    svecTranslator.load(QLocale(), svecTrName, ":i18n");
-    application.installTranslator(&svecTranslator);
+    SVCERR << "Loading " << svecTrName << "..." << endl;
+    if (svecTranslator.load(svecTrName, ":i18n")) {
+        application.installTranslator(&svecTranslator);
+    } else {
+        SVCERR << "Failed to load translation" << endl;
+    }
 
     StoreStartupLocale();
 
