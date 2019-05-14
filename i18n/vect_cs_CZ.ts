@@ -2370,7 +2370,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>%1: %2</source>
-        <translation type="vanished">%1: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment using transform &quot;%1&quot;:&lt;p&gt;%2</source>
@@ -2442,7 +2442,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>%1Hz (resampling to %2Hz)</source>
-        <translation>%1Hz (převzorkování na %2Hz)</translation>
+        <translation type="vanished">%1Hz (převzorkování na %2Hz)</translation>
     </message>
     <message>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Layer file %1 could not be opened.</source>
@@ -4277,26 +4277,6 @@ Co chcete vyvést?</translation>
         <translation type="unfinished">Časový průběh signálu</translation>
     </message>
     <message>
-        <source>Novelty Curve</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pitch Plot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stereo Azimuth Plot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Full-Range Spectrogram</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Melodic-Range Spectrogram</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Clear Session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4407,14 +4387,6 @@ The file will play at the wrong speed and pitch.</source>
         <source>&lt;p&gt;Failed to create date directory &quot;%1&quot; for session files&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
-        <source>%1 - %n file(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
         <source>http://www.sonicvisualiser.org/sonicvector/</source>
         <translation type="unfinished"></translation>
@@ -4438,6 +4410,38 @@ The file will play at the wrong speed and pitch.</source>
     <message>
         <source>About Sonic Vector</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Outline waveform</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spectral flux</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sung pitch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo azimuth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Melodic spectrogram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Outline Waveform</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%1: %n file(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -4546,7 +4550,7 @@ The file will play at the wrong speed and pitch.</source>
     </message>
     <message>
         <source> (modified)</source>
-        <translation> (upraveno)</translation>
+        <translation type="vanished"> (upraveno)</translation>
     </message>
     <message>
         <source>Close the current session and start a new one</source>
