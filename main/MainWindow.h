@@ -67,8 +67,8 @@ public:
     virtual ~MainWindow();
 
 public slots:
-    virtual void preferenceChanged(PropertyContainer::PropertyName);
-    virtual bool commitData(bool mayAskUser); // on session shutdown
+    void preferenceChanged(PropertyContainer::PropertyName) override;
+    bool commitData(bool mayAskUser); // on session shutdown
 
     void goFullScreen();
     void endFullScreen();
@@ -82,8 +82,8 @@ protected slots:
     virtual void openMostRecentSession();
     virtual void checkpointSession();
     virtual void newSession();
-    virtual void closeSession();
     virtual void preferences();
+    void closeSession() override;
 
     virtual void curveModeSelected();
     virtual void waveformModeSelected();
@@ -96,11 +96,11 @@ protected slots:
 
     virtual void renameCurrentLayer();
 
-    virtual void paneAdded(Pane *);
-    virtual void paneHidden(Pane *);
-    virtual void paneAboutToBeDeleted(Pane *);
-    virtual void paneDropAccepted(Pane *, QStringList);
-    virtual void paneDropAccepted(Pane *, QString);
+    void paneAdded(Pane *) override;
+    void paneHidden(Pane *) override;
+    void paneAboutToBeDeleted(Pane *) override;
+    void paneDropAccepted(Pane *, QStringList) override;
+    void paneDropAccepted(Pane *, QString) override;
 
     virtual void alignToggled();
     virtual void playSpeedChanged(int);
@@ -109,43 +109,45 @@ protected slots:
     virtual void slowDownPlayback();
     virtual void restoreNormalPlayback();
 
-    virtual void monitoringLevelsChanged(float, float);
+    void monitoringLevelsChanged(float, float) override;
     
-    virtual void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool);
-    virtual void audioOverloadPluginDisabled();
-    virtual void audioTimeStretchMultiChannelDisabled();
+    void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;
+    void audioOverloadPluginDisabled() override;
+    void audioTimeStretchMultiChannelDisabled() override;
 
-    virtual void documentModified();
-    virtual void documentRestored();
+    void documentModified() override;
+    void documentRestored() override;
 
-    virtual void updateMenuStates();
-    virtual void updateDescriptionLabel();
+    void updateMenuStates() override;
+    void updateDescriptionLabel() override;
 
-    virtual void layerRemoved(Layer *);
-    virtual void layerInAView(Layer *, bool);
+    void layerRemoved(Layer *) override;
+    void layerInAView(Layer *, bool) override;
 
-    virtual void mainModelChanged(WaveFileModel *);
+    void mainModelChanged(WaveFileModel *) override;
+    void modelAdded(Model *) override;
+    void modelAboutToBeDeleted(Model *) override;
+
     virtual void mainModelGainChanged(float);
     virtual void mainModelPanChanged(float);
-    virtual void modelAdded(Model *);
-    virtual void modelAboutToBeDeleted(Model *);
 
-    virtual void modelGenerationFailed(QString, QString);
-    virtual void modelGenerationWarning(QString, QString);
-    virtual void modelRegenerationFailed(QString, QString, QString);
-    virtual void modelRegenerationWarning(QString, QString, QString);
+    void modelGenerationFailed(QString, QString) override;
+    void modelGenerationWarning(QString, QString) override;
+    void modelRegenerationFailed(QString, QString, QString) override;
+    void modelRegenerationWarning(QString, QString, QString) override;
 
-    virtual void alignmentComplete(AlignmentModel *);
-    virtual void alignmentFailed(QString);
+    void alignmentComplete(AlignmentModel *) override;
+    void alignmentFailed(QString) override;
+
     virtual void salientLayerCompletionChanged();
 
-    virtual void rightButtonMenuRequested(Pane *, QPoint point);
+    void rightButtonMenuRequested(Pane *, QPoint point) override;
 
     virtual void setupRecentSessionsMenu();
 
     virtual void showLayerTree();
 
-    virtual void handleOSCMessage(const OSCMessage &);
+    void handleOSCMessage(const OSCMessage &) override;
 
     virtual void mouseEnteredWidget();
     virtual void mouseLeftWidget();
@@ -191,7 +193,8 @@ protected:
 
     KeyReference            *m_keyReference;
 
-    virtual void setupMenus();
+    void setupMenus() override;
+    
     virtual void setupFileMenu();
     virtual void setupEditMenu();
     virtual void setupViewMenu();
@@ -216,8 +219,8 @@ protected:
                                            QString layerPropertyXml);
     DisplayMode m_displayMode;
 
-    virtual void closeEvent(QCloseEvent *e);
-    virtual bool checkSaveModified();
+    void closeEvent(QCloseEvent *e) override;
+    bool checkSaveModified() override;
 
     virtual void configureNewPane(Pane *p);
     virtual bool selectExistingLayerForMode(Pane *, QString,
@@ -236,8 +239,8 @@ protected:
     std::set<AlignmentModel *> m_salientPending;
     int m_salientColour;
     
-    virtual void updateVisibleRangeDisplay(Pane *p) const;
-    virtual void updatePositionStatusDisplays() const;
+    void updateVisibleRangeDisplay(Pane *p) const override;
+    void updatePositionStatusDisplays() const override;
 
     // Generate and return a filename into which to save the session,
     // based on the identity of the main model. This should be fixed
