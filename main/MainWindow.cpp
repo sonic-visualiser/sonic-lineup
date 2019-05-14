@@ -134,7 +134,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_preferencesDialog(0),
     m_layerTreeView(0),
     m_keyReference(new KeyReference()),
-    m_displayMode(WaveformMode),
+    m_displayMode(OutlineWaveformMode),
     m_salientCalculating(false),
     m_salientColour(0),
     m_sessionState(NoSession)
@@ -212,7 +212,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     bottomFrame->setObjectName("BottomFrame");
     QGridLayout *bottomLayout = new QGridLayout;
 
-    int bottomElementHeight = m_viewManager->scalePixelSize(35);
+    int bottomElementHeight = m_viewManager->scalePixelSize(45);
     if (bottomElementHeight < 40) bottomElementHeight = 40;
     int bottomButtonHeight = (bottomElementHeight * 3) / 4;
     
@@ -225,78 +225,77 @@ MainWindow::MainWindow(bool withAudioOutput) :
     buttonLayout->setMargin(0);
     buttonFrame->setLayout(buttonLayout);
 
-    QToolButton *button = new QToolButton;
+    QPushButton *button = new QPushButton;
     button->setIcon(il.load("waveform"));
-    button->setToolTip(tr("Waveform"));
+    button->setText(tr("Outline waveform"));
     button->setCheckable(true);
     button->setChecked(true);
-    button->setAutoRaise(true);
-    button->setFixedWidth(bottomButtonHeight);
     button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
-    connect(button, SIGNAL(clicked()), this, SLOT(waveformModeSelected()));
+    connect(button, SIGNAL(clicked()), this, SLOT(outlineWaveformModeSelected()));
+    m_modeButtons[OutlineWaveformMode] = button;
+
+    button = new QPushButton;
+    button->setIcon(il.load("waveform"));
+    button->setText(tr("Waveform"));
+    button->setCheckable(true);
+    button->setChecked(true);
+    button->setFixedHeight(bottomButtonHeight);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(standardWaveformModeSelected()));
     m_modeButtons[WaveformMode] = button;
 
-    button = new QToolButton;
+    button = new QPushButton;
     button->setIcon(il.load("values"));
-    button->setToolTip(tr("Novelty Curve"));
+    button->setText(tr("Spectral flux"));
     button->setCheckable(true);
     button->setChecked(false);
-    button->setAutoRaise(true);
-    button->setFixedWidth(bottomButtonHeight);
     button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
     m_modeButtons[CurveMode] = button;
 
-    button = new QToolButton;
-    button->setIcon(il.load("pitch"));
-    button->setToolTip(tr("Pitch Plot"));
+    button = new QPushButton;
+    button->setIcon(il.load("values"));
+    button->setText(tr("Sung pitch"));
     button->setCheckable(true);
     button->setChecked(false);
-    button->setAutoRaise(true);
-    button->setFixedWidth(bottomButtonHeight);
     button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(pitchModeSelected()));
     m_modeButtons[PitchMode] = button;
 
-    button = new QToolButton;
-    button->setIcon(il.load("azimuth"));
-    button->setToolTip(tr("Stereo Azimuth Plot"));
+    button = new QPushButton;
+    button->setIcon(il.load("colour3d"));
+    button->setText(tr("Stereo azimuth"));
     button->setCheckable(true);
     button->setChecked(false);
-    button->setAutoRaise(true);
-    button->setFixedWidth(bottomButtonHeight);
     button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(azimuthModeSelected()));
     m_modeButtons[AzimuthMode] = button;
 
-    button = new QToolButton;
-    button->setIcon(il.load("spectrogram"));
-    button->setToolTip(tr("Full-Range Spectrogram"));
+    button = new QPushButton;
+    button->setIcon(il.load("colour3d"));
+    button->setText(tr("Spectrogram"));
     button->setCheckable(true);
     button->setChecked(false);
-    button->setAutoRaise(true);
-    button->setFixedWidth(bottomButtonHeight);
     button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(spectrogramModeSelected()));
     m_modeButtons[SpectrogramMode] = button;
 
-    button = new QToolButton;
-    button->setIcon(il.load("melodogram"));
-    button->setToolTip(tr("Melodic-Range Spectrogram"));
+    button = new QPushButton;
+    button->setIcon(il.load("colour3d"));
+    button->setText(tr("Melodic spectrogram"));
     button->setCheckable(true);
     button->setChecked(false);
-    button->setAutoRaise(true);
-    button->setFixedWidth(bottomButtonHeight);
     button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
@@ -1002,13 +1001,13 @@ MainWindow::newSession()
     closeSession();
     createDocument();
 
-    // Reset to waveform mode; this is because it takes less time to
+    // Reset to a waveform mode; this is because it takes less time to
     // process & render than other modes, so we will be able to
     // checkpoint sooner - the result of starting out in e.g. pitch
     // mode can be quite strange because of the near-eternity before a
     // safe checkpoint can be made
     
-    m_displayMode = WaveformMode;
+    m_displayMode = OutlineWaveformMode;
     for (auto &bp : m_modeButtons) {
         bp.second->setChecked(false);
     }
@@ -1497,9 +1496,56 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 }
 
 void
-MainWindow::waveformModeSelected()
+MainWindow::outlineWaveformModeSelected()
 {
-    QString name = tr("Waveform");
+    QString name = tr("Outline Waveform");
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
+
+        Model *createFrom = nullptr;
+        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
+            createFrom) {
+
+            Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
+            newLayer->setObjectName(name);
+
+            bool mono = true;
+            WaveFileModel *wfm = qobject_cast<WaveFileModel *>(createFrom);
+            if (wfm) {
+                mono = (wfm->getChannelCount() == 1);
+            }
+
+            QString layerPropertyXml =
+                QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
+                .arg(int(WaveformLayer::MeterScale))
+                .arg(int(mono ?
+                         WaveformLayer::SeparateChannels :
+                         WaveformLayer::MergeChannels));
+            LayerFactory::getInstance()->setLayerProperties
+                (newLayer, layerPropertyXml);
+            
+            m_document->setModel(newLayer, createFrom);
+            m_document->addLayerToView(pane, newLayer);
+            m_paneStack->setCurrentLayer(pane, newLayer);
+        }
+
+        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+        if (salient) {
+            pane->propertyContainerSelected(pane, salient);
+        }
+    }
+
+    m_displayMode = OutlineWaveformMode;
+    checkpointSession();
+}
+
+void
+MainWindow::standardWaveformModeSelected()
+{
+    QString name = tr("Standard Waveform");
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
@@ -1522,9 +1568,7 @@ MainWindow::waveformModeSelected()
             QString layerPropertyXml =
                 QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
                 .arg(int(WaveformLayer::LinearScale))
-                .arg(int(mono ?
-                         WaveformLayer::SeparateChannels :
-                         WaveformLayer::MergeChannels));
+                .arg(int(WaveformLayer::SeparateChannels));
             LayerFactory::getInstance()->setLayerProperties
                 (newLayer, layerPropertyXml);
             
@@ -1735,7 +1779,11 @@ MainWindow::updateModeFromLayers()
             //!!! todo: store layer names in a map against layer types, so
             //!!! as to ensure consistency
         
-            if (ln == tr("Waveform")) {
+            if (ln == tr("Outline Waveform")) {
+                m_displayMode = OutlineWaveformMode;
+                found = true;
+                break;
+            } else if (ln == tr("Waveform")) {
                 m_displayMode = WaveformMode;
                 found = true;
                 break;
@@ -1773,7 +1821,8 @@ MainWindow::reselectMode()
 {
     switch (m_displayMode) {
     case CurveMode: curveModeSelected(); break;
-    case WaveformMode: waveformModeSelected(); break;
+    case OutlineWaveformMode: outlineWaveformModeSelected(); break;
+    case WaveformMode: standardWaveformModeSelected(); break;
     case SpectrogramMode: spectrogramModeSelected(); break;
     case MelodogramMode: melodogramModeSelected(); break;
     case AzimuthMode: azimuthModeSelected(); break;
@@ -2385,13 +2434,15 @@ MainWindow::mainModelChanged(WaveFileModel *model)
             AddPaneCommand *command = new AddPaneCommand(this);
             CommandHistory::getInstance()->addCommand(command);
             Pane *pane = command->getPane();
-            Layer *newLayer = m_document->createMainModelLayer
-                (LayerFactory::Waveform);
-            
+            Layer *newLayer =
+                m_document->createMainModelLayer(LayerFactory::Waveform);
+            newLayer->setObjectName(tr("Outline Waveform"));
+
             bool mono = (model->getChannelCount() == 1);
+
             QString layerPropertyXml =
                 QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
-                .arg(int(WaveformLayer::LinearScale))
+                .arg(int(WaveformLayer::MeterScale))
                 .arg(int(mono ?
                          WaveformLayer::SeparateChannels :
                          WaveformLayer::MergeChannels));

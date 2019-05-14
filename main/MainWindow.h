@@ -85,14 +85,15 @@ protected slots:
     virtual void preferences();
     void closeSession() override;
 
-    virtual void curveModeSelected();
-    virtual void waveformModeSelected();
-    virtual void spectrogramModeSelected();
-    virtual void melodogramModeSelected();
-    virtual void azimuthModeSelected();
-    virtual void pitchModeSelected();
+    void curveModeSelected();
+    void outlineWaveformModeSelected();
+    void standardWaveformModeSelected();
+    void spectrogramModeSelected();
+    void melodogramModeSelected();
+    void azimuthModeSelected();
+    void pitchModeSelected();
 
-    virtual void toggleSalientFeatures();
+    void toggleSalientFeatures();
 
     virtual void renameCurrentLayer();
 
@@ -204,13 +205,14 @@ protected:
 
     enum DisplayMode {
         CurveMode,
+        OutlineWaveformMode,
         WaveformMode,
         SpectrogramMode,
         MelodogramMode,
         AzimuthMode,
         PitchMode
     };
-    std::map<DisplayMode, QToolButton *> m_modeButtons;
+    std::map<DisplayMode, QPushButton *> m_modeButtons;
     
     virtual void reselectMode();
     virtual void updateModeFromLayers(); // after loading a session
