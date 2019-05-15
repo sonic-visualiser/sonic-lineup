@@ -148,11 +148,11 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     ColourDatabase *cdb = ColourDatabase::getInstance();
     cdb->setUseDarkBackground(cdb->addColour(Qt::white, tr("White")), true);
-    cdb->setUseDarkBackground(cdb->addColour(QColor(30, 150, 255), tr("Bright Blue")), true);
-    cdb->setUseDarkBackground(cdb->addColour(Qt::red, tr("Bright Red")), true);
-    cdb->setUseDarkBackground(cdb->addColour(Qt::green, tr("Bright Green")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
+    cdb->setUseDarkBackground(cdb->addColour(Qt::green, tr("Bright Green")), true);
+    cdb->setUseDarkBackground(cdb->addColour(QColor(30, 150, 255), tr("Bright Blue")), true);
+    cdb->setUseDarkBackground(cdb->addColour(Qt::red, tr("Bright Red")), true);
     cdb->setUseDarkBackground(cdb->addColour(Qt::yellow, tr("Bright Yellow")), true);
 
     Preferences::getInstance()->setResampleOnLoad(true);
@@ -1519,13 +1519,18 @@ MainWindow::outlineWaveformModeSelected()
             }
 
             QString layerPropertyXml =
-                QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
+                QString("<layer scale=\"%1\" channelMode=\"%2\" gain=\"0.95\"/>")
                 .arg(int(WaveformLayer::MeterScale))
-                .arg(int(mono ?
-                         WaveformLayer::SeparateChannels :
-                         WaveformLayer::MergeChannels));
+                .arg(int(WaveformLayer::MergeChannels));
             LayerFactory::getInstance()->setLayerProperties
                 (newLayer, layerPropertyXml);
+
+            SingleColourLayer *scl =
+                qobject_cast<SingleColourLayer *>(newLayer);
+            if (scl) {
+                scl->setBaseColour
+                    (i % ColourDatabase::getInstance()->getColourCount());
+            }
             
             m_document->setModel(newLayer, createFrom);
             m_document->addLayerToView(pane, newLayer);
@@ -1571,6 +1576,13 @@ MainWindow::standardWaveformModeSelected()
                 .arg(int(WaveformLayer::SeparateChannels));
             LayerFactory::getInstance()->setLayerProperties
                 (newLayer, layerPropertyXml);
+
+            SingleColourLayer *scl =
+                qobject_cast<SingleColourLayer *>(newLayer);
+            if (scl) {
+                scl->setBaseColour
+                    (i % ColourDatabase::getInstance()->getColourCount());
+            }
             
             m_document->setModel(newLayer, createFrom);
             m_document->addLayerToView(pane, newLayer);
@@ -1679,6 +1691,14 @@ MainWindow::selectTransformDrivenMode(QString name,
                     newLayer->setObjectName(name);
                     LayerFactory::getInstance()->setLayerProperties
                         (newLayer, layerPropertyXml);
+
+                    SingleColourLayer *scl =
+                        qobject_cast<SingleColourLayer *>(newLayer);
+                    if (scl) {
+                        scl->setBaseColour
+                            (i % ColourDatabase::getInstance()->getColourCount());
+                    }
+
                     m_document->addLayerToView(pane, newLayer);
                     m_paneStack->setCurrentLayer(pane, newLayer);
                 } else {
