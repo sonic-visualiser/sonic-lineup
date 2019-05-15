@@ -93,6 +93,16 @@
 	    "service": "soundsoftware",
             "repository": "match-vamp"
         },
+        "constant-q-cpp": {
+            "vcs": "git",
+	    "service": "github",
+            "owner": "cannam",
+            "repository": "constant-q-cpp"
+        },
+        "tuning-difference": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
+        },
         "pyin": {
             "vcs": "hg",
 	    "service": "soundsoftware"

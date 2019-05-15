@@ -51,6 +51,12 @@
     "match": {
       "pin": "4b272c839f7e"
     },
+    "constant-q-cpp": {
+      "pin": "628db02cf5ee6b8d12c183cb0ea274161daf1d03"
+    },
+    "tuning-difference": {
+      "pin": "aaf8fa1cde19"
+    },
     "pyin": {
       "pin": "550d5f186abb"
     },
