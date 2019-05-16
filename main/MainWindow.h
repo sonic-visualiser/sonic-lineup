@@ -104,6 +104,7 @@ protected slots:
     void paneDropAccepted(Pane *, QString) override;
 
     virtual void alignToggled();
+    virtual void tuningDifferenceToggled();
     virtual void playSpeedChanged(int);
 
     virtual void speedUpPlayback();
@@ -143,7 +144,7 @@ protected slots:
 
     virtual void salientLayerCompletionChanged();
 
-    void rightButtonMenuRequested(Pane *, QPoint point) override;
+    void rightButtonMenuRequested(Pane *, QPoint) override { /* none */ }
 
     virtual void setupRecentSessionsMenu();
 
@@ -168,8 +169,6 @@ protected:
     bool                     m_mainMenusCreated;
     QMenu                   *m_playbackMenu;
     QMenu                   *m_recentSessionsMenu;
-    QMenu                   *m_rightButtonMenu;
-    QMenu                   *m_rightButtonPlaybackMenu;
 
     QAction                 *m_deleteSelectedAction;
     QAction                 *m_ffwdAction;
@@ -198,7 +197,6 @@ protected:
     void setupMenus() override;
     
     virtual void setupFileMenu();
-    virtual void setupEditMenu();
     virtual void setupViewMenu();
     virtual void setupHelpMenu();
     virtual void setupToolbars();

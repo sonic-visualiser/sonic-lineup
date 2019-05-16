@@ -4,13 +4,13 @@
       "pin": "62987b6d6a3b"
     },
     "svcore": {
-      "pin": "2848c1215bb5"
+      "pin": "54a954ee7529"
     },
     "svgui": {
-      "pin": "98157ea8a3d2"
+      "pin": "009f22e03bf6"
     },
     "svapp": {
-      "pin": "0960e27c3232"
+      "pin": "b6cafe05017d"
     },
     "checker": {
       "pin": "c8c17e51aab0"
@@ -55,7 +55,7 @@
       "pin": "628db02cf5ee6b8d12c183cb0ea274161daf1d03"
     },
     "tuning-difference": {
-      "pin": "475571f398fe"
+      "pin": "2ef9c5d744ab"
     },
     "pyin": {
       "pin": "550d5f186abb"

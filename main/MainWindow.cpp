@@ -124,8 +124,6 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_mainMenusCreated(false),
     m_playbackMenu(0),
     m_recentSessionsMenu(0),
-    m_rightButtonMenu(0),
-    m_rightButtonPlaybackMenu(0),
     m_deleteSelectedAction(0),
     m_ffwdAction(0),
     m_rwdAction(0),
@@ -148,11 +146,11 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     ColourDatabase *cdb = ColourDatabase::getInstance();
     cdb->setUseDarkBackground(cdb->addColour(Qt::white, tr("White")), true);
-    cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
-    cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
-    cdb->setUseDarkBackground(cdb->addColour(Qt::green, tr("Bright Green")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(30, 150, 255), tr("Bright Blue")), true);
     cdb->setUseDarkBackground(cdb->addColour(Qt::red, tr("Bright Red")), true);
+    cdb->setUseDarkBackground(cdb->addColour(Qt::green, tr("Bright Green")), true);
+    cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
+    cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
     cdb->setUseDarkBackground(cdb->addColour(Qt::yellow, tr("Bright Yellow")), true);
 
     Preferences::getInstance()->setResampleOnLoad(true);
@@ -182,6 +180,10 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     settings.beginGroup("IconLoader");
     settings.setValue("invert-icons-on-dark-background", true);
+    settings.endGroup();
+
+    settings.beginGroup("View");
+    settings.setValue("showcancelbuttons", false);
     settings.endGroup();
 
     m_viewManager->setAlignMode(true);
@@ -377,25 +379,9 @@ MainWindow::setupMenus()
         // the system menubar integration altogether. Like this:
 	menuBar()->setNativeMenuBar(false);
 #endif
-
-        m_rightButtonMenu = new QMenu();
-
-        // No -- we don't want tear-off enabled on the right-button
-        // menu.  If it is enabled, then simply right-clicking and
-        // releasing will pop up the menu, activate the tear-off, and
-        // leave the torn-off menu window in front of the main window.
-        // That isn't desirable.  I'm not sure it ever would be, in a
-        // context menu -- perhaps technically a Qt bug?
-//        m_rightButtonMenu->setTearOffEnabled(true);
-    }
-
-    if (!m_mainMenusCreated) {
-        CommandHistory::getInstance()->registerMenu(m_rightButtonMenu);
-        m_rightButtonMenu->addSeparator();
     }
 
     setupFileMenu();
-//    setupEditMenu();
     setupViewMenu();
 
     m_mainMenusCreated = true;
@@ -508,16 +494,6 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-}
-
-void
-MainWindow::setupEditMenu()
-{
-    if (m_mainMenusCreated) return;
-
-    QMenu *menu = menuBar()->addMenu(tr("&Edit"));
-    menu->setTearOffEnabled(false);
-    CommandHistory::getInstance()->registerMenu(menu);
 }
 
 void
@@ -740,8 +716,6 @@ MainWindow::setupToolbars()
 
     QMenu *menu = m_playbackMenu = menuBar()->addMenu(tr("Play&back"));
     menu->setTearOffEnabled(false);
-    m_rightButtonMenu->addSeparator();
-    m_rightButtonPlaybackMenu = m_rightButtonMenu->addMenu(tr("Playback"));
 
     QToolBar *toolbar = addToolBar(tr("Playback Toolbar"));
 
@@ -782,47 +756,6 @@ MainWindow::setupToolbars()
     ffwdEndAction->setStatusTip(tr("Fast-forward to the end"));
     connect(ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
     connect(this, SIGNAL(canPlay(bool)), ffwdEndAction, SLOT(setEnabled(bool)));
-/*
-    toolbar = addToolBar(tr("Play Mode Toolbar"));
-
-    QAction *psAction = toolbar->addAction(il.load("playselection"),
-                                           tr("Constrain Playback to Selection"));
-    psAction->setCheckable(true);
-    psAction->setChecked(m_viewManager->getPlaySelectionMode());
-    psAction->setShortcut(tr("s"));
-    psAction->setStatusTip(tr("Constrain playback to the selected regions"));
-    connect(m_viewManager, SIGNAL(playSelectionModeChanged(bool)),
-            psAction, SLOT(setChecked(bool)));
-    connect(psAction, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
-    connect(this, SIGNAL(canPlaySelection(bool)), psAction, SLOT(setEnabled(bool)));
-
-    QAction *plAction = toolbar->addAction(il.load("playloop"),
-                                           tr("Loop Playback"));
-    plAction->setCheckable(true);
-    plAction->setChecked(m_viewManager->getPlayLoopMode());
-    plAction->setShortcut(tr("l"));
-    plAction->setStatusTip(tr("Loop playback"));
-    connect(m_viewManager, SIGNAL(playLoopModeChanged(bool)),
-            plAction, SLOT(setChecked(bool)));
-    connect(plAction, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
-    connect(this, SIGNAL(canPlay(bool)), plAction, SLOT(setEnabled(bool)));
-
-    QAction *soAction = toolbar->addAction(il.load("solo"),
-                                           tr("Solo Current Pane"));
-    soAction->setCheckable(true);
-    soAction->setChecked(m_viewManager->getPlaySoloMode());
-    soAction->setShortcut(tr("o"));
-    soAction->setStatusTip(tr("Solo the current pane during playback"));
-    connect(m_viewManager, SIGNAL(playSoloModeChanged(bool)),
-            soAction, SLOT(setChecked(bool)));
-    connect(soAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
-    connect(this, SIGNAL(canPlay(bool)), soAction, SLOT(setEnabled(bool)));
-
-    m_keyReference->registerShortcut(psAction);
-    m_keyReference->registerShortcut(plAction);
-    m_keyReference->registerShortcut(soAction);
-*/
-
 
     QAction *alAction = 0;
     alAction = toolbar->addAction(il.load("align"),
@@ -834,17 +767,23 @@ MainWindow::setupToolbars()
             alAction, SLOT(setChecked(bool)));
     connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
 
+    QSettings settings;
+
+    QAction *tdAction = 0;
+    tdAction = new QAction(tr("Adjust for Tuning Differences when Aligning"));
+    tdAction->setCheckable(true);
+    settings.beginGroup("Alignment");
+    tdAction->setChecked(settings.value("align-pitch-aware", false).toBool());
+    settings.endGroup();
+    tdAction->setStatusTip(tr("Compare relative pitch content of audio files before aligning, in order to correctly align recordings of the same material at different tuning pitches"));
+    connect(tdAction, SIGNAL(triggered()), this, SLOT(tuningDifferenceToggled()));
+
     m_keyReference->registerShortcut(m_playAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(rwdStartAction);
     m_keyReference->registerShortcut(ffwdEndAction);
 
-/*
-    menu->addAction(psAction);
-    menu->addAction(plAction);
-    menu->addAction(soAction);
-*/
     menu->addAction(m_playAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
@@ -854,23 +793,8 @@ MainWindow::setupToolbars()
     menu->addAction(ffwdEndAction);
     menu->addSeparator();
     menu->addAction(alAction);
+    menu->addAction(tdAction);
     menu->addSeparator();
-
-    m_rightButtonPlaybackMenu->addAction(m_playAction);
-/*
-    m_rightButtonPlaybackMenu->addAction(psAction);
-    m_rightButtonPlaybackMenu->addAction(plAction);
-    m_rightButtonPlaybackMenu->addAction(soAction);
-*/
-    m_rightButtonPlaybackMenu->addSeparator();
-    m_rightButtonPlaybackMenu->addAction(m_rwdAction);
-    m_rightButtonPlaybackMenu->addAction(m_ffwdAction);
-    m_rightButtonPlaybackMenu->addSeparator();
-    m_rightButtonPlaybackMenu->addAction(rwdStartAction);
-    m_rightButtonPlaybackMenu->addAction(ffwdEndAction);
-    m_rightButtonPlaybackMenu->addSeparator();
-    m_rightButtonPlaybackMenu->addAction(alAction);
-    m_rightButtonPlaybackMenu->addSeparator();
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
     fastAction->setShortcut(tr("Ctrl+PgUp"));
@@ -893,10 +817,6 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(fastAction);
     m_keyReference->registerShortcut(slowAction);
     m_keyReference->registerShortcut(normalAction);
-
-    m_rightButtonPlaybackMenu->addAction(fastAction);
-    m_rightButtonPlaybackMenu->addAction(slowAction);
-    m_rightButtonPlaybackMenu->addAction(normalAction);
 
     Pane::registerShortcuts(*m_keyReference);
 }
@@ -2072,6 +1992,22 @@ MainWindow::alignToggled()
 }
 
 void
+MainWindow::tuningDifferenceToggled()
+{
+    QSettings settings;
+    settings.beginGroup("Alignment");
+    bool on = settings.value("align-pitch-aware", false).toBool();
+    settings.setValue("align-pitch-aware", !on);
+    settings.endGroup();
+
+    if (m_viewManager->getAlignMode()) {
+        //!!! todo: this doesn't currently work, the document won't
+        //!!! realign a model that is already aligned
+        m_document->alignModels();
+    }
+}    
+    
+void
 MainWindow::playSpeedChanged(int position)
 {
     PlaySpeedRangeMapper mapper;
@@ -2578,14 +2514,6 @@ MainWindow::alignmentFailed(QString message)
          tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
          .arg(message),
          QMessageBox::Ok);
-}
-
-void
-MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
-{
-//    cerr << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << endl;
-    m_paneStack->setCurrentPane(pane);
-    m_rightButtonMenu->popup(position);
 }
 
 void
