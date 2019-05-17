@@ -207,6 +207,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     m_paneStack->setResizeMode(PaneStack::AutoResizeOnly);
     m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
+    m_paneStack->setShowCloseButtonOnFirstPane(false);
     m_paneStack->setShowAlignmentViews(true);
     m_mainScroll->setWidget(m_paneStack);
 
@@ -250,6 +251,29 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_modeButtons[WaveformMode] = button;
 
     button = new QPushButton;
+    button->setIcon(il.load("colour3d"));
+    button->setText(tr("Melodic spectrogram"));
+    button->setCheckable(true);
+    button->setChecked(false);
+    button->setFixedHeight(bottomButtonHeight);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(melodogramModeSelected()));
+    m_modeButtons[MelodogramMode] = button;
+
+    button = new QPushButton;
+    button->setIcon(il.load("colour3d"));
+    button->setText(tr("Spectrogram"));
+    button->setCheckable(true);
+    button->setChecked(false);
+    button->setFixedHeight(bottomButtonHeight);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(spectrogramModeSelected()));
+    m_modeButtons[SpectrogramMode] = button;
+
+/*
+    button = new QPushButton;
     button->setIcon(il.load("values"));
     button->setText(tr("Spectral flux"));
     button->setCheckable(true);
@@ -259,7 +283,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
     m_modeButtons[CurveMode] = button;
-
+*/
     button = new QPushButton;
     button->setIcon(il.load("values"));
     button->setText(tr("Sung pitch"));
@@ -281,28 +305,6 @@ MainWindow::MainWindow(bool withAudioOutput) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(azimuthModeSelected()));
     m_modeButtons[AzimuthMode] = button;
-
-    button = new QPushButton;
-    button->setIcon(il.load("colour3d"));
-    button->setText(tr("Spectrogram"));
-    button->setCheckable(true);
-    button->setChecked(false);
-    button->setFixedHeight(bottomButtonHeight);
-    bg->addButton(button);
-    buttonLayout->addWidget(button);
-    connect(button, SIGNAL(clicked()), this, SLOT(spectrogramModeSelected()));
-    m_modeButtons[SpectrogramMode] = button;
-
-    button = new QPushButton;
-    button->setIcon(il.load("colour3d"));
-    button->setText(tr("Melodic spectrogram"));
-    button->setCheckable(true);
-    button->setChecked(false);
-    button->setFixedHeight(bottomButtonHeight);
-    bg->addButton(button);
-    buttonLayout->addWidget(button);
-    connect(button, SIGNAL(clicked()), this, SLOT(melodogramModeSelected()));
-    m_modeButtons[MelodogramMode] = button;
 
     m_playSpeed = new AudioDial(bottomFrame);
     m_playSpeed->setMinimum(0);
