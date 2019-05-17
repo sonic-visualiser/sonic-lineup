@@ -30,6 +30,13 @@ case "$stem" in
 esac
 
 echo
+echo "Copying in Vamp plugins."
+
+for plugin in azi match-vamp-plugin nnls-chroma pyin qm-vamp-plugins tuning-difference ; do 
+    cp "$plugin.dylib" "$source/Contents/Resources/"
+done
+
+echo
 echo "Copying in frameworks and plugins from Qt installation directory."
 
 deploy/osx/copy-qt.sh "$app" || exit 2
