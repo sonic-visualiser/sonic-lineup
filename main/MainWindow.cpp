@@ -167,7 +167,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     settings.beginGroup("LayerDefaults");
 
     settings.setValue("spectrogram",
-                      QString("<layer channel=\"-1\" windowSize=\"1024\" colourMap=\"Cividis\" windowHopLevel=\"2\"/>"));
+                      QString("<layer channel=\"-1\" windowSize=\"1024\" colourMap=\"White on Black\" windowHopLevel=\"2\"/>"));
 
     settings.setValue("melodicrange",
                       QString("<layer channel=\"-1\" gain=\"1\" normalizeVisibleArea=\"false\" columnNormalization=\"hybrid\" colourMap=\"Ice\" minFrequency=\"80\" maxFrequency=\"1500\" windowSize=\"8192\" windowOverlap=\"75\" binDisplay=\"0\" />"));
@@ -1451,12 +1451,6 @@ MainWindow::outlineWaveformModeSelected()
             Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
             newLayer->setObjectName(name);
 
-            bool mono = true;
-            WaveFileModel *wfm = qobject_cast<WaveFileModel *>(createFrom);
-            if (wfm) {
-                mono = (wfm->getChannelCount() == 1);
-            }
-
             QString layerPropertyXml =
                 QString("<layer scale=\"%1\" channelMode=\"%2\" gain=\"0.95\"/>")
                 .arg(int(WaveformLayer::MeterScale))
@@ -1502,12 +1496,6 @@ MainWindow::standardWaveformModeSelected()
 
             Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
             newLayer->setObjectName(name);
-
-            bool mono = true;
-            WaveFileModel *wfm = qobject_cast<WaveFileModel *>(createFrom);
-            if (wfm) {
-                mono = (wfm->getChannelCount() == 1);
-            }
 
             QString layerPropertyXml =
                 QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
