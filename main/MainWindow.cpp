@@ -1336,14 +1336,15 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 
     TimeInstantLayer *salient = findSalientFeatureLayer();
     if (!salient) {
-        cerr << "MainWindow::mapSalientFeatureLayer: No salient layer found"
-             << endl;
+        SVCERR << "MainWindow::mapSalientFeatureLayer: No salient layer found"
+               << endl;
         m_salientPending.insert(am);
         return;
     }
 
     if (!am) {
-        cerr << "MainWindow::mapSalientFeatureLayer: AlignmentModel is null!" << endl;
+        SVCERR << "MainWindow::mapSalientFeatureLayer: AlignmentModel is null!"
+               << endl;
         return;
     }
     
@@ -1369,9 +1370,24 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     }
 
     if (!pane || !layer) {
-        cerr << "MainWindow::mapSalientFeatureLayer: Failed to find model "
-             << model << " in any layer" << endl;
+        SVCERR << "MainWindow::mapSalientFeatureLayer: Failed to find model "
+               << model << " in any layer" << endl;
         return;
+    }
+
+    QString salientLayerName = tr("Mapped Salient Feature Layer");
+
+    // Remove any existing mapped salient layer from this pane (in
+    // case we are re-aligning an existing model)
+    for (int j = 0; j < pane->getLayerCount(); ++j) {
+        Layer *l = pane->getLayer(j);
+        if (!l) continue;
+        if (l->objectName() == salientLayerName) {
+            SVDEBUG << "MainWindow::mapSalientFeatureLayer: "
+                    << "Removing existing mapped layer " << l << endl;
+            m_document->deleteLayer(l, true); // force flag: remove from views
+            break;
+        }
     }
 
     pane->setCentreFrame(am->fromReference(firstPane->getCentreFrame()));
@@ -1379,7 +1395,8 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     const SparseOneDimensionalModel *from =
         qobject_cast<const SparseOneDimensionalModel *>(salient->getModel());
     if (!from) {
-        cerr << "MainWindow::mapSalientFeatureLayer: Salient layer lacks SparseOneDimensionalModel" << endl;
+        SVCERR << "MainWindow::mapSalientFeatureLayer: "
+               << "Salient layer lacks SparseOneDimensionalModel" << endl;
         return;
     }
         
@@ -1399,6 +1416,8 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 
     if (newLayer) {
 
+        newLayer->setObjectName(salientLayerName);
+        
         TimeInstantLayer *til = qobject_cast<TimeInstantLayer *>(newLayer);
         if (til) {
             til->setPlotStyle(TimeInstantLayer::PlotInstants);
@@ -2001,9 +2020,7 @@ MainWindow::tuningDifferenceToggled()
     settings.endGroup();
 
     if (m_viewManager->getAlignMode()) {
-        //!!! todo: this doesn't currently work, the document won't
-        //!!! realign a model that is already aligned
-        m_document->alignModels();
+        m_document->realignModels();
     }
 }    
     
