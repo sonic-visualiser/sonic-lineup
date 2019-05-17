@@ -16,18 +16,15 @@
         },
         "svcore": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-            "branch": "single-point"
+	    "service": "soundsoftware"
         },
         "svgui": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-            "branch": "single-point"
+	    "service": "soundsoftware"
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-            "branch": "single-point"
+	    "service": "soundsoftware"
         },
         "checker": {
             "vcs": "hg",
@@ -92,6 +89,16 @@
             "vcs": "hg",
 	    "service": "soundsoftware",
             "repository": "match-vamp"
+        },
+        "constant-q-cpp": {
+            "vcs": "git",
+	    "service": "github",
+            "owner": "cannam",
+            "repository": "constant-q-cpp"
+        },
+        "tuning-difference": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
         },
         "pyin": {
             "vcs": "hg",

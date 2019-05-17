@@ -189,6 +189,11 @@ main(int argc, char **argv)
 
     InteractiveFileFinder::getInstance()->setApplicationSessionExtension("vect");
 
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    settings.setValue("run-vamp-plugins-in-process", true);
+    settings.endGroup();
+
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 
@@ -245,7 +250,6 @@ main(int argc, char **argv)
     if (height < 450) height = available.height() * 2 / 3;
     if (width > height * 2) width = height * 2;
 
-    QSettings settings;
     settings.beginGroup("MainWindow");
 
     QSize size = settings.value("size", QSize(width, height)).toSize();

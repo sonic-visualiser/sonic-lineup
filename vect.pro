@@ -19,6 +19,7 @@ SUBDIRS += \
 	sub_server \
         sub_convert \
         sub_match \
+        sub_tuning_difference \
         sub_pyin \
         sub_nnls_chroma \
         sub_qm_vamp_plugins \
@@ -36,6 +37,7 @@ sub_server.file = server.pro
 sub_convert.file = convert.pro
 sub_match.file = match.pro
 sub_pyin.file = pyin.pro
+sub_tuning_difference.file = tuning-difference.pro
 sub_nnls_chroma.file = nnls-chroma.pro
 sub_qm_vamp_plugins.file = qm-vamp-plugins.pro
 sub_azi.file = azi.pro

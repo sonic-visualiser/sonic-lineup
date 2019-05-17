@@ -1,16 +1,16 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "b650289c47b4"
+      "pin": "62987b6d6a3b"
     },
     "svcore": {
-      "pin": "452b48b29c2d"
+      "pin": "978c143c767f"
     },
     "svgui": {
-      "pin": "98157ea8a3d2"
+      "pin": "42c87368287c"
     },
     "svapp": {
-      "pin": "331be52cd473"
+      "pin": "d62fd61082a1"
     },
     "checker": {
       "pin": "c8c17e51aab0"
@@ -50,6 +50,12 @@
     },
     "match": {
       "pin": "4b272c839f7e"
+    },
+    "constant-q-cpp": {
+      "pin": "628db02cf5ee6b8d12c183cb0ea274161daf1d03"
+    },
+    "tuning-difference": {
+      "pin": "2ef9c5d744ab"
     },
     "pyin": {
       "pin": "550d5f186abb"

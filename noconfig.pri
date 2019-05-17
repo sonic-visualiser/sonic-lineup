@@ -119,8 +119,8 @@ macx* {
 
     # All Mac builds are 64-bit these days.
 
-    INCLUDEPATH += $$PWD/sv-dependency-builds/osx/include $$PWD/sv-dependency-builds/osx/include/opus
-    LIBS += -L$$PWD/sv-dependency-builds/osx/lib -L$$PWD
+    INCLUDEPATH += $$PWD/sv-dependency-builds/osx/include $$PWD/sv-dependency-builds/osx/include/opus /usr/local/include
+    LIBS += -L$$PWD/sv-dependency-builds/osx/lib -L$$PWD /usr/local/lib
 
     QMAKE_CXXFLAGS_RELEASE += -O3 -ffast-math -flto
     QMAKE_LFLAGS_RELEASE += -O3 -flto

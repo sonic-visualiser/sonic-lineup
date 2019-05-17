@@ -18,7 +18,7 @@ OBJECTS_DIR = match/o
 
 INCLUDEPATH += $$PWD/vamp-plugin-sdk
 
-               QMAKE_CXXFLAGS -= -Werror
+QMAKE_CXXFLAGS -= -Werror
 
 DEFINES += USE_COMPACT_TYPES
 
