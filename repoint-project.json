@@ -16,18 +16,15 @@
         },
         "svcore": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-            "branch": "single-point"
+	    "service": "soundsoftware"
         },
         "svgui": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-            "branch": "single-point"
+	    "service": "soundsoftware"
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-            "branch": "tuning-difference"
+	    "service": "soundsoftware"
         },
         "checker": {
             "vcs": "hg",
