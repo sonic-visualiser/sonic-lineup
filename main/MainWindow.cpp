@@ -2652,8 +2652,13 @@ void
 MainWindow::loadStyle()
 {
     m_viewManager->setGlobalDarkBackground(true);
-    
+
+#ifdef Q_OS_MAC    
+    QString stylepath = ":vect-mac.qss";
+#else
     QString stylepath = ":vect.qss";
+#endif
+
     QFile file(stylepath);
     if (!file.open(QFile::ReadOnly)) {
         SVCERR << "WARNING: Failed to open style file " << stylepath << endl;

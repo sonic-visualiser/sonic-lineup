@@ -27,17 +27,6 @@ QDialog
     background-color: #333333;
 }
 
-QToolBar
-{
-    background-color: #333333;
-}
-
-QToolBar::handle:top,
-QToolBar::handle:bottom
-{
-    image: url(:icons/style/htoolbar-separator.png);
-}
-
 QFrame#BottomFrame,
 QFrame#BottomFrame > QFrame
 {
@@ -291,133 +280,10 @@ QProgressBar::chunk
     width: 20px;
 }
 
-QToolButton[popupMode="1"]
-{    /* only for MenuButtonPopup */
-     padding-right: 5px; /* make way for the popup button */
-}
-
-QToolButton::menu-arrow
+QToolButton
 {
-    image: url(:icons/style/arrow-down-small.png); 
-}
-
-QToolButton::menu-arrow:open
-{
-    top: 1px; left: 1px; /* shift it a bit */
-}
-
-QToolButton::menu-button
-{
-    background: transparent;
-    border: none;
-}
-
-QToolButton::up-arrow
-{ 
-    image: url(:icons/style/arrow-up-small.png); 
-}
-
-QToolButton::down-arrow
-{
-    subcontrol-position: right bottom;
-    image: url(:icons/style/arrow-down-small.png); 
-}
-
-QToolButton,
-QToolButton::enabled
-{
-    color: #FFFFFF;
     background-color: transparent;
-    border: 2px solid transparent;
-    border-radius: 2px;
-}
-
-QToolButton::pressed,
-QToolButton::checked
-{
-    border: 2px solid #AAAAAA;
-    border-radius: 2px;
-    background-color: #666666;
-}
-
-QToolButton::enabled:hover
-{
-    border: 2px solid #AAAAAA;
-    border-radius: 2px;
-    background-color: #666666;
-}
-
-QToolButton::!enabled
-{
-    color: #FFFFFF;
-    background-color: transparent;
-}
-
-QToolButton::menu-indicator
-{
-    /* the arrow on tool buttons with menus in ImmediatePopup mode is
-     * intentionally styled out of existence */
-    background: transparent;
-}
-
-QComboBox {
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
-    color: #FFFFFF;
-}
-
-QComboBox:enabled {
-    color: #FFFFFF;
-}
-
-QComboBox:disabled {
-    color: #909090;
-}
-
-QComboBox QAbstractItemView {
-    background-color: #EEEEEE;
-    border: 1px solid black;
-    color: #000000;
-}
-
-QComboBox QAbstractItemView::separator
-{
-    height: 2px;
-    background: #AAAAAA;
-    margin-left: 10px;
-    margin-right: 5px;
-}
-
-QComboBox QAbstractItemView::item:enabled
-{
-    /* sets background of menu item. set this to something non-transparent
-    if you want menu color and menu item color to be different */
-    background-color: transparent;
-    color: #000000;
-    padding: 2px 25px 2px 20px;
-    border: 1px solid transparent;
-    min-width: 12em; /* leaves room for space between item and hotkey */
-}
-
-QComboBox QAbstractItemView::item:!enabled
-{
-    color: #AAAAAA;
-    padding: 2px 25px 2px 20px;
-    border: 1px solid transparent;
-    min-width: 12em; /* leaves room for space between item and hotkey */
-}
-
-QComboBox QAbstractItemView::item:selected
-{
-    background-color: #80AFFF;
-    color: #FFFFFF;
-}
-
-QFileDialog
-{
-    leftarrow-icon: url(:icons/style/arrow-left-inverted.png);
-    rightarrow-icon: url(:icons/style/arrow-right-inverted.png);
-    uparrow-icon: url(:icons/style/arrow-up-inverted.png);
+    border: 0px;
 }
 
 QPushButton,

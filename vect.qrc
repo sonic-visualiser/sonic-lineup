@@ -147,6 +147,7 @@
     <file>i18n/vect_en_GB.qm</file>
     <file>i18n/tips_en.xml</file>
     <file>vect.qss</file>
+    <file>vect-mac.qss</file>
     <file>icons/style/arrow-down.png</file>
     <file>icons/style/arrow-down-small-inverted.png</file>
     <file>icons/style/arrow-down-small.png</file>
