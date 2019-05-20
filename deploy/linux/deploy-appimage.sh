@@ -111,7 +111,7 @@ for plug in $qtplugins; do
     done
 done
 
-#!!! cp "$program.desktop" "$targetdir/"
+cp "$program.desktop" "$targetdir/"
 
 #!!! cp "icons/sv-icon.svg" "$targetdir/"
 #!!! cp "icons/sonic-vector.svg" "$targetdir/"

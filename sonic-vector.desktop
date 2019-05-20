@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Sonic Vector
+Comment=Comparative visualisation of multiple audio files of related content
+Exec=sonic-vector %U
+Keywords=audio; sound; visualiser; sonic;
+Terminal=false
+Type=Application
+Icon=sonic-vector
+Categories=Audio;AudioVideo;
+MimeType=application/x-ogg;audio/mp3;audio/mpeg;audio/mpegurl;audio/x-flac;audio/x-mp3;audio/x-mpeg;audio/x-mpegurl;audio/x-wav;audio/wav;application/ogg;audio/x-vorbis+ogg;
