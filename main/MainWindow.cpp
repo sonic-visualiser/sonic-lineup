@@ -772,7 +772,8 @@ MainWindow::setupToolbars()
     QSettings settings;
 
     QAction *tdAction = 0;
-    tdAction = new QAction(tr("Adjust for Tuning Differences when Aligning"));
+    tdAction = new QAction(tr("Allow for Tuning Differences when Aligning"),
+                           this);
     tdAction->setCheckable(true);
     settings.beginGroup("Alignment");
     tdAction->setChecked(settings.value("align-pitch-aware", false).toBool());
