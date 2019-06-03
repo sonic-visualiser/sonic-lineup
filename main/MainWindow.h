@@ -92,6 +92,7 @@ protected slots:
     void melodogramModeSelected();
     void azimuthModeSelected();
     void pitchModeSelected();
+    void keyModeSelected();
 
     void toggleSalientFeatures();
 
@@ -208,7 +209,8 @@ protected:
         SpectrogramMode,
         MelodogramMode,
         AzimuthMode,
-        PitchMode
+        PitchMode,
+        KeyMode
     };
     std::map<DisplayMode, QPushButton *> m_modeButtons;
     

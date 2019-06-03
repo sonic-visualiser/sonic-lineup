@@ -297,6 +297,17 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
+    button->setText(tr("Key"));
+    button->setCheckable(true);
+    button->setChecked(false);
+    button->setFixedHeight(bottomButtonHeight);
+    bg->addButton(button);
+    buttonLayout->addWidget(button);
+    connect(button, SIGNAL(clicked()), this, SLOT(keyModeSelected()));
+    m_modeButtons[KeyMode] = button;
+
+    button = new QPushButton;
+    button->setIcon(il.load("colour3d"));
     button->setText(tr("Stereo azimuth"));
     button->setCheckable(true);
     button->setChecked(false);
@@ -1680,6 +1691,21 @@ MainWindow::pitchModeSelected()
 }
 
 void
+MainWindow::keyModeSelected()
+{
+    QString propertyXml =
+        QString("<layer colourMap=\"Sunset\" opaque=\"true\" smooth=\"false\" "
+                "binScale=\"%1\" columnNormalization=\"none\"/>")
+        .arg(int(BinScale::Linear));
+    
+    selectTransformDrivenMode
+        (tr("Key"),
+         KeyMode,
+         "vamp:qm-vamp-plugins:qm-keydetector:keystrength",
+         propertyXml);
+}
+
+void
 MainWindow::azimuthModeSelected()
 {
     QString propertyXml =
@@ -1753,6 +1779,10 @@ MainWindow::updateModeFromLayers()
                 m_displayMode = PitchMode;
                 found = true;
                 break;
+            } else if (ln == tr("Key")) {
+                m_displayMode = KeyMode;
+                found = true;
+                break;
             } else if (ln == tr("Azimuth")) {
                 m_displayMode = AzimuthMode;
                 found = true;
@@ -1777,6 +1807,7 @@ MainWindow::reselectMode()
     case MelodogramMode: melodogramModeSelected(); break;
     case AzimuthMode: azimuthModeSelected(); break;
     case PitchMode: pitchModeSelected(); break;
+    case KeyMode: keyModeSelected(); break;
     }
 }
 
