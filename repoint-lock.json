@@ -4,7 +4,7 @@
       "pin": "62987b6d6a3b"
     },
     "svcore": {
-      "pin": "2c388d372abf"
+      "pin": "35d08f4274b9"
     },
     "svgui": {
       "pin": "0ecfaa463c1b"
@@ -64,10 +64,10 @@
       "pin": "89099872c87b"
     },
     "qm-vamp-plugins": {
-      "pin": "c5d3d7a7d920eff3fcb3e181f0d1402db6ec4a31"
+      "pin": "930618639abceb93f93e1f4100d93906f2118695"
     },
     "qm-vamp-plugins/lib/qm-dsp": {
-      "pin": "4c406d9990bc42e5e298dc28eb8b897095275683"
+      "pin": "9b18a2294638e2a28c8b97ca04d870422a8da4ef"
     },
     "azi": {
       "pin": "343d5e5ba9f7"

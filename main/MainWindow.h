@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MAIN_WINDOW_H_
-#define _MAIN_WINDOW_H_
+#ifndef VECT_MAIN_WINDOW_H
+#define VECT_MAIN_WINDOW_H
 
 #include <QFrame>
 #include <QString>
