@@ -31,6 +31,9 @@
 #include "transform/Transform.h"
 #include "framework/SVFileReader.h"
 #include "widgets/InteractiveFileFinder.h"
+
+#include "SmallSession.h"
+
 #include <map>
 
 class Document;
@@ -257,6 +260,13 @@ protected:
     // open, and so may change during the lifetime of the session.
     QString makeSessionLabel();
 
+    // Construct a SmallSession, which contains the origin URIs of the
+    // files in the current session
+    SmallSession makeSmallSession();
+
+    // Open a session from the given SmallSession file path
+    void openSmallSessionFile(QString path);
+    
     enum SessionState {
         NoSession,
         SessionLoading,
