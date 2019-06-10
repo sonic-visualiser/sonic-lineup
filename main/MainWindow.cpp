@@ -1135,6 +1135,8 @@ MainWindow::openSmallSessionFile(QString path)
         goto failed;
     }
     
+    configureNewPane(m_paneStack->getCurrentPane());
+        
     for (QString path: session.additionalFiles) {
         
         status = openPath(path, CreateAdditionalModel);
@@ -1150,6 +1152,7 @@ MainWindow::openSmallSessionFile(QString path)
     m_sessionState = SessionActive;
     updateModeFromLayers(); // get the mode from session, then...
     reselectMode();         // ...ensure there are no stragglers
+    m_documentModified = false;
     return;
 
 failed:
@@ -2345,13 +2348,6 @@ MainWindow::checkpointSession()
         SVCERR << "MainWindow::checkpointSession: session is loading" << endl;
         return;
     }
-
-//!!! could lose some of the following tests when switching to SmallSession
-    
-    if (ModelTransformerFactory::getInstance()->haveRunningTransformers()) {
-        SVCERR << "MainWindow::checkpointSession: some transformers are still running" << endl;
-        return;
-    }
     
     // This test is necessary, so that we don't get into a nasty loop
     // when checkpointing on closeSession called when opening a new
@@ -2470,37 +2466,31 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
 
-    if (m_sessionState != SessionLoading) {
-
-        if (model &&
-            m_paneStack &&
-            (m_paneStack->getPaneCount() == 0)) {
+    if (model &&
+        m_paneStack &&
+        (m_paneStack->getPaneCount() == 0)) {
         
-            AddPaneCommand *command = new AddPaneCommand(this);
-            CommandHistory::getInstance()->addCommand(command);
-            Pane *pane = command->getPane();
-            Layer *newLayer =
-                m_document->createMainModelLayer(LayerFactory::Waveform);
-            newLayer->setObjectName(tr("Outline Waveform"));
-
-            bool mono = (model->getChannelCount() == 1);
-
-            QString layerPropertyXml =
-                QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
-                .arg(int(WaveformLayer::MeterScale))
-                .arg(int(mono ?
-                         WaveformLayer::SeparateChannels :
-                         WaveformLayer::MergeChannels));
-            LayerFactory::getInstance()->setLayerProperties
-                (newLayer, layerPropertyXml);
+        AddPaneCommand *command = new AddPaneCommand(this);
+        CommandHistory::getInstance()->addCommand(command);
+        Pane *pane = command->getPane();
+        Layer *newLayer =
+            m_document->createMainModelLayer(LayerFactory::Waveform);
+        newLayer->setObjectName(tr("Outline Waveform"));
+        
+        bool mono = (model->getChannelCount() == 1);
+        
+        QString layerPropertyXml =
+            QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
+            .arg(int(WaveformLayer::MeterScale))
+            .arg(int(mono ?
+                     WaveformLayer::SeparateChannels :
+                     WaveformLayer::MergeChannels));
+        LayerFactory::getInstance()->setLayerProperties
+            (newLayer, layerPropertyXml);
             
-            m_document->addLayerToView(pane, newLayer);
+        m_document->addLayerToView(pane, newLayer);
 
-            addSalientFeatureLayer(pane, model);
-        
-        } else {
-            addSalientFeatureLayer(m_paneStack->getCurrentPane(), model);
-        }
+        addSalientFeatureLayer(pane, model);
     }
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
