@@ -4,7 +4,7 @@
     Vect
     An experimental audio player for plural recordings of a work
     Centre for Digital Music, Queen Mary, University of London.
-    This file copyright 2006-2012 Chris Cannam and QMUL.
+    This file copyright 2006-2019 Chris Cannam and QMUL.
     
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -1089,30 +1089,7 @@ MainWindow::openRecentSession()
         return;
     }
 
-    m_sessionFile = path;
-    m_sessionState = SessionLoading;
-
-    SVDEBUG << "MainWindow::openRecentSession: m_sessionFile is now "
-            << m_sessionFile << endl;
-    
-    FileOpenStatus status = openPath(path, ReplaceSession);
-
-    if (status == FileOpenSucceeded) {
-        m_sessionState = SessionActive;
-        updateModeFromLayers(); // get the mode from session, then...
-        reselectMode();         // ...ensure there are no stragglers
-    } else {
-        m_sessionFile = "";
-        m_sessionState = NoSession;
-
-        if (status == FileOpenFailed) {
-            QMessageBox::critical(this, tr("Failed to open location"),
-                                  tr("<b>Open failed</b><p>File or URL \"%1\" could not be opened").arg(path));
-        } else if (status == FileOpenWrongMode) {
-            QMessageBox::critical(this, tr("Failed to open location"),
-                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
-        }
-    }
+    openSmallSessionFile(path);
 }
 
 void
@@ -1124,30 +1101,65 @@ MainWindow::openMostRecentSession()
     QString path = files[0];
     if (path == "") return;
 
+    openSmallSessionFile(path);
+}
+
+void
+MainWindow::openSmallSessionFile(QString path)
+{
     m_sessionFile = path;
     m_sessionState = SessionLoading;
 
-    SVDEBUG << "MainWindow::openMostRecentSession: m_sessionFile is now "
+    SVDEBUG << "MainWindow::openSmallSessionFile: m_sessionFile is now "
             << m_sessionFile << endl;
+
+    SmallSession session;
+    FileOpenStatus status;
+    QString errorText;
     
-    FileOpenStatus status = openPath(path, ReplaceSession);
-
-    if (status == FileOpenSucceeded) {
-        m_sessionState = SessionActive;
-        updateModeFromLayers(); // get the mode from session, then...
-        reselectMode();         // ...ensure there are no stragglers
-    } else {
-        m_sessionFile = "";
-        m_sessionState = NoSession;
-
-        if (status == FileOpenFailed) {
-            QMessageBox::critical(this, tr("Failed to open location"),
-                                  tr("<b>Open failed</b><p>File or URL \"%1\" could not be opened").arg(path));
-        } else if (status == FileOpenWrongMode) {
-            QMessageBox::critical(this, tr("Failed to open location"),
-                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
-        }
+    try {
+        session = SmallSession::load(path);
+    } catch (const std::runtime_error &e) {
+        errorText = e.what();
+        goto failed;
     }
+
+    closeSession();
+    createDocument();
+
+    status = openPath(session.mainFile, ReplaceMainModel);
+
+    if (status != FileOpenSucceeded) {
+        errorText = tr("Unable to open main audio file %1")
+            .arg(session.mainFile);
+        goto failed;
+    }
+    
+    configureNewPane(m_paneStack->getCurrentPane());
+        
+    for (QString path: session.additionalFiles) {
+        
+        status = openPath(path, CreateAdditionalModel);
+
+        if (status != FileOpenSucceeded) {
+            errorText = tr("Unable to open audio file %1").arg(path);
+            goto failed;
+        }
+
+        configureNewPane(m_paneStack->getCurrentPane());
+    }
+
+    m_sessionState = SessionActive;
+    updateModeFromLayers(); // get the mode from session, then...
+    reselectMode();         // ...ensure there are no stragglers
+    m_documentModified = false;
+    return;
+
+failed:
+    QMessageBox::critical(this, tr("Failed to reload session"),
+                          tr("<b>Open failed</b><p>Session file \"%1\" could not be opened: %2</p>").arg(path).arg(errorText));
+    m_sessionFile = "";
+    m_sessionState = NoSession;
 }
 
 bool
@@ -2336,11 +2348,6 @@ MainWindow::checkpointSession()
         SVCERR << "MainWindow::checkpointSession: session is loading" << endl;
         return;
     }
-
-    if (ModelTransformerFactory::getInstance()->haveRunningTransformers()) {
-        SVCERR << "MainWindow::checkpointSession: some transformers are still running" << endl;
-        return;
-    }
     
     // This test is necessary, so that we don't get into a nasty loop
     // when checkpointing on closeSession called when opening a new
@@ -2374,14 +2381,53 @@ MainWindow::checkpointSession()
     SVCERR << "MainWindow::checkpointSession: saving to session file: "
            << m_sessionFile << endl;
 
-    if (saveSessionFile(m_sessionFile)) {
+    SmallSession session(makeSmallSession());
+
+    try {
+        SmallSession::save(session, m_sessionFile);
         m_recentSessions.addFile(m_sessionFile, makeSessionLabel());
         CommandHistory::getInstance()->documentSaved();
         documentRestored();
         SVCERR << "MainWindow::checkpointSession complete" << endl;
-    } else {
-        SVCERR << "MainWindow::checkpointSession: save failed!" << endl;
+    } catch (const std::runtime_error &e) {
+        SVCERR << "MainWindow::checkpointSession: save failed: "
+               << e.what() << endl;
     }
+}
+
+SmallSession
+MainWindow::makeSmallSession()
+{
+    SmallSession session;
+    if (!m_paneStack) return session;
+
+    WaveFileModel *mainModel = getMainModel();
+    if (!mainModel) return session;
+
+    session.mainFile = mainModel->getLocation();
+
+    std::set<QString> alreadyRecorded;
+    alreadyRecorded.insert(session.mainFile);
+    
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+        Pane *p = m_paneStack->getPane(i);
+        for (int j = 0; j < p->getLayerCount(); ++j) {
+            Layer *l = p->getLayer(j);
+            Model *m = l->getModel();
+            while (m && m->getSourceModel()) m = m->getSourceModel();
+            if (qobject_cast<WaveFileModel *>(m)) {
+                QString location = m->getLocation();
+                if (alreadyRecorded.find(location) == alreadyRecorded.end()) {
+                    session.additionalFiles.push_back(location);
+                    alreadyRecorded.insert(location);
+                }
+            }
+        }
+    }
+
+    SVCERR << "MainWindow::makeSmallSession: have " << session.additionalFiles.size() << " non-main model(s)" << endl;
+    
+    return session;
 }
 
 void
@@ -2420,37 +2466,31 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
 
-    if (m_sessionState != SessionLoading) {
-
-        if (model &&
-            m_paneStack &&
-            (m_paneStack->getPaneCount() == 0)) {
+    if (model &&
+        m_paneStack &&
+        (m_paneStack->getPaneCount() == 0)) {
         
-            AddPaneCommand *command = new AddPaneCommand(this);
-            CommandHistory::getInstance()->addCommand(command);
-            Pane *pane = command->getPane();
-            Layer *newLayer =
-                m_document->createMainModelLayer(LayerFactory::Waveform);
-            newLayer->setObjectName(tr("Outline Waveform"));
-
-            bool mono = (model->getChannelCount() == 1);
-
-            QString layerPropertyXml =
-                QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
-                .arg(int(WaveformLayer::MeterScale))
-                .arg(int(mono ?
-                         WaveformLayer::SeparateChannels :
-                         WaveformLayer::MergeChannels));
-            LayerFactory::getInstance()->setLayerProperties
-                (newLayer, layerPropertyXml);
+        AddPaneCommand *command = new AddPaneCommand(this);
+        CommandHistory::getInstance()->addCommand(command);
+        Pane *pane = command->getPane();
+        Layer *newLayer =
+            m_document->createMainModelLayer(LayerFactory::Waveform);
+        newLayer->setObjectName(tr("Outline Waveform"));
+        
+        bool mono = (model->getChannelCount() == 1);
+        
+        QString layerPropertyXml =
+            QString("<layer scale=\"%1\" channelMode=\"%2\"/>")
+            .arg(int(WaveformLayer::MeterScale))
+            .arg(int(mono ?
+                     WaveformLayer::SeparateChannels :
+                     WaveformLayer::MergeChannels));
+        LayerFactory::getInstance()->setLayerProperties
+            (newLayer, layerPropertyXml);
             
-            m_document->addLayerToView(pane, newLayer);
+        m_document->addLayerToView(pane, newLayer);
 
-            addSalientFeatureLayer(pane, model);
-        
-        } else {
-            addSalientFeatureLayer(m_paneStack->getCurrentPane(), model);
-        }
+        addSalientFeatureLayer(pane, model);
     }
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());

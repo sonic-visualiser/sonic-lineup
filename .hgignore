@@ -56,3 +56,4 @@ build_win32
 build_win64
 constant-q-cpp
 Dockerfile*.gen
+qm-vamp-plugins
