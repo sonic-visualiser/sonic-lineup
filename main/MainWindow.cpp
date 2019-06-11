@@ -1149,10 +1149,8 @@ MainWindow::openSmallSessionFile(QString path)
         configureNewPane(m_paneStack->getCurrentPane());
     }
 
-    m_sessionState = SessionActive;
-    updateModeFromLayers(); // get the mode from session, then...
-    reselectMode();         // ...ensure there are no stragglers
     m_documentModified = false;
+    m_sessionState = SessionActive;
     return;
 
 failed:
