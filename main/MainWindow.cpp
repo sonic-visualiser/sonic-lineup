@@ -1939,6 +1939,13 @@ MainWindow::configureNewPane(Pane *pane)
 }
 
 void
+MainWindow::record()
+{
+    MainWindowBase::record();
+    configureNewPane(m_paneStack->getCurrentPane());
+}
+
+void
 MainWindow::closeEvent(QCloseEvent *e)
 {
     if (m_exiting) {

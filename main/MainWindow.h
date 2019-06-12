@@ -86,6 +86,7 @@ protected slots:
     virtual void checkpointSession();
     virtual void newSession();
     virtual void preferences();
+
     void closeSession() override;
 
     void curveModeSelected();
@@ -107,6 +108,8 @@ protected slots:
     void paneDropAccepted(Pane *, QStringList) override;
     void paneDropAccepted(Pane *, QString) override;
 
+    void record() override;
+    
     virtual void alignToggled();
     virtual void tuningDifferenceToggled();
     virtual void playSpeedChanged(int);
