@@ -66,7 +66,7 @@ class MainWindow : public MainWindowBase
     Q_OBJECT
 
 public:
-    MainWindow(bool withAudioOutput = true);
+    MainWindow(SoundOptions options);
     virtual ~MainWindow();
 
 public slots:

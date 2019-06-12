@@ -49,6 +49,7 @@
 #include "widgets/NotifyingPushButton.h"
 #include "widgets/KeyReference.h"
 #include "audio/AudioCallbackPlaySource.h"
+#include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/PlaylistFileReader.h"
@@ -119,8 +120,8 @@ using std::set;
 using std::pair;
 
 
-MainWindow::MainWindow(bool withAudioOutput) :
-    MainWindowBase(withAudioOutput ? WithAudioOutput : WithNothing),
+MainWindow::MainWindow(SoundOptions options) :
+    MainWindowBase(options),
     m_mainMenusCreated(false),
     m_playbackMenu(0),
     m_recentSessionsMenu(0),
@@ -770,6 +771,17 @@ MainWindow::setupToolbars()
     connect(ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
     connect(this, SIGNAL(canPlay(bool)), ffwdEndAction, SLOT(setEnabled(bool)));
 
+    QAction *recordAction = toolbar->addAction(il.load("record"),
+                                               tr("Record"));
+    recordAction->setCheckable(true);
+    recordAction->setShortcut(tr("Ctrl+Space"));
+    recordAction->setStatusTip(tr("Record a new audio file"));
+    connect(recordAction, SIGNAL(triggered()), this, SLOT(record()));
+    connect(m_recordTarget, SIGNAL(recordStatusChanged(bool)),
+            recordAction, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(canRecord(bool)),
+            recordAction, SLOT(setEnabled(bool)));
+
     QAction *alAction = 0;
     alAction = toolbar->addAction(il.load("align"),
                                   tr("Align File Timelines"));
@@ -797,6 +809,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(rwdStartAction);
     m_keyReference->registerShortcut(ffwdEndAction);
+    m_keyReference->registerShortcut(recordAction);
 
     menu->addAction(m_playAction);
     menu->addSeparator();
@@ -808,6 +821,8 @@ MainWindow::setupToolbars()
     menu->addSeparator();
     menu->addAction(alAction);
     menu->addAction(tdAction);
+    menu->addSeparator();
+    menu->addAction(recordAction);
     menu->addSeparator();
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
