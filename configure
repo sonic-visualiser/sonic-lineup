@@ -582,7 +582,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="Sonic Vector"
+ac_unique_file="Sonic Lineup"
 ac_unique_file="main/main.cpp"
 # Factoring default headers for most tests.
 ac_includes_default="\

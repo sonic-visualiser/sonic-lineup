@@ -505,7 +505,7 @@ MainWindow::setupFileMenu()
     menu->addSeparator();
     action = new QAction(il.load("exit"), tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
-    action->setStatusTip(tr("Exit Sonic Vector"));
+    action->setStatusTip(tr("Exit Sonic Lineup"));
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
@@ -663,13 +663,13 @@ MainWindow::setupHelpMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     
-    action = new QAction(tr("Sonic Vector on the &Web"), this); 
-    action->setStatusTip(tr("Open the Sonic Vector website")); 
+    action = new QAction(tr("Sonic Lineup on the &Web"), this); 
+    action->setStatusTip(tr("Open the Sonic Lineup website")); 
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
-    action = new QAction(tr("&About Sonic Vector"), this); 
-    action->setStatusTip(tr("Show information about Sonic Vector")); 
+    action = new QAction(tr("&About Sonic Lineup"), this); 
+    action->setStatusTip(tr("Show information about Sonic Lineup")); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
 }
@@ -992,7 +992,7 @@ MainWindow::closeSession()
     m_viewManager->clearSelections();
     m_timeRulerLayer = 0; // document owned this
 
-    setWindowTitle(tr("Sonic Vector"));
+    setWindowTitle(tr("Sonic Lineup"));
 
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
@@ -2702,14 +2702,14 @@ MainWindow::about()
 
     QString aboutText;
 
-    aboutText += tr("<h3>About Sonic Vector</h3>");
-    aboutText += tr("<p>Sonic Vector is a comparative viewer for sets of related audio recordings.</p>");
+    aboutText += tr("<h3>About Sonic Lineup</h3>");
+    aboutText += tr("<p>Sonic Lineup is a comparative viewer for sets of related audio recordings.</p>");
     aboutText += tr("<p>%1 : %2 configuration</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
 
     aboutText += 
-        "<p>Sonic Vector Copyright &copy; 2005 - 2019 Chris Cannam and<br>"
+        "<p>Sonic Lineup Copyright &copy; 2005 - 2019 Chris Cannam and<br>"
         "Queen Mary, University of London.</p>"
         "<p>This program uses library code from many other authors. Please<br>"
         "refer to the accompanying documentation for more information.</p>"
@@ -2719,7 +2719,7 @@ MainWindow::about()
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</p>";
     
-    QMessageBox::about(this, tr("About Sonic Vector"), aboutText);
+    QMessageBox::about(this, tr("About Sonic Lineup"), aboutText);
 }
 
 void

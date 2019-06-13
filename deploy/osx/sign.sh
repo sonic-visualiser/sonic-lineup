@@ -19,7 +19,7 @@ for app in "$dir"/*.app; do
     find "$app" -name \*.dylib -print | while read fr; do
 	codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime "$fr"
     done
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$entitlements" "$app/Contents/MacOS/Sonic Vector"
+    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$entitlements" "$app/Contents/MacOS/Sonic Lineup"
     codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$entitlements" "$app"
 done
 
