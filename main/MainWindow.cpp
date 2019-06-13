@@ -1630,56 +1630,109 @@ void
 MainWindow::selectTransformDrivenMode(QString name,
                                       DisplayMode mode,
                                       QString transformId,
-                                      QString layerPropertyXml)
+                                      QString layerPropertyXml,
+                                      bool includeGhostReference)
 {
+    // Bring forth any existing layers of the appropriate name; for
+    // each pane that lacks one, make a note of the model from which
+    // we should create it
+
+    map<Pane *, Model *> sourceModels;
+
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
-
         Pane *pane = m_paneStack->getPane(i);
-        if (!pane) continue;
-
         Model *createFrom = nullptr;
-        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
-
-            TransformFactory *tf = TransformFactory::getInstance();
-
-            if (tf->haveTransform(transformId)) {
-
-                Transform transform = tf->getDefaultTransformFor
-                    (transformId, createFrom->getSampleRate());
-
-                ModelTransformer::Input input(createFrom, -1);
-                
-                Layer *newLayer =
-                    m_document->createDerivedLayer(transform, createFrom);
-
-                if (newLayer) {
-                    newLayer->setObjectName(name);
-                    LayerFactory::getInstance()->setLayerProperties
-                        (newLayer, layerPropertyXml);
-
-                    SingleColourLayer *scl =
-                        qobject_cast<SingleColourLayer *>(newLayer);
-                    if (scl) {
-                        scl->setBaseColour
-                            (i % ColourDatabase::getInstance()->getColourCount());
-                    }
-
-                    m_document->addLayerToView(pane, newLayer);
-                    m_paneStack->setCurrentLayer(pane, newLayer);
-                } else {
-                    SVCERR << "ERROR: Failed to create derived layer" << endl;
-                }
-            
-            } else {
-                SVCERR << "ERROR: No PYin plugin available" << endl;
+        if (!selectExistingLayerForMode(pane, name, &createFrom)) {
+            if (createFrom) {
+                sourceModels[pane] = createFrom;
             }
         }
+    }
 
-        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
-        if (salient) {
-            pane->propertyContainerSelected(pane, salient);
+    Layer *ghostReference = nullptr;
+
+    if (includeGhostReference && !sourceModels.empty()) {
+
+        // Look up the layer of this type in the first pane -- this is
+        // the reference that we must include as a ghost in the pane
+        // that we're adding the new layer to.
+
+        // NB it won't exist if this is the first time into this mode
+        // and we haven't created the layer for the reference pane yet
+        // - we have to handle that in the creation loop below.
+        
+        Pane *pane = m_paneStack->getPane(0);
+        
+        for (int i = 0; i < pane->getLayerCount(); ++i) {
+            Layer *layer = pane->getLayer(i);
+            if (!layer || qobject_cast<TimeInstantLayer *>(layer)) {
+                continue;
+            }
+            if (layer->objectName() == name) {
+                ghostReference = layer;
+                break;
+            }
         }
+    }
+        
+    TransformFactory *tf = TransformFactory::getInstance();
+
+    if (tf->haveTransform(transformId)) {
+
+        for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+            Pane *pane = m_paneStack->getPane(i);
+
+            if (sourceModels.find(pane) == sourceModels.end()) {
+                // no need to create, this one exists already
+                continue;
+            }
+
+            Model *source = sourceModels[pane];
+
+            if (ghostReference) {
+                m_document->addLayerToView(pane, ghostReference);
+            }
+            
+            Transform transform = tf->getDefaultTransformFor
+                (transformId, source->getSampleRate());
+
+            ModelTransformer::Input input(source, -1);
+
+            Layer *layer = m_document->createDerivedLayer(transform, source);
+
+            if (layer) {
+
+                layer->setObjectName(name);
+                LayerFactory::getInstance()->setLayerProperties
+                    (layer, layerPropertyXml);
+
+                SingleColourLayer *scl =
+                    qobject_cast<SingleColourLayer *>(layer);
+                if (scl) {
+                    int colourIndex = 
+                        (i % ColourDatabase::getInstance()->getColourCount());
+                    scl->setBaseColour(colourIndex);
+                }
+
+                m_document->addLayerToView(pane, layer);
+                m_paneStack->setCurrentLayer(pane, layer);
+
+                if (!ghostReference && includeGhostReference && i == 0) {
+                    ghostReference = layer;
+                }
+                
+            } else {
+                SVCERR << "ERROR: Failed to create derived layer" << endl;
+            }
+
+            TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+            if (salient) {
+                pane->propertyContainerSelected(pane, salient);
+            }
+        }
+    } else {
+        SVCERR << "ERROR: No plugin available for mode: " << name << endl;
     }
 
     m_displayMode = mode;
@@ -1697,7 +1750,8 @@ MainWindow::curveModeSelected()
         (tr("Curve"),
          CurveMode,
          "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
-         propertyXml);
+         propertyXml,
+         false);
 }
 
 void
@@ -1712,7 +1766,8 @@ MainWindow::pitchModeSelected()
         (tr("Pitch"),
          PitchMode,
          "vamp:pyin:pyin:smoothedpitchtrack",
-         propertyXml);
+         propertyXml,
+         true);
 }
 
 void
@@ -1727,7 +1782,8 @@ MainWindow::keyModeSelected()
         (tr("Key"),
          KeyMode,
          "vamp:qm-vamp-plugins:qm-keydetector:keystrength",
-         propertyXml);
+         propertyXml,
+         false);
 }
 
 void
@@ -1742,7 +1798,8 @@ MainWindow::azimuthModeSelected()
         (tr("Azimuth"),
          AzimuthMode,
          "vamp:azi:azi:plan",
-         propertyXml);
+         propertyXml,
+         false);
 }
 
 void

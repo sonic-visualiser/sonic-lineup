@@ -225,7 +225,8 @@ protected:
     virtual void selectTransformDrivenMode(QString name,
                                            DisplayMode mode,
                                            QString transformId,
-                                           QString layerPropertyXml);
+                                           QString layerPropertyXml,
+                                           bool includeGhostReference);
     DisplayMode m_displayMode;
 
     void closeEvent(QCloseEvent *e) override;
