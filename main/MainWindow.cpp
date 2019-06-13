@@ -424,7 +424,7 @@ MainWindow::goFullScreen()
 
     QAction *acts[] = {
         m_playAction, m_zoomInAction, m_zoomOutAction, m_zoomFitAction,
-        m_scrollLeftAction, m_scrollRightAction, m_showPropertyBoxesAction
+        m_scrollLeftAction, m_scrollRightAction
     };
 
     for (int i = 0; i < int(sizeof(acts)/sizeof(acts[0])); ++i) {
@@ -614,43 +614,18 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    menu->addSeparator();
-
-    QActionGroup *overlayGroup = new QActionGroup(this);
-        
-    action = new QAction(tr("Show &No Overlays"), this);
-    action->setShortcut(tr("0"));
-    action->setStatusTip(tr("Hide times, layer names, and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-        
-    action = new QAction(tr("Show &Minimal Overlays"), this);
-    action->setShortcut(tr("9"));
-    action->setStatusTip(tr("Show times and basic scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showMinimalOverlays()));
+    action = new QAction(tr("Show Vertical Scales"), this);
+    action->setShortcut(tr("S"));
+    action->setStatusTip(tr("Show or hide all vertical scales"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleVerticalScales()));
     action->setCheckable(true);
     action->setChecked(true);
-    overlayGroup->addAction(action);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
         
-    action = new QAction(tr("Show &All Overlays"), this);
-    action->setShortcut(tr("8"));
-    action->setStatusTip(tr("Show times, layer names, and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-        
+#ifndef Q_OS_MAC
     menu->addSeparator();
 
-#ifndef Q_OS_MAC
     // Only on non-Mac platforms -- on the Mac this interacts very
     // badly with the "native" full-screen mode
     action = new QAction(tr("Go Full-Screen"), this);
@@ -1329,6 +1304,16 @@ MainWindow::findSalientFeatureLayer(Pane *pane)
     }
 
     return nullptr;
+}
+
+void
+MainWindow::toggleVerticalScales()
+{
+    if (m_viewManager->getOverlayMode() == ViewManager::NoOverlays) {
+        m_viewManager->setOverlayMode(ViewManager::StandardOverlays);
+    } else {
+        m_viewManager->setOverlayMode(ViewManager::NoOverlays);
+    }
 }
 
 void

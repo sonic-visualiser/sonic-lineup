@@ -99,6 +99,7 @@ protected slots:
     void keyModeSelected();
 
     void toggleSalientFeatures();
+    void toggleVerticalScales();
 
     virtual void renameCurrentLayer();
 
@@ -187,7 +188,6 @@ protected:
     QAction                 *m_zoomFitAction;
     QAction                 *m_scrollLeftAction;
     QAction                 *m_scrollRightAction;
-    QAction                 *m_showPropertyBoxesAction;
 
     RecentFiles              m_recentSessions;
     
