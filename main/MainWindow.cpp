@@ -193,6 +193,7 @@ MainWindow::MainWindow(SoundOptions options) :
     m_viewManager->setZoomWheelsEnabled(false);
     m_viewManager->setIlluminateLocalFeatures(false);
     m_viewManager->setShowWorkTitle(true);
+    m_viewManager->setOpportunisticEditingEnabled(false);
 
     loadStyle();
     
