@@ -124,7 +124,7 @@ setupVectVampPath()
 #ifdef Q_OS_WIN32
         QString programFiles = getEnvQStr("ProgramFiles");
         if (programFiles == "") programFiles = "C:\\Program Files";
-        QString defaultVectPath(programFiles + "\\Vect");
+        QString defaultVectPath(programFiles + "\\" + QApplication::applicationName());
         vectVampPath = vectVampPath + sep + defaultVectPath;
 #else
 #ifdef Q_OS_MAC

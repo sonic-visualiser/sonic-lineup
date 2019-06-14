@@ -31,16 +31,6 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
 
       <Directory Id="ProgramFiles64Folder" Name="PFiles64">
-        <Directory Id="VampPlugins" Name="Vamp Plugins">
-          <Component Win64="yes"
-              Id="VampPlugins"
-              Guid="528C7D7E-5A06-4E7D-89BB-7C16431DF82F">
-            <File
-                Id="VampREADME"
-                Name="README.txt"
-                Source="..\deploy\win64\README-Vamp.txt"/>
-          </Component>
-        </Directory>
 
         <Directory Id="APPLICATIONFOLDER" Name="Sonic Lineup">
 
@@ -86,37 +76,39 @@
                 Name="CHANGELOG.txt"
                 Source="..\CHANGELOG"/>
             <File
-                Id="CITATION"
-                Name="CITATION.txt"
-                Source="..\CITATION"/>
-
-            <File
                 Id="winicon.ico"
                 Name="sv-winicon.ico"
                 Source="..\icons\sv-winicon.ico"/>
           </Component>
           
           <Component Win64="yes"
-	      Id="SVFileAssociation"
-	      Guid="F07C5CC1-0209-4C1A-8D52-C40B50A2B964">
-            
-            <CreateFolder/>
-
-            <ProgId 
-                Id='SonicVector.svfile' 
-                Description='Sonic Lineup project file'
-                Icon="SVExecutable">
-              <Extension 
-                  Id='sv' 
-                  ContentType='application/sonicvector'>
-                <Verb 
-                    Id='open' 
-                    Command='Open' 
-                    TargetFile='SVExecutable' 
-                    Argument='"%1"' />
-              </Extension>
-            </ProgId>
-            
+              Id="Plugins"
+              Guid="2ba2ade2-a813-4ddc-9ce6-ba79390cc14e">
+            <File
+                Id="MATCH"
+                Name="match-vamp-plugin.dll"
+                Source="release\match-vamp-plugin.dll"
+                KeyPath="yes"/>
+            <File
+                Id="Azi"
+                Name="azi.dll"
+                Source="release\azi.dll"/>
+            <File
+                Id="NNLSChroma"
+                Name="nnls-chroma.dll"
+                Source="release\nnls-chroma.dll"/>
+            <File
+                Id="pYIN"
+                Name="pyin.dll"
+                Source="release\pyin.dll"/>
+            <File
+                Id="QMVampPlugins"
+                Name="qm-vamp-plugins.dll"
+                Source="release\qm-vamp-plugins.dll"/>
+            <File
+                Id="TuningDifference"
+                Name="tuning-difference.dll"
+                Source="release\tuning-difference.dll"/>
           </Component>
           
           <Component Win64="yes"
@@ -281,11 +273,10 @@
 	Absent="disallow"
 	ConfigurableDirectory="APPLICATIONFOLDER"
 	Level="1">
-      <ComponentRef Id="VampPlugins"/>
       <ComponentRef Id="MainExecutable"/>
-      <ComponentRef Id="SVFileAssociation"/>
-      <ComponentRef Id="Sndfile"/>
+      <ComponentRef Id="Plugins"/>
       <ComponentRef Id="Qt5"/>
+      <ComponentRef Id="Sndfile"/>
       <ComponentRef Id="VCRuntime"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
       <ComponentRef Id="Qt5StylePlugins"/>
