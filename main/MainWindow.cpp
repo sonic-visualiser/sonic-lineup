@@ -156,7 +156,6 @@ MainWindow::MainWindow(SoundOptions options) :
 
     Preferences::getInstance()->setResampleOnLoad(true);
 
-
     Preferences::getInstance()->setSpectrogramSmoothing
         (Preferences::SpectrogramInterpolated);
 
@@ -496,12 +495,14 @@ MainWindow::setupFileMenu()
     connect(&m_recentSessions, SIGNAL(recentChanged()),
             this, SLOT(setupRecentSessionsMenu()));
 
+    /*
     menu->addSeparator();
     action = new QAction(tr("&Preferences..."), this);
     action->setStatusTip(tr("Adjust the application preferences"));
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
     menu->addAction(action);
-
+    */
+    
     menu->addSeparator();
     action = new QAction(il.load("exit"), tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
