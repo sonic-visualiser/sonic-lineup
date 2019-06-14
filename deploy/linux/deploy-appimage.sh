@@ -113,8 +113,8 @@ done
 
 cp "$program.desktop" "$targetdir/"
 
-#!!! cp "icons/sv-icon.svg" "$targetdir/"
-#!!! cp "icons/sonic-lineup.svg" "$targetdir/"
+##!!!
+cp "icons/sv-icon.svg" "$targetdir/sonic-lineup.svg"
 
 cp "deploy/linux/AppRun" "$targetdir/"
 
