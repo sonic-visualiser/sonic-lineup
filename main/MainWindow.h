@@ -84,6 +84,7 @@ protected slots:
     virtual void openRecentSession();
     virtual void openMostRecentSession();
     virtual void checkpointSession();
+    virtual void browseRecordedAudio();
     virtual void newSession();
     virtual void preferences();
 
@@ -219,11 +220,11 @@ protected:
         KeyMode
     };
     std::map<DisplayMode, QPushButton *> m_modeButtons;
+    std::map<DisplayMode, QString> m_modeLayerNames;
     
     virtual void reselectMode();
     virtual void updateModeFromLayers(); // after loading a session
-    virtual void selectTransformDrivenMode(QString name,
-                                           DisplayMode mode,
+    virtual void selectTransformDrivenMode(DisplayMode mode,
                                            QString transformId,
                                            QString layerPropertyXml);
     DisplayMode m_displayMode;

@@ -27,6 +27,7 @@
 #include "data/model/SparseOneDimensionalModel.h"
 #include "base/StorageAdviser.h"
 #include "base/TempDirectory.h"
+#include "base/RecordDirectory.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "layer/WaveformLayer.h"
@@ -239,6 +240,7 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(outlineWaveformModeSelected()));
     m_modeButtons[OutlineWaveformMode] = button;
+    m_modeLayerNames[OutlineWaveformMode] = "Outline Waveform"; // not to be translated
 
     button = new QPushButton;
     button->setIcon(il.load("waveform"));
@@ -250,6 +252,7 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(standardWaveformModeSelected()));
     m_modeButtons[WaveformMode] = button;
+    m_modeLayerNames[WaveformMode] = "Waveform"; // not to be translated
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
@@ -261,6 +264,7 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(melodogramModeSelected()));
     m_modeButtons[MelodogramMode] = button;
+    m_modeLayerNames[MelodogramMode] = "Melodogram"; // not to be translated
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
@@ -272,6 +276,7 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(spectrogramModeSelected()));
     m_modeButtons[SpectrogramMode] = button;
+    m_modeLayerNames[SpectrogramMode] = "Spectrogram"; // not to be translated
 
 /*
     button = new QPushButton;
@@ -284,6 +289,7 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
     m_modeButtons[CurveMode] = button;
+    m_modeLayerNames[CurveMode] = "Curve";
 */
     button = new QPushButton;
     button->setIcon(il.load("values"));
@@ -295,6 +301,7 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(pitchModeSelected()));
     m_modeButtons[PitchMode] = button;
+    m_modeLayerNames[PitchMode] = "Pitch"; // not to be translated
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
@@ -306,6 +313,7 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(keyModeSelected()));
     m_modeButtons[KeyMode] = button;
+    m_modeLayerNames[KeyMode] = "Key"; // not to be translated
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
@@ -317,6 +325,7 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(azimuthModeSelected()));
     m_modeButtons[AzimuthMode] = button;
+    m_modeLayerNames[AzimuthMode] = "Azimuth"; // not to be translated
 
     m_playSpeed = new AudioDial(bottomFrame);
     m_playSpeed->setMinimum(0);
@@ -495,6 +504,13 @@ MainWindow::setupFileMenu()
     connect(&m_recentSessions, SIGNAL(recentChanged()),
             this, SLOT(setupRecentSessionsMenu()));
 
+    menu->addSeparator();
+    
+    action = new QAction(tr("Browse Recorded Audio"), this);
+    action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
+    connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
+    menu->addAction(action);
+    
     /*
     menu->addSeparator();
     action = new QAction(tr("&Preferences..."), this);
@@ -621,7 +637,7 @@ MainWindow::setupViewMenu()
     action->setStatusTip(tr("Show or hide all vertical scales"));
     connect(action, SIGNAL(triggered()), this, SLOT(toggleVerticalScales()));
     action->setCheckable(true);
-    action->setChecked(true);
+    action->setChecked(false);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
         
@@ -916,6 +932,16 @@ MainWindow::selectMainPane()
     if (m_paneStack && m_paneStack->getPaneCount() > 0) {
         m_paneStack->setCurrentPane(m_paneStack->getPane(0));
     }
+}
+
+void
+MainWindow::browseRecordedAudio()
+{
+    QString path = RecordDirectory::getRecordContainerDirectory();
+    if (path == "") path = RecordDirectory::getRecordDirectory();
+    if (path == "") return;
+
+    openLocalFolder(path);
 }
 
 void
@@ -1462,7 +1488,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 void
 MainWindow::outlineWaveformModeSelected()
 {
-    QString name = tr("Outline Waveform");
+    QString name = m_modeLayerNames[OutlineWaveformMode];
 
     Pane *currentPane = m_paneStack->getCurrentPane();
     
@@ -1514,7 +1540,7 @@ MainWindow::outlineWaveformModeSelected()
 void
 MainWindow::standardWaveformModeSelected()
 {
-    QString name = tr("Standard Waveform");
+    QString name = m_modeLayerNames[WaveformMode];
 
     Pane *currentPane = m_paneStack->getCurrentPane();
     
@@ -1566,7 +1592,7 @@ MainWindow::standardWaveformModeSelected()
 void
 MainWindow::spectrogramModeSelected()
 {
-    QString name = tr("Spectrogram");
+    QString name = m_modeLayerNames[SpectrogramMode];
 
     Pane *currentPane = m_paneStack->getCurrentPane();
     
@@ -1602,7 +1628,7 @@ MainWindow::spectrogramModeSelected()
 void
 MainWindow::melodogramModeSelected()
 {
-    QString name = tr("Melodic Range Spectrogram");
+    QString name = m_modeLayerNames[MelodogramMode];
 
     Pane *currentPane = m_paneStack->getCurrentPane();
 
@@ -1637,11 +1663,12 @@ MainWindow::melodogramModeSelected()
 }
 
 void
-MainWindow::selectTransformDrivenMode(QString name,
-                                      DisplayMode mode,
+MainWindow::selectTransformDrivenMode(DisplayMode mode,
                                       QString transformId,
                                       QString layerPropertyXml)
 {
+    QString name = m_modeLayerNames[mode];
+    
     Pane *currentPane = m_paneStack->getCurrentPane();
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
@@ -1710,8 +1737,7 @@ MainWindow::curveModeSelected()
         .arg(int(TimeValueLayer::PlotStems));
 
     selectTransformDrivenMode
-        (tr("Curve"),
-         CurveMode,
+        (CurveMode,
          "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
          propertyXml);
 }
@@ -1725,8 +1751,7 @@ MainWindow::pitchModeSelected()
         .arg(int(TimeValueLayer::LogScale));
     
     selectTransformDrivenMode
-        (tr("Pitch"),
-         PitchMode,
+        (PitchMode,
          "vamp:pyin:pyin:smoothedpitchtrack",
          propertyXml);
 }
@@ -1740,8 +1765,7 @@ MainWindow::keyModeSelected()
         .arg(int(BinScale::Linear));
     
     selectTransformDrivenMode
-        (tr("Key"),
-         KeyMode,
+        (KeyMode,
          "vamp:qm-vamp-plugins:qm-keydetector:keystrength",
          propertyXml);
 }
@@ -1755,8 +1779,7 @@ MainWindow::azimuthModeSelected()
         .arg(int(BinScale::Linear));
 
     selectTransformDrivenMode
-        (tr("Azimuth"),
-         AzimuthMode,
+        (AzimuthMode,
          "vamp:azi:azi:plan",
          propertyXml);
 }
@@ -1792,42 +1815,13 @@ MainWindow::updateModeFromLayers()
             QString ln = layer->objectName();
 
             SVCERR << "MainWindow::updateModeFromLayers: layer " << j << " has name " << ln << endl;
-            
-            //!!! todo: store layer names in a map against layer types, so
-            //!!! as to ensure consistency
-        
-            if (ln == tr("Outline Waveform")) {
-                m_displayMode = OutlineWaveformMode;
-                found = true;
-                break;
-            } else if (ln == tr("Waveform")) {
-                m_displayMode = WaveformMode;
-                found = true;
-                break;
-            } else if (ln == tr("Melodic Range Spectrogram")) {
-                m_displayMode = MelodogramMode;
-                found = true;
-                break;
-            } else if (ln == tr("Spectrogram")) {
-                m_displayMode = SpectrogramMode;
-                found = true;
-                break;
-            } else if (ln == tr("Curve")) {
-                m_displayMode = CurveMode;
-                found = true;
-                break;
-            } else if (ln == tr("Pitch")) {
-                m_displayMode = PitchMode;
-                found = true;
-                break;
-            } else if (ln == tr("Key")) {
-                m_displayMode = KeyMode;
-                found = true;
-                break;
-            } else if (ln == tr("Azimuth")) {
-                m_displayMode = AzimuthMode;
-                found = true;
-                break;
+
+            for (const auto &mp: m_modeLayerNames) {
+                if (ln == mp.second) {
+                    m_displayMode = mp.first;
+                    found = true;
+                    break;
+                }
             }
         }
 
