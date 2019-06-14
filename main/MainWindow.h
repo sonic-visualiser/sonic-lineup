@@ -128,7 +128,9 @@ protected slots:
     virtual void restoreNormalPlayback();
 
     void monitoringLevelsChanged(float, float) override;
-    
+
+    void betaReleaseWarning();
+
     void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;
     void audioOverloadPluginDisabled() override;
     void audioTimeStretchMultiChannelDisabled() override;

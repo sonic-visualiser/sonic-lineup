@@ -339,8 +339,8 @@ MainWindow::MainWindow(SoundOptions options) :
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(bottomElementHeight);
-    m_playSpeed->setFixedHeight(bottomElementHeight);
+    m_playSpeed->setFixedWidth(bottomElementHeight * 0.9);
+    m_playSpeed->setFixedHeight(bottomElementHeight * 0.9);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -386,6 +386,8 @@ MainWindow::MainWindow(SoundOptions options) :
     finaliseMenus();
 
     openMostRecentSession();
+    
+    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
 
 MainWindow::~MainWindow()
@@ -688,6 +690,7 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(toggleVerticalScales()));
     action->setCheckable(true);
     action->setChecked(false);
+    m_viewManager->setOverlayMode(ViewManager::NoOverlays);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
         
@@ -1214,6 +1217,8 @@ MainWindow::openSmallSessionFile(QString path)
     configureNewPane(m_paneStack->getCurrentPane());
         
     for (QString path: session.additionalFiles) {
+
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         
         status = openPath(path, CreateAdditionalModel);
 
@@ -2333,6 +2338,14 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
         (this, tr("Audio processing overload"),
          tr("<b>Overloaded</b><p>Audio playback speed processing has been reduced to a single channel, due to a processing overload."));
     shownOnce = true;
+}
+
+void
+MainWindow::betaReleaseWarning()
+{
+    QMessageBox::information
+        (this, tr("Test release"),
+         tr("<b>This is a test release of %1</b><p>This release is made for test purposes only - please send feedback to the developers.</p>").arg(QApplication::applicationName()));
 }
 
 void
