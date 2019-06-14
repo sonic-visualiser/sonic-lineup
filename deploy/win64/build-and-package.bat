@@ -37,7 +37,7 @@ del signtest.exe
 @echo Rebuilding 64-bit
 
 cd %STARTPWD%
-rem del /q /s build_win64
+del /q /s build_win64
 call .\deploy\win64\build-64.bat
 if %errorlevel% neq 0 exit /b %errorlevel%
 
