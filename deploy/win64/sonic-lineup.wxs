@@ -8,7 +8,7 @@
       Language="1033"
       Codepage="1252" 
       Version="3.2"
-      UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
+      UpgradeCode="a21e6cb2-df2e-43c0-aec3-22736add6a9c"
       Manufacturer="Queen Mary, University of London">
     
     <Package
@@ -36,7 +36,7 @@
 
           <Component Win64="yes"
               Id="MainExecutable"
-              Guid="65E1EBDF-4C8F-47B8-BCD6-981667F5946D">
+              Guid="b253c538-321e-455e-81b2-9c879fe1371c">
 
             <File
                 Id="SVExecutable"
@@ -113,7 +113,7 @@
           
           <Component Win64="yes"
               Id="Qt5"
-              Guid="5495ED5E-939A-4BE8-9000-D55F2A7A2E90">
+              Guid="4d6d166f-9e3c-443d-a502-8711fbd80911">
             <File
                 Id="QtCore"
                 Name="Qt5Core.dll"
@@ -143,7 +143,7 @@
 
           <Component Win64="yes"
                      Id="Sndfile"
-                     Guid="04533516-6460-4155-A0D4-E9BA4D31E95C">
+                     Guid="49332c83-e52c-4ce3-b772-737f865854f1">
             <File
                 Id="libsndfile"
                 Name="libsndfile-1.dll"
@@ -153,7 +153,7 @@
 
           <Component Win64="yes"
                Id="VCRuntime"
-               Guid="251D9513-BBD2-47CF-BE78-EF79446F7683">
+               Guid="5d4a1454-d726-4c46-8be0-79c916cba03d">
 
             <!-- Redistributables are handled by the Visual Studio
                  installer (a separate program from VS itself) and are
@@ -186,7 +186,7 @@
 	  <Directory Id="Platforms" Name="platforms">
             <Component Win64="yes"
                 Id="Qt5PlatformPlugins"
-                Guid="1FFB773E-6D6D-4C0E-832B-F0FFEA959CA5">
+                Guid="363830fa-1117-4609-8d47-006900c1396e">
 	      <File
                   Id="qminimal"
                   Name="qminimal.dll"
@@ -201,7 +201,7 @@
 	  <Directory Id="Styles" Name="styles">
             <Component Win64="yes"
                 Id="Qt5StylePlugins"
-                Guid="7A676FC1-B139-432C-A7D3-F33984934B79">
+                Guid="dd137a4b-e48d-4679-8628-5b01b82495ef">
 	      <File
                   Id="qwindowsvistastyle"
                   Name="qwindowsvistastyle.dll"
@@ -212,7 +212,7 @@
 	  <Directory Id="Helpers" Name="helpers">
             <Component Win64="yes"
                 Id="Piper64"
-                Guid="6385BD86-A5D3-4C77-AD41-B2DCA5B34E48">
+                Guid="da7c2b7a-f950-4e2c-94bd-c86ec662835e">
 	      <File
 		  Id="piperconv64"
 		  Name="piper-convert.exe"
@@ -241,7 +241,7 @@
 	    </Component>
             <Component Win64="yes"
                 Id="Checker64"
-                Guid="19A400D9-D5B2-4CB5-AF84-7C1DEA11D7B5">
+                Guid="2170129f-cea0-499d-b761-ea95679f850d">
 	      <File
 		  Id="checker64"
 		  Name="vamp-plugin-load-checker.exe"
@@ -254,7 +254,7 @@
 
       <Directory Id="ProgramMenuFolder" Name="Programs">
         <Directory Id="ProgramMenuDir" Name="Sonic Lineup">
-          <Component Id="ProgramMenuDir" Guid="C1980FF3-D135-46F8-8542-F937748721E6">
+          <Component Id="ProgramMenuDir" Guid="633047c8-bfee-4522-b9cd-ec8143c09a8f">
             <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
             <RegistryValue Root="HKMU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes"/>
           </Component>
