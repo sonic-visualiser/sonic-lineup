@@ -3,7 +3,7 @@
 <!-- TODO: rewrite GUIDs, these are still those from (other) SV -->
 
   <Product
-      Name="Sonic Vector" 
+      Name="Sonic Lineup" 
       Id="*"
       Language="1033"
       Codepage="1252" 
@@ -14,7 +14,7 @@
     <Package
         Id="*"
         Keywords="Installer"
-        Description="Sonic Vector 64-bit Installer" 
+        Description="Sonic Lineup 64-bit Installer" 
         Comments="Copyright (c) 2018 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="200"
@@ -23,10 +23,10 @@
         Platform="x64"
         SummaryCodepage="1252"/>
 
-    <MajorUpgrade DowngradeErrorMessage="A later version of Sonic Vector is already installed. Setup will now exit."/>
+    <MajorUpgrade DowngradeErrorMessage="A later version of Sonic Lineup is already installed. Setup will now exit."/>
 
     <Media Id="1" Cabinet="SonicVector.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1"/>
-    <Property Id="DiskPrompt" Value="Sonic Vector Installation [1]"/>
+    <Property Id="DiskPrompt" Value="Sonic Lineup Installation [1]"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
 
@@ -42,7 +42,7 @@
           </Component>
         </Directory>
 
-        <Directory Id="APPLICATIONFOLDER" Name="Sonic Vector">
+        <Directory Id="APPLICATIONFOLDER" Name="Sonic Lineup">
 
           <Component Win64="yes"
               Id="MainExecutable"
@@ -50,14 +50,14 @@
 
             <File
                 Id="SVExecutable"
-                Name="Sonic Vector.exe"
-                Source="release\Sonic Vector.exe"
+                Name="Sonic Lineup.exe"
+                Source="release\Sonic Lineup.exe"
                 KeyPath="yes">
 
               <Shortcut
                   Id="SVStartEntry"
                   Directory="ProgramMenuDir"
-                  Name="Sonic Vector"
+                  Name="Sonic Lineup"
                   WorkingDirectory="APPLICATIONFOLDER"
                   Icon="winicon.ico"
                   IconIndex="0"
@@ -66,7 +66,7 @@
               <Shortcut
                   Id="SVDesktop"
                   Directory="DesktopFolder"
-                  Name="Sonic Vector"
+                  Name="Sonic Lineup"
                   WorkingDirectory="APPLICATIONFOLDER"
                   Icon="winicon.ico"
                   IconIndex="0"
@@ -104,7 +104,7 @@
 
             <ProgId 
                 Id='SonicVector.svfile' 
-                Description='Sonic Vector project file'
+                Description='Sonic Lineup project file'
                 Icon="SVExecutable">
               <Extension 
                   Id='sv' 
@@ -261,7 +261,7 @@
       </Directory> <!-- pfiles64 -->
 
       <Directory Id="ProgramMenuFolder" Name="Programs">
-        <Directory Id="ProgramMenuDir" Name="Sonic Vector">
+        <Directory Id="ProgramMenuDir" Name="Sonic Lineup">
           <Component Id="ProgramMenuDir" Guid="C1980FF3-D135-46F8-8542-F937748721E6">
             <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
             <RegistryValue Root="HKMU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes"/>
@@ -276,7 +276,7 @@
     <Feature 
 	Id="Complete"
 	Title="Required files"
-	Description="Installs the required files for running Sonic Vector."
+	Description="Installs the required files for running Sonic Lineup."
 	AllowAdvertise="no"
 	Absent="disallow"
 	ConfigurableDirectory="APPLICATIONFOLDER"
@@ -301,7 +301,7 @@
 
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
     <Property Id="WIXUI_DONTVALIDATEPATH" Value="1" />
-    <Property Id="ApplicationFolderName" Value="Sonic Vector" />
+    <Property Id="ApplicationFolderName" Value="Sonic Lineup" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
     <WixVariable Id="WixUILicenseRtf" Value="..\deploy\win64\License.rtf" />
     

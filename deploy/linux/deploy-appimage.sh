@@ -2,7 +2,7 @@
 
 set -eu
 
-program=sonic-vector
+program=sonic-lineup
 checker=vamp-plugin-load-checker
 piper=piper-vamp-simple-server
 plugins="azi match-vamp-plugin nnls-chroma pyin qm-vamp-plugins tuning-difference"
@@ -114,7 +114,7 @@ done
 cp "$program.desktop" "$targetdir/"
 
 #!!! cp "icons/sv-icon.svg" "$targetdir/"
-#!!! cp "icons/sonic-vector.svg" "$targetdir/"
+#!!! cp "icons/sonic-lineup.svg" "$targetdir/"
 
 cp "deploy/linux/AppRun" "$targetdir/"
 

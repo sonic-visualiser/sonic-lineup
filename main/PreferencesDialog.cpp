@@ -40,7 +40,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),
     m_changesOnRestart(false)
 {
-    setWindowTitle(tr("Sonic Vector: Application Preferences"));
+    setWindowTitle(tr("Sonic Lineup: Application Preferences"));
 
     Preferences *prefs = Preferences::getInstance();
 
@@ -213,7 +213,7 @@ PreferencesDialog::applyClicked()
 
     if (m_changesOnRestart) {
         QMessageBox::information(this, tr("Preferences"),
-                                 tr("One or more of the application preferences you have changed may not take full effect until Sonic Vector is restarted.\nPlease exit and restart the application now if you want these changes to take effect immediately."));
+                                 tr("One or more of the application preferences you have changed may not take full effect until Sonic Lineup is restarted.\nPlease exit and restart the application now if you want these changes to take effect immediately."));
         m_changesOnRestart = false;
     }
 }    

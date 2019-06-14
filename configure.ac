@@ -1,5 +1,5 @@
 
-AC_INIT([Sonic Vector], [], cannam@all-day-breakfast.com)
+AC_INIT([Sonic Lineup], [], cannam@all-day-breakfast.com)
 
 AC_CONFIG_SRCDIR(main/main.cpp)
 

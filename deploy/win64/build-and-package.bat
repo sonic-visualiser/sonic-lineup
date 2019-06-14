@@ -51,17 +51,17 @@ set PATH=%PATH%;"C:\Program Files (x86)\WiX Toolset v3.11\bin"
 @echo Packaging 64-bit
 
 cd %STARTPWD%\build_win64
-del sonic-vector.msi
-candle -v ..\deploy\win64\sonic-vector.wxs
-light -b . -ext WixUIExtension -ext WixUtilExtension -v sonic-vector.wixobj
+del sonic-lineup.msi
+candle -v ..\deploy\win64\sonic-lineup.wxs
+light -b . -ext WixUIExtension -ext WixUtilExtension -v sonic-lineup.wixobj
 if %errorlevel% neq 0 exit /b %errorlevel%
-del sonic-vector.wixobj
-del sonic-vector.wixpdb
+del sonic-lineup.wixobj
+del sonic-lineup.wixpdb
 
 if "%ARG%" == "sign" (
 @echo Signing 64-bit package
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 sonic-vector.msi
-signtool verify /pa sonic-vector.msi
+signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 sonic-lineup.msi
+signtool verify /pa sonic-lineup.msi
 )
 
 set PATH=%ORIGINALPATH%

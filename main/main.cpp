@@ -130,7 +130,7 @@ setupVectVampPath()
 #ifdef Q_OS_MAC
         vectVampPath = vectVampPath + "/../Resources:" + vectVampPath;
 #else
-        QString defaultVectPath("/usr/local/lib/sonic-vector:/usr/lib/sonic-vector");
+        QString defaultVectPath("/usr/local/lib/sonic-lineup:/usr/lib/sonic-lineup");
         vectVampPath = vectVampPath + sep + defaultVectPath;
 #endif
 #endif
@@ -177,7 +177,7 @@ main(int argc, char **argv)
 
     if (args.contains("--help") || args.contains("-h") || args.contains("-?")) {
         std::cerr << QApplication::tr(
-            "\nSonic Vector is a comparative viewer for sets of related audio recordings.\n\nUsage:\n\n  %1 [--no-audio] [<file1>, <file2>...]\n\n  --no-audio: Do not attempt to open an audio output device\n  <file1>, <file2>...: Audio files; Sonic Vector is designed for comparative\nviewing of multiple recordings of the same music or other related material.\n").arg(argv[0]).toStdString() << std::endl;
+            "\nSonic Lineup is a comparative viewer for sets of related audio recordings.\n\nUsage:\n\n  %1 [--no-audio] [<file1>, <file2>...]\n\n  --no-audio: Do not attempt to open an audio output device\n  <file1>, <file2>...: Audio files; Sonic Lineup is designed for comparative\nviewing of multiple recordings of the same music or other related material.\n").arg(argv[0]).toStdString() << std::endl;
         exit(2);
     }
 
@@ -185,7 +185,7 @@ main(int argc, char **argv)
 
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
-    QApplication::setApplicationName("Sonic Vector");
+    QApplication::setApplicationName("Sonic Lineup");
 
     InteractiveFileFinder::getInstance()->setApplicationSessionExtension("vect");
 

@@ -18,13 +18,13 @@ doc/html/
 re:^autom4te\.cache/
 re:^qrc_vect\.cpp$
 re:^vect$
-re:^sonic-vector$
+re:^sonic-lineup$
 re:^aclocal\.m4$
 re:^config\.log$
 re:^config\.pri$
 re:^config\.status$
 *.app
-Sonic Vector*
+Sonic Lineup*
 .DS_Store
 *.stash
 cov-int/*

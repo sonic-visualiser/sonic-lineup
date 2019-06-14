@@ -339,8 +339,8 @@ MainWindow::MainWindow(SoundOptions options) :
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(bottomElementHeight);
-    m_playSpeed->setFixedHeight(bottomElementHeight);
+    m_playSpeed->setFixedWidth(bottomElementHeight * 0.9);
+    m_playSpeed->setFixedHeight(bottomElementHeight * 0.9);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -386,6 +386,8 @@ MainWindow::MainWindow(SoundOptions options) :
     finaliseMenus();
 
     openMostRecentSession();
+    
+    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
 
 MainWindow::~MainWindow()
@@ -532,7 +534,7 @@ MainWindow::setupFileMenu()
     menu->addSeparator();
     action = new QAction(il.load("exit"), tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
-    action->setStatusTip(tr("Exit Sonic Vector"));
+    action->setStatusTip(tr("Exit Sonic Lineup"));
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
@@ -688,6 +690,7 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(toggleVerticalScales()));
     action->setCheckable(true);
     action->setChecked(false);
+    m_viewManager->setOverlayMode(ViewManager::NoOverlays);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
         
@@ -730,13 +733,13 @@ MainWindow::setupHelpMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     
-    action = new QAction(tr("Sonic Vector on the &Web"), this); 
-    action->setStatusTip(tr("Open the Sonic Vector website")); 
+    action = new QAction(tr("Sonic Lineup on the &Web"), this); 
+    action->setStatusTip(tr("Open the Sonic Lineup website")); 
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
-    action = new QAction(tr("&About Sonic Vector"), this); 
-    action->setStatusTip(tr("Show information about Sonic Vector")); 
+    action = new QAction(tr("&About Sonic Lineup"), this); 
+    action->setStatusTip(tr("Show information about Sonic Lineup")); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
 }
@@ -1077,7 +1080,7 @@ MainWindow::closeSession()
     m_viewManager->clearSelections();
     m_timeRulerLayer = 0; // document owned this
 
-    setWindowTitle(tr("Sonic Vector"));
+    setWindowTitle(tr("Sonic Lineup"));
 
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
@@ -1214,6 +1217,8 @@ MainWindow::openSmallSessionFile(QString path)
     configureNewPane(m_paneStack->getCurrentPane());
         
     for (QString path: session.additionalFiles) {
+
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         
         status = openPath(path, CreateAdditionalModel);
 
@@ -2336,6 +2341,14 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 }
 
 void
+MainWindow::betaReleaseWarning()
+{
+    QMessageBox::information
+        (this, tr("Test release"),
+         tr("<b>This is a test release of %1</b><p>This release is made for test purposes only - please send feedback to the developers.</p>").arg(QApplication::applicationName()));
+}
+
+void
 MainWindow::layerRemoved(Layer *layer)
 {
     MainWindowBase::layerRemoved(layer);
@@ -2811,14 +2824,14 @@ MainWindow::about()
 
     QString aboutText;
 
-    aboutText += tr("<h3>About Sonic Vector</h3>");
-    aboutText += tr("<p>Sonic Vector is a comparative viewer for sets of related audio recordings.</p>");
+    aboutText += tr("<h3>About Sonic Lineup</h3>");
+    aboutText += tr("<p>Sonic Lineup is a comparative viewer for sets of related audio recordings.</p>");
     aboutText += tr("<p>%1 : %2 configuration</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
 
     aboutText += 
-        "<p>Sonic Vector Copyright &copy; 2005 - 2019 Chris Cannam and<br>"
+        "<p>Sonic Lineup Copyright &copy; 2005 - 2019 Chris Cannam and<br>"
         "Queen Mary, University of London.</p>"
         "<p>This program uses library code from many other authors. Please<br>"
         "refer to the accompanying documentation for more information.</p>"
@@ -2828,7 +2841,7 @@ MainWindow::about()
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</p>";
     
-    QMessageBox::about(this, tr("About Sonic Vector"), aboutText);
+    QMessageBox::about(this, tr("About Sonic Lineup"), aboutText);
 }
 
 void

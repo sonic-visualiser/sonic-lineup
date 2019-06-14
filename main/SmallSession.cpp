@@ -36,7 +36,7 @@ SmallSession::save(const SmallSession &session, QString sessionFile)
     out.setCodec(QTextCodec::codecForName("UTF-8"));
     
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        << "<!DOCTYPE sonic-vector>\n"
+        << "<!DOCTYPE sonic-lineup>\n"
         << "<vect>\n";
 
     out << (QString("  <model id=\"1\" type=\"wavefile\" "

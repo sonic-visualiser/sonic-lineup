@@ -4265,7 +4265,7 @@ Co chcete vyvést?</translation>
         <translation type="vanished">Táhněte nahoru/dolů pro přizpůsobení, Ctrl+klepnutí pro vrácení do výchozího stavu</translation>
     </message>
     <message>
-        <source>Sonic Vector</source>
+        <source>Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4305,7 +4305,7 @@ Co chcete vyvést?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Exit Sonic Vector</source>
+        <source>Exit Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4325,19 +4325,19 @@ Co chcete vyvést?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sonic Vector on the &amp;Web</source>
+        <source>Sonic Lineup on the &amp;Web</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Open the Sonic Vector website</source>
+        <source>Open the Sonic Lineup website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;About Sonic Vector</source>
+        <source>&amp;About Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show information about Sonic Vector</source>
+        <source>Show information about Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4396,11 +4396,11 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;h3&gt;About Sonic Vector&lt;/h3&gt;</source>
+        <source>&lt;h3&gt;About Sonic Lineup&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;p&gt;Sonic Vector is a comparative viewer for sets of related audio recordings.&lt;/p&gt;</source>
+        <source>&lt;p&gt;Sonic Lineup is a comparative viewer for sets of related audio recordings.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4408,7 +4408,7 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About Sonic Vector</source>
+        <source>About Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6021,7 +6021,7 @@ Použít je před zavřením?</translation>
         <translation type="vanished">&amp;Přídavné moduly</translation>
     </message>
     <message>
-        <source>Sonic Vector: Application Preferences</source>
+        <source>Sonic Lineup: Application Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6037,7 +6037,7 @@ Použít je před zavřením?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>One or more of the application preferences you have changed may not take full effect until Sonic Vector is restarted.
+        <source>One or more of the application preferences you have changed may not take full effect until Sonic Lineup is restarted.
 Please exit and restart the application now if you want these changes to take effect immediately.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6220,14 +6220,14 @@ Použití:
     </message>
     <message>
         <source>
-Sonic Vector is a comparative viewer for sets of related audio recordings.
+Sonic Lineup is a comparative viewer for sets of related audio recordings.
 
 Usage:
 
   %1 [--no-audio] [&lt;file1&gt;, &lt;file2&gt;...]
 
   --no-audio: Do not attempt to open an audio output device
-  &lt;file1&gt;, &lt;file2&gt;...: Audio files; Sonic Vector is designed for comparative
+  &lt;file1&gt;, &lt;file2&gt;...: Audio files; Sonic Lineup is designed for comparative
 viewing of multiple recordings of the same music or other related material.
 </source>
         <translation type="unfinished"></translation>
