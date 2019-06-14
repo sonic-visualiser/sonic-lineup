@@ -124,5 +124,5 @@ chmod +x "$targetdir/AppRun"
 # in situations where FUSE is unavailable like in a Docker container
 export ARCH=x86_64
 sv-dependency-builds/linux/appimage/appimagetool-x86_64.AppImage --appimage-extract
-./squashfs-root/AppRun "$targetdir" "SonicVector-$version-x86_64.AppImage"
+./squashfs-root/AppRun "$targetdir" "SonicLineup-$version-x86_64.AppImage"
 
