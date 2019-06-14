@@ -245,7 +245,7 @@ MainWindow::MainWindow(SoundOptions options) :
     button->setIcon(il.load("waveform"));
     button->setText(tr("Waveform"));
     button->setCheckable(true);
-    button->setChecked(true);
+    button->setChecked(false);
     button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
@@ -771,11 +771,10 @@ MainWindow::setupToolbars()
     QSettings settings;
 
     QAction *tdAction = 0;
-    tdAction = new QAction(tr("Allow for Tuning Differences when Aligning"),
-                           this);
+    tdAction = new QAction(tr("Allow for Pitch Difference when Aligning"), this);
     tdAction->setCheckable(true);
     settings.beginGroup("Alignment");
-    tdAction->setChecked(settings.value("align-pitch-aware", false).toBool());
+    tdAction->setChecked(settings.value("align-pitch-aware", true).toBool());
     settings.endGroup();
     tdAction->setStatusTip(tr("Compare relative pitch content of audio files before aligning, in order to correctly align recordings of the same material at different tuning pitches"));
     connect(tdAction, SIGNAL(triggered()), this, SLOT(tuningDifferenceToggled()));
@@ -1464,6 +1463,8 @@ MainWindow::outlineWaveformModeSelected()
 {
     QString name = tr("Outline Waveform");
 
+    Pane *currentPane = m_paneStack->getCurrentPane();
+    
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
@@ -1501,6 +1502,10 @@ MainWindow::outlineWaveformModeSelected()
         }
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+    
     m_displayMode = OutlineWaveformMode;
     checkpointSession();
 }
@@ -1510,6 +1515,8 @@ MainWindow::standardWaveformModeSelected()
 {
     QString name = tr("Standard Waveform");
 
+    Pane *currentPane = m_paneStack->getCurrentPane();
+    
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
@@ -1547,6 +1554,10 @@ MainWindow::standardWaveformModeSelected()
         }
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+
     m_displayMode = WaveformMode;
     checkpointSession();
 }
@@ -1556,6 +1567,8 @@ MainWindow::spectrogramModeSelected()
 {
     QString name = tr("Spectrogram");
 
+    Pane *currentPane = m_paneStack->getCurrentPane();
+    
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
@@ -1577,6 +1590,10 @@ MainWindow::spectrogramModeSelected()
         }
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+
     m_displayMode = SpectrogramMode;
     checkpointSession();
 }
@@ -1585,6 +1602,8 @@ void
 MainWindow::melodogramModeSelected()
 {
     QString name = tr("Melodic Range Spectrogram");
+
+    Pane *currentPane = m_paneStack->getCurrentPane();
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
@@ -1608,6 +1627,10 @@ MainWindow::melodogramModeSelected()
         }
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+
     m_displayMode = MelodogramMode;
     checkpointSession();
 }
@@ -1618,6 +1641,8 @@ MainWindow::selectTransformDrivenMode(QString name,
                                       QString transformId,
                                       QString layerPropertyXml)
 {
+    Pane *currentPane = m_paneStack->getCurrentPane();
+
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
@@ -1666,6 +1691,10 @@ MainWindow::selectTransformDrivenMode(QString name,
         if (salient) {
             pane->propertyContainerSelected(pane, salient);
         }
+    }
+
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
     }
 
     m_displayMode = mode;
