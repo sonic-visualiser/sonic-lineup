@@ -11,9 +11,15 @@
 	<key>CFBundleIconFile</key>
 	<string>sv-macicon.icns</string> <!-- todo -->
 	<key>CFBundleIdentifier</key>
-	<string>org.sonicvisualiser.SonicVector</string>
+	<string>org.sonicvisualiser.SonicLineup</string>
 	<key>CFBundleShortVersionString</key>
 	<string>VECT_VERSION</string>
+
+	<!-- Provide an explanatory string for microphone usage so
+	     that access is requested. NB this is localised in
+	     the *.lproj/InfoPlist.strings files -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Sonic Lineup needs to use the microphone for recording.</string>
 
 	<!-- enable HiDPI -->
 	<key>NSPrincipalClass</key>
@@ -23,33 +29,6 @@
 
 	<key>CFBundleDocumentTypes</key>
 	<array>
-		<!-- we are an 'editor' of SV files -->
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>vect</string>
-			</array>
-			<!-- TODO
-			<key>CFBundleTypeIconFile</key>
-			<string>SVProject.icns</string> -->
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/x-sonic-lineup-session</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>Sonic Lineup Session</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>****</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
-		</dict>
-		
 		<!-- we are a 'viewer' of general audio files -->
 		<dict>
 			<key>CFBundleTypeExtensions</key>

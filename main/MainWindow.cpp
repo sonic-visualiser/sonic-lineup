@@ -141,6 +141,8 @@ MainWindow::MainWindow(SoundOptions options) :
 {
     setWindowTitle(QApplication::applicationName());
 
+    setUnifiedTitleAndToolBarOnMac(true);
+
     UnitDatabase *udb = UnitDatabase::getInstance();
     udb->registerUnit("Hz");
     udb->registerUnit("dB");
@@ -509,19 +511,19 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 
     menu->addSeparator();
+    
+    action = new QAction(tr("Browse Recorded Audio"), this);
+    action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
+    connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
+    menu->addAction(action);
+
+    menu->addSeparator();
 
     m_recentSessionsMenu = menu->addMenu(tr("&Recent Sessions"));
     m_recentSessionsMenu->setTearOffEnabled(false);
     setupRecentSessionsMenu();
     connect(&m_recentSessions, SIGNAL(recentChanged()),
             this, SLOT(setupRecentSessionsMenu()));
-
-    menu->addSeparator();
-    
-    action = new QAction(tr("Browse Recorded Audio"), this);
-    action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
-    connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
-    menu->addAction(action);
     
     /*
     menu->addSeparator();
@@ -693,10 +695,13 @@ MainWindow::setupViewMenu()
     m_viewManager->setOverlayMode(ViewManager::NoOverlays);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-        
-#ifndef Q_OS_MAC
+
+    // We need this separator even if not adding the full-screen
+    // option ourselves, as the Mac automatic full-screen entry
+    // doesn't include a separator first
     menu->addSeparator();
 
+#ifndef Q_OS_MAC
     // Only on non-Mac platforms -- on the Mac this interacts very
     // badly with the "native" full-screen mode
     action = new QAction(tr("Go Full-Screen"), this);

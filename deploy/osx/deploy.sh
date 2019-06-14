@@ -69,10 +69,9 @@ perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/osx/Info.plist \
 
 echo "Done: check $source/Contents/Info.plist for sanity please"
 
-## Needed if e.g. we ask for microphone permissions
-#echo
-#echo "Copying in lproj directories containing InfoPlist.strings translation files."
-#cp -r i18n/*.lproj "$source"/Contents/Resources/
+echo
+echo "Copying in lproj directories containing InfoPlist.strings translation files."
+cp -r i18n/*.lproj "$source"/Contents/Resources/
 
 echo
 echo "Making target tree."
