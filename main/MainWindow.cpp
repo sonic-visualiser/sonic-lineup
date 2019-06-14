@@ -2829,20 +2829,20 @@ MainWindow::about()
 
     QString aboutText;
 
-    aboutText += tr("<h3>About Sonic Lineup</h3>");
-    aboutText += tr("<p>Sonic Lineup is a comparative viewer for sets of related audio recordings.</p>");
+    aboutText += tr("<h3>%1</h3>").arg(QApplication::applicationName());
+    aboutText += tr("<p>An application for comparative visualisation and alignment of related audio recordings.</p>");
     aboutText += tr("<p>%1 : %2 configuration</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
 
     aboutText += 
-        "<p>Sonic Lineup Copyright &copy; 2005 - 2019 Chris Cannam and<br>"
+        "<p>Sonic Lineup Copyright &copy; 2005 - 2019 Chris Cannam and "
         "Queen Mary, University of London.</p>"
-        "<p>This program uses library code from many other authors. Please<br>"
+        "<p>This program uses library code from many other authors. Please "
         "refer to the accompanying documentation for more information.</p>"
-        "<p>This program is free software; you can redistribute it and/or<br>"
-        "modify it under the terms of the GNU General Public License as<br>"
-        "published by the Free Software Foundation; either version 2 of the<br>"
+        "<p>This program is free software; you can redistribute it and/or "
+        "modify it under the terms of the GNU General Public License as "
+        "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</p>";
     
