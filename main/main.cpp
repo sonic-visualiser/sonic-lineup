@@ -239,7 +239,7 @@ main(int argc, char **argv)
     // Permit size_t and PropertyName to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
-    MainWindow::SoundOptions options = MainWindow::WithEverything;
+    MainWindow::SoundOptions options = MainWindow::WithAudioInput | MainWindow::WithAudioOutput;
     if (!audioOutput) options = 0;
 
     MainWindow *gui = new MainWindow(options);

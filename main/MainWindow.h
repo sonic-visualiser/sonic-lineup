@@ -69,6 +69,10 @@ public:
     MainWindow(SoundOptions options);
     virtual ~MainWindow();
 
+signals:
+    void canSelectPreviousDisplayMode(bool);
+    void canSelectNextDisplayMode(bool);
+
 public slots:
     void preferenceChanged(PropertyContainer::PropertyName) override;
     bool commitData(bool mayAskUser); // on session shutdown
@@ -84,6 +88,7 @@ protected slots:
     virtual void openRecentSession();
     virtual void openMostRecentSession();
     virtual void checkpointSession();
+    virtual void browseRecordedAudio();
     virtual void newSession();
     virtual void preferences();
 
@@ -97,6 +102,9 @@ protected slots:
     void azimuthModeSelected();
     void pitchModeSelected();
     void keyModeSelected();
+
+    void previousDisplayMode();
+    void nextDisplayMode();
 
     void toggleSalientFeatures();
     void toggleVerticalScales();
@@ -189,6 +197,11 @@ protected:
     QAction                 *m_scrollLeftAction;
     QAction                 *m_scrollRightAction;
 
+    QAction                 *m_selectPreviousPaneAction;
+    QAction                 *m_selectNextPaneAction;
+    QAction                 *m_selectPreviousDisplayModeAction;
+    QAction                 *m_selectNextDisplayModeAction;
+
     RecentFiles              m_recentSessions;
     
     bool                     m_exiting;
@@ -219,11 +232,12 @@ protected:
         KeyMode
     };
     std::map<DisplayMode, QPushButton *> m_modeButtons;
+    std::map<DisplayMode, QString> m_modeLayerNames;
+    std::vector<DisplayMode> m_modeDisplayOrder;
     
     virtual void reselectMode();
     virtual void updateModeFromLayers(); // after loading a session
-    virtual void selectTransformDrivenMode(QString name,
-                                           DisplayMode mode,
+    virtual void selectTransformDrivenMode(DisplayMode mode,
                                            QString transformId,
                                            QString layerPropertyXml);
     DisplayMode m_displayMode;
