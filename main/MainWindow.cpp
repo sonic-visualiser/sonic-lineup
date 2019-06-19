@@ -189,6 +189,12 @@ MainWindow::MainWindow(SoundOptions options) :
     settings.setValue("showcancelbuttons", false);
     settings.endGroup();
 
+    settings.beginGroup("Alignment");
+    if (!settings.contains("align-pitch-aware")) {
+        settings.setValue("align-pitch-aware", true);
+    }
+    settings.endGroup();
+
     m_viewManager->setAlignMode(true);
     m_viewManager->setPlaySoloMode(true);
     m_viewManager->setToolMode(ViewManager::NavigateMode);
@@ -341,8 +347,8 @@ MainWindow::MainWindow(SoundOptions options) :
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(bottomElementHeight * 0.9);
-    m_playSpeed->setFixedHeight(bottomElementHeight * 0.9);
+    m_playSpeed->setFixedWidth(int(bottomElementHeight * 0.9));
+    m_playSpeed->setFixedHeight(int(bottomElementHeight * 0.9));
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -889,7 +895,7 @@ MainWindow::setupToolbars()
     tdAction = new QAction(tr("Allow for Pitch Difference when Aligning"), this);
     tdAction->setCheckable(true);
     settings.beginGroup("Alignment");
-    tdAction->setChecked(settings.value("align-pitch-aware", true).toBool());
+    tdAction->setChecked(settings.value("align-pitch-aware", false).toBool());
     settings.endGroup();
     tdAction->setStatusTip(tr("Compare relative pitch content of audio files before aligning, in order to correctly align recordings of the same material at different tuning pitches"));
     connect(tdAction, SIGNAL(triggered()), this, SLOT(tuningDifferenceToggled()));
