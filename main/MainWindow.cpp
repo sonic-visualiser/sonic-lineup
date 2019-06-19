@@ -2033,20 +2033,37 @@ MainWindow::configureNewPane(Pane *pane)
 
     if (!pane) return;
 
-    zoomToFit();
-    reselectMode();
-
+    // MainWindowBase::addOpenedAudioModel adds a waveform layer for
+    // each additional model besides the main one (assuming that the
+    // main one gets it, if needed, from the session template). We
+    // don't actually want to use those - we'll be adding our own with
+    // specific parameters - but they don't cost much, so rather than
+    // remove them, just rename them to something that won't cause
+    // confusion with the name-based mode layer handling. NB we have
+    // to do this before calling reselectMode(), as that will add
+    // another competing waveform layer
+    
     Layer *waveformLayer = 0;
 
     for (int i = 0; i < pane->getLayerCount(); ++i) {
         Layer *layer = pane->getLayer(i);
-        if (!layer) continue;
-        if (dynamic_cast<WaveformLayer *>(layer)) waveformLayer = layer;
-        if (dynamic_cast<TimeValueLayer *>(layer)) return;
+        if (!layer) {
+            continue;
+        }
+        if (dynamic_cast<WaveformLayer *>(layer)) {
+            waveformLayer = layer;
+        }
+        if (dynamic_cast<TimeValueLayer *>(layer)) {
+            break;
+        }
     }
-    if (!waveformLayer) return;
 
-    waveformLayer->setObjectName(tr("Waveform"));
+    if (waveformLayer) {
+        waveformLayer->setObjectName("Automatically Created - Unused"); // not to be translated
+    }
+
+    zoomToFit();
+    reselectMode();
 }
 
 void
