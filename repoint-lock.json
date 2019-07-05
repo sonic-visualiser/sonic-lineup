@@ -4,13 +4,13 @@
       "pin": "62987b6d6a3b"
     },
     "svcore": {
-      "pin": "26da177d7266"
+      "pin": "fd7f127ecd89"
     },
     "svgui": {
-      "pin": "de41a11cabc2"
+      "pin": "e540aa5d89cd"
     },
     "svapp": {
-      "pin": "a82b9d410393"
+      "pin": "e0b0f3e163ca"
     },
     "checker": {
       "pin": "c8c17e51aab0"
@@ -64,7 +64,7 @@
       "pin": "89099872c87b"
     },
     "qm-vamp-plugins": {
-      "pin": "930618639abceb93f93e1f4100d93906f2118695"
+      "pin": "40591ca3bc1cb4421ec81b5d499bab6d8b5c2715"
     },
     "qm-vamp-plugins/lib/qm-dsp": {
       "pin": "9b18a2294638e2a28c8b97ca04d870422a8da4ef"

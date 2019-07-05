@@ -145,9 +145,8 @@ protected slots:
     void layerRemoved(Layer *) override;
     void layerInAView(Layer *, bool) override;
 
-    void mainModelChanged(WaveFileModel *) override;
-    void modelAdded(Model *) override;
-    void modelAboutToBeDeleted(Model *) override;
+    void mainModelChanged(ModelId) override;
+    void modelAdded(ModelId) override;
 
     virtual void mainModelGainChanged(float);
     virtual void mainModelPanChanged(float);
@@ -157,7 +156,7 @@ protected slots:
     void modelRegenerationFailed(QString, QString, QString) override;
     void modelRegenerationWarning(QString, QString, QString) override;
 
-    void alignmentComplete(AlignmentModel *) override;
+    void alignmentComplete(ModelId) override;
     void alignmentFailed(QString) override;
 
     virtual void salientLayerCompletionChanged();
@@ -249,10 +248,10 @@ protected:
 
     virtual void configureNewPane(Pane *p);
     virtual bool selectExistingLayerForMode(Pane *, QString,
-                                            Model **createFrom);
+                                            ModelId *createFrom);
 
-    virtual void addSalientFeatureLayer(Pane *, WaveFileModel *);
-    virtual void mapSalientFeatureLayer(AlignmentModel *);
+    virtual void addSalientFeatureLayer(Pane *, ModelId); // a WaveFileModel
+    virtual void mapSalientFeatureLayer(ModelId); // an AlignmentModel
 
     // Return the salient-feature layer in the given pane. If pane is
     // unspecified, return the main salient-feature layer, i.e. the
@@ -261,7 +260,7 @@ protected:
     virtual TimeInstantLayer *findSalientFeatureLayer(Pane *pane = nullptr);
     
     bool m_salientCalculating;
-    std::set<AlignmentModel *> m_salientPending;
+    std::set<ModelId> m_salientPending; // AlignmentModels
     int m_salientColour;
     
     void updateVisibleRangeDisplay(Pane *p) const override;
