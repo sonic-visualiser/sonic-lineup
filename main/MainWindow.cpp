@@ -1354,8 +1354,8 @@ MainWindow::addSalientFeatureLayer(Pane *pane, ModelId modelId)
             params->setPlayAudible(false);
         }
 
-        connect(til, SIGNAL(modelCompletionChanged()),
-                this, SLOT(salientLayerCompletionChanged()));
+        connect(til, SIGNAL(modelCompletionChanged(ModelId)),
+                this, SLOT(salientLayerCompletionChanged(ModelId)));
         
         m_document->addLayerToView(pane, newLayer);
         m_paneStack->setCurrentLayer(pane, newLayer);
@@ -1363,7 +1363,7 @@ MainWindow::addSalientFeatureLayer(Pane *pane, ModelId modelId)
 }
 
 void
-MainWindow::salientLayerCompletionChanged()
+MainWindow::salientLayerCompletionChanged(ModelId)
 {
     Layer *layer = qobject_cast<Layer *>(sender());
     if (layer && layer->getCompletion(0) == 100) {

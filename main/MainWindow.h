@@ -159,7 +159,7 @@ protected slots:
     void alignmentComplete(ModelId) override;
     void alignmentFailed(QString) override;
 
-    virtual void salientLayerCompletionChanged();
+    virtual void salientLayerCompletionChanged(ModelId);
 
     void rightButtonMenuRequested(Pane *, QPoint) override { /* none */ }
 
