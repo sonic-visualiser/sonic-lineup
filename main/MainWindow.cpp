@@ -1255,7 +1255,7 @@ failed:
 bool
 MainWindow::selectExistingLayerForMode(Pane *pane,
                                        QString modeName,
-                                       Model **createFrom)
+                                       ModelId *createFrom)
 {
     // Search the given pane for any layer whose object name matches
     // modeName, showing it if it exists, and hiding all other layers
@@ -1267,7 +1267,7 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
     // it points to will be set to a pointer to the model from which
     // such a layer should be constructed.
 
-    Model *model = 0;
+    ModelId modelId;
 
     bool have = false;
 
@@ -1277,13 +1277,20 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
         if (!layer || qobject_cast<TimeInstantLayer *>(layer)) {
             continue;
         }
-        
-        Model *lm = layer->getModel();
-        while (lm && lm->getSourceModel()) lm = lm->getSourceModel();
-        if (qobject_cast<WaveFileModel *>(lm)) model = lm;
+
+        ModelId lm = layer->getModel();
+        while (!lm.isNone()) {
+            if (auto model = ModelById::get(lm)) {
+                if (auto wfm = std::dynamic_pointer_cast<WaveFileModel>(model)) {
+                    modelId = lm;
+                }
+                lm = model->getSourceModel();
+            } else {
+                break;
+            }
+        }
         
         QString ln = layer->objectName();
-
         if (ln == modeName) {
             layer->showLayer(pane, true);
             have = true;
@@ -1295,17 +1302,18 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
     if (have) return true;
 
     if (createFrom) {
-        *createFrom = model;
+        *createFrom = modelId;
     }
     return false;
 }
 
 void
-MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
+MainWindow::addSalientFeatureLayer(Pane *pane, ModelId modelId)
 {
     //!!! what if there already is one? could have changed the main
     //!!! model for example
 
+    auto model = ModelById::getAs<WaveFileModel>(modelId);
     if (!model) {
         cerr << "MainWindow::addSalientFeatureLayer: No model" << endl;
         return;
@@ -1324,18 +1332,14 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
         return;
     }
 
-    if (!model) {
-        return;
-    }
-
     m_salientCalculating = true;
 
     Transform transform = tf->getDefaultTransformFor
         (id, model->getSampleRate());
 
-    ModelTransformer::Input input(model, -1);
+    ModelTransformer::Input input(modelId, -1);
 
-    Layer *newLayer = m_document->createDerivedLayer(transform, model);
+    Layer *newLayer = m_document->createDerivedLayer(transform, modelId);
 
     if (newLayer) {
 
@@ -1345,13 +1349,13 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
             til->setBaseColour(m_salientColour);
         }
 
-        PlayParameters *params = newLayer->getPlayParameters();
+        auto params = newLayer->getPlayParameters();
         if (params) {
             params->setPlayAudible(false);
         }
 
-        connect(til, SIGNAL(modelCompletionChanged()),
-                this, SLOT(salientLayerCompletionChanged()));
+        connect(til, SIGNAL(modelCompletionChanged(ModelId)),
+                this, SLOT(salientLayerCompletionChanged(ModelId)));
         
         m_document->addLayerToView(pane, newLayer);
         m_paneStack->setCurrentLayer(pane, newLayer);
@@ -1359,12 +1363,12 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
 }
 
 void
-MainWindow::salientLayerCompletionChanged()
+MainWindow::salientLayerCompletionChanged(ModelId)
 {
     Layer *layer = qobject_cast<Layer *>(sender());
     if (layer && layer->getCompletion(0) == 100) {
         m_salientCalculating = false;
-        foreach (AlignmentModel *am, m_salientPending) {
+        for (ModelId am: m_salientPending) {
             mapSalientFeatureLayer(am);
         }
         m_salientPending.clear();
@@ -1384,7 +1388,7 @@ MainWindow::findSalientFeatureLayer(Pane *pane)
 
             for (int j = 0; j < p->getLayerCount(); ++j) {
                 Layer *l = p->getLayer(j);
-                if (l->getModel() == getMainModel()) {
+                if (l->getModel() == getMainModelId()) {
                     isAssociatedWithMainModel = true;
                     break;
                 }
@@ -1453,10 +1457,17 @@ MainWindow::toggleSalientFeatures()
 }
 
 void
-MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
+MainWindow::mapSalientFeatureLayer(ModelId amId)
 {
+    auto am = ModelById::getAs<AlignmentModel>(amId);
+    if (!am) {
+        SVCERR << "MainWindow::mapSalientFeatureLayer: AlignmentModel is absent!"
+               << endl;
+        return;
+    }
+    
     if (m_salientCalculating) {
-        m_salientPending.insert(am);
+        m_salientPending.insert(amId);
         return;
     }
 
@@ -1464,17 +1475,16 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     if (!salient) {
         SVCERR << "MainWindow::mapSalientFeatureLayer: No salient layer found"
                << endl;
-        m_salientPending.insert(am);
-        return;
-    }
-
-    if (!am) {
-        SVCERR << "MainWindow::mapSalientFeatureLayer: AlignmentModel is null!"
-               << endl;
+        m_salientPending.insert(amId);
         return;
     }
     
-    const Model *model = am->getAlignedModel();
+    ModelId modelId = am->getAlignedModel();
+    auto model = ModelById::get(modelId);
+    if (!model) {
+        SVCERR << "MainWindow::mapSalientFeatureLayer: No aligned model in AlignmentModel" << endl;
+        return;
+    }
 
     Pane *pane = nullptr;
     Layer *layer = nullptr;
@@ -1486,7 +1496,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
             if (!l) continue;
-            if (l->getModel() == model) {
+            if (l->getModel() == modelId) {
                 pane = p;
                 layer = l;
                 break;
@@ -1497,7 +1507,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 
     if (!pane || !layer) {
         SVCERR << "MainWindow::mapSalientFeatureLayer: Failed to find model "
-               << model << " in any layer" << endl;
+               << modelId << " in any layer" << endl;
         return;
     }
 
@@ -1517,17 +1527,18 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     }
 
     pane->setCentreFrame(am->fromReference(firstPane->getCentreFrame()));
-    
-    const SparseOneDimensionalModel *from =
-        qobject_cast<const SparseOneDimensionalModel *>(salient->getModel());
+
+    auto fromId = salient->getModel();
+    auto from = ModelById::getAs<SparseOneDimensionalModel>(fromId);
     if (!from) {
         SVCERR << "MainWindow::mapSalientFeatureLayer: "
                << "Salient layer lacks SparseOneDimensionalModel" << endl;
         return;
     }
-        
-    SparseOneDimensionalModel *to = new SparseOneDimensionalModel
+
+    auto to = std::make_shared<SparseOneDimensionalModel>
         (model->getSampleRate(), from->getResolution(), false);
+    auto toId = ModelById::add(to);
 
     EventVector pp = from->getAllEvents();
     for (const auto &p: pp) {
@@ -1538,7 +1549,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         to->add(aligned);
     }
 
-    Layer *newLayer = m_document->createImportedLayer(to);
+    Layer *newLayer = m_document->createImportedLayer(toId);
 
     if (newLayer) {
 
@@ -1550,7 +1561,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
             til->setBaseColour(m_salientColour);
         }
         
-        PlayParameters *params = newLayer->getPlayParameters();
+        auto params = newLayer->getPlayParameters();
         if (params) {
             params->setPlayAudible(false);
         }
@@ -1572,9 +1583,9 @@ MainWindow::outlineWaveformModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
 
             Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
             newLayer->setObjectName(name);
@@ -1624,9 +1635,9 @@ MainWindow::standardWaveformModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
 
             Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
             newLayer->setObjectName(name);
@@ -1676,9 +1687,9 @@ MainWindow::spectrogramModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
             Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
             newLayer->setObjectName(name);
             m_document->setModel(newLayer, createFrom);
@@ -1712,9 +1723,9 @@ MainWindow::melodogramModeSelected()
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
             Layer *newLayer = m_document->createLayer
                 (LayerFactory::MelodicRangeSpectrogram);
             newLayer->setObjectName(name);
@@ -1751,16 +1762,15 @@ MainWindow::selectTransformDrivenMode(DisplayMode mode,
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
 
             TransformFactory *tf = TransformFactory::getInstance();
 
             if (tf->haveTransform(transformId)) {
 
-                Transform transform = tf->getDefaultTransformFor
-                    (transformId, createFrom->getSampleRate());
+                Transform transform = tf->getDefaultTransformFor(transformId);
 
                 ModelTransformer::Input input(createFrom, -1);
                 
@@ -2389,21 +2399,15 @@ MainWindow::layerInAView(Layer *layer, bool inAView)
 }
 
 void
-MainWindow::modelAdded(Model *model)
+MainWindow::modelAdded(ModelId model)
 {
     MainWindowBase::modelAdded(model);
-}
-
-void
-MainWindow::modelAboutToBeDeleted(Model *model)
-{
-    MainWindowBase::modelAboutToBeDeleted(model);
 }
 
 QString
 MainWindow::makeSessionFilename()
 {
-    Model *mainModel = getMainModel();
+    auto mainModel = getMainModel();
     if (!mainModel) {
         SVDEBUG << "MainWindow::makeSessionFilename: No main model, returning empty filename" << endl;
         return {};
@@ -2470,7 +2474,7 @@ MainWindow::makeSessionFilename()
 QString
 MainWindow::makeSessionLabel()
 {
-    Model *mainModel = getMainModel();
+    auto mainModel = getMainModel();
     if (!mainModel) {
         SVDEBUG << "MainWindow::makeSessionFilename: No main model, returning empty filename" << endl;
         return {};
@@ -2557,7 +2561,7 @@ MainWindow::makeSmallSession()
     SmallSession session;
     if (!m_paneStack) return session;
 
-    WaveFileModel *mainModel = getMainModel();
+    auto mainModel = getMainModel();
     if (!mainModel) return session;
 
     session.mainFile = mainModel->getLocation();
@@ -2569,10 +2573,14 @@ MainWindow::makeSmallSession()
         Pane *p = m_paneStack->getPane(i);
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
-            Model *m = l->getModel();
-            while (m && m->getSourceModel()) m = m->getSourceModel();
-            if (qobject_cast<WaveFileModel *>(m)) {
-                QString location = m->getLocation();
+            auto modelId = l->getModel();
+            auto model = ModelById::get(modelId);
+            while (model && !model->getSourceModel().isNone()) {
+                modelId = model->getSourceModel();
+                model = ModelById::get(modelId);
+            }
+            if (auto wfm = ModelById::getAs<WaveFileModel>(modelId)) {
+                QString location = wfm->getLocation();
                 if (alreadyRecorded.find(location) == alreadyRecorded.end()) {
                     session.additionalFiles.push_back(location);
                     alreadyRecorded.insert(location);
@@ -2587,13 +2595,13 @@ MainWindow::makeSmallSession()
 }
 
 void
-MainWindow::mainModelChanged(WaveFileModel *model)
+MainWindow::mainModelChanged(ModelId modelId)
 {
-    SVDEBUG << "MainWindow::mainModelChanged(" << model << ")" << endl;
+    SVDEBUG << "MainWindow::mainModelChanged(" << modelId << ")" << endl;
 
     if (m_sessionState == SessionLoading) {
         SVDEBUG << "MainWindow::mainModelChanged: Session is loading, not (re)making session filename" << endl;
-    } else if (!model) {
+    } else if (modelId.isNone()) {
         SVDEBUG << "MainWindow::mainModelChanged: Null model, not (re)making session filename" << endl;
     } else {
         if (m_sessionState == NoSession) {
@@ -2611,7 +2619,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     m_salientPending.clear();
     m_salientCalculating = false;
 
-    MainWindowBase::mainModelChanged(model);
+    MainWindowBase::mainModelChanged(modelId);
 
     if (m_playTarget || m_audioIO) {
         connect(m_mainLevelPan, SIGNAL(levelChanged(float)),
@@ -2622,6 +2630,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
 
+    auto model = ModelById::getAs<WaveFileModel>(modelId);
     if (model &&
         m_paneStack &&
         (m_paneStack->getPaneCount() == 0)) {
@@ -2646,7 +2655,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
             
         m_document->addLayerToView(pane, newLayer);
 
-        addSalientFeatureLayer(pane, model);
+        addSalientFeatureLayer(pane, modelId);
     }
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
@@ -2733,10 +2742,10 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
-MainWindow::alignmentComplete(AlignmentModel *model)
+MainWindow::alignmentComplete(ModelId modelId)
 {
-    cerr << "MainWindow::alignmentComplete(" << model << ")" << endl;
-    if (model) mapSalientFeatureLayer(model);
+    cerr << "MainWindow::alignmentComplete(" << modelId << ")" << endl;
+    mapSalientFeatureLayer(modelId);
     checkpointSession();
 }
 

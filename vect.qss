@@ -98,12 +98,12 @@ QCheckBox:!enabled
 {
     color: #000000;
 }
-
+/*
 QCheckBox::indicator:enabled
 {
     background: url(:icons/style/checkbox-checked.png); 
 }
-
+*/
 QCheckBox
 {
     spacing: 5px;
@@ -114,7 +114,7 @@ QCheckBox::indicator
     width: 13px;
     height: 13px;
 }
-
+/*
 QCheckBox::indicator:unchecked
 {
     image: url(:icons/style/checkbox_unchecked.png);
@@ -169,7 +169,7 @@ QCheckBox::indicator:indeterminate:pressed
 {
     image: url(:icons/style/checkbox_indeterminate_pressed.png);
 }
-
+*/
 QRadioButton:enabled QLabel,
 QRadioButton:enabled
 {
