@@ -13,9 +13,9 @@ include(base.pri)
 
 QT += network xml gui widgets svg
 
-TARGET = "Sonic Vector"
-linux*:TARGET = sonic-vector
-solaris*:TARGET = sonic-vector
+TARGET = "Sonic Lineup"
+linux*:TARGET = sonic-lineup
+solaris*:TARGET = sonic-lineup
 
 !win32 {
     PRE_TARGETDEPS += $$PWD/libbase.a
@@ -25,7 +25,7 @@ solaris*:TARGET = sonic-vector
 linux* {
 
     vect_bins.path = $$PREFIX_PATH/bin/
-    vect_bins.files = checker/vamp-plugin-load-checker piper-vamp-simple-server sonic-vector
+    vect_bins.files = checker/vamp-plugin-load-checker piper-vamp-simple-server sonic-lineup
     vect_bins.CONFIG = no_check_exist
 
 #    vect_desktop.path = $$PREFIX_PATH/share/applications/

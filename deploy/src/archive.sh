@@ -1,10 +1,44 @@
 #!/bin/bash
 
-tag=`hg tags | grep '^vect_v' | head -1 | awk '{ print $1; }'`
+set -eu
 
-v=`echo "$tag" |sed 's/vect_v//'`
+tag=`hg tags | grep '^v' | head -1 | awk '{ print $1; }'`
 
-echo "Packaging up version $v from tag $tag..."
+v=`echo "$tag" | sed 's/v//' | sed 's/_.*$//'`
 
-hg archive -r"$tag" --subrepos --exclude sv-dependency-builds /tmp/sonic-vector-"$v".tar.gz
+current=$(hg id | awk '{ print $1; }')
 
+case "$current" in
+    *+) echo "ERROR: Current working copy has been modified - unmodified copy required so we can update to tag and back again safely"; exit 2;;
+    *);;
+esac
+          
+echo
+echo -n "Packaging up version $v from tag $tag... "
+
+hg update -r"$tag"
+
+./repoint archive /tmp/sonic-lineup-"$v".tar.gz --exclude sv-dependency-builds repoint.pri
+
+hg update -r"$current"
+
+echo Done
+echo
+
+# Test that the appropriate version of the docs exist on the website
+
+echo "WARNING: Documentation not configured yet!"
+echo
+exit
+
+doc_url="http://sonicvisualiser.org/doc/reference/$v/en/"
+doc_status=$(curl -sL -w "%{http_code}" "$doc_url" -o /dev/null)
+
+if [ "$doc_status" = "404" ]; then
+    echo "*** WARNING: Documentation URL returns a 404:"
+    echo "***          $doc_url"
+    echo "***          Please fix this before release!"
+    echo "***          And remember to update the link from"
+    echo "             http://www.sonicvisualiser.org/documentation.html !"
+    echo
+fi

@@ -4,13 +4,13 @@
       "pin": "62987b6d6a3b"
     },
     "svcore": {
-      "pin": "26da177d7266"
+      "pin": "dffc70996f54"
     },
     "svgui": {
-      "pin": "0ecfaa463c1b"
+      "pin": "bd7fdc418f36"
     },
     "svapp": {
-      "pin": "16c1077da62c"
+      "pin": "3e34eeb92647"
     },
     "checker": {
       "pin": "c8c17e51aab0"
@@ -55,10 +55,10 @@
       "pin": "628db02cf5ee6b8d12c183cb0ea274161daf1d03"
     },
     "tuning-difference": {
-      "pin": "dcfae9ef87de"
+      "pin": "8fd1c994f937"
     },
     "pyin": {
-      "pin": "550d5f186abb"
+      "pin": "6f17d912e1dd"
     },
     "nnls-chroma": {
       "pin": "89099872c87b"

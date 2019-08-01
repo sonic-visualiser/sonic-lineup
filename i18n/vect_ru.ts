@@ -2892,7 +2892,7 @@ Do you want to locate it?</source>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="1070"/>
-        <source>Sonic Vector</source>
+        <source>Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2945,7 +2945,7 @@ Do you want to locate it?</source>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="507"/>
-        <source>Exit Sonic Vector</source>
+        <source>Exit Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2970,22 +2970,22 @@ Do you want to locate it?</source>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="700"/>
-        <source>Sonic Vector on the &amp;Web</source>
+        <source>Sonic Lineup on the &amp;Web</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="701"/>
-        <source>Open the Sonic Vector website</source>
+        <source>Open the Sonic Lineup website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="705"/>
-        <source>&amp;About Sonic Vector</source>
+        <source>&amp;About Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="706"/>
-        <source>Show information about Sonic Vector</source>
+        <source>Show information about Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3098,12 +3098,12 @@ Do you want to locate it?</source>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="2672"/>
-        <source>&lt;h3&gt;About Sonic Vector&lt;/h3&gt;</source>
+        <source>&lt;h3&gt;About Sonic Lineup&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="2673"/>
-        <source>&lt;p&gt;Sonic Vector is a comparative viewer for sets of related audio recordings.&lt;/p&gt;</source>
+        <source>&lt;p&gt;Sonic Lineup is a comparative viewer for sets of related audio recordings.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3113,7 +3113,7 @@ Do you want to locate it?</source>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="2689"/>
-        <source>About Sonic Vector</source>
+        <source>About Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6448,7 +6448,7 @@ but the source has %1 channels.</source>
     <name>PreferencesDialog</name>
     <message>
         <location filename="../main/PreferencesDialog.cpp" line="43"/>
-        <source>Sonic Vector: Application Preferences</source>
+        <source>Sonic Lineup: Application Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6480,7 +6480,7 @@ but the source has %1 channels.</source>
     </message>
     <message>
         <location filename="../main/PreferencesDialog.cpp" line="216"/>
-        <source>One or more of the application preferences you have changed may not take full effect until Sonic Vector is restarted.
+        <source>One or more of the application preferences you have changed may not take full effect until Sonic Lineup is restarted.
 Please exit and restart the application now if you want these changes to take effect immediately.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6859,14 +6859,14 @@ Sonic Visualiser — программа для просмотра и иссле�
     <message>
         <location filename="../main/main.cpp" line="179"/>
         <source>
-Sonic Vector is a comparative viewer for sets of related audio recordings.
+Sonic Lineup is a comparative viewer for sets of related audio recordings.
 
 Usage:
 
   %1 [--no-audio] [&lt;file1&gt;, &lt;file2&gt;...]
 
   --no-audio: Do not attempt to open an audio output device
-  &lt;file1&gt;, &lt;file2&gt;...: Audio files; Sonic Vector is designed for comparative
+  &lt;file1&gt;, &lt;file2&gt;...: Audio files; Sonic Lineup is designed for comparative
 viewing of multiple recordings of the same music or other related material.
 </source>
         <translation type="unfinished"></translation>

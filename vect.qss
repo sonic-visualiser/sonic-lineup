@@ -61,14 +61,14 @@ QMenu::separator
     height: 2px;
     background: #AAAAAA;
     margin-left: 10px;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 
 QMenu::item:enabled
 {
     background-color: transparent;
     color: #000000;
-    padding: 2px 25px 2px 20px;
+    padding: 2px 20px 2px 25px;
     border: 1px solid transparent;
     min-width: 12em; /* leaves room for space between item and hotkey */
 }
@@ -76,7 +76,7 @@ QMenu::item:enabled
 QMenu::item:!enabled
 {
     color: #AAAAAA;
-    padding: 2px 25px 2px 20px;
+    padding: 2px 20px 2px 25px;
     border: 1px solid transparent;
     min-width: 12em; /* leaves room for space between item and hotkey */
 }
@@ -98,12 +98,12 @@ QCheckBox:!enabled
 {
     color: #000000;
 }
-
+/*
 QCheckBox::indicator:enabled
 {
     background: url(:icons/style/checkbox-checked.png); 
 }
-
+*/
 QCheckBox
 {
     spacing: 5px;
@@ -114,7 +114,7 @@ QCheckBox::indicator
     width: 13px;
     height: 13px;
 }
-
+/*
 QCheckBox::indicator:unchecked
 {
     image: url(:icons/style/checkbox_unchecked.png);
@@ -169,7 +169,7 @@ QCheckBox::indicator:indeterminate:pressed
 {
     image: url(:icons/style/checkbox_indeterminate_pressed.png);
 }
-
+*/
 QRadioButton:enabled QLabel,
 QRadioButton:enabled
 {

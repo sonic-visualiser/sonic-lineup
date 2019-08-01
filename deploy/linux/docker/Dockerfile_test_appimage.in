@@ -9,7 +9,7 @@ RUN echo [[REVISION]]
 RUN yum -y update
 RUN yum -y groupinstall "X Window System"
 RUN yum -y install wget
-ADD output/SonicVector-[[REVISION]]-x86_64.AppImage SV.AppImage
-RUN chmod +x SV.AppImage
-RUN ./SV.AppImage --appimage-extract
+ADD output/SonicLineup-[[REVISION]]-x86_64.AppImage SL.AppImage
+RUN chmod +x SL.AppImage
+RUN ./SL.AppImage --appimage-extract
 RUN ./squashfs-root/AppRun --version

@@ -27,6 +27,7 @@
 #include "data/model/SparseOneDimensionalModel.h"
 #include "base/StorageAdviser.h"
 #include "base/TempDirectory.h"
+#include "base/RecordDirectory.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "layer/WaveformLayer.h"
@@ -140,6 +141,8 @@ MainWindow::MainWindow(SoundOptions options) :
 {
     setWindowTitle(QApplication::applicationName());
 
+    setUnifiedTitleAndToolBarOnMac(true);
+
     UnitDatabase *udb = UnitDatabase::getInstance();
     udb->registerUnit("Hz");
     udb->registerUnit("dB");
@@ -155,7 +158,6 @@ MainWindow::MainWindow(SoundOptions options) :
     cdb->setUseDarkBackground(cdb->addColour(Qt::yellow, tr("Bright Yellow")), true);
 
     Preferences::getInstance()->setResampleOnLoad(true);
-
 
     Preferences::getInstance()->setSpectrogramSmoothing
         (Preferences::SpectrogramInterpolated);
@@ -187,12 +189,19 @@ MainWindow::MainWindow(SoundOptions options) :
     settings.setValue("showcancelbuttons", false);
     settings.endGroup();
 
+    settings.beginGroup("Alignment");
+    if (!settings.contains("align-pitch-aware")) {
+        settings.setValue("align-pitch-aware", true);
+    }
+    settings.endGroup();
+
     m_viewManager->setAlignMode(true);
     m_viewManager->setPlaySoloMode(true);
     m_viewManager->setToolMode(ViewManager::NavigateMode);
     m_viewManager->setZoomWheelsEnabled(false);
     m_viewManager->setIlluminateLocalFeatures(false);
     m_viewManager->setShowWorkTitle(true);
+    m_viewManager->setOpportunisticEditingEnabled(false);
 
     loadStyle();
     
@@ -239,17 +248,21 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(outlineWaveformModeSelected()));
     m_modeButtons[OutlineWaveformMode] = button;
+    m_modeLayerNames[OutlineWaveformMode] = "Outline Waveform"; // not to be translated
+    m_modeDisplayOrder.push_back(OutlineWaveformMode);
 
     button = new QPushButton;
     button->setIcon(il.load("waveform"));
     button->setText(tr("Waveform"));
     button->setCheckable(true);
-    button->setChecked(true);
+    button->setChecked(false);
     button->setFixedHeight(bottomButtonHeight);
     bg->addButton(button);
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(standardWaveformModeSelected()));
     m_modeButtons[WaveformMode] = button;
+    m_modeLayerNames[WaveformMode] = "Waveform"; // not to be translated
+    m_modeDisplayOrder.push_back(WaveformMode);
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
@@ -261,6 +274,8 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(melodogramModeSelected()));
     m_modeButtons[MelodogramMode] = button;
+    m_modeLayerNames[MelodogramMode] = "Melodogram"; // not to be translated
+    m_modeDisplayOrder.push_back(MelodogramMode);
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
@@ -272,6 +287,8 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(spectrogramModeSelected()));
     m_modeButtons[SpectrogramMode] = button;
+    m_modeLayerNames[SpectrogramMode] = "Spectrogram"; // not to be translated
+    m_modeDisplayOrder.push_back(SpectrogramMode);
 
 /*
     button = new QPushButton;
@@ -284,6 +301,8 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
     m_modeButtons[CurveMode] = button;
+    m_modeLayerNames[CurveMode] = "Curve";
+    m_modeDisplayOrder.push_back(CurveMode);
 */
     button = new QPushButton;
     button->setIcon(il.load("values"));
@@ -295,6 +314,8 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(pitchModeSelected()));
     m_modeButtons[PitchMode] = button;
+    m_modeLayerNames[PitchMode] = "Pitch"; // not to be translated
+    m_modeDisplayOrder.push_back(PitchMode);
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
@@ -306,6 +327,8 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(keyModeSelected()));
     m_modeButtons[KeyMode] = button;
+    m_modeLayerNames[KeyMode] = "Key"; // not to be translated
+    m_modeDisplayOrder.push_back(KeyMode);
 
     button = new QPushButton;
     button->setIcon(il.load("colour3d"));
@@ -317,13 +340,15 @@ MainWindow::MainWindow(SoundOptions options) :
     buttonLayout->addWidget(button);
     connect(button, SIGNAL(clicked()), this, SLOT(azimuthModeSelected()));
     m_modeButtons[AzimuthMode] = button;
+    m_modeLayerNames[AzimuthMode] = "Azimuth"; // not to be translated
+    m_modeDisplayOrder.push_back(AzimuthMode);
 
     m_playSpeed = new AudioDial(bottomFrame);
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(bottomElementHeight);
-    m_playSpeed->setFixedHeight(bottomElementHeight);
+    m_playSpeed->setFixedWidth(int(bottomElementHeight * 0.9));
+    m_playSpeed->setFixedHeight(int(bottomElementHeight * 0.9));
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -369,6 +394,8 @@ MainWindow::MainWindow(SoundOptions options) :
     finaliseMenus();
 
     openMostRecentSession();
+    
+    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
 
 MainWindow::~MainWindow()
@@ -424,7 +451,9 @@ MainWindow::goFullScreen()
 
     QAction *acts[] = {
         m_playAction, m_zoomInAction, m_zoomOutAction, m_zoomFitAction,
-        m_scrollLeftAction, m_scrollRightAction, m_showPropertyBoxesAction
+        m_scrollLeftAction, m_scrollRightAction,
+        m_selectPreviousPaneAction, m_selectNextPaneAction,
+        m_selectPreviousDisplayModeAction, m_selectNextDisplayModeAction
     };
 
     for (int i = 0; i < int(sizeof(acts)/sizeof(acts[0])); ++i) {
@@ -488,23 +517,32 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 
     menu->addSeparator();
+    
+    action = new QAction(tr("Browse Recorded Audio"), this);
+    action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
+    connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
+    menu->addAction(action);
+
+    menu->addSeparator();
 
     m_recentSessionsMenu = menu->addMenu(tr("&Recent Sessions"));
     m_recentSessionsMenu->setTearOffEnabled(false);
     setupRecentSessionsMenu();
     connect(&m_recentSessions, SIGNAL(recentChanged()),
             this, SLOT(setupRecentSessionsMenu()));
-
+    
+    /*
     menu->addSeparator();
     action = new QAction(tr("&Preferences..."), this);
     action->setStatusTip(tr("Adjust the application preferences"));
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
     menu->addAction(action);
-
+    */
+    
     menu->addSeparator();
     action = new QAction(il.load("exit"), tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
-    action->setStatusTip(tr("Exit Sonic Vector"));
+    action->setStatusTip(tr("Exit Sonic Lineup"));
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
@@ -554,6 +592,46 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Switch to Previous Pane"), this);
+    action->setShortcut(tr("["));
+    action->setStatusTip(tr("Make the next pane up in the pane stack current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(previousPane()));
+    connect(this, SIGNAL(canSelectPreviousPane(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+    m_selectPreviousPaneAction = action;
+
+    action = new QAction(tr("Switch to Next Pane"), this);
+    action->setShortcut(tr("]"));
+    action->setStatusTip(tr("Make the next pane down in the pane stack current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(nextPane()));
+    connect(this, SIGNAL(canSelectNextPane(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+    m_selectNextPaneAction = action;
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Switch to Previous View Mode"), this);
+    action->setShortcut(tr("{"));
+    action->setStatusTip(tr("Make the next view mode current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(previousDisplayMode()));
+    connect(this, SIGNAL(canSelectPreviousDisplayMode(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+    m_selectPreviousDisplayModeAction = action;
+
+    action = new QAction(tr("Switch to Next View Mode"), this);
+    action->setShortcut(tr("}"));
+    action->setStatusTip(tr("Make the next view mode current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(nextDisplayMode()));
+    connect(this, SIGNAL(canSelectNextDisplayMode(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+    m_selectNextDisplayModeAction = action;
 
     menu->addSeparator();
 
@@ -614,40 +692,19 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    menu->addSeparator();
+    action = new QAction(tr("Show Vertical Scales"), this);
+    action->setShortcut(tr("S"));
+    action->setStatusTip(tr("Show or hide all vertical scales"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleVerticalScales()));
+    action->setCheckable(true);
+    action->setChecked(false);
+    m_viewManager->setOverlayMode(ViewManager::NoOverlays);
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
 
-    QActionGroup *overlayGroup = new QActionGroup(this);
-        
-    action = new QAction(tr("Show &No Overlays"), this);
-    action->setShortcut(tr("0"));
-    action->setStatusTip(tr("Hide times, layer names, and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-        
-    action = new QAction(tr("Show &Minimal Overlays"), this);
-    action->setShortcut(tr("9"));
-    action->setStatusTip(tr("Show times and basic scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showMinimalOverlays()));
-    action->setCheckable(true);
-    action->setChecked(true);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-        
-    action = new QAction(tr("Show &All Overlays"), this);
-    action->setShortcut(tr("8"));
-    action->setStatusTip(tr("Show times, layer names, and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-        
+    // We need this separator even if not adding the full-screen
+    // option ourselves, as the Mac automatic full-screen entry
+    // doesn't include a separator first
     menu->addSeparator();
 
 #ifndef Q_OS_MAC
@@ -687,13 +744,13 @@ MainWindow::setupHelpMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     
-    action = new QAction(tr("Sonic Vector on the &Web"), this); 
-    action->setStatusTip(tr("Open the Sonic Vector website")); 
+    action = new QAction(tr("Sonic Lineup on the &Web"), this); 
+    action->setStatusTip(tr("Open the Sonic Lineup website")); 
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
-    action = new QAction(tr("&About Sonic Vector"), this); 
-    action->setStatusTip(tr("Show information about Sonic Vector")); 
+    action = new QAction(tr("&About Sonic Lineup"), this); 
+    action->setStatusTip(tr("Show information about Sonic Lineup")); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
 }
@@ -758,7 +815,7 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
 
     m_ffwdAction = toolbar->addAction(il.load("ffwd"),
-                                              tr("Fast Forward"));
+                                      tr("Fast Forward"));
     m_ffwdAction->setShortcut(tr("PgDown"));
     m_ffwdAction->setStatusTip(tr("Fast-forward to the next time instant or time ruler notch"));
     connect(m_ffwdAction, SIGNAL(triggered()), this, SLOT(ffwd()));
@@ -782,28 +839,6 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(canRecord(bool)),
             recordAction, SLOT(setEnabled(bool)));
 
-    QAction *alAction = 0;
-    alAction = toolbar->addAction(il.load("align"),
-                                  tr("Align File Timelines"));
-    alAction->setCheckable(true);
-    alAction->setChecked(m_viewManager->getAlignMode());
-    alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
-    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
-            alAction, SLOT(setChecked(bool)));
-    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
-
-    QSettings settings;
-
-    QAction *tdAction = 0;
-    tdAction = new QAction(tr("Allow for Tuning Differences when Aligning"),
-                           this);
-    tdAction->setCheckable(true);
-    settings.beginGroup("Alignment");
-    tdAction->setChecked(settings.value("align-pitch-aware", false).toBool());
-    settings.endGroup();
-    tdAction->setStatusTip(tr("Compare relative pitch content of audio files before aligning, in order to correctly align recordings of the same material at different tuning pitches"));
-    connect(tdAction, SIGNAL(triggered()), this, SLOT(tuningDifferenceToggled()));
-
     m_keyReference->registerShortcut(m_playAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
@@ -818,9 +853,6 @@ MainWindow::setupToolbars()
     menu->addSeparator();
     menu->addAction(rwdStartAction);
     menu->addAction(ffwdEndAction);
-    menu->addSeparator();
-    menu->addAction(alAction);
-    menu->addAction(tdAction);
     menu->addSeparator();
     menu->addAction(recordAction);
     menu->addSeparator();
@@ -846,6 +878,31 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(fastAction);
     m_keyReference->registerShortcut(slowAction);
     m_keyReference->registerShortcut(normalAction);
+
+    QAction *alAction = 0;
+    alAction = toolbar->addAction(il.load("align"),
+                                  tr("Align File Timelines"));
+    alAction->setCheckable(true);
+    alAction->setChecked(m_viewManager->getAlignMode());
+    alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
+    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
+            alAction, SLOT(setChecked(bool)));
+    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+
+    QSettings settings;
+
+    QAction *tdAction = 0;
+    tdAction = new QAction(tr("Allow for Pitch Difference when Aligning"), this);
+    tdAction->setCheckable(true);
+    settings.beginGroup("Alignment");
+    tdAction->setChecked(settings.value("align-pitch-aware", false).toBool());
+    settings.endGroup();
+    tdAction->setStatusTip(tr("Compare relative pitch content of audio files before aligning, in order to correctly align recordings of the same material at different tuning pitches"));
+    connect(tdAction, SIGNAL(triggered()), this, SLOT(tuningDifferenceToggled()));
+
+    menu->addSeparator();
+    menu->addAction(alAction);
+    menu->addAction(tdAction);
 
     Pane::registerShortcuts(*m_keyReference);
 }
@@ -877,6 +934,14 @@ MainWindow::updateMenuStates()
     int v = m_playSpeed->value();
     emit canSpeedUpPlayback(v < m_playSpeed->maximum());
     emit canSlowDownPlayback(v > m_playSpeed->minimum());
+
+    emit canSelectPreviousDisplayMode
+        (!m_modeDisplayOrder.empty() &&
+         (m_displayMode != m_modeDisplayOrder[0]));
+
+    emit canSelectNextDisplayMode
+        (!m_modeDisplayOrder.empty() &&
+         (m_displayMode != m_modeDisplayOrder[m_modeDisplayOrder.size()-1]));
 
     if (m_ffwdAction && m_rwdAction) {
         if (haveCurrentTimeInstantsLayer) {
@@ -943,18 +1008,22 @@ MainWindow::selectMainPane()
 }
 
 void
+MainWindow::browseRecordedAudio()
+{
+    QString path = RecordDirectory::getRecordContainerDirectory();
+    if (path == "") path = RecordDirectory::getRecordDirectory();
+    if (path == "") return;
+
+    openLocalFolder(path);
+}
+
+void
 MainWindow::newSession()
 {
     cerr << "MainWindow::newSession" << endl;
 
     closeSession();
     createDocument();
-
-    // Reset to a waveform mode; this is because it takes less time to
-    // process & render than other modes, so we will be able to
-    // checkpoint sooner - the result of starting out in e.g. pitch
-    // mode can be quite strange because of the near-eternity before a
-    // safe checkpoint can be made
     
     m_displayMode = OutlineWaveformMode;
     for (auto &bp : m_modeButtons) {
@@ -1016,7 +1085,7 @@ MainWindow::closeSession()
     m_viewManager->clearSelections();
     m_timeRulerLayer = 0; // document owned this
 
-    setWindowTitle(tr("Sonic Vector"));
+    setWindowTitle(tr("Sonic Lineup"));
 
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
@@ -1153,6 +1222,8 @@ MainWindow::openSmallSessionFile(QString path)
     configureNewPane(m_paneStack->getCurrentPane());
         
     for (QString path: session.additionalFiles) {
+
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         
         status = openPath(path, CreateAdditionalModel);
 
@@ -1178,7 +1249,7 @@ failed:
 bool
 MainWindow::selectExistingLayerForMode(Pane *pane,
                                        QString modeName,
-                                       Model **createFrom)
+                                       ModelId *createFrom)
 {
     // Search the given pane for any layer whose object name matches
     // modeName, showing it if it exists, and hiding all other layers
@@ -1190,7 +1261,7 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
     // it points to will be set to a pointer to the model from which
     // such a layer should be constructed.
 
-    Model *model = 0;
+    ModelId modelId;
 
     bool have = false;
 
@@ -1200,13 +1271,20 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
         if (!layer || qobject_cast<TimeInstantLayer *>(layer)) {
             continue;
         }
-        
-        Model *lm = layer->getModel();
-        while (lm && lm->getSourceModel()) lm = lm->getSourceModel();
-        if (qobject_cast<WaveFileModel *>(lm)) model = lm;
+
+        ModelId lm = layer->getModel();
+        while (!lm.isNone()) {
+            if (auto model = ModelById::get(lm)) {
+                if (auto wfm = std::dynamic_pointer_cast<WaveFileModel>(model)) {
+                    modelId = lm;
+                }
+                lm = model->getSourceModel();
+            } else {
+                break;
+            }
+        }
         
         QString ln = layer->objectName();
-
         if (ln == modeName) {
             layer->showLayer(pane, true);
             have = true;
@@ -1218,17 +1296,18 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
     if (have) return true;
 
     if (createFrom) {
-        *createFrom = model;
+        *createFrom = modelId;
     }
     return false;
 }
 
 void
-MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
+MainWindow::addSalientFeatureLayer(Pane *pane, ModelId modelId)
 {
     //!!! what if there already is one? could have changed the main
     //!!! model for example
 
+    auto model = ModelById::getAs<WaveFileModel>(modelId);
     if (!model) {
         cerr << "MainWindow::addSalientFeatureLayer: No model" << endl;
         return;
@@ -1247,18 +1326,14 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
         return;
     }
 
-    if (!model) {
-        return;
-    }
-
     m_salientCalculating = true;
 
     Transform transform = tf->getDefaultTransformFor
         (id, model->getSampleRate());
 
-    ModelTransformer::Input input(model, -1);
+    ModelTransformer::Input input(modelId, -1);
 
-    Layer *newLayer = m_document->createDerivedLayer(transform, model);
+    Layer *newLayer = m_document->createDerivedLayer(transform, modelId);
 
     if (newLayer) {
 
@@ -1268,13 +1343,13 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
             til->setBaseColour(m_salientColour);
         }
 
-        PlayParameters *params = newLayer->getPlayParameters();
+        auto params = newLayer->getPlayParameters();
         if (params) {
             params->setPlayAudible(false);
         }
 
-        connect(til, SIGNAL(modelCompletionChanged()),
-                this, SLOT(salientLayerCompletionChanged()));
+        connect(til, SIGNAL(modelCompletionChanged(ModelId)),
+                this, SLOT(salientLayerCompletionChanged(ModelId)));
         
         m_document->addLayerToView(pane, newLayer);
         m_paneStack->setCurrentLayer(pane, newLayer);
@@ -1282,12 +1357,12 @@ MainWindow::addSalientFeatureLayer(Pane *pane, WaveFileModel *model)
 }
 
 void
-MainWindow::salientLayerCompletionChanged()
+MainWindow::salientLayerCompletionChanged(ModelId)
 {
     Layer *layer = qobject_cast<Layer *>(sender());
     if (layer && layer->getCompletion(0) == 100) {
         m_salientCalculating = false;
-        foreach (AlignmentModel *am, m_salientPending) {
+        for (ModelId am: m_salientPending) {
             mapSalientFeatureLayer(am);
         }
         m_salientPending.clear();
@@ -1307,7 +1382,7 @@ MainWindow::findSalientFeatureLayer(Pane *pane)
 
             for (int j = 0; j < p->getLayerCount(); ++j) {
                 Layer *l = p->getLayer(j);
-                if (l->getModel() == getMainModel()) {
+                if (l->getModel() == getMainModelId()) {
                     isAssociatedWithMainModel = true;
                     break;
                 }
@@ -1329,6 +1404,16 @@ MainWindow::findSalientFeatureLayer(Pane *pane)
     }
 
     return nullptr;
+}
+
+void
+MainWindow::toggleVerticalScales()
+{
+    if (m_viewManager->getOverlayMode() == ViewManager::NoOverlays) {
+        m_viewManager->setOverlayMode(ViewManager::StandardOverlays);
+    } else {
+        m_viewManager->setOverlayMode(ViewManager::NoOverlays);
+    }
 }
 
 void
@@ -1366,10 +1451,17 @@ MainWindow::toggleSalientFeatures()
 }
 
 void
-MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
+MainWindow::mapSalientFeatureLayer(ModelId amId)
 {
+    auto am = ModelById::getAs<AlignmentModel>(amId);
+    if (!am) {
+        SVCERR << "MainWindow::mapSalientFeatureLayer: AlignmentModel is absent!"
+               << endl;
+        return;
+    }
+    
     if (m_salientCalculating) {
-        m_salientPending.insert(am);
+        m_salientPending.insert(amId);
         return;
     }
 
@@ -1377,17 +1469,16 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     if (!salient) {
         SVCERR << "MainWindow::mapSalientFeatureLayer: No salient layer found"
                << endl;
-        m_salientPending.insert(am);
-        return;
-    }
-
-    if (!am) {
-        SVCERR << "MainWindow::mapSalientFeatureLayer: AlignmentModel is null!"
-               << endl;
+        m_salientPending.insert(amId);
         return;
     }
     
-    const Model *model = am->getAlignedModel();
+    ModelId modelId = am->getAlignedModel();
+    auto model = ModelById::get(modelId);
+    if (!model) {
+        SVCERR << "MainWindow::mapSalientFeatureLayer: No aligned model in AlignmentModel" << endl;
+        return;
+    }
 
     Pane *pane = nullptr;
     Layer *layer = nullptr;
@@ -1399,7 +1490,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
             if (!l) continue;
-            if (l->getModel() == model) {
+            if (l->getModel() == modelId) {
                 pane = p;
                 layer = l;
                 break;
@@ -1410,7 +1501,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 
     if (!pane || !layer) {
         SVCERR << "MainWindow::mapSalientFeatureLayer: Failed to find model "
-               << model << " in any layer" << endl;
+               << modelId << " in any layer" << endl;
         return;
     }
 
@@ -1430,17 +1521,18 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
     }
 
     pane->setCentreFrame(am->fromReference(firstPane->getCentreFrame()));
-    
-    const SparseOneDimensionalModel *from =
-        qobject_cast<const SparseOneDimensionalModel *>(salient->getModel());
+
+    auto fromId = salient->getModel();
+    auto from = ModelById::getAs<SparseOneDimensionalModel>(fromId);
     if (!from) {
         SVCERR << "MainWindow::mapSalientFeatureLayer: "
                << "Salient layer lacks SparseOneDimensionalModel" << endl;
         return;
     }
-        
-    SparseOneDimensionalModel *to = new SparseOneDimensionalModel
+
+    auto to = std::make_shared<SparseOneDimensionalModel>
         (model->getSampleRate(), from->getResolution(), false);
+    auto toId = ModelById::add(to);
 
     EventVector pp = from->getAllEvents();
     for (const auto &p: pp) {
@@ -1451,7 +1543,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
         to->add(aligned);
     }
 
-    Layer *newLayer = m_document->createImportedLayer(to);
+    Layer *newLayer = m_document->createImportedLayer(toId);
 
     if (newLayer) {
 
@@ -1463,7 +1555,7 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
             til->setBaseColour(m_salientColour);
         }
         
-        PlayParameters *params = newLayer->getPlayParameters();
+        auto params = newLayer->getPlayParameters();
         if (params) {
             params->setPlayAudible(false);
         }
@@ -1476,16 +1568,18 @@ MainWindow::mapSalientFeatureLayer(AlignmentModel *am)
 void
 MainWindow::outlineWaveformModeSelected()
 {
-    QString name = tr("Outline Waveform");
+    QString name = m_modeLayerNames[OutlineWaveformMode];
 
+    Pane *currentPane = m_paneStack->getCurrentPane();
+    
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
 
             Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
             newLayer->setObjectName(name);
@@ -1515,6 +1609,10 @@ MainWindow::outlineWaveformModeSelected()
         }
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+    
     m_displayMode = OutlineWaveformMode;
     checkpointSession();
 }
@@ -1522,16 +1620,18 @@ MainWindow::outlineWaveformModeSelected()
 void
 MainWindow::standardWaveformModeSelected()
 {
-    QString name = tr("Standard Waveform");
+    QString name = m_modeLayerNames[WaveformMode];
 
+    Pane *currentPane = m_paneStack->getCurrentPane();
+    
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
 
             Layer *newLayer = m_document->createLayer(LayerFactory::Waveform);
             newLayer->setObjectName(name);
@@ -1561,6 +1661,10 @@ MainWindow::standardWaveformModeSelected()
         }
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+
     m_displayMode = WaveformMode;
     checkpointSession();
 }
@@ -1568,16 +1672,18 @@ MainWindow::standardWaveformModeSelected()
 void
 MainWindow::spectrogramModeSelected()
 {
-    QString name = tr("Spectrogram");
+    QString name = m_modeLayerNames[SpectrogramMode];
 
+    Pane *currentPane = m_paneStack->getCurrentPane();
+    
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
             Layer *newLayer = m_document->createLayer(LayerFactory::Spectrogram);
             newLayer->setObjectName(name);
             m_document->setModel(newLayer, createFrom);
@@ -1591,6 +1697,10 @@ MainWindow::spectrogramModeSelected()
         }
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+
     m_displayMode = SpectrogramMode;
     checkpointSession();
 }
@@ -1598,16 +1708,18 @@ MainWindow::spectrogramModeSelected()
 void
 MainWindow::melodogramModeSelected()
 {
-    QString name = tr("Melodic Range Spectrogram");
+    QString name = m_modeLayerNames[MelodogramMode];
+
+    Pane *currentPane = m_paneStack->getCurrentPane();
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
         Pane *pane = m_paneStack->getPane(i);
         if (!pane) continue;
 
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            createFrom) {
+            !createFrom.isNone()) {
             Layer *newLayer = m_document->createLayer
                 (LayerFactory::MelodicRangeSpectrogram);
             newLayer->setObjectName(name);
@@ -1622,28 +1734,33 @@ MainWindow::melodogramModeSelected()
         }
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+
     m_displayMode = MelodogramMode;
     checkpointSession();
 }
 
 void
-MainWindow::selectTransformDrivenMode(QString name,
-                                      DisplayMode mode,
+MainWindow::selectTransformDrivenMode(DisplayMode mode,
                                       QString transformId,
                                       QString layerPropertyXml,
                                       bool includeGhostReference)
 {
+    QString name = m_modeLayerNames[mode];
+
     // Bring forth any existing layers of the appropriate name; for
     // each pane that lacks one, make a note of the model from which
     // we should create it
 
-    map<Pane *, Model *> sourceModels;
-
+    map<Pane *, ModelId> sourceModels;
+    
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
         Pane *pane = m_paneStack->getPane(i);
-        Model *createFrom = nullptr;
+        ModelId createFrom;
         if (!selectExistingLayerForMode(pane, name, &createFrom)) {
-            if (createFrom) {
+            if (!createFrom.isNone()) {
                 sourceModels[pane] = createFrom;
             }
         }
@@ -1674,7 +1791,9 @@ MainWindow::selectTransformDrivenMode(QString name,
             }
         }
     }
-        
+
+    Pane *currentPane = m_paneStack->getCurrentPane();
+
     TransformFactory *tf = TransformFactory::getInstance();
 
     if (tf->haveTransform(transformId)) {
@@ -1688,14 +1807,13 @@ MainWindow::selectTransformDrivenMode(QString name,
                 continue;
             }
 
-            Model *source = sourceModels[pane];
+            ModelId source = sourceModels[pane];
 
             if (ghostReference) {
                 m_document->addLayerToView(pane, ghostReference);
             }
             
-            Transform transform = tf->getDefaultTransformFor
-                (transformId, source->getSampleRate());
+            Transform transform = tf->getDefaultTransformFor(transformId);
 
             ModelTransformer::Input input(source, -1);
 
@@ -1735,6 +1853,10 @@ MainWindow::selectTransformDrivenMode(QString name,
         SVCERR << "ERROR: No plugin available for mode: " << name << endl;
     }
 
+    if (currentPane) {
+        m_paneStack->setCurrentPane(currentPane);
+    }
+
     m_displayMode = mode;
     checkpointSession();
 }
@@ -1747,8 +1869,7 @@ MainWindow::curveModeSelected()
         .arg(int(TimeValueLayer::PlotStems));
 
     selectTransformDrivenMode
-        (tr("Curve"),
-         CurveMode,
+        (CurveMode,
          "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
          propertyXml,
          false);
@@ -1763,8 +1884,7 @@ MainWindow::pitchModeSelected()
         .arg(int(TimeValueLayer::LogScale));
     
     selectTransformDrivenMode
-        (tr("Pitch"),
-         PitchMode,
+        (PitchMode,
          "vamp:pyin:pyin:smoothedpitchtrack",
          propertyXml,
          true);
@@ -1779,8 +1899,7 @@ MainWindow::keyModeSelected()
         .arg(int(BinScale::Linear));
     
     selectTransformDrivenMode
-        (tr("Key"),
-         KeyMode,
+        (KeyMode,
          "vamp:qm-vamp-plugins:qm-keydetector:keystrength",
          propertyXml,
          false);
@@ -1795,11 +1914,36 @@ MainWindow::azimuthModeSelected()
         .arg(int(BinScale::Linear));
 
     selectTransformDrivenMode
-        (tr("Azimuth"),
-         AzimuthMode,
+        (AzimuthMode,
          "vamp:azi:azi:plan",
          propertyXml,
          false);
+}
+
+void
+MainWindow::previousDisplayMode()
+{
+    for (int i = 0; in_range_for(m_modeDisplayOrder, i); ++i) {
+        if (m_displayMode == m_modeDisplayOrder[i]) {
+            if (i > 0) {
+                m_modeButtons[m_modeDisplayOrder[i-1]]->click();
+            }
+            break;
+        }
+    }
+}
+
+void
+MainWindow::nextDisplayMode()
+{
+    for (int i = 0; in_range_for(m_modeDisplayOrder, i); ++i) {
+        if (m_displayMode == m_modeDisplayOrder[i]) {
+            if (in_range_for(m_modeDisplayOrder, i+1)) {
+                m_modeButtons[m_modeDisplayOrder[i+1]]->click();
+            }
+            break;
+        }
+    }
 }
 
 void
@@ -1833,42 +1977,13 @@ MainWindow::updateModeFromLayers()
             QString ln = layer->objectName();
 
             SVCERR << "MainWindow::updateModeFromLayers: layer " << j << " has name " << ln << endl;
-            
-            //!!! todo: store layer names in a map against layer types, so
-            //!!! as to ensure consistency
-        
-            if (ln == tr("Outline Waveform")) {
-                m_displayMode = OutlineWaveformMode;
-                found = true;
-                break;
-            } else if (ln == tr("Waveform")) {
-                m_displayMode = WaveformMode;
-                found = true;
-                break;
-            } else if (ln == tr("Melodic Range Spectrogram")) {
-                m_displayMode = MelodogramMode;
-                found = true;
-                break;
-            } else if (ln == tr("Spectrogram")) {
-                m_displayMode = SpectrogramMode;
-                found = true;
-                break;
-            } else if (ln == tr("Curve")) {
-                m_displayMode = CurveMode;
-                found = true;
-                break;
-            } else if (ln == tr("Pitch")) {
-                m_displayMode = PitchMode;
-                found = true;
-                break;
-            } else if (ln == tr("Key")) {
-                m_displayMode = KeyMode;
-                found = true;
-                break;
-            } else if (ln == tr("Azimuth")) {
-                m_displayMode = AzimuthMode;
-                found = true;
-                break;
+
+            for (const auto &mp: m_modeLayerNames) {
+                if (ln == mp.second) {
+                    m_displayMode = mp.first;
+                    found = true;
+                    break;
+                }
             }
         }
 
@@ -1979,20 +2094,37 @@ MainWindow::configureNewPane(Pane *pane)
 
     if (!pane) return;
 
-    zoomToFit();
-    reselectMode();
-
+    // MainWindowBase::addOpenedAudioModel adds a waveform layer for
+    // each additional model besides the main one (assuming that the
+    // main one gets it, if needed, from the session template). We
+    // don't actually want to use those - we'll be adding our own with
+    // specific parameters - but they don't cost much, so rather than
+    // remove them, just rename them to something that won't cause
+    // confusion with the name-based mode layer handling. NB we have
+    // to do this before calling reselectMode(), as that will add
+    // another competing waveform layer
+    
     Layer *waveformLayer = 0;
 
     for (int i = 0; i < pane->getLayerCount(); ++i) {
         Layer *layer = pane->getLayer(i);
-        if (!layer) continue;
-        if (dynamic_cast<WaveformLayer *>(layer)) waveformLayer = layer;
-        if (dynamic_cast<TimeValueLayer *>(layer)) return;
+        if (!layer) {
+            continue;
+        }
+        if (dynamic_cast<WaveformLayer *>(layer)) {
+            waveformLayer = layer;
+        }
+        if (dynamic_cast<TimeValueLayer *>(layer)) {
+            break;
+        }
     }
-    if (!waveformLayer) return;
 
-    waveformLayer->setObjectName(tr("Waveform"));
+    if (waveformLayer) {
+        waveformLayer->setObjectName("Automatically Created - Unused"); // not to be translated
+    }
+
+    zoomToFit();
+    reselectMode();
 }
 
 void
@@ -2298,6 +2430,14 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 }
 
 void
+MainWindow::betaReleaseWarning()
+{
+    QMessageBox::information
+        (this, tr("Test release"),
+         tr("<b>This is a test release of %1</b><p>This release is made for test purposes only - please send feedback to the developers.</p>").arg(QApplication::applicationName()));
+}
+
+void
 MainWindow::layerRemoved(Layer *layer)
 {
     MainWindowBase::layerRemoved(layer);
@@ -2310,21 +2450,15 @@ MainWindow::layerInAView(Layer *layer, bool inAView)
 }
 
 void
-MainWindow::modelAdded(Model *model)
+MainWindow::modelAdded(ModelId model)
 {
     MainWindowBase::modelAdded(model);
-}
-
-void
-MainWindow::modelAboutToBeDeleted(Model *model)
-{
-    MainWindowBase::modelAboutToBeDeleted(model);
 }
 
 QString
 MainWindow::makeSessionFilename()
 {
-    Model *mainModel = getMainModel();
+    auto mainModel = getMainModel();
     if (!mainModel) {
         SVDEBUG << "MainWindow::makeSessionFilename: No main model, returning empty filename" << endl;
         return {};
@@ -2391,7 +2525,7 @@ MainWindow::makeSessionFilename()
 QString
 MainWindow::makeSessionLabel()
 {
-    Model *mainModel = getMainModel();
+    auto mainModel = getMainModel();
     if (!mainModel) {
         SVDEBUG << "MainWindow::makeSessionFilename: No main model, returning empty filename" << endl;
         return {};
@@ -2478,7 +2612,7 @@ MainWindow::makeSmallSession()
     SmallSession session;
     if (!m_paneStack) return session;
 
-    WaveFileModel *mainModel = getMainModel();
+    auto mainModel = getMainModel();
     if (!mainModel) return session;
 
     session.mainFile = mainModel->getLocation();
@@ -2490,10 +2624,14 @@ MainWindow::makeSmallSession()
         Pane *p = m_paneStack->getPane(i);
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
-            Model *m = l->getModel();
-            while (m && m->getSourceModel()) m = m->getSourceModel();
-            if (qobject_cast<WaveFileModel *>(m)) {
-                QString location = m->getLocation();
+            auto modelId = l->getModel();
+            auto model = ModelById::get(modelId);
+            while (model && !model->getSourceModel().isNone()) {
+                modelId = model->getSourceModel();
+                model = ModelById::get(modelId);
+            }
+            if (auto wfm = ModelById::getAs<WaveFileModel>(modelId)) {
+                QString location = wfm->getLocation();
                 if (alreadyRecorded.find(location) == alreadyRecorded.end()) {
                     session.additionalFiles.push_back(location);
                     alreadyRecorded.insert(location);
@@ -2508,13 +2646,13 @@ MainWindow::makeSmallSession()
 }
 
 void
-MainWindow::mainModelChanged(WaveFileModel *model)
+MainWindow::mainModelChanged(ModelId modelId)
 {
-    SVDEBUG << "MainWindow::mainModelChanged(" << model << ")" << endl;
+    SVDEBUG << "MainWindow::mainModelChanged(" << modelId << ")" << endl;
 
     if (m_sessionState == SessionLoading) {
         SVDEBUG << "MainWindow::mainModelChanged: Session is loading, not (re)making session filename" << endl;
-    } else if (!model) {
+    } else if (modelId.isNone()) {
         SVDEBUG << "MainWindow::mainModelChanged: Null model, not (re)making session filename" << endl;
     } else {
         if (m_sessionState == NoSession) {
@@ -2532,7 +2670,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     m_salientPending.clear();
     m_salientCalculating = false;
 
-    MainWindowBase::mainModelChanged(model);
+    MainWindowBase::mainModelChanged(modelId);
 
     if (m_playTarget || m_audioIO) {
         connect(m_mainLevelPan, SIGNAL(levelChanged(float)),
@@ -2543,6 +2681,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     SVDEBUG << "Pane stack pane count = " << m_paneStack->getPaneCount() << endl;
 
+    auto model = ModelById::getAs<WaveFileModel>(modelId);
     if (model &&
         m_paneStack &&
         (m_paneStack->getPaneCount() == 0)) {
@@ -2567,7 +2706,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
             
         m_document->addLayerToView(pane, newLayer);
 
-        addSalientFeatureLayer(pane, model);
+        addSalientFeatureLayer(pane, modelId);
     }
 
     m_document->setAutoAlignment(m_viewManager->getAlignMode());
@@ -2654,10 +2793,10 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
-MainWindow::alignmentComplete(AlignmentModel *model)
+MainWindow::alignmentComplete(ModelId modelId)
 {
-    cerr << "MainWindow::alignmentComplete(" << model << ")" << endl;
-    if (model) mapSalientFeatureLayer(model);
+    cerr << "MainWindow::alignmentComplete(" << modelId << ")" << endl;
+    mapSalientFeatureLayer(modelId);
     checkpointSession();
 }
 
@@ -2773,24 +2912,24 @@ MainWindow::about()
 
     QString aboutText;
 
-    aboutText += tr("<h3>About Sonic Vector</h3>");
-    aboutText += tr("<p>Sonic Vector is a comparative viewer for sets of related audio recordings.</p>");
+    aboutText += tr("<h3>%1</h3>").arg(QApplication::applicationName());
+    aboutText += tr("<p>An application for comparative visualisation and alignment of related audio recordings.</p>");
     aboutText += tr("<p>%1 : %2 configuration</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
 
     aboutText += 
-        "<p>Sonic Vector Copyright &copy; 2005 - 2019 Chris Cannam and<br>"
+        "<p>Sonic Lineup Copyright &copy; 2005 - 2019 Chris Cannam and "
         "Queen Mary, University of London.</p>"
-        "<p>This program uses library code from many other authors. Please<br>"
+        "<p>This program uses library code from many other authors. Please "
         "refer to the accompanying documentation for more information.</p>"
-        "<p>This program is free software; you can redistribute it and/or<br>"
-        "modify it under the terms of the GNU General Public License as<br>"
-        "published by the Free Software Foundation; either version 2 of the<br>"
+        "<p>This program is free software; you can redistribute it and/or "
+        "modify it under the terms of the GNU General Public License as "
+        "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</p>";
     
-    QMessageBox::about(this, tr("About Sonic Vector"), aboutText);
+    QMessageBox::about(this, tr("About Sonic Lineup"), aboutText);
 }
 
 void

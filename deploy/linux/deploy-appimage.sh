@@ -2,7 +2,7 @@
 
 set -eu
 
-program=sonic-vector
+program=sonic-lineup
 checker=vamp-plugin-load-checker
 piper=piper-vamp-simple-server
 plugins="azi match-vamp-plugin nnls-chroma pyin qm-vamp-plugins tuning-difference"
@@ -113,8 +113,8 @@ done
 
 cp "$program.desktop" "$targetdir/"
 
-#!!! cp "icons/sv-icon.svg" "$targetdir/"
-#!!! cp "icons/sonic-vector.svg" "$targetdir/"
+##!!!
+cp "icons/sv-icon.svg" "$targetdir/sonic-lineup.svg"
 
 cp "deploy/linux/AppRun" "$targetdir/"
 
@@ -124,5 +124,5 @@ chmod +x "$targetdir/AppRun"
 # in situations where FUSE is unavailable like in a Docker container
 export ARCH=x86_64
 sv-dependency-builds/linux/appimage/appimagetool-x86_64.AppImage --appimage-extract
-./squashfs-root/AppRun "$targetdir" "SonicVector-$version-x86_64.AppImage"
+./squashfs-root/AppRun "$targetdir" "SonicLineup-$version-x86_64.AppImage"
 

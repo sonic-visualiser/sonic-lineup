@@ -3,18 +3,18 @@
 <!-- TODO: rewrite GUIDs, these are still those from (other) SV -->
 
   <Product
-      Name="Sonic Vector" 
+      Name="Sonic Lineup" 
       Id="*"
       Language="1033"
       Codepage="1252" 
       Version="3.2"
-      UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
+      UpgradeCode="a21e6cb2-df2e-43c0-aec3-22736add6a9c"
       Manufacturer="Queen Mary, University of London">
     
     <Package
         Id="*"
         Keywords="Installer"
-        Description="Sonic Vector 64-bit Installer" 
+        Description="Sonic Lineup 64-bit Installer" 
         Comments="Copyright (c) 2018 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="200"
@@ -23,41 +23,31 @@
         Platform="x64"
         SummaryCodepage="1252"/>
 
-    <MajorUpgrade DowngradeErrorMessage="A later version of Sonic Vector is already installed. Setup will now exit."/>
+    <MajorUpgrade DowngradeErrorMessage="A later version of Sonic Lineup is already installed. Setup will now exit."/>
 
     <Media Id="1" Cabinet="SonicVector.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1"/>
-    <Property Id="DiskPrompt" Value="Sonic Vector Installation [1]"/>
+    <Property Id="DiskPrompt" Value="Sonic Lineup Installation [1]"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
 
       <Directory Id="ProgramFiles64Folder" Name="PFiles64">
-        <Directory Id="VampPlugins" Name="Vamp Plugins">
-          <Component Win64="yes"
-              Id="VampPlugins"
-              Guid="528C7D7E-5A06-4E7D-89BB-7C16431DF82F">
-            <File
-                Id="VampREADME"
-                Name="README.txt"
-                Source="..\deploy\win64\README-Vamp.txt"/>
-          </Component>
-        </Directory>
 
-        <Directory Id="APPLICATIONFOLDER" Name="Sonic Vector">
+        <Directory Id="APPLICATIONFOLDER" Name="Sonic Lineup">
 
           <Component Win64="yes"
               Id="MainExecutable"
-              Guid="65E1EBDF-4C8F-47B8-BCD6-981667F5946D">
+              Guid="b253c538-321e-455e-81b2-9c879fe1371c">
 
             <File
                 Id="SVExecutable"
-                Name="Sonic Vector.exe"
-                Source="release\Sonic Vector.exe"
+                Name="Sonic Lineup.exe"
+                Source="release\Sonic Lineup.exe"
                 KeyPath="yes">
 
               <Shortcut
                   Id="SVStartEntry"
                   Directory="ProgramMenuDir"
-                  Name="Sonic Vector"
+                  Name="Sonic Lineup"
                   WorkingDirectory="APPLICATIONFOLDER"
                   Icon="winicon.ico"
                   IconIndex="0"
@@ -66,7 +56,7 @@
               <Shortcut
                   Id="SVDesktop"
                   Directory="DesktopFolder"
-                  Name="Sonic Vector"
+                  Name="Sonic Lineup"
                   WorkingDirectory="APPLICATIONFOLDER"
                   Icon="winicon.ico"
                   IconIndex="0"
@@ -86,42 +76,44 @@
                 Name="CHANGELOG.txt"
                 Source="..\CHANGELOG"/>
             <File
-                Id="CITATION"
-                Name="CITATION.txt"
-                Source="..\CITATION"/>
-
-            <File
                 Id="winicon.ico"
                 Name="sv-winicon.ico"
                 Source="..\icons\sv-winicon.ico"/>
           </Component>
           
           <Component Win64="yes"
-	      Id="SVFileAssociation"
-	      Guid="F07C5CC1-0209-4C1A-8D52-C40B50A2B964">
-            
-            <CreateFolder/>
-
-            <ProgId 
-                Id='SonicVector.svfile' 
-                Description='Sonic Vector project file'
-                Icon="SVExecutable">
-              <Extension 
-                  Id='sv' 
-                  ContentType='application/sonicvector'>
-                <Verb 
-                    Id='open' 
-                    Command='Open' 
-                    TargetFile='SVExecutable' 
-                    Argument='"%1"' />
-              </Extension>
-            </ProgId>
-            
+              Id="Plugins"
+              Guid="2ba2ade2-a813-4ddc-9ce6-ba79390cc14e">
+            <File
+                Id="MATCH"
+                Name="match-vamp-plugin.dll"
+                Source="release\match-vamp-plugin.dll"
+                KeyPath="yes"/>
+            <File
+                Id="Azi"
+                Name="azi.dll"
+                Source="release\azi.dll"/>
+            <File
+                Id="NNLSChroma"
+                Name="nnls-chroma.dll"
+                Source="release\nnls-chroma.dll"/>
+            <File
+                Id="pYIN"
+                Name="pyin.dll"
+                Source="release\pyin.dll"/>
+            <File
+                Id="QMVampPlugins"
+                Name="qm-vamp-plugins.dll"
+                Source="release\qm-vamp-plugins.dll"/>
+            <File
+                Id="TuningDifference"
+                Name="tuning-difference.dll"
+                Source="release\tuning-difference.dll"/>
           </Component>
           
           <Component Win64="yes"
               Id="Qt5"
-              Guid="5495ED5E-939A-4BE8-9000-D55F2A7A2E90">
+              Guid="4d6d166f-9e3c-443d-a502-8711fbd80911">
             <File
                 Id="QtCore"
                 Name="Qt5Core.dll"
@@ -151,7 +143,7 @@
 
           <Component Win64="yes"
                      Id="Sndfile"
-                     Guid="04533516-6460-4155-A0D4-E9BA4D31E95C">
+                     Guid="49332c83-e52c-4ce3-b772-737f865854f1">
             <File
                 Id="libsndfile"
                 Name="libsndfile-1.dll"
@@ -161,7 +153,7 @@
 
           <Component Win64="yes"
                Id="VCRuntime"
-               Guid="251D9513-BBD2-47CF-BE78-EF79446F7683">
+               Guid="5d4a1454-d726-4c46-8be0-79c916cba03d">
 
             <!-- Redistributables are handled by the Visual Studio
                  installer (a separate program from VS itself) and are
@@ -194,7 +186,7 @@
 	  <Directory Id="Platforms" Name="platforms">
             <Component Win64="yes"
                 Id="Qt5PlatformPlugins"
-                Guid="1FFB773E-6D6D-4C0E-832B-F0FFEA959CA5">
+                Guid="363830fa-1117-4609-8d47-006900c1396e">
 	      <File
                   Id="qminimal"
                   Name="qminimal.dll"
@@ -209,7 +201,7 @@
 	  <Directory Id="Styles" Name="styles">
             <Component Win64="yes"
                 Id="Qt5StylePlugins"
-                Guid="7A676FC1-B139-432C-A7D3-F33984934B79">
+                Guid="dd137a4b-e48d-4679-8628-5b01b82495ef">
 	      <File
                   Id="qwindowsvistastyle"
                   Name="qwindowsvistastyle.dll"
@@ -220,7 +212,7 @@
 	  <Directory Id="Helpers" Name="helpers">
             <Component Win64="yes"
                 Id="Piper64"
-                Guid="6385BD86-A5D3-4C77-AD41-B2DCA5B34E48">
+                Guid="da7c2b7a-f950-4e2c-94bd-c86ec662835e">
 	      <File
 		  Id="piperconv64"
 		  Name="piper-convert.exe"
@@ -249,7 +241,7 @@
 	    </Component>
             <Component Win64="yes"
                 Id="Checker64"
-                Guid="19A400D9-D5B2-4CB5-AF84-7C1DEA11D7B5">
+                Guid="2170129f-cea0-499d-b761-ea95679f850d">
 	      <File
 		  Id="checker64"
 		  Name="vamp-plugin-load-checker.exe"
@@ -261,8 +253,8 @@
       </Directory> <!-- pfiles64 -->
 
       <Directory Id="ProgramMenuFolder" Name="Programs">
-        <Directory Id="ProgramMenuDir" Name="Sonic Vector">
-          <Component Id="ProgramMenuDir" Guid="C1980FF3-D135-46F8-8542-F937748721E6">
+        <Directory Id="ProgramMenuDir" Name="Sonic Lineup">
+          <Component Id="ProgramMenuDir" Guid="633047c8-bfee-4522-b9cd-ec8143c09a8f">
             <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
             <RegistryValue Root="HKMU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes"/>
           </Component>
@@ -276,16 +268,15 @@
     <Feature 
 	Id="Complete"
 	Title="Required files"
-	Description="Installs the required files for running Sonic Vector."
+	Description="Installs the required files for running Sonic Lineup."
 	AllowAdvertise="no"
 	Absent="disallow"
 	ConfigurableDirectory="APPLICATIONFOLDER"
 	Level="1">
-      <ComponentRef Id="VampPlugins"/>
       <ComponentRef Id="MainExecutable"/>
-      <ComponentRef Id="SVFileAssociation"/>
-      <ComponentRef Id="Sndfile"/>
+      <ComponentRef Id="Plugins"/>
       <ComponentRef Id="Qt5"/>
+      <ComponentRef Id="Sndfile"/>
       <ComponentRef Id="VCRuntime"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
       <ComponentRef Id="Qt5StylePlugins"/>
@@ -301,7 +292,7 @@
 
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
     <Property Id="WIXUI_DONTVALIDATEPATH" Value="1" />
-    <Property Id="ApplicationFolderName" Value="Sonic Vector" />
+    <Property Id="ApplicationFolderName" Value="Sonic Lineup" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
     <WixVariable Id="WixUILicenseRtf" Value="..\deploy\win64\License.rtf" />
     

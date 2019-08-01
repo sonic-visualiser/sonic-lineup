@@ -69,6 +69,10 @@ public:
     MainWindow(SoundOptions options);
     virtual ~MainWindow();
 
+signals:
+    void canSelectPreviousDisplayMode(bool);
+    void canSelectNextDisplayMode(bool);
+
 public slots:
     void preferenceChanged(PropertyContainer::PropertyName) override;
     bool commitData(bool mayAskUser); // on session shutdown
@@ -84,6 +88,7 @@ protected slots:
     virtual void openRecentSession();
     virtual void openMostRecentSession();
     virtual void checkpointSession();
+    virtual void browseRecordedAudio();
     virtual void newSession();
     virtual void preferences();
 
@@ -98,7 +103,11 @@ protected slots:
     void pitchModeSelected();
     void keyModeSelected();
 
+    void previousDisplayMode();
+    void nextDisplayMode();
+
     void toggleSalientFeatures();
+    void toggleVerticalScales();
 
     virtual void renameCurrentLayer();
 
@@ -119,7 +128,9 @@ protected slots:
     virtual void restoreNormalPlayback();
 
     void monitoringLevelsChanged(float, float) override;
-    
+
+    void betaReleaseWarning();
+
     void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;
     void audioOverloadPluginDisabled() override;
     void audioTimeStretchMultiChannelDisabled() override;
@@ -134,9 +145,8 @@ protected slots:
     void layerRemoved(Layer *) override;
     void layerInAView(Layer *, bool) override;
 
-    void mainModelChanged(WaveFileModel *) override;
-    void modelAdded(Model *) override;
-    void modelAboutToBeDeleted(Model *) override;
+    void mainModelChanged(ModelId) override;
+    void modelAdded(ModelId) override;
 
     virtual void mainModelGainChanged(float);
     virtual void mainModelPanChanged(float);
@@ -146,10 +156,10 @@ protected slots:
     void modelRegenerationFailed(QString, QString, QString) override;
     void modelRegenerationWarning(QString, QString, QString) override;
 
-    void alignmentComplete(AlignmentModel *) override;
+    void alignmentComplete(ModelId) override;
     void alignmentFailed(QString) override;
 
-    virtual void salientLayerCompletionChanged();
+    virtual void salientLayerCompletionChanged(ModelId);
 
     void rightButtonMenuRequested(Pane *, QPoint) override { /* none */ }
 
@@ -187,7 +197,11 @@ protected:
     QAction                 *m_zoomFitAction;
     QAction                 *m_scrollLeftAction;
     QAction                 *m_scrollRightAction;
-    QAction                 *m_showPropertyBoxesAction;
+
+    QAction                 *m_selectPreviousPaneAction;
+    QAction                 *m_selectNextPaneAction;
+    QAction                 *m_selectPreviousDisplayModeAction;
+    QAction                 *m_selectNextDisplayModeAction;
 
     RecentFiles              m_recentSessions;
     
@@ -219,11 +233,12 @@ protected:
         KeyMode
     };
     std::map<DisplayMode, QPushButton *> m_modeButtons;
+    std::map<DisplayMode, QString> m_modeLayerNames;
+    std::vector<DisplayMode> m_modeDisplayOrder;
     
     virtual void reselectMode();
     virtual void updateModeFromLayers(); // after loading a session
-    virtual void selectTransformDrivenMode(QString name,
-                                           DisplayMode mode,
+    virtual void selectTransformDrivenMode(DisplayMode mode,
                                            QString transformId,
                                            QString layerPropertyXml,
                                            bool includeGhostReference);
@@ -234,10 +249,10 @@ protected:
 
     virtual void configureNewPane(Pane *p);
     virtual bool selectExistingLayerForMode(Pane *, QString,
-                                            Model **createFrom);
+                                            ModelId *createFrom);
 
-    virtual void addSalientFeatureLayer(Pane *, WaveFileModel *);
-    virtual void mapSalientFeatureLayer(AlignmentModel *);
+    virtual void addSalientFeatureLayer(Pane *, ModelId); // a WaveFileModel
+    virtual void mapSalientFeatureLayer(ModelId); // an AlignmentModel
 
     // Return the salient-feature layer in the given pane. If pane is
     // unspecified, return the main salient-feature layer, i.e. the
@@ -246,7 +261,7 @@ protected:
     virtual TimeInstantLayer *findSalientFeatureLayer(Pane *pane = nullptr);
     
     bool m_salientCalculating;
-    std::set<AlignmentModel *> m_salientPending;
+    std::set<ModelId> m_salientPending; // AlignmentModels
     int m_salientColour;
     
     void updateVisibleRangeDisplay(Pane *p) const override;
