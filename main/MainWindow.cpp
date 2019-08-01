@@ -1024,12 +1024,6 @@ MainWindow::newSession()
 
     closeSession();
     createDocument();
-
-    // Reset to a waveform mode; this is because it takes less time to
-    // process & render than other modes, so we will be able to
-    // checkpoint sooner - the result of starting out in e.g. pitch
-    // mode can be quite strange because of the near-eternity before a
-    // safe checkpoint can be made
     
     m_displayMode = OutlineWaveformMode;
     for (auto &bp : m_modeButtons) {
