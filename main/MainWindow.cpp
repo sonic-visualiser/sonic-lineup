@@ -1272,17 +1272,9 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
             continue;
         }
 
-        ModelId lm = layer->getModel();
-        while (!lm.isNone()) {
-            if (auto model = ModelById::get(lm)) {
-                if (auto wfm = std::dynamic_pointer_cast<WaveFileModel>(model)) {
-                    modelId = lm;
-                }
-                lm = model->getSourceModel();
-            } else {
-                break;
-            }
-        }
+        modelId = layer->getModel();
+        auto sourceId = layer->getSourceModel();
+        if (!sourceId.isNone()) modelId = sourceId;
         
         QString ln = layer->objectName();
         if (ln == modeName) {
@@ -1811,6 +1803,7 @@ MainWindow::selectTransformDrivenMode(DisplayMode mode,
 
             if (ghostReference) {
                 m_document->addLayerToView(pane, ghostReference);
+                pane->setUseAligningProxy(true);
             }
             
             Transform transform = tf->getDefaultTransformFor(transformId);
@@ -2625,10 +2618,9 @@ MainWindow::makeSmallSession()
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
             auto modelId = l->getModel();
-            auto model = ModelById::get(modelId);
-            while (model && !model->getSourceModel().isNone()) {
-                modelId = model->getSourceModel();
-                model = ModelById::get(modelId);
+            auto sourceId = l->getSourceModel();
+            if (!sourceId.isNone()) {
+                modelId = sourceId;
             }
             if (auto wfm = ModelById::getAs<WaveFileModel>(modelId)) {
                 QString location = wfm->getLocation();
