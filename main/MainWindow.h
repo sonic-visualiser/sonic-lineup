@@ -240,7 +240,8 @@ protected:
     virtual void updateModeFromLayers(); // after loading a session
     virtual void selectTransformDrivenMode(DisplayMode mode,
                                            QString transformId,
-                                           QString layerPropertyXml);
+                                           QString layerPropertyXml,
+                                           bool includeGhostReference);
     DisplayMode m_displayMode;
 
     void closeEvent(QCloseEvent *e) override;

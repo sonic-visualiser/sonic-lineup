@@ -1272,17 +1272,9 @@ MainWindow::selectExistingLayerForMode(Pane *pane,
             continue;
         }
 
-        ModelId lm = layer->getModel();
-        while (!lm.isNone()) {
-            if (auto model = ModelById::get(lm)) {
-                if (auto wfm = std::dynamic_pointer_cast<WaveFileModel>(model)) {
-                    modelId = lm;
-                }
-                lm = model->getSourceModel();
-            } else {
-                break;
-            }
-        }
+        modelId = layer->getModel();
+        auto sourceId = layer->getSourceModel();
+        if (!sourceId.isNone()) modelId = sourceId;
         
         QString ln = layer->objectName();
         if (ln == modeName) {
@@ -1520,7 +1512,7 @@ MainWindow::mapSalientFeatureLayer(ModelId amId)
         }
     }
 
-    pane->setCentreFrame(am->fromReference(firstPane->getCentreFrame()));
+    pane->setCentreFrame(model->alignFromReference(firstPane->getCentreFrame()));
 
     auto fromId = salient->getModel();
     auto from = ModelById::getAs<SparseOneDimensionalModel>(fromId);
@@ -1537,7 +1529,7 @@ MainWindow::mapSalientFeatureLayer(ModelId amId)
     EventVector pp = from->getAllEvents();
     for (const auto &p: pp) {
         Event aligned = p
-            .withFrame(am->fromReference(p.getFrame()))
+            .withFrame(model->alignFromReference(p.getFrame()))
             .withLabel(""); // remove label, as the analysis was not
                             // conducted on the audio we're mapping to
         to->add(aligned);
@@ -1745,59 +1737,113 @@ MainWindow::melodogramModeSelected()
 void
 MainWindow::selectTransformDrivenMode(DisplayMode mode,
                                       QString transformId,
-                                      QString layerPropertyXml)
+                                      QString layerPropertyXml,
+                                      bool includeGhostReference)
 {
     QString name = m_modeLayerNames[mode];
+
+    // Bring forth any existing layers of the appropriate name; for
+    // each pane that lacks one, make a note of the model from which
+    // we should create it
+
+    map<Pane *, ModelId> sourceModels;
     
-    Pane *currentPane = m_paneStack->getCurrentPane();
-
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
-
         Pane *pane = m_paneStack->getPane(i);
-        if (!pane) continue;
-
         ModelId createFrom;
-        if (!selectExistingLayerForMode(pane, name, &createFrom) &&
-            !createFrom.isNone()) {
-
-            TransformFactory *tf = TransformFactory::getInstance();
-
-            if (tf->haveTransform(transformId)) {
-
-                Transform transform = tf->getDefaultTransformFor(transformId);
-
-                ModelTransformer::Input input(createFrom, -1);
-                
-                Layer *newLayer =
-                    m_document->createDerivedLayer(transform, createFrom);
-
-                if (newLayer) {
-                    newLayer->setObjectName(name);
-                    LayerFactory::getInstance()->setLayerProperties
-                        (newLayer, layerPropertyXml);
-
-                    SingleColourLayer *scl =
-                        qobject_cast<SingleColourLayer *>(newLayer);
-                    if (scl) {
-                        scl->setBaseColour
-                            (i % ColourDatabase::getInstance()->getColourCount());
-                    }
-
-                    m_document->addLayerToView(pane, newLayer);
-                    m_paneStack->setCurrentLayer(pane, newLayer);
-                } else {
-                    SVCERR << "ERROR: Failed to create derived layer" << endl;
-                }
-            
-            } else {
-                SVCERR << "ERROR: No PYin plugin available" << endl;
+        if (!selectExistingLayerForMode(pane, name, &createFrom)) {
+            if (!createFrom.isNone()) {
+                sourceModels[pane] = createFrom;
             }
         }
+    }
 
-        TimeInstantLayer *salient = findSalientFeatureLayer(pane);
-        if (salient) {
-            pane->propertyContainerSelected(pane, salient);
+    Layer *ghostReference = nullptr;
+
+    if (includeGhostReference && !sourceModels.empty()) {
+
+        // Look up the layer of this type in the first pane -- this is
+        // the reference that we must include as a ghost in the pane
+        // that we're adding the new layer to.
+
+        // NB it won't exist if this is the first time into this mode
+        // and we haven't created the layer for the reference pane yet
+        // - we have to handle that in the creation loop below.
+        
+        Pane *pane = m_paneStack->getPane(0);
+        
+        for (int i = 0; i < pane->getLayerCount(); ++i) {
+            Layer *layer = pane->getLayer(i);
+            if (!layer || qobject_cast<TimeInstantLayer *>(layer)) {
+                continue;
+            }
+            if (layer->objectName() == name) {
+                ghostReference = layer;
+                break;
+            }
         }
+    }
+
+    Pane *currentPane = m_paneStack->getCurrentPane();
+
+    TransformFactory *tf = TransformFactory::getInstance();
+
+    if (tf->haveTransform(transformId)) {
+
+        for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+            Pane *pane = m_paneStack->getPane(i);
+
+            if (sourceModels.find(pane) == sourceModels.end()) {
+                // no need to create, this one exists already
+                continue;
+            }
+
+            ModelId source = sourceModels[pane];
+
+            if (ghostReference) {
+                m_document->addLayerToView(pane, ghostReference);
+                pane->setUseAligningProxy(true);
+            }
+            
+            Transform transform = tf->getDefaultTransformFor(transformId);
+
+            ModelTransformer::Input input(source, -1);
+
+            Layer *layer = m_document->createDerivedLayer(transform, source);
+
+            if (layer) {
+
+                layer->setObjectName(name);
+                LayerFactory::getInstance()->setLayerProperties
+                    (layer, layerPropertyXml);
+
+                SingleColourLayer *scl =
+                    qobject_cast<SingleColourLayer *>(layer);
+                if (scl) {
+                    int colourIndex = 
+                        (i % ColourDatabase::getInstance()->getColourCount());
+                    scl->setBaseColour(colourIndex);
+                }
+
+                m_document->addLayerToView(pane, layer);
+                m_paneStack->setCurrentLayer(pane, layer);
+
+                if (!ghostReference && includeGhostReference && i == 0) {
+                    ghostReference = layer;
+                }
+                
+            } else {
+                SVCERR << "ERROR: Failed to create derived layer" << endl;
+            }
+
+            TimeInstantLayer *salient = findSalientFeatureLayer(pane);
+            if (salient) {
+                pane->propertyContainerSelected(pane, salient);
+            }
+        }
+    } else {
+        SVCERR << "ERROR: No plugin available for mode: " << name << endl;
     }
 
     if (currentPane) {
@@ -1818,7 +1864,8 @@ MainWindow::curveModeSelected()
     selectTransformDrivenMode
         (CurveMode,
          "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
-         propertyXml);
+         propertyXml,
+         false);
 }
 
 void
@@ -1832,7 +1879,8 @@ MainWindow::pitchModeSelected()
     selectTransformDrivenMode
         (PitchMode,
          "vamp:pyin:pyin:smoothedpitchtrack",
-         propertyXml);
+         propertyXml,
+         true);
 }
 
 void
@@ -1846,7 +1894,8 @@ MainWindow::keyModeSelected()
     selectTransformDrivenMode
         (KeyMode,
          "vamp:qm-vamp-plugins:qm-keydetector:keystrength",
-         propertyXml);
+         propertyXml,
+         false);
 }
 
 void
@@ -1860,7 +1909,8 @@ MainWindow::azimuthModeSelected()
     selectTransformDrivenMode
         (AzimuthMode,
          "vamp:azi:azi:plan",
-         propertyXml);
+         propertyXml,
+         false);
 }
 
 void
@@ -2568,10 +2618,9 @@ MainWindow::makeSmallSession()
         for (int j = 0; j < p->getLayerCount(); ++j) {
             Layer *l = p->getLayer(j);
             auto modelId = l->getModel();
-            auto model = ModelById::get(modelId);
-            while (model && !model->getSourceModel().isNone()) {
-                modelId = model->getSourceModel();
-                model = ModelById::get(modelId);
+            auto sourceId = l->getSourceModel();
+            if (!sourceId.isNone()) {
+                modelId = sourceId;
             }
             if (auto wfm = ModelById::getAs<WaveFileModel>(modelId)) {
                 QString location = wfm->getLocation();

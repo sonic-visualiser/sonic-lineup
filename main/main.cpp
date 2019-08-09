@@ -191,6 +191,9 @@ main(int argc, char **argv)
 
     QSettings settings;
     settings.beginGroup("Preferences");
+    // Running plugins in-process allows us to use the serialise
+    // option in the MATCH plugin, which cuts down on memory pressure
+    // and makes things go more smoothly
     settings.setValue("run-vamp-plugins-in-process", true);
     settings.endGroup();
 
