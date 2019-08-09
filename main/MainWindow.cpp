@@ -1512,7 +1512,7 @@ MainWindow::mapSalientFeatureLayer(ModelId amId)
         }
     }
 
-    pane->setCentreFrame(am->fromReference(firstPane->getCentreFrame()));
+    pane->setCentreFrame(model->alignFromReference(firstPane->getCentreFrame()));
 
     auto fromId = salient->getModel();
     auto from = ModelById::getAs<SparseOneDimensionalModel>(fromId);
@@ -1529,7 +1529,7 @@ MainWindow::mapSalientFeatureLayer(ModelId amId)
     EventVector pp = from->getAllEvents();
     for (const auto &p: pp) {
         Event aligned = p
-            .withFrame(am->fromReference(p.getFrame()))
+            .withFrame(model->alignFromReference(p.getFrame()))
             .withLabel(""); // remove label, as the analysis was not
                             // conducted on the audio we're mapping to
         to->add(aligned);
