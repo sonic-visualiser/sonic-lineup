@@ -1737,6 +1737,7 @@ MainWindow::melodogramModeSelected()
 void
 MainWindow::selectTransformDrivenMode(DisplayMode mode,
                                       QString transformId,
+                                      Transform::ParameterMap parameters,
                                       QString layerPropertyXml,
                                       bool includeGhostReference)
 {
@@ -1808,6 +1809,10 @@ MainWindow::selectTransformDrivenMode(DisplayMode mode,
             
             Transform transform = tf->getDefaultTransformFor(transformId);
 
+            if (!parameters.empty()) {
+                transform.setParameters(parameters);
+            }
+
             ModelTransformer::Input input(source, -1);
 
             Layer *layer = m_document->createDerivedLayer(transform, source);
@@ -1864,6 +1869,7 @@ MainWindow::curveModeSelected()
     selectTransformDrivenMode
         (CurveMode,
          "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
+         {},
          propertyXml,
          false);
 }
@@ -1879,6 +1885,7 @@ MainWindow::pitchModeSelected()
     selectTransformDrivenMode
         (PitchMode,
          "vamp:pyin:pyin:smoothedpitchtrack",
+         {},
          propertyXml,
          true);
 }
@@ -1893,7 +1900,8 @@ MainWindow::keyModeSelected()
     
     selectTransformDrivenMode
         (KeyMode,
-         "vamp:qm-vamp-plugins:qm-keydetector:keystrength",
+         "vamp:qm-vamp-plugins:qm-keydetector:tonicstrength",
+         {},
          propertyXml,
          false);
 }
@@ -1909,6 +1917,7 @@ MainWindow::azimuthModeSelected()
     selectTransformDrivenMode
         (AzimuthMode,
          "vamp:azi:azi:plan",
+         {},
          propertyXml,
          false);
 }

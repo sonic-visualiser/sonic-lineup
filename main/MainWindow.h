@@ -240,6 +240,7 @@ protected:
     virtual void updateModeFromLayers(); // after loading a session
     virtual void selectTransformDrivenMode(DisplayMode mode,
                                            QString transformId,
+                                           Transform::ParameterMap parameters,
                                            QString layerPropertyXml,
                                            bool includeGhostReference);
     DisplayMode m_displayMode;
