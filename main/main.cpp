@@ -159,6 +159,10 @@ main(int argc, char **argv)
 
     VectApplication application(argc, argv);
 
+    QApplication::setOrganizationName("sonic-visualiser");
+    QApplication::setOrganizationDomain("sonicvisualiser.org");
+    QApplication::setApplicationName("Sonic Lineup");
+
     setupVectVampPath();
 
     QStringList args = application.arguments();
@@ -182,10 +186,6 @@ main(int argc, char **argv)
     }
 
     if (args.contains("--no-audio")) audioOutput = false;
-
-    QApplication::setOrganizationName("sonic-visualiser");
-    QApplication::setOrganizationDomain("sonicvisualiser.org");
-    QApplication::setApplicationName("Sonic Lineup");
 
     InteractiveFileFinder::getInstance()->setApplicationSessionExtension("vect");
 
