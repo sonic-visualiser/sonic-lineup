@@ -1887,7 +1887,7 @@ MainWindow::pitchModeSelected()
          "vamp:pyin:pyin:smoothedpitchtrack",
          {},
          propertyXml,
-         true);
+         true); // ghost reference
 }
 
 void
