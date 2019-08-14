@@ -1,7 +1,7 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "62987b6d6a3b"
+      "pin": "0b6802e3b755"
     },
     "svcore": {
       "pin": "fadd9f8aaa27"
@@ -64,7 +64,7 @@
       "pin": "89099872c87b"
     },
     "qm-vamp-plugins": {
-      "pin": "51cf39a9a55d3f9daf7560b528f2e00465fc32b4"
+      "pin": "8fc424f289f8dec3e95aff5b6d18f3c5d24af0e4"
     },
     "qm-vamp-plugins/lib/qm-dsp": {
       "pin": "9b18a2294638e2a28c8b97ca04d870422a8da4ef"

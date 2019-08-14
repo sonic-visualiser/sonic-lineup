@@ -1878,9 +1878,11 @@ void
 MainWindow::pitchModeSelected()
 {
     QString propertyXml =
-        QString("<layer plotStyle=\"%1\" verticalScale=\"%2\"/>")
+        QString("<layer plotStyle=\"%1\" verticalScale=\"%2\" scaleMinimum=\"%3\" scaleMaximum=\"%4\"/>")
         .arg(int(TimeValueLayer::PlotDiscreteCurves))
-        .arg(int(TimeValueLayer::LogScale));
+        .arg(int(TimeValueLayer::LogScale))
+        .arg(40)
+        .arg(510);
     
     selectTransformDrivenMode
         (PitchMode,
