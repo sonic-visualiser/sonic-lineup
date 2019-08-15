@@ -88,7 +88,12 @@
         "match": {
             "vcs": "hg",
 	    "service": "soundsoftware",
-            "repository": "match-vamp"
+            "repository": "match-vamp",
+            "branch": "tipic"
+        },
+        "tipic": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
         },
         "constant-q-cpp": {
             "vcs": "git",

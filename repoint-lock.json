@@ -10,7 +10,7 @@
       "pin": "d09345e578a7"
     },
     "svapp": {
-      "pin": "e4d92aaa689c"
+      "pin": "0a43c88cea48"
     },
     "checker": {
       "pin": "c8c17e51aab0"
@@ -49,7 +49,10 @@
       "pin": "1c8844bfa946"
     },
     "match": {
-      "pin": "4b272c839f7e"
+      "pin": "7c1381b8182d"
+    },
+    "tipic": {
+      "pin": "6ca3c80e1f43"
     },
     "constant-q-cpp": {
       "pin": "628db02cf5ee6b8d12c183cb0ea274161daf1d03"
