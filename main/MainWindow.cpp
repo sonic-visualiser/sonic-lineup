@@ -395,7 +395,7 @@ MainWindow::MainWindow(SoundOptions options) :
 
     openMostRecentSession();
     
-    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+//    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
 
 MainWindow::~MainWindow()
