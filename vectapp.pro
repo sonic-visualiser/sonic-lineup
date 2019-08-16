@@ -68,12 +68,14 @@ for (file, SVAPP_HEADERS)    { HEADERS += $$sprintf("svapp/%1",    $$file) }
 
 HEADERS += \
         main/MainWindow.h \
+        main/NetworkPermissionTester.h \
         main/PreferencesDialog.h \
         main/SmallSession.h
 
 SOURCES +=  \
 	main/main.cpp \
         main/MainWindow.cpp \
+        main/NetworkPermissionTester.cpp \
         main/PreferencesDialog.cpp \
         main/SmallSession.cpp
 

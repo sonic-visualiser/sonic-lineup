@@ -36,6 +36,7 @@
 
 #include <map>
 
+class VersionTester;
 class Document;
 class PaneStack;
 class Pane;
@@ -214,6 +215,7 @@ protected:
     QPointer<QTreeView>      m_layerTreeView;
 
     KeyReference            *m_keyReference;
+    VersionTester           *m_versionTester;
 
     void setupMenus() override;
     

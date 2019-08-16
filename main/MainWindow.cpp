@@ -17,7 +17,10 @@
 
 #include "MainWindow.h"
 #include "framework/Document.h"
+#include "framework/VersionTester.h"
+
 #include "PreferencesDialog.h"
+#include "NetworkPermissionTester.h"
 
 #include "view/Pane.h"
 #include "view/PaneStack.h"
@@ -392,6 +395,17 @@ MainWindow::MainWindow(SoundOptions options) :
 
     setIconsVisibleInMenus(false);
     finaliseMenus();
+
+    NetworkPermissionTester tester;
+    bool networkPermission = tester.havePermission();
+    if (networkPermission) {
+        m_versionTester = new VersionTester
+            ("sonicvisualiser.org", "latest-vect-version.txt", VECT_VERSION);
+        connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
+                this, SLOT(newerVersionAvailable(QString)));
+    } else {
+        m_versionTester = 0;
+    }
 
     openMostRecentSession();
     

@@ -170,7 +170,7 @@ else
    fi
 fi
 
-if ! $QMAKE -r vect.pro; then
+if ! $QMAKE -r sonic-lineup.pro; then
    AC_MSG_ERROR([qmake failed: Command was "$QMAKE -r"])
 fi
 

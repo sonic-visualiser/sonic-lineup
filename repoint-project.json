@@ -12,7 +12,8 @@
     "libraries": {
         "vamp-plugin-sdk": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "c++11-mutex"
         },
         "svcore": {
             "vcs": "hg",

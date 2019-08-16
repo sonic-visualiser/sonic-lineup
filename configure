@@ -8729,7 +8729,7 @@ $as_echo "$as_me: WARNING: No vamp-plugin-sdk directory present, so external lib
    fi
 fi
 
-if ! $QMAKE -r vect.pro; then
+if ! $QMAKE -r sonic-lineup.pro; then
    as_fn_error $? "qmake failed: Command was \"$QMAKE -r\"" "$LINENO" 5
 fi
 
