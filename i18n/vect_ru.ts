@@ -22,7 +22,7 @@
 <context>
     <name>AddLayerCommand</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="1163"/>
+        <location filename="../svapp/framework/Document.cpp" line="1182"/>
         <source>Add %1 Layer</source>
         <translation>Добавить слой %1</translation>
     </message>
@@ -30,7 +30,7 @@
 <context>
     <name>AggregateWaveModel</name>
     <message>
-        <location filename="../svcore/data/model/AggregateWaveModel.h" line="50"/>
+        <location filename="../svcore/data/model/AggregateWaveModel.h" line="49"/>
         <source>Aggregate Wave</source>
         <translation type="unfinished"></translation>
     </message>
@@ -38,7 +38,7 @@
 <context>
     <name>AlignmentModel</name>
     <message>
-        <location filename="../svcore/data/model/AlignmentModel.h" line="50"/>
+        <location filename="../svcore/data/model/AlignmentModel.h" line="54"/>
         <source>Alignment</source>
         <translation>Выравнивание</translation>
     </message>
@@ -46,7 +46,7 @@
 <context>
     <name>AlignmentView</name>
     <message>
-        <location filename="../svgui/view/AlignmentView.cpp" line="31"/>
+        <location filename="../svgui/view/AlignmentView.cpp" line="34"/>
         <source>AlignmentView</source>
         <translation type="unfinished"></translation>
     </message>
@@ -54,17 +54,17 @@
 <context>
     <name>AudioCallbackPlaySource</name>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="525"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="526"/>
         <source>Play from %1</source>
         <translation>Воспроизведение от %1</translation>
     </message>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="548"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="549"/>
         <source>Stop at %1</source>
         <translation>Остановка в позиции %1</translation>
     </message>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="1089"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="1090"/>
         <source>Change time-stretch factor to %1</source>
         <translation>Смена коэффициента растяжения во времени на %1</translation>
     </message>
@@ -474,7 +474,7 @@ Example data from file:</source>
 <context>
     <name>Colour3DPlotLayer</name>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="851"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="884"/>
         <source>Time:	%1 - %2
 Bin:	%3
 Value:	%4</source>
@@ -483,25 +483,25 @@ Bin:	%3
 Значение:	%4</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="404"/>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="423"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="419"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="438"/>
         <source>Linear</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="427"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="442"/>
         <source>&lt;unknown&gt;</source>
         <translation>&lt;неизвестно&gt;</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="259"/>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="305"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="274"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="320"/>
         <source>Colour</source>
         <translation>Цвет</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="260"/>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="296"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="275"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="311"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -514,78 +514,78 @@ Bin:	%3
         <translation type="vanished">Нормализовать видимую область</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="405"/>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="424"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="420"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="439"/>
         <source>Log</source>
         <translation>Логарифмический</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="406"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="421"/>
         <source>+/-1</source>
         <translation>±1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="262"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="277"/>
         <source>Invert Vertical Scale</source>
         <translation>Инвертировать масштаб по вертикали</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="264"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="279"/>
         <source>Always Opaque</source>
         <translation>Всегда непрозрачно</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="407"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="422"/>
         <source>Absolute</source>
         <translation>Абсолютный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="263"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="278"/>
         <source>Gain</source>
         <translation>Усиление</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="261"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="276"/>
         <source>Normalization</source>
         <translation>Нормировка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="265"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="280"/>
         <source>Smooth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="266"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="281"/>
         <source>Bin Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="300"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="315"/>
         <source>Bins</source>
         <translation type="unfinished">Бины</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="413"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="428"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="414"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="429"/>
         <source>Col</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="415"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="430"/>
         <source>View</source>
         <translation type="unfinished">Вид</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="416"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="431"/>
         <source>Hybrid</source>
         <translation>Гибрид</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="450"/>
+        <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="465"/>
         <source>dB</source>
         <translation>Дб</translation>
     </message>
@@ -754,7 +754,7 @@ Bin:	%3
 <context>
     <name>Dense3DModelPeakCache</name>
     <message>
-        <location filename="../svcore/data/model/Dense3DModelPeakCache.h" line="94"/>
+        <location filename="../svcore/data/model/Dense3DModelPeakCache.h" line="106"/>
         <source>Dense 3-D Peak Cache</source>
         <translation type="unfinished"></translation>
     </message>
@@ -793,12 +793,12 @@ Bin:	%3
 <context>
     <name>Document</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="417"/>
+        <location filename="../svapp/framework/Document.cpp" line="408"/>
         <source>Set main model to %1</source>
         <translation>Сделать %1 основной моделью</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="419"/>
+        <location filename="../svapp/framework/Document.cpp" line="410"/>
         <source>Clear main model</source>
         <translation>Очистить основную модель</translation>
     </message>
@@ -814,12 +814,12 @@ Bin:	%3
 <context>
     <name>FFTModel</name>
     <message>
-        <location filename="../svcore/data/model/FFTModel.cpp" line="104"/>
+        <location filename="../svcore/data/model/FFTModel.cpp" line="123"/>
         <source>%1 Hz</source>
         <translation>%1 Гц</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/FFTModel.h" line="144"/>
+        <location filename="../svcore/data/model/FFTModel.h" line="136"/>
         <source>FFT</source>
         <translation>FFT</translation>
     </message>
@@ -875,28 +875,28 @@ Bin:	%3
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="165"/>
-        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="192"/>
+        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="167"/>
+        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="194"/>
         <source>Failed to initialise feature extraction plugin &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="177"/>
+        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="179"/>
         <source>Feature extraction plugin &quot;%1&quot; rejected the given step and block sizes (%2 and %3); using plugin defaults (%4 and %5) instead</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="203"/>
+        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="205"/>
         <source>Transform was configured for version %1 of plugin &quot;%2&quot;, but the plugin being used is version %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="219"/>
+        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="221"/>
         <source>Plugin &quot;%1&quot; has no outputs</source>
         <translation>У плагина &quot;%1&quot; нет выходов</translation>
     </message>
     <message>
-        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="238"/>
+        <location filename="../svcore/transform/FeatureExtractionModelTransformer.cpp" line="242"/>
         <source>Plugin &quot;%1&quot; has no output named &quot;%2&quot;</source>
         <translation>У плагина &quot;%1&quot; нет выхода с названием &quot;%2&quot;</translation>
     </message>
@@ -950,75 +950,75 @@ Bin:	%3
 <context>
     <name>FlexiNoteLayer</name>
     <message>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="62"/>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="63"/>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="64"/>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="934"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="964"/>
         <source>New Point</source>
         <translation type="unfinished">Новая точка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="101"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="105"/>
         <source>Vertical Scale</source>
         <translation>Верт. масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="102"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="106"/>
         <source>Scale Units</source>
         <translation type="unfinished">Единицы шкалы</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="118"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="122"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="167"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="173"/>
         <source>Auto-Align</source>
         <translation>Автовыравнивание</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="168"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="174"/>
         <source>Linear</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="169"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="175"/>
         <source>Log</source>
         <translation>Логарифмический</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="170"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="176"/>
         <source>MIDI Notes</source>
         <translation>Ноты MIDI</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="482"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="508"/>
         <source>In progress</source>
         <translation>В процессе</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="484"/>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="509"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="510"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="535"/>
         <source>No local points</source>
         <translation>Нет локальных точек</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="523"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="549"/>
         <source>%1 (%2, %3 Hz)</source>
         <translation>%1 (%2, %3 Гц)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="530"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="556"/>
         <source>%1 Hz (%2, %3)</source>
         <translation>%1Гц (%2, %3)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="536"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="562"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="543"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="569"/>
         <source>Time:	%1
 Pitch:	%2
 Duration:	%3
@@ -1029,7 +1029,7 @@ No label</source>
 Без метки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="548"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="574"/>
         <source>Time:	%1
 Pitch:	%2
 Duration:	%3
@@ -1040,100 +1040,100 @@ Label:	%4</source>
 Метка:	%4</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="829"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="857"/>
         <source>freq: %1%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="838"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="866"/>
         <source>dur: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="938"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="968"/>
         <source>Draw Point</source>
         <translation>Нарисовать точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1015"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1048"/>
         <source>Erase Point</source>
         <translation>Стереть точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1099"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1135"/>
         <source>Drag Point</source>
         <translation>Перетащить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1202"/>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1275"/>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1587"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1239"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1317"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1630"/>
         <source>Edit Point</source>
         <translation>Изменить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1204"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1241"/>
         <source>Relocate Point</source>
         <translation>Переместить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1207"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1244"/>
         <source>Change Point Value</source>
         <translation>Изменить значение точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1337"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1380"/>
         <source>new note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1339"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1381"/>
         <source>Add Point</source>
         <translation>Добавить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1379"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1420"/>
         <source>Snap Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1422"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1465"/>
         <source>Merge Notes</source>
         <translation>Объединить ноты</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1603"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1646"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1624"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1667"/>
         <source>Resize Selection</source>
         <translation>Изменить размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1654"/>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1672"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1698"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1717"/>
         <source>Delete Selected Points</source>
         <translation>Удалить выбранные точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1709"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1756"/>
         <source>Re-align pasted items?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1710"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1757"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1724"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1770"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1794"/>
+        <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1839"/>
         <source>Record Note</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1236,63 +1236,63 @@ Label:	%4</source>
 <context>
     <name>ImageLayer</name>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="178"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="194"/>
         <source>In progress</source>
         <translation>В процессе</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="558"/>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="664"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="584"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="694"/>
         <source>Select image</source>
         <translation>Выбрать изображение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="630"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="658"/>
         <source>Move Image</source>
         <translation>Переместить изображение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="673"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="703"/>
         <source>Edit Image</source>
         <translation type="unfinished">Изменить изображение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="689"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="720"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="710"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="742"/>
         <source>Resize Selection</source>
         <translation>Изменить размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="738"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="771"/>
         <source>Delete Selection</source>
         <translation>Удалите выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="775"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="810"/>
         <source>Re-align pasted items?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="776"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="811"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="790"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="824"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="820"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="854"/>
         <source>New Point</source>
         <translation>Новая точка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="852"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="886"/>
         <source>Opening image URL...</source>
         <translation>Открывается изображение по URL...</translation>
     </message>
@@ -1300,8 +1300,8 @@ Label:	%4</source>
 <context>
     <name>ImageModel</name>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="57"/>
-        <location filename="../svcore/data/model/ImageModel.h" line="190"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="58"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="192"/>
         <source>Image</source>
         <translation>Изображение</translation>
     </message>
@@ -1310,27 +1310,27 @@ Label:	%4</source>
         <translation type="vanished">Изменить изображение</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="188"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="190"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="189"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="191"/>
         <source>Frame</source>
         <translation>Выборка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="191"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="193"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="192"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="194"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="235"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="236"/>
         <source>Edit Data</source>
         <translation>Изменить данные</translation>
     </message>
@@ -1955,7 +1955,7 @@ Do you want to locate it?</source>
     </message>
     <message>
         <location filename="../svcore/data/model/Labeller.h" line="178"/>
-        <location filename="../svcore/data/model/Labeller.h" line="309"/>
+        <location filename="../svcore/data/model/Labeller.h" line="313"/>
         <source>%1.%2</source>
         <translation>%1.%2</translation>
     </message>
@@ -1965,17 +1965,17 @@ Do you want to locate it?</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/Labeller.h" line="235"/>
+        <location filename="../svcore/data/model/Labeller.h" line="237"/>
         <source>Label Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/Labeller.h" line="281"/>
+        <location filename="../svcore/data/model/Labeller.h" line="285"/>
         <source>Subdivide Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/Labeller.h" line="330"/>
+        <location filename="../svcore/data/model/Labeller.h" line="336"/>
         <source>Winnow Points</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2059,12 +2059,12 @@ Do you want to locate it?</source>
         <translation>Области</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Layer.cpp" line="340"/>
+        <location filename="../svgui/layer/Layer.cpp" line="350"/>
         <source>Make Measurement</source>
         <translation>Создать замер</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/Layer.cpp" line="358"/>
+        <location filename="../svgui/layer/Layer.cpp" line="368"/>
         <source>Delete Measurement</source>
         <translation>Удалить замер</translation>
     </message>
@@ -2104,22 +2104,22 @@ Do you want to locate it?</source>
 <context>
     <name>LayerTreeModel</name>
     <message>
-        <location filename="../svgui/widgets/LayerTree.cpp" line="514"/>
+        <location filename="../svgui/widgets/LayerTree.cpp" line="512"/>
         <source>Layer</source>
         <translation>Слой</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/LayerTree.cpp" line="517"/>
+        <location filename="../svgui/widgets/LayerTree.cpp" line="515"/>
         <source>Model</source>
         <translation>Модель</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/LayerTree.cpp" line="515"/>
+        <location filename="../svgui/widgets/LayerTree.cpp" line="513"/>
         <source>Shown</source>
         <translation>Отображение</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/LayerTree.cpp" line="516"/>
+        <location filename="../svgui/widgets/LayerTree.cpp" line="514"/>
         <source>Played</source>
         <translation>Воспризведение</translation>
     </message>
@@ -2285,12 +2285,12 @@ Do you want to locate it?</source>
         <translation type="vanished">С&amp;лой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="457"/>
+        <location filename="../main/MainWindow.cpp" line="487"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="459"/>
+        <location filename="../main/MainWindow.cpp" line="489"/>
         <source>File Toolbar</source>
         <translation>Панель файлов</translation>
     </message>
@@ -2299,7 +2299,7 @@ Do you want to locate it?</source>
         <translation type="vanished">&amp;Создать сессию</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="467"/>
+        <location filename="../main/MainWindow.cpp" line="497"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
@@ -2308,7 +2308,7 @@ Do you want to locate it?</source>
         <translation type="obsolete">&amp;Открыть сеанс...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="476"/>
+        <location filename="../main/MainWindow.cpp" line="506"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
@@ -2397,19 +2397,18 @@ Do you want to locate it?</source>
         <translation type="vanished">Экспортировать данные слоя в файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="505"/>
+        <location filename="../main/MainWindow.cpp" line="544"/>
         <source>&amp;Quit</source>
         <translation>В&amp;ыход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="506"/>
+        <location filename="../main/MainWindow.cpp" line="545"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="518"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Правка</translation>
+        <translation type="vanished">&amp;Правка</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
@@ -2492,32 +2491,29 @@ Do you want to locate it?</source>
         <translation type="vanished">Enter</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="534"/>
+        <location filename="../main/MainWindow.cpp" line="563"/>
         <source>&amp;View</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="632"/>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="642"/>
         <source>9</source>
-        <translation>9</translation>
+        <translation type="vanished">9</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="652"/>
         <source>8</source>
-        <translation>8</translation>
+        <translation type="vanished">8</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="536"/>
+        <location filename="../main/MainWindow.cpp" line="565"/>
         <source>Scroll &amp;Left</source>
         <translation>Прокрутить в&amp;лево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="313"/>
+        <location filename="../main/MainWindow.cpp" line="344"/>
         <source>Playback Speed</source>
         <translation>Скорость воспроизведения</translation>
     </message>
@@ -2558,8 +2554,9 @@ Do you want to locate it?</source>
         <translation type="vanished">Открыть папку с записанными аудиофайлами</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="523"/>
         <source>Open the Recorded Audio folder in the system file browser</source>
-        <translation type="vanished">Открыть папку с записанным звуком в файловом менеджере</translation>
+        <translation>Открыть папку с записанным звуком в файловом менеджере</translation>
     </message>
     <message>
         <source>Exit %1</source>
@@ -2582,107 +2579,107 @@ Do you want to locate it?</source>
         <translation type="vanished">Сбросить счётчики нумерации</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="537"/>
+        <location filename="../main/MainWindow.cpp" line="566"/>
         <source>Left</source>
         <translation>Влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="538"/>
+        <location filename="../main/MainWindow.cpp" line="567"/>
         <source>Scroll the current pane to the left</source>
         <translation>Прокрутить активное окно влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="544"/>
+        <location filename="../main/MainWindow.cpp" line="573"/>
         <source>Scroll &amp;Right</source>
         <translation>Прокрутить в&amp;право</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="545"/>
+        <location filename="../main/MainWindow.cpp" line="574"/>
         <source>Right</source>
         <translation>Вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="546"/>
+        <location filename="../main/MainWindow.cpp" line="575"/>
         <source>Scroll the current pane to the right</source>
         <translation>Прокрутить активное окно вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="553"/>
+        <location filename="../main/MainWindow.cpp" line="582"/>
         <source>Ctrl+Left</source>
         <translation>Ctrl+Влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="554"/>
+        <location filename="../main/MainWindow.cpp" line="583"/>
         <source>Scroll the current pane a big step to the left</source>
         <translation>Сделать большой шаг прокрутки влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="561"/>
+        <location filename="../main/MainWindow.cpp" line="590"/>
         <source>Ctrl+Right</source>
         <translation>Ctrl+Вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="562"/>
+        <location filename="../main/MainWindow.cpp" line="591"/>
         <source>Scroll the current pane a big step to the right</source>
         <translation>Сделать большой шаг прокрутки вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="573"/>
+        <location filename="../main/MainWindow.cpp" line="642"/>
         <source>Zoom &amp;In</source>
         <translation>При&amp;близить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="574"/>
+        <location filename="../main/MainWindow.cpp" line="643"/>
         <source>Up</source>
         <translation>Вверх</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="575"/>
+        <location filename="../main/MainWindow.cpp" line="644"/>
         <source>Increase the zoom level</source>
         <translation>Увеличить масштаб отображения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="582"/>
+        <location filename="../main/MainWindow.cpp" line="651"/>
         <source>Zoom &amp;Out</source>
         <translation>&amp;Отдалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="583"/>
+        <location filename="../main/MainWindow.cpp" line="652"/>
         <source>Down</source>
         <translation>Вниз</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="584"/>
+        <location filename="../main/MainWindow.cpp" line="653"/>
         <source>Decrease the zoom level</source>
         <translation>Уменьшить масштаб отображения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="590"/>
+        <location filename="../main/MainWindow.cpp" line="659"/>
         <source>Restore &amp;Default Zoom</source>
         <translation>&amp;Восстановить обычный масштаб</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="597"/>
+        <location filename="../main/MainWindow.cpp" line="666"/>
         <source>Zoom to &amp;Fit</source>
         <translation>&amp;Уместить в окне</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="599"/>
+        <location filename="../main/MainWindow.cpp" line="668"/>
         <source>Zoom to show the whole file</source>
         <translation>Увидеть весь файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="609"/>
+        <location filename="../main/MainWindow.cpp" line="678"/>
         <source>Show &amp;Centre Line</source>
         <translation>Показывать &amp;центральную линию</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="610"/>
+        <location filename="../main/MainWindow.cpp" line="679"/>
         <source>&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="611"/>
+        <location filename="../main/MainWindow.cpp" line="680"/>
         <source>Show or hide the centre line</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2691,36 +2688,21 @@ Do you want to locate it?</source>
         <translation type="vanished">Переключить видимость всех линеек</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="633"/>
-        <source>Hide times, layer names, and scale</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="643"/>
-        <source>Show times and basic scale</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="653"/>
-        <source>Show times, layer names, and scale</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show &amp;Unit Converter</source>
         <translation type="vanished">Показать конвертер &amp;единиц</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="666"/>
+        <location filename="../main/MainWindow.cpp" line="714"/>
         <source>Go Full-Screen</source>
         <translation>Полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="667"/>
+        <location filename="../main/MainWindow.cpp" line="715"/>
         <source>F11</source>
         <translation>F11</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="668"/>
+        <location filename="../main/MainWindow.cpp" line="716"/>
         <source>Expand the pane area to the whole screen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2801,16 +2783,18 @@ Do you want to locate it?</source>
         <translation type="vanished">Переключиться на предыдущий слой</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="620"/>
         <source>{</source>
-        <translation type="vanished">{</translation>
+        <translation>{</translation>
     </message>
     <message>
         <source>Switch to Next Layer</source>
         <translation type="vanished">Переключиться на следующий слой</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="629"/>
         <source>}</source>
-        <translation type="vanished">}</translation>
+        <translation>}</translation>
     </message>
     <message>
         <source>&amp;Rename Layer...</source>
@@ -2829,12 +2813,12 @@ Do you want to locate it?</source>
         <translation type="vanished">Удалить активный слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="678"/>
+        <location filename="../main/MainWindow.cpp" line="726"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="686"/>
+        <location filename="../main/MainWindow.cpp" line="734"/>
         <source>&amp;Help Reference</source>
         <translation>&amp;Руководство пользователя</translation>
     </message>
@@ -2859,226 +2843,274 @@ Do you want to locate it?</source>
         <translation type="obsolete">Показать информацию о Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="749"/>
+        <location filename="../main/MainWindow.cpp" line="795"/>
         <source>Rewind to Start</source>
         <translation>Перемотать в начало</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="750"/>
+        <location filename="../main/MainWindow.cpp" line="796"/>
         <source>Home</source>
         <translation>Домой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="751"/>
+        <location filename="../main/MainWindow.cpp" line="797"/>
         <source>Rewind to the start</source>
         <translation>Перемотать в начало</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="756"/>
-        <location filename="../main/MainWindow.cpp" line="946"/>
-        <location filename="../main/MainWindow.cpp" line="947"/>
+        <location filename="../main/MainWindow.cpp" line="802"/>
+        <location filename="../main/MainWindow.cpp" line="961"/>
+        <location filename="../main/MainWindow.cpp" line="962"/>
         <source>Rewind</source>
         <translation>Перемотать назад</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="937"/>
+        <location filename="../main/MainWindow.cpp" line="952"/>
         <source>Rewind to the previous time instant in the current layer</source>
         <translation>Перемотать до предыдущей отметки времени в текущем слое</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="763"/>
+        <location filename="../main/MainWindow.cpp" line="809"/>
         <source>Play / Pause</source>
         <translation>Воспроизвести / Приостановить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1070"/>
+        <location filename="../main/MainWindow.cpp" line="1089"/>
         <source>Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="156"/>
+        <location filename="../main/MainWindow.cpp" line="162"/>
         <source>Bright Yellow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="241"/>
-        <location filename="../main/MainWindow.cpp" line="1548"/>
-        <location filename="../main/MainWindow.cpp" line="1786"/>
-        <location filename="../main/MainWindow.cpp" line="1932"/>
+        <location filename="../main/MainWindow.cpp" line="260"/>
         <source>Waveform</source>
         <translation type="unfinished">Волновая форма</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="466"/>
+        <location filename="../main/MainWindow.cpp" line="312"/>
+        <source>Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="496"/>
         <source>&amp;Clear Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="468"/>
+        <location filename="../main/MainWindow.cpp" line="498"/>
         <source>Abandon the current session and start a new one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="475"/>
+        <location filename="../main/MainWindow.cpp" line="505"/>
         <source>&amp;Add Files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="477"/>
+        <location filename="../main/MainWindow.cpp" line="507"/>
         <source>Add one or more audio files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="483"/>
+        <location filename="../main/MainWindow.cpp" line="513"/>
         <source>Add Lo&amp;cation...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="485"/>
+        <location filename="../main/MainWindow.cpp" line="515"/>
         <source>Add a file from a remote URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="492"/>
+        <location filename="../main/MainWindow.cpp" line="522"/>
+        <source>Browse Recorded Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="529"/>
         <source>&amp;Recent Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="507"/>
+        <location filename="../main/MainWindow.cpp" line="546"/>
         <source>Exit Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="618"/>
+        <location filename="../main/MainWindow.cpp" line="601"/>
+        <source>Make the next pane up in the pane stack current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="610"/>
+        <source>Make the next pane down in the pane stack current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="619"/>
+        <source>Switch to Previous View Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="621"/>
+        <location filename="../main/MainWindow.cpp" line="630"/>
+        <source>Make the next view mode current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="628"/>
+        <source>Switch to Next View Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="687"/>
         <source>Show Salient Feature Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="620"/>
+        <location filename="../main/MainWindow.cpp" line="689"/>
         <source>Show or hide all salient-feature layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="688"/>
+        <location filename="../main/MainWindow.cpp" line="696"/>
+        <source>Show Vertical Scales</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="697"/>
+        <source>S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="698"/>
+        <source>Show or hide all vertical scales</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="736"/>
         <source>Open the reference manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="695"/>
+        <location filename="../main/MainWindow.cpp" line="743"/>
         <source>Open a window showing the keystrokes you can use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="700"/>
+        <location filename="../main/MainWindow.cpp" line="748"/>
         <source>Sonic Lineup on the &amp;Web</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="701"/>
+        <location filename="../main/MainWindow.cpp" line="749"/>
         <source>Open the Sonic Lineup website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="705"/>
+        <location filename="../main/MainWindow.cpp" line="753"/>
         <source>&amp;About Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="706"/>
+        <location filename="../main/MainWindow.cpp" line="754"/>
         <source>Show information about Sonic Lineup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="728"/>
+        <location filename="../main/MainWindow.cpp" line="776"/>
         <source>Re-open the current or most recently opened session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="765"/>
+        <location filename="../main/MainWindow.cpp" line="811"/>
         <source>Space</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="766"/>
+        <location filename="../main/MainWindow.cpp" line="812"/>
         <source>Start or stop playback from the current position</source>
         <translation>Запустить или остановить воспроизведение с текущей позиции</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="773"/>
-        <location filename="../main/MainWindow.cpp" line="944"/>
+        <location filename="../main/MainWindow.cpp" line="819"/>
+        <location filename="../main/MainWindow.cpp" line="959"/>
         <source>Fast Forward</source>
         <translation>Перемотать вперёд</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="935"/>
+        <location filename="../main/MainWindow.cpp" line="896"/>
+        <source>Allow for Pitch Difference when Aligning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="901"/>
+        <source>Compare relative pitch content of audio files before aligning, in order to correctly align recordings of the same material at different tuning pitches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="950"/>
         <source>Fast forward to the next time instant in the current layer</source>
         <translation>Перемотать до следующей отметки времени в текущем слое</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="285"/>
-        <location filename="../main/MainWindow.cpp" line="1593"/>
-        <location filename="../main/MainWindow.cpp" line="1794"/>
+        <location filename="../main/MainWindow.cpp" line="3015"/>
+        <source>&lt;br&gt;With Serd and Sord RDF parser and store &amp;copy; David Robillard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="3019"/>
+        <source>Russian UI translation contributed by Alexandre Prokoudine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="3021"/>
+        <source>Czech UI translation contributed by Pavel Fric.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="286"/>
         <source>Spectrogram</source>
         <translation type="unfinished">Спектрограмма</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="230"/>
+        <location filename="../main/MainWindow.cpp" line="247"/>
         <source>Outline waveform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="252"/>
-        <source>Spectral flux</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="263"/>
+        <location filename="../main/MainWindow.cpp" line="299"/>
         <source>Sung pitch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="274"/>
+        <location filename="../main/MainWindow.cpp" line="325"/>
         <source>Stereo azimuth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="296"/>
+        <location filename="../main/MainWindow.cpp" line="273"/>
         <source>Melodic spectrogram</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1501"/>
-        <location filename="../main/MainWindow.cpp" line="1782"/>
-        <location filename="../main/MainWindow.cpp" line="2439"/>
+        <location filename="../main/MainWindow.cpp" line="2682"/>
         <source>Outline Waveform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1623"/>
-        <location filename="../main/MainWindow.cpp" line="1790"/>
-        <source>Melodic Range Spectrogram</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="1711"/>
-        <location filename="../main/MainWindow.cpp" line="1798"/>
         <source>Curve</source>
-        <translation type="unfinished">Кривая</translation>
+        <translation type="obsolete">Кривая</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1726"/>
-        <location filename="../main/MainWindow.cpp" line="1802"/>
         <source>Pitch</source>
-        <translation type="unfinished">Высота тона</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="1741"/>
-        <location filename="../main/MainWindow.cpp" line="1806"/>
-        <source>Azimuth</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Высота тона</translation>
     </message>
     <message numerus="yes">
-        <location filename="../main/MainWindow.cpp" line="2324"/>
+        <location filename="../main/MainWindow.cpp" line="2531"/>
         <source>%1: %n file(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3087,37 +3119,12 @@ Do you want to locate it?</source>
         </translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2640"/>
-        <source>http://www.sonicvisualiser.org/sonicvector/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="2646"/>
-        <source>http://www.sonicvisualiser.org/sonicvector/doc/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="2672"/>
+        <location filename="../main/MainWindow.cpp" line="2912"/>
         <source>&lt;h3&gt;About Sonic Lineup&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2673"/>
-        <source>&lt;p&gt;Sonic Lineup is a comparative viewer for sets of related audio recordings.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="2674"/>
-        <source>&lt;p&gt;%1 : %2 configuration&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="2689"/>
-        <source>About Sonic Lineup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="780"/>
+        <location filename="../main/MainWindow.cpp" line="826"/>
         <source>Fast Forward to End</source>
         <translation>Перемотать до конца</translation>
     </message>
@@ -3134,12 +3141,12 @@ Do you want to locate it?</source>
         <translation type="vanished">Показать информацию о %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="781"/>
+        <location filename="../main/MainWindow.cpp" line="827"/>
         <source>End</source>
         <translation>Конец</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="782"/>
+        <location filename="../main/MainWindow.cpp" line="828"/>
         <source>Fast-forward to the end</source>
         <translation>Перемотать до конца</translation>
     </message>
@@ -3216,7 +3223,7 @@ Do you want to locate it?</source>
         <translation type="vanished">%1 Гц (ресэмплирование до %2 Гц)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1096"/>
+        <location filename="../main/MainWindow.cpp" line="1115"/>
         <source>Failed to open file</source>
         <translation>Не удалось открыть файл</translation>
     </message>
@@ -3275,22 +3282,22 @@ What do you want to export?</source>
         <translation type="vanished">Не удалось сохранить файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2017"/>
+        <location filename="../main/MainWindow.cpp" line="2208"/>
         <source>Rename Layer</source>
         <translation>Переименовать слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2018"/>
+        <location filename="../main/MainWindow.cpp" line="2209"/>
         <source>New name for this layer:</source>
         <translation>Новое имя этого слоя:</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2189"/>
+        <location filename="../main/MainWindow.cpp" line="2394"/>
         <source>Sample rate mismatch</source>
         <translation>Несоответствие частоты дискретизации</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2190"/>
+        <location filename="../main/MainWindow.cpp" line="2395"/>
         <source>The sample rate of this audio file (%1 Hz) does not match
 the current playback rate (%2 Hz).
 
@@ -3298,34 +3305,34 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2256"/>
-        <location filename="../main/MainWindow.cpp" line="2269"/>
+        <location filename="../main/MainWindow.cpp" line="2463"/>
+        <location filename="../main/MainWindow.cpp" line="2476"/>
         <source>Failed to create session directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2257"/>
+        <location filename="../main/MainWindow.cpp" line="2464"/>
         <source>&lt;p&gt;Failed to create directory &quot;%1&quot; for session files&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2270"/>
+        <location filename="../main/MainWindow.cpp" line="2477"/>
         <source>&lt;p&gt;Failed to create date directory &quot;%1&quot; for session files&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2493"/>
+        <location filename="../main/MainWindow.cpp" line="2732"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate derived layer.&lt;p&gt;The layer transform &quot;%1&quot; failed:&lt;p&gt;%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2500"/>
+        <location filename="../main/MainWindow.cpp" line="2739"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate a derived layer.&lt;p&gt;The layer transform &quot;%1&quot; failed.&lt;p&gt;No error information is available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2521"/>
-        <location filename="../main/MainWindow.cpp" line="2528"/>
+        <location filename="../main/MainWindow.cpp" line="2760"/>
+        <location filename="../main/MainWindow.cpp" line="2767"/>
         <source>Failed to regenerate layer</source>
         <translation>Не удалось повторно создать слой</translation>
     </message>
@@ -3334,17 +3341,17 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">http://www.sonicvisualiser.org/</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2660"/>
+        <location filename="../main/MainWindow.cpp" line="2891"/>
         <source>Release %1 : Revision %2</source>
         <translation>Версия %1 : Редакция %2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2662"/>
+        <location filename="../main/MainWindow.cpp" line="2893"/>
         <source>Release %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2666"/>
+        <location filename="../main/MainWindow.cpp" line="2897"/>
         <source>Unreleased : Revision %1</source>
         <translation>Не выпущено : редакция %1</translation>
     </message>
@@ -3353,18 +3360,19 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">&lt;h3&gt;О программе Sonic Visualiser&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2676"/>
+        <location filename="../main/MainWindow.cpp" line="2903"/>
         <source>Debug</source>
         <translation>Отладка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2676"/>
+        <location filename="../main/MainWindow.cpp" line="2903"/>
         <source>Release</source>
         <translation>Версия</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2966"/>
         <source>&lt;br&gt;With Ogg file decoder (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</source>
-        <translation type="vanished">&lt;br&gt;С декодером Ogg (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</translation>
+        <translation>&lt;br&gt;С декодером Ogg (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
         <source>&lt;br&gt;With LADSPA plugin support (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</source>
@@ -3379,24 +3387,22 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">О программе Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2492"/>
-        <location filename="../main/MainWindow.cpp" line="2499"/>
+        <location filename="../main/MainWindow.cpp" line="2731"/>
+        <location filename="../main/MainWindow.cpp" line="2738"/>
         <source>Failed to generate layer</source>
         <translation>Не удалось создать слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="500"/>
         <source>Adjust the application preferences</source>
-        <translation>Изменить параметры работы приложения</translation>
+        <translation type="vanished">Изменить параметры работы приложения</translation>
     </message>
     <message>
         <source>&amp;Recent Files</source>
         <translation type="obsolete">Н&amp;едавние файлы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="499"/>
         <source>&amp;Preferences...</source>
-        <translation>&amp;Параметры...</translation>
+        <translation type="vanished">&amp;Параметры...</translation>
     </message>
     <message>
         <source>;</source>
@@ -3459,7 +3465,7 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Пр&amp;еобразования</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="966"/>
+        <location filename="../main/MainWindow.cpp" line="981"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
@@ -3472,8 +3478,8 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished"> [\(&lt;].*$</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2201"/>
-        <location filename="../main/MainWindow.cpp" line="2211"/>
+        <location filename="../main/MainWindow.cpp" line="2406"/>
+        <location filename="../main/MainWindow.cpp" line="2416"/>
         <source>Audio processing overload</source>
         <translation>Перегрузка в обработке звука</translation>
     </message>
@@ -3502,7 +3508,7 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Открыть &amp;местоположение...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="484"/>
+        <location filename="../main/MainWindow.cpp" line="514"/>
         <source>Ctrl+Shift+O</source>
         <translation>Ctrl+Shift+O</translation>
     </message>
@@ -3559,33 +3565,31 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Shift+Enter</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="552"/>
+        <location filename="../main/MainWindow.cpp" line="581"/>
         <source>&amp;Jump Left</source>
         <translation>Перескочить в&amp;лево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="560"/>
+        <location filename="../main/MainWindow.cpp" line="589"/>
         <source>J&amp;ump Right</source>
         <translation>П&amp;ерескочить вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="591"/>
+        <location filename="../main/MainWindow.cpp" line="660"/>
         <source>Restore the zoom level to the default</source>
         <translation>Восстановить обычный масштаб отображения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="631"/>
         <source>Show &amp;No Overlays</source>
-        <translation>Не по&amp;казывать перекрытия совсем</translation>
+        <translation type="vanished">Не по&amp;казывать перекрытия совсем</translation>
     </message>
     <message>
         <source>Hide centre indicator, frame times, layer names and scale</source>
         <translation type="obsolete">Спрятать индикацию центра, времён выделения, имена слоёв и масштаб</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="641"/>
         <source>Show &amp;Minimal Overlays</source>
-        <translation>Показывать &amp;минимум перекрытий</translation>
+        <translation type="vanished">Показывать &amp;минимум перекрытий</translation>
     </message>
     <message>
         <source>Show centre indicator only</source>
@@ -3600,9 +3604,8 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="obsolete">Показывать индикатор центра, времена выделений, имена слоёв и масштаб</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="651"/>
         <source>Show &amp;All Overlays</source>
-        <translation>Показывать в&amp;се перекрытия</translation>
+        <translation type="vanished">Показывать в&amp;се перекрытия</translation>
     </message>
     <message>
         <source>7</source>
@@ -3665,69 +3668,160 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Нарисовать новые объекты в слое</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1113"/>
+        <location filename="../main/MainWindow.cpp" line="1132"/>
         <source>Open Location</source>
         <translation>Открыть местоположение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1114"/>
+        <location filename="../main/MainWindow.cpp" line="1133"/>
         <source>Please enter the URL of the location to open:</source>
         <translation>Введите URL открываемого местоположения:</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1128"/>
-        <location filename="../main/MainWindow.cpp" line="1131"/>
-        <location filename="../main/MainWindow.cpp" line="1175"/>
-        <location filename="../main/MainWindow.cpp" line="1178"/>
-        <location filename="../main/MainWindow.cpp" line="1210"/>
-        <location filename="../main/MainWindow.cpp" line="1213"/>
+        <location filename="../main/MainWindow.cpp" line="1147"/>
+        <location filename="../main/MainWindow.cpp" line="1150"/>
         <source>Failed to open location</source>
         <translation>Не удалось открыть местоположение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2077"/>
+        <location filename="../main/MainWindow.cpp" line="1218"/>
+        <source>Unable to open main audio file %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="1232"/>
+        <source>Unable to open audio file %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="1244"/>
+        <source>Failed to reload session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="1245"/>
+        <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;Session file &quot;%1&quot; could not be opened: %2&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="1501"/>
+        <source>Mapped Salient Feature Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2282"/>
         <source>Playback speed: %1% (%2x slower)</source>
         <translation>Скорость воспроизведения: %1% (в %2 раза медленнее)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2083"/>
+        <location filename="../main/MainWindow.cpp" line="2288"/>
         <source>Playback speed: %1% (%2x faster)</source>
         <translation>Скорость воспроизведения: %1% (в %2 раза быстрее)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2161"/>
+        <location filename="../main/MainWindow.cpp" line="2366"/>
         <source>Visible: %1 to %2 (duration %3)</source>
         <translation>Видимая область: от %1 до %2 (длительность %3)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2625"/>
+        <location filename="../main/MainWindow.cpp" line="2425"/>
+        <source>Test release</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2426"/>
+        <source>&lt;b&gt;This is a test release of %1&lt;/b&gt;&lt;p&gt;This release is made for test purposes only - please send feedback to the developers.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2856"/>
         <source>Adjust the master playback level</source>
         <translation>Изменить общую громкость воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2627"/>
+        <location filename="../main/MainWindow.cpp" line="2858"/>
         <source>Adjust the master playback speed</source>
         <translation>Изменить общую скорость воспроизведения</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2871"/>
+        <source>http://www.sonicvisualiser.org/sonic-lineup/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2877"/>
+        <source>http://www.sonicvisualiser.org/sonic-lineup/doc/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2901"/>
+        <source>%1 : %2 configuration, %3-bit build</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2913"/>
+        <source>&lt;p&gt;Sonic Lineup is an application for comparative visualisation and alignment of related audio recordings.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2917"/>
+        <source>&lt;p&gt;&lt;small&gt;Sonic Lineup and Sonic Visualiser application code&lt;br&gt;Copyright &amp;copy; 2005&amp;ndash;2019 Chris Cannam and Queen Mary, University of London.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2921"/>
+        <source>&lt;p&gt;&lt;small&gt;MATCH Audio Alignment plugin&lt;br&gt;Copyright &amp;copy; 2007&amp;ndash;2019 Simon Dixon, Chris Cannam, and Queen Mary University of London;&lt;br&gt;Copyright &amp;copy; 2014&amp;ndash;2015 Tido GmbH.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2927"/>
+        <source>&lt;p&gt;&lt;small&gt;NNLS Chroma and Chordino plugin&lt;br&gt;Copyright &amp;copy; 2008&amp;ndash;2019 Matthias Mauch and Queen Mary University of London.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2932"/>
+        <source>&lt;p&gt;&lt;small&gt;pYIN plugin&lt;br&gt;Copyright &amp;copy; 2012&amp;ndash;2019 Matthias Mauch and Queen Mary University of London.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2937"/>
+        <source>&lt;p&gt;&lt;small&gt;QM Key Detector plugin&lt;br&gt;Copyright &amp;copy; 2006&amp;ndash;2019 Katy Noland, Christian Landone, and Queen Mary University of London.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2943"/>
+        <source>With Qt v%1 &amp;copy; The Qt Company</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2968"/>
         <source>&lt;br&gt;With Ogg file decoder &amp;copy; CSIRO Australia</source>
-        <translation type="vanished">&lt;br&gt;С декодером Ogg &amp;copy; CSIRO Australia</translation>
+        <translation>&lt;br&gt;С декодером Ogg &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2972"/>
+        <source>&lt;br&gt;With Opus decoder &amp;copy; Xiph.Org Foundation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="2978"/>
         <source>&lt;br&gt;With MAD mp3 decoder &amp;copy; Underbit Technologies Inc</source>
-        <translation type="vanished">&lt;br&gt;С декодером MAD mp3 &amp;copy; Underbit Technologies Inc</translation>
+        <translation>&lt;br&gt;С декодером MAD mp3 &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2985"/>
         <source>&lt;br&gt;With libsamplerate &amp;copy; Erik de Castro Lopo</source>
-        <translation type="vanished">&lt;br&gt;С libsamplerate &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;С libsamplerate &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2992"/>
         <source>&lt;br&gt;With libsndfile &amp;copy; Erik de Castro Lopo</source>
-        <translation type="vanished">&lt;br&gt;С libsndfile &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;С libsndfile &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2999"/>
         <source>&lt;br&gt;With FFTW3 &amp;copy; Matteo Frigo and MIT</source>
-        <translation type="vanished">&lt;br&gt;С FFTW3 &amp;copy; Matteo Frigo и MIT</translation>
+        <translation>&lt;br&gt;С FFTW3 &amp;copy; Matteo Frigo и MIT</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam</source>
@@ -3778,7 +3872,7 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Не удалось сохранить файл изображения %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2158"/>
+        <location filename="../main/MainWindow.cpp" line="2363"/>
         <source>Selection: %1 to %2 (duration %3)</source>
         <translation>Выделение: %1 до %2 (длительность %3)</translation>
     </message>
@@ -3807,37 +3901,37 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Оранжевый</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="150"/>
+        <location filename="../main/MainWindow.cpp" line="156"/>
         <source>White</source>
         <translation>Белый</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="152"/>
+        <location filename="../main/MainWindow.cpp" line="158"/>
         <source>Bright Red</source>
         <translation>Ярко-красный</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="151"/>
+        <location filename="../main/MainWindow.cpp" line="157"/>
         <source>Bright Blue</source>
         <translation>Ярко-синий</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="153"/>
+        <location filename="../main/MainWindow.cpp" line="159"/>
         <source>Bright Green</source>
         <translation>Ярко-зелёный</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="154"/>
+        <location filename="../main/MainWindow.cpp" line="161"/>
         <source>Bright Purple</source>
         <translation>Ярко-пурпурный</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="155"/>
+        <location filename="../main/MainWindow.cpp" line="160"/>
         <source>Bright Orange</source>
         <translation>Ярко-оранжевый</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="461"/>
+        <location filename="../main/MainWindow.cpp" line="491"/>
         <source>File and Session Management</source>
         <translation>Файлы и управление сессиями</translation>
     </message>
@@ -3906,27 +4000,27 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Перенумеровать выбранные отметки</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="532"/>
+        <location filename="../main/MainWindow.cpp" line="561"/>
         <source>Panning and Navigation</source>
         <translation>Прокрутка и перемещение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="570"/>
+        <location filename="../main/MainWindow.cpp" line="639"/>
         <source>Zoom</source>
         <translation>Масштаб просмотра</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="598"/>
+        <location filename="../main/MainWindow.cpp" line="667"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="607"/>
+        <location filename="../main/MainWindow.cpp" line="676"/>
         <source>Display Features</source>
         <translation>Отображение элементов</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="619"/>
+        <location filename="../main/MainWindow.cpp" line="688"/>
         <source>#</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4003,20 +4097,24 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Shift+U</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="599"/>
         <source>Switch to Previous Pane</source>
-        <translation type="vanished">Перейти к предыдущему окну</translation>
+        <translation>Перейти к предыдущему окну</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="600"/>
         <source>[</source>
-        <translation type="vanished">[</translation>
+        <translation>[</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="608"/>
         <source>Switch to Next Pane</source>
-        <translation type="vanished">Перейти к следующему окну</translation>
+        <translation>Перейти к следующему окну</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="609"/>
         <source>]</source>
-        <translation type="vanished">]</translation>
+        <translation>]</translation>
     </message>
     <message>
         <source>Ctrl+Shift+D</source>
@@ -4043,12 +4141,12 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="681"/>
+        <location filename="../main/MainWindow.cpp" line="729"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="687"/>
+        <location filename="../main/MainWindow.cpp" line="735"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
@@ -4057,12 +4155,12 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Открыть справочник по %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="693"/>
+        <location filename="../main/MainWindow.cpp" line="741"/>
         <source>&amp;Key and Mouse Reference</source>
         <translation>&amp;Использование клавиатуры и мыши</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="694"/>
+        <location filename="../main/MainWindow.cpp" line="742"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
@@ -4071,12 +4169,12 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="obsolete">Открыть окно, в котором перечисляются клавиатурные комбинации Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="724"/>
+        <location filename="../main/MainWindow.cpp" line="772"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="726"/>
+        <location filename="../main/MainWindow.cpp" line="774"/>
         <source>Re-open</source>
         <translation>Повторно открыть</translation>
     </message>
@@ -4105,56 +4203,58 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Повторно запустить самое последнее выполнявшееся преобразование</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="737"/>
+        <location filename="../main/MainWindow.cpp" line="785"/>
         <source>Playback and Transport Controls</source>
         <translation>Управление воспроизведением и перемоткой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="741"/>
+        <location filename="../main/MainWindow.cpp" line="789"/>
         <source>Play&amp;back</source>
         <translation>Воспро&amp;изведение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="744"/>
         <source>Playback</source>
-        <translation>Воспроизведение</translation>
+        <translation type="vanished">Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="746"/>
+        <location filename="../main/MainWindow.cpp" line="792"/>
         <source>Playback Toolbar</source>
         <translation>Панель воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="757"/>
+        <location filename="../main/MainWindow.cpp" line="803"/>
         <source>PgUp</source>
         <translation>PgUp</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="758"/>
+        <location filename="../main/MainWindow.cpp" line="804"/>
         <source>Rewind to the previous time instant or time ruler notch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="774"/>
+        <location filename="../main/MainWindow.cpp" line="820"/>
         <source>PgDown</source>
         <translation>PgDown</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="775"/>
+        <location filename="../main/MainWindow.cpp" line="821"/>
         <source>Fast-forward to the next time instant or time ruler notch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="833"/>
         <source>Record</source>
-        <translation type="vanished">Записать</translation>
+        <translation>Записать</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="835"/>
         <source>Ctrl+Space</source>
-        <translation type="vanished">Ctrl+Space</translation>
+        <translation>Ctrl+Space</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="836"/>
         <source>Record a new audio file</source>
-        <translation type="vanished">Записать новый звуковой файл</translation>
+        <translation>Записать новый звуковой файл</translation>
     </message>
     <message>
         <source>Solo Current Pane</source>
@@ -4169,57 +4269,57 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">При воспроизведении звучит лишь активное окно</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="829"/>
+        <location filename="../main/MainWindow.cpp" line="885"/>
         <source>Align File Timelines</source>
         <translation>Выровнять линейки времени</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="832"/>
+        <location filename="../main/MainWindow.cpp" line="888"/>
         <source>Treat multiple audio files as versions of the same work, and align their timelines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="875"/>
+        <location filename="../main/MainWindow.cpp" line="861"/>
         <source>Speed Up</source>
         <translation>Ускорить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="876"/>
+        <location filename="../main/MainWindow.cpp" line="862"/>
         <source>Ctrl+PgUp</source>
         <translation>Ctrl+PgUp</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="877"/>
+        <location filename="../main/MainWindow.cpp" line="863"/>
         <source>Time-stretch playback to speed it up without changing pitch</source>
         <translation>Сжать время воспроизведения, не меняя высоту тона</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="881"/>
+        <location filename="../main/MainWindow.cpp" line="867"/>
         <source>Slow Down</source>
         <translation>Замедлить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="882"/>
+        <location filename="../main/MainWindow.cpp" line="868"/>
         <source>Ctrl+PgDown</source>
         <translation>Ctrl+PgDown</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="883"/>
+        <location filename="../main/MainWindow.cpp" line="869"/>
         <source>Time-stretch playback to slow it down without changing pitch</source>
         <translation>Расширить время воспроизведения, не меняя высоту тона</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="887"/>
+        <location filename="../main/MainWindow.cpp" line="873"/>
         <source>Restore Normal Speed</source>
         <translation>Восстановить обычную скорость</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="888"/>
+        <location filename="../main/MainWindow.cpp" line="874"/>
         <source>Ctrl+Home</source>
         <translation>Ctrl+Home</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="889"/>
+        <location filename="../main/MainWindow.cpp" line="875"/>
         <source>Restore non-time-stretched playback</source>
         <translation>Восстановить естественную скорость воспроизведения</translation>
     </message>
@@ -4316,37 +4416,37 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Удалить замер, находящийся под курсором мыши</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="934"/>
+        <location filename="../main/MainWindow.cpp" line="949"/>
         <source>Fast Forward to Next Instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="936"/>
+        <location filename="../main/MainWindow.cpp" line="951"/>
         <source>Rewind to Previous Instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="939"/>
+        <location filename="../main/MainWindow.cpp" line="954"/>
         <source>Fast Forward to Next Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="940"/>
+        <location filename="../main/MainWindow.cpp" line="955"/>
         <source>Fast forward to the next point in the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="941"/>
+        <location filename="../main/MainWindow.cpp" line="956"/>
         <source>Rewind to Previous Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="942"/>
+        <location filename="../main/MainWindow.cpp" line="957"/>
         <source>Rewind to the previous point in the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="945"/>
+        <location filename="../main/MainWindow.cpp" line="960"/>
         <source>Fast forward</source>
         <translation>Быстрый вперед</translation>
     </message>
@@ -4363,13 +4463,24 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Невозможно экспортировать ненотные слои в MIDI</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2558"/>
+        <location filename="../main/MainWindow.cpp" line="2797"/>
         <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment:&lt;p&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="3004"/>
+        <source>&lt;br&gt;With Rubber Band Library v%1 &amp;copy; Particular Programs Ltd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="3006"/>
+        <source>&lt;br&gt;With Rubber Band Library &amp;copy; Particular Programs Ltd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="3009"/>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam and QMUL</source>
-        <translation type="vanished">&lt;br&gt;С поддержкой плагинов Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam и QMUL</translation>
+        <translation>&lt;br&gt;С поддержкой плагинов Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam и QMUL</translation>
     </message>
     <message>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;You are using version %1 of Sonic Visualiser, but version %2 is now available.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;Sonic Visualiser website&lt;/a&gt; for more information.&lt;/p&gt;</source>
@@ -4380,43 +4491,39 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">&lt;b&gt;Не удалось открыть файл&lt;/b&gt;&lt;p&gt;Не удалось открыть файл сеанса &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1097"/>
+        <location filename="../main/MainWindow.cpp" line="1116"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;File &quot;%1&quot; could not be opened</source>
         <translation>&lt;b&gt;Не удалось открыть файл&lt;/b&gt;&lt;p&gt;Не удалось открыть файл &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1129"/>
+        <location filename="../main/MainWindow.cpp" line="1148"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;URL &quot;%1&quot; could not be opened</source>
         <translation>&lt;b&gt;Не удалось открыть ссылку&lt;/b&gt;&lt;p&gt;Не удалось открыть URL &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1132"/>
-        <location filename="../main/MainWindow.cpp" line="1179"/>
-        <location filename="../main/MainWindow.cpp" line="1214"/>
-        <location filename="../main/MainWindow.cpp" line="1886"/>
+        <location filename="../main/MainWindow.cpp" line="1151"/>
+        <location filename="../main/MainWindow.cpp" line="2053"/>
         <source>&lt;b&gt;Audio required&lt;/b&gt;&lt;p&gt;Please load at least one audio file before importing annotation data</source>
         <translation type="unfinished">&lt;b&gt;Нужны звуковые данные&lt;/b&gt;&lt;p&gt;Загрузите хотя бы один звуковой файл перед импортом аннотаций</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1176"/>
-        <location filename="../main/MainWindow.cpp" line="1211"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;File or URL &quot;%1&quot; could not be opened</source>
-        <translation>&lt;b&gt;Не удалось открыть ссылку&lt;/b&gt;&lt;p&gt;Не удалось открыть файл или URL &quot;%1&quot;</translation>
+        <translation type="vanished">&lt;b&gt;Не удалось открыть ссылку&lt;/b&gt;&lt;p&gt;Не удалось открыть файл или URL &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Enter template name</source>
         <translation type="vanished">Введите название шаблона</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1870"/>
-        <location filename="../main/MainWindow.cpp" line="1882"/>
-        <location filename="../main/MainWindow.cpp" line="1885"/>
+        <location filename="../main/MainWindow.cpp" line="2037"/>
+        <location filename="../main/MainWindow.cpp" line="2049"/>
+        <location filename="../main/MainWindow.cpp" line="2052"/>
         <source>Failed to open dropped URL</source>
         <translation>Не удалось открыть URL, перемещенный мышью в окно программы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1871"/>
-        <location filename="../main/MainWindow.cpp" line="1883"/>
+        <location filename="../main/MainWindow.cpp" line="2038"/>
+        <location filename="../main/MainWindow.cpp" line="2050"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;Dropped URL &quot;%1&quot; could not be opened</source>
         <translation>&lt;b&gt;Не удалось открыть ссылку&lt;/b&gt;&lt;p&gt;Не удалось открыть файл URL &quot;%1&quot;, перетащенный в окно программы мышью</translation>
     </message>
@@ -4433,7 +4540,7 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="obsolete">%1: %1 {1:?}</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2073"/>
+        <location filename="../main/MainWindow.cpp" line="2278"/>
         <source>Playback speed: Normal</source>
         <translation>Скорость воспроизведения: обычная</translation>
     </message>
@@ -4442,7 +4549,7 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Скорость воспроизведения: %1%2%</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2202"/>
+        <location filename="../main/MainWindow.cpp" line="2407"/>
         <source>&lt;b&gt;Overloaded&lt;/b&gt;&lt;p&gt;Audio effects plugin auditioning has been disabled due to a processing overload.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4451,45 +4558,48 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Обнуление счетчиков</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2510"/>
-        <location filename="../main/MainWindow.cpp" line="2541"/>
+        <location filename="../main/MainWindow.cpp" line="2749"/>
+        <location filename="../main/MainWindow.cpp" line="2780"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2522"/>
+        <location filename="../main/MainWindow.cpp" line="2761"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to regenerate derived layer &quot;%1&quot; using new data model as input.&lt;p&gt;The layer transform &quot;%2&quot; failed:&lt;p&gt;%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2529"/>
+        <location filename="../main/MainWindow.cpp" line="2768"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to regenerate derived layer &quot;%1&quot; using new data model as input.&lt;p&gt;The layer transform &quot;%2&quot; failed.&lt;p&gt;No error information is available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2541"/>
+        <location filename="../main/MainWindow.cpp" line="2780"/>
         <source>&lt;b&gt;Warning when regenerating layer&lt;/b&gt;&lt;p&gt;When regenerating the derived layer &quot;%1&quot; using new data model as input:&lt;p&gt;%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2557"/>
+        <location filename="../main/MainWindow.cpp" line="2796"/>
         <source>Failed to calculate alignment</source>
         <translation>Не удалось рассчитать выравнивание</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2951"/>
         <source>&lt;br&gt;With JACK audio output library &amp;copy; Paul Davis and Jack O&apos;Quin</source>
-        <translation type="vanished">&lt;br&gt;С библиотекой JACK &amp;copy; Paul Davis и Jack O&apos;Quin</translation>
+        <translation>&lt;br&gt;С библиотекой JACK &amp;copy; Paul Davis и Jack O&apos;Quin</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2955"/>
         <source>&lt;br&gt;With PortAudio audio output library &amp;copy; Ross Bencina and Phil Burk</source>
-        <translation type="vanished">&lt;br&gt;С библиотекой PortAudio &amp;copy; Ross Bencina и Phil Burk</translation>
+        <translation>&lt;br&gt;С библиотекой PortAudio &amp;copy; Ross Bencina и Phil Burk</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2961"/>
         <source>&lt;br&gt;With PulseAudio audio output library &amp;copy; Lennart Poettering and Pierre Ossman</source>
-        <translation type="vanished">&lt;br&gt;С библиотекой PulseAudio &amp;copy; Lennart Poettering и Pierre Ossman</translation>
+        <translation>&lt;br&gt;С библиотекой PulseAudio &amp;copy; Lennart Poettering и Pierre Ossman</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2212"/>
+        <location filename="../main/MainWindow.cpp" line="2417"/>
         <source>&lt;b&gt;Overloaded&lt;/b&gt;&lt;p&gt;Audio playback speed processing has been reduced to a single channel, due to a processing overload.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4522,28 +4632,34 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">С использованием Qt v%1 &amp;copy; Nokia Corporation</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2949"/>
         <source>&lt;br&gt;With JACK audio output library v%1 &amp;copy; Paul Davis and Jack O&apos;Quin</source>
-        <translation type="vanished">&lt;br&gt;С библиотекой JACK v%1 &amp;copy; Paul Davis и Jack O&apos;Quin</translation>
+        <translation>&lt;br&gt;С библиотекой JACK v%1 &amp;copy; Paul Davis и Jack O&apos;Quin</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2959"/>
         <source>&lt;br&gt;With PulseAudio audio output library v%1 &amp;copy; Lennart Poettering and Pierre Ossman</source>
-        <translation type="vanished">&lt;br&gt;С библиотекой PulseAudio v%1 &amp;copy; Lennart Poettering и Pierre Ossman</translation>
+        <translation>&lt;br&gt;С библиотекой PulseAudio v%1 &amp;copy; Lennart Poettering и Pierre Ossman</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2976"/>
         <source>&lt;br&gt;With MAD mp3 decoder v%1 &amp;copy; Underbit Technologies Inc</source>
-        <translation type="vanished">&lt;br&gt;С декодером mp3 MAD v%1 &amp;copy; Underbit Technologies Inc</translation>
+        <translation>&lt;br&gt;С декодером mp3 MAD v%1 &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2983"/>
         <source>&lt;br&gt;With libsamplerate v%1 &amp;copy; Erik de Castro Lopo</source>
-        <translation type="vanished">&lt;br&gt;С libsamplerate v%1 &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;С libsamplerate v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2990"/>
         <source>&lt;br&gt;With libsndfile v%1 &amp;copy; Erik de Castro Lopo</source>
-        <translation type="vanished">&lt;br&gt;С libsndfile v%1 &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;С libsndfile v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2997"/>
         <source>&lt;br&gt;With FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</source>
-        <translation type="vanished">&lt;br&gt;С FFTW3 v%1 &amp;copy; Matteo Frigo и MIT</translation>
+        <translation>&lt;br&gt;С FFTW3 v%1 &amp;copy; Matteo Frigo и MIT</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band v%1 &amp;copy; Chris Cannam</source>
@@ -4566,12 +4682,14 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="obsolete">&lt;br&gt;С движком запросов RDF  Rasqal &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="3011"/>
         <source>&lt;br&gt;With Redland RDF datastore v%1 &amp;copy; Dave Beckett and the University of Bristol</source>
-        <translation type="vanished">&lt;br&gt;C хранилищем данных RDF Redland v%1 &amp;copy; Dave Beckett и Бристольский университет</translation>
+        <translation>&lt;br&gt;C хранилищем данных RDF Redland v%1 &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="3013"/>
         <source>&lt;br&gt;With Redland RDF datastore &amp;copy; Dave Beckett and the University of Bristol</source>
-        <translation type="vanished">&lt;br&gt;C хранилищем данных RDF Redland &amp;copy; Dave Beckett и Бристольский университет</translation>
+        <translation>&lt;br&gt;C хранилищем данных RDF Redland &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
         <source>&lt;br&gt;With liblo Lite OSC library v%1 &amp;copy; Steve Harris</source>
@@ -4714,8 +4832,9 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished">Какой звуковой файл вы хотите экспортировать?</translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="3035"/>
         <source>About %1</source>
-        <translation type="vanished">О программе %1</translation>
+        <translation>О программе %1</translation>
     </message>
     <message>
         <source>Newer version available</source>
@@ -4738,28 +4857,28 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="vanished"> (изменен)</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1022"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1025"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1093"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1096"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1199"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1221"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1202"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1223"/>
         <source>Add Point</source>
         <translation>Добавить точку</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1251"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1253"/>
         <source>Add Point at %1 s</source>
         <translation>Добавить точку по отметке %1 с</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1424"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1423"/>
         <source>Opening file or URL...</source>
         <translation>Открывается файл или URL...</translation>
     </message>
@@ -4772,32 +4891,32 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="obsolete">Загрузить этот файл в новое окно волновой формы</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1505"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1504"/>
         <source>Not enough disc space</source>
         <translation>Недостаточно дискового пространства</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1506"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1505"/>
         <source>&lt;b&gt;Not enough disc space&lt;/b&gt;&lt;p&gt;There doesn&apos;t appear to be enough spare disc space to accommodate any necessary temporary files.&lt;/p&gt;&lt;p&gt;Please clear some space and try again.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1513"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1512"/>
         <source>Not enough memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1514"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1513"/>
         <source>&lt;b&gt;Not enough memory&lt;/b&gt;&lt;p&gt;There doesn&apos;t appear to be enough memory to accommodate any necessary temporary data.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1606"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1604"/>
         <source>Select target for import</source>
         <translation>Выбрать цель для импорта</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1607"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1605"/>
         <source>&lt;b&gt;Select a target for import&lt;/b&gt;&lt;p&gt;You already have an audio file loaded.&lt;br&gt;What would you like to do with the new audio file?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4813,108 +4932,113 @@ The file will play at the wrong speed and pitch.</source>
         <translation>%1: %2 [%3]</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1729"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1773"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1725"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1769"/>
         <source>Import &quot;%1&quot;</source>
         <translation>Импортировать &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1833"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1829"/>
         <source>Opening playlist...</source>
         <translation>Открывается список воспроизведения...</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2086"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2085"/>
         <source>Opening session...</source>
         <translation>Открывается сессия…</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2171"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2283"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2170"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2282"/>
         <source>SV XML file read error:
 %1</source>
         <translation>Ошибка чтения XML-файла SV:
 %1</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2197"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2196"/>
         <source>Incomplete session loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2198"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2197"/>
         <source>Some of the audio content referred to by the original session file could not be loaded.
 If you save this session, it will be saved without any reference to that audio, and information may be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2293"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2292"/>
         <source>Open session template &quot;%1&quot;</source>
         <translation>Открыть шаблон сессии &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2379"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2378"/>
         <source>&lt;b&gt;Failed to import RDF&lt;/b&gt;&lt;p&gt;No suitable data models found for import from RDF document at &quot;%1&quot;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2578"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2577"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open an audio device.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2580"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2579"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open audio device: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2583"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2582"/>
         <source>&lt;p&gt;Automatic audio device detection failed. Audio playback and recording will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2585"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2584"/>
         <source>&lt;p&gt;Automatic audio device detection failed. Audio playback will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2592"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2591"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio driver (&quot;%1&quot;).&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2594"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2593"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio driver (&quot;%1&quot;): %2.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2597"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2596"/>
         <source>&lt;p&gt;Audio playback and recording will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2599"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2598"/>
         <source>&lt;p&gt;Audio playback will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2604"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2603"/>
         <source>Couldn&apos;t open audio device</source>
         <translation>Не удалось открыть звуковое устройство</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2729"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2742"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2780"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2725"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2738"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2776"/>
         <source>Failed to write file</source>
         <translation>Не удалось записать файл</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2730"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2743"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2781"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2726"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2739"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2777"/>
         <source>&lt;b&gt;Save failed&lt;/b&gt;&lt;p&gt;Failed to write to file &quot;%1&quot;: %2</source>
         <translation>&lt;b&gt;Не удалось сохранить&lt;/b&gt;&lt;p&gt;Не удалось записать файл &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2792"/>
+        <source>Internal error: unknown model</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../svapp/framework/MainWindowBase.cpp" line="2800"/>
@@ -4952,33 +5076,33 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3318"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3319"/>
         <source>Import Recorded Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3615"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3616"/>
         <source>Add Pane</source>
         <translation>Добавить окно</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3661"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3662"/>
         <source>Remove Pane</source>
         <translation>Удалить окно</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3684"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="4101"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3685"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="4091"/>
         <source>Delete Pane</source>
         <translation>Удалить окно</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3920"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3919"/>
         <source>Playing: %1 of %2 (%3 remaining)</source>
         <translation>Воспроизводится: %1 из %2 (осталось %3)</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3932"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3931"/>
         <source>Recording: %1</source>
         <translation>Запись: %1</translation>
     </message>
@@ -4987,17 +5111,17 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="vanished">&lt;b&gt;Беззвучный режим&lt;/b&gt;&lt;p&gt;Не удалось открыть звуковое устройство для воспроизведения.&lt;p&gt;Не удалось автоматически определить звуковое устройство. На этот раз придется обойтись без воспроизведения звука.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1600"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1598"/>
         <source>Close the current session and start a new one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1601"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1599"/>
         <source>Replace the main audio file in this session</source>
         <translation>Заменить основной аудиофайл в этйо сессии</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1602"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1600"/>
         <source>Add the audio file to this session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5006,8 +5130,8 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="vanished">&lt;b&gt;Беззвучный режим&lt;/b&gt;&lt;p&gt;Не удалось открыть предпочитаемое звуковое устройство («%1»).&lt;p&gt;На этот раз придется обойтись без воспроизведения звука.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2348"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2374"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2347"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2373"/>
         <source>Importing from RDF...</source>
         <translation>Выполняется импорт из RDF...</translation>
     </message>
@@ -5016,43 +5140,43 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="obsolete">&lt;b&gt;Выберите цель импорта&lt;/b&gt;&lt;p&gt;У вас уже есть один загруженный звуковой файл.&lt;br&gt;Что вы хотите сделать с новыми звуковыми данными?</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1689"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1687"/>
         <source>Import audio file &quot;%1&quot;</source>
         <translation>Импорт звукового файла &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1919"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1915"/>
         <source>Import layer XML file &quot;%1&quot;</source>
         <translation>Импорт XML-файла слоя &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1956"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1952"/>
         <source>Import MIDI file &quot;%1&quot;</source>
         <translation>Импорт файла MIDI &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2184"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2183"/>
         <source>Import session file &quot;%1&quot;</source>
         <translation>Импорт файла сессии &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2365"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2378"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2364"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2377"/>
         <source>Failed to import RDF</source>
         <translation>Не удалось импортировать RDF</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2366"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2365"/>
         <source>&lt;b&gt;Failed to import RDF&lt;/b&gt;&lt;p&gt;Importing data from RDF document at &quot;%1&quot; failed: %2&lt;/p&gt;</source>
         <translation>&lt;b&gt;Не удалось импортировать RDF&lt;/b&gt;&lt;p&gt;Не удалось импортировать данные из документа RDF &quot;%1&quot;: %2&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2383"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2382"/>
         <source>Import RDF document &quot;%1&quot;</source>
         <translation>Импорт документа RDF &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1294"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1298"/>
         <source>Add Item at %1 s</source>
         <translation>Добавить объект в позицию %1с</translation>
     </message>
@@ -5152,22 +5276,22 @@ If you save this session, it will be saved without any reference to that audio, 
 <context>
     <name>ModelMetadataModel</name>
     <message>
-        <location filename="../svgui/widgets/LayerTree.cpp" line="227"/>
+        <location filename="../svgui/widgets/LayerTree.cpp" line="225"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/LayerTree.cpp" line="228"/>
+        <location filename="../svgui/widgets/LayerTree.cpp" line="226"/>
         <source>Name</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/LayerTree.cpp" line="229"/>
+        <location filename="../svgui/widgets/LayerTree.cpp" line="227"/>
         <source>Maker</source>
         <translation>Создатель</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/LayerTree.cpp" line="230"/>
+        <location filename="../svgui/widgets/LayerTree.cpp" line="228"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
@@ -5175,12 +5299,12 @@ If you save this session, it will be saved without any reference to that audio, 
 <context>
     <name>ModelTransformerFactory</name>
     <message>
-        <location filename="../svcore/transform/ModelTransformerFactory.cpp" line="81"/>
+        <location filename="../svcore/transform/ModelTransformerFactory.cpp" line="95"/>
         <source>%1 &lt;%2&gt;</source>
         <translation>%1 &lt;%2&gt;</translation>
     </message>
     <message>
-        <location filename="../svcore/transform/ModelTransformerFactory.cpp" line="243"/>
+        <location filename="../svcore/transform/ModelTransformerFactory.cpp" line="264"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
@@ -5208,42 +5332,53 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="vanished">&lt;p&gt;&lt;b&gt;Программа не будет передавать персональные данные, следить за вами или делиться с кем-то вашей личной информацией.&lt;/b&gt; Однако Sonic Visualiser будет собирать базовую статистику о своем использовании.&lt;/p&gt;&lt;p&gt;Мы рекомендуем разрешить программе доступ в Сеть, поскольку это позволит нам сделать Sonic Visualiser лучше для вас, а кроме того, поможет с финансированием разработки. Если вы против, просто снимите флажок ниже.&lt;br&gt;&lt;/p&gt;</translation>
     </message>
     <message>
+        <location filename="../main/NetworkPermissionTester.cpp" line="46"/>
+        <source>Sonic Lineup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/NetworkPermissionTester.cpp" line="56"/>
+        <source>&lt;img src=&quot;:icons/qm-logo-smaller-white.png&quot; style=&quot;float:right; margin-left: 4em&quot;&gt;&lt;h2&gt;Welcome to Sonic Lineup!&lt;/h2&gt;&lt;p&gt;Sonic Lineup is a program for comparative visualisation and alignment of groups of related audio recordings.&lt;/p&gt;&lt;p&gt;Developed in the Centre for Digital Music at Queen Mary, University of London, Sonic Lineup is open source software under the GNU General Public License.&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Before we go on...&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Sonic Lineup would like to make occasional network requests to our servers, in order to tell you when updates are available.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;b&gt;No personal information will be sent, no tracking is carried out, and no individual information will be shared with anyone else.&lt;/b&gt; We will however make aggregate counts of distinct requests for usage reporting.&lt;/p&gt;&lt;p&gt;We recommend that you allow this, because it makes Sonic Lineup more useful to you and supports the public funding of this work. But if you do not wish to do so, please un-check the box below.&lt;br&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/NetworkPermissionTester.cpp" line="67"/>
         <source>Allow this</source>
-        <translation type="vanished">Разрешить доступ в Сеть</translation>
+        <translation>Разрешить доступ в Сеть</translation>
     </message>
 </context>
 <context>
     <name>NoteLayer</name>
     <message>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="56"/>
         <location filename="../svgui/layer/NoteLayer.cpp" line="57"/>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="58"/>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="846"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="877"/>
         <source>New Point</source>
         <translation>Новая точка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="96"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="109"/>
         <source>Vertical Scale</source>
         <translation>Верт. масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="162"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="177"/>
         <source>Auto-Align</source>
         <translation>Автовыравнивание</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="450"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="469"/>
         <source>In progress</source>
         <translation>В процессе</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="452"/>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="476"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="471"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="495"/>
         <source>No local points</source>
         <translation>Нет локальных точек</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="512"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="531"/>
         <source>Time:	%1
 Pitch:	%2
 Duration:	%3
@@ -5254,7 +5389,7 @@ No label</source>
 Без метки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="517"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="536"/>
         <source>Time:	%1
 Pitch:	%2
 Duration:	%3
@@ -5265,108 +5400,108 @@ Label:	%4</source>
 Метка:	%4</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="850"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="881"/>
         <source>Draw Point</source>
         <translation>Нарисовать точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="980"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1017"/>
         <source>Drag Point</source>
         <translation>Перетащить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1002"/>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1053"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1040"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1092"/>
         <source>Edit Point</source>
         <translation>Изменить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1004"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1042"/>
         <source>Relocate Point</source>
         <translation>Переместить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1007"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1045"/>
         <source>Change Point Value</source>
         <translation>Изменить значение точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1072"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1112"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1093"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1134"/>
         <source>Resize Selection</source>
         <translation>Изменить размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1123"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1165"/>
         <source>Delete Selected Points</source>
         <translation>Удалить выбранные точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1176"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1220"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="97"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="110"/>
         <source>Scale Units</source>
         <translation type="unfinished">Единицы шкалы</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="113"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="126"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="163"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="178"/>
         <source>Linear</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="164"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="179"/>
         <source>Log</source>
         <translation>Логарифмический</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="165"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="180"/>
         <source>MIDI Notes</source>
         <translation>Ноты MIDI</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="505"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="524"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="928"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="963"/>
         <source>Erase Point</source>
         <translation>Стереть точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1161"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1205"/>
         <source>Re-align pasted items?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1162"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1206"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="1246"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="1292"/>
         <source>Record Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="492"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="511"/>
         <source>%1 (%2, %3 Hz)</source>
         <translation>%1 (%2, %3 Гц)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/NoteLayer.cpp" line="499"/>
+        <location filename="../svgui/layer/NoteLayer.cpp" line="518"/>
         <source>%1 Hz (%2, %3)</source>
         <translation>%1Гц (%2, %3)</translation>
     </message>
@@ -5374,47 +5509,47 @@ Label:	%4</source>
 <context>
     <name>NoteModel</name>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="97"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="102"/>
         <source>Note</source>
         <translation>Нота</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="264"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="270"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="265"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="271"/>
         <source>Frame</source>
         <translation>Выборка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="266"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="272"/>
         <source>Pitch</source>
         <translation>Высота тона</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="267"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="273"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="268"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="274"/>
         <source>Level</source>
         <translation>Уровень</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="269"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="275"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="270"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="276"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="312"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="317"/>
         <source>Edit Data</source>
         <translation>Изменить данные</translation>
     </message>
@@ -5434,7 +5569,7 @@ Label:	%4</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Overview.cpp" line="366"/>
+        <location filename="../svgui/view/Overview.cpp" line="365"/>
         <source>Click and drag to navigate; double-click to jump</source>
         <translation>Щёлкните и потащите для перемещения по окну; щёлкните дважды для скачка</translation>
     </message>
@@ -5442,52 +5577,52 @@ Label:	%4</source>
 <context>
     <name>Pane</name>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="634"/>
+        <location filename="../svgui/view/Pane.cpp" line="655"/>
         <source>Some lengthy prefix:</source>
         <translation>Некий длинный префикс:</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1049"/>
+        <location filename="../svgui/view/Pane.cpp" line="1091"/>
         <source>(R)</source>
         <translation>(R)</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1047"/>
+        <location filename="../svgui/view/Pane.cpp" line="1089"/>
         <source>(X)</source>
         <translation>(X)</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1053"/>
+        <location filename="../svgui/view/Pane.cpp" line="1095"/>
         <source>%1 / %2Hz%3</source>
         <translation>%1 / %2 Гц%3</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2581"/>
+        <location filename="../svgui/view/Pane.cpp" line="2624"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2588"/>
+        <location filename="../svgui/view/Pane.cpp" line="2631"/>
         <source>Resize Selection</source>
         <translation>Изменить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="125"/>
+        <location filename="../svgui/view/Pane.cpp" line="126"/>
         <source>Horizontal Zoom</source>
         <translation>Горизонтальное масштабирование</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="151"/>
+        <location filename="../svgui/view/Pane.cpp" line="152"/>
         <source>Vertical Zoom</source>
         <translation>Вертикальное масштабирование</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2458"/>
+        <location filename="../svgui/view/Pane.cpp" line="2501"/>
         <source>Enter new range</source>
         <translation>Введите новый диапазон</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2459"/>
+        <location filename="../svgui/view/Pane.cpp" line="2502"/>
         <source>New vertical display range, from %1 to %2 %4:</source>
         <translation>Новый диапазон отображения по вертикали, от %1 до %2 %4:</translation>
     </message>
@@ -5496,235 +5631,245 @@ Label:	%4</source>
         <translation type="vanished">Щёлкните и потащите для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2769"/>
+        <location filename="../svgui/view/Pane.cpp" line="2812"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Ctrl for multi-select; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + Ctrl — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2763"/>
+        <location filename="../svgui/view/Pane.cpp" line="2806"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Cmd for multi-select; middle-click and drag to navigate</source>
         <translation type="unfinished">Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + Cmd — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2771"/>
+        <location filename="../svgui/view/Pane.cpp" line="2814"/>
         <source>Click and drag to select a range; hold Ctrl for multi-select; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения диапазона; + Ctrl — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2765"/>
+        <location filename="../svgui/view/Pane.cpp" line="2808"/>
         <source>Click and drag to select a range; hold Cmd for multi-select; middle-click and drag to navigate</source>
         <translation type="unfinished">Щёлкните и потащите для выделения диапазона; + Cmd — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2752"/>
+        <location filename="../svgui/view/Pane.cpp" line="2795"/>
         <source>Click and drag to navigate; use mouse-wheel or trackpad-scroll to zoom; hold Shift and drag to zoom to an area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2780"/>
+        <location filename="../svgui/view/Pane.cpp" line="2823"/>
         <source>Click and drag to move the selection boundary</source>
         <translation>Щёлкните и потащите для перемещения границ выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2785"/>
+        <location filename="../svgui/view/Pane.cpp" line="2828"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; middle-click to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2787"/>
+        <location filename="../svgui/view/Pane.cpp" line="2830"/>
         <source>Click and drag to select a range; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2795"/>
+        <location filename="../svgui/view/Pane.cpp" line="2838"/>
         <source>Click to add a new item in the active layer</source>
         <translation>Щёлкните для добавления нового объекта на активный слой</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2814"/>
+        <location filename="../svgui/view/Pane.cpp" line="2857"/>
         <source>Click and drag to move all items in the selected range</source>
         <translation>Щёлкните и потащите все объекты в выделенной области</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2830"/>
+        <location filename="../svgui/view/Pane.cpp" line="2873"/>
         <source>Click and drag to adjust the visible range of the vertical scale</source>
         <translation>Щёлкните и потащите для смены видимого диапазона масштабирования по вертикали</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2832"/>
+        <location filename="../svgui/view/Pane.cpp" line="2875"/>
         <source>Click and drag to adjust the vertical zoom level</source>
         <translation>Щёлкните и потащите для смены уровня масштабирования по вертикали</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2834"/>
+        <location filename="../svgui/view/Pane.cpp" line="2877"/>
         <source>Click and drag to adjust the horizontal zoom level</source>
         <translation>Щёлкните и потащите для смены уровня масштабирования по горизонтали</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2836"/>
+        <location filename="../svgui/view/Pane.cpp" line="2879"/>
         <source>Reset horizontal and vertical zoom levels to their defaults</source>
         <translation>Сбросить уровни масштабирования по горизонтали и вертикали до исходных значений</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="806"/>
+        <location filename="../svgui/view/Pane.cpp" line="833"/>
         <source>Reference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="808"/>
-        <location filename="../svgui/view/Pane.cpp" line="812"/>
+        <location filename="../svgui/view/Pane.cpp" line="835"/>
+        <location filename="../svgui/view/Pane.cpp" line="844"/>
         <source>Unaligned</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="814"/>
+        <location filename="../svgui/view/Pane.cpp" line="846"/>
         <source>Aligning: %1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="816"/>
+        <location filename="../svgui/view/Pane.cpp" line="848"/>
+        <source>Aligned at -%1 cents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svgui/view/Pane.cpp" line="850"/>
+        <source>Aligned at +%1 cents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svgui/view/Pane.cpp" line="852"/>
         <source>Aligned</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="858"/>
+        <location filename="../svgui/view/Pane.cpp" line="897"/>
         <source>%1 - %2</source>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="984"/>
-        <location filename="../svgui/view/Pane.cpp" line="1000"/>
+        <location filename="../svgui/view/Pane.cpp" line="1023"/>
+        <location filename="../svgui/view/Pane.cpp" line="1039"/>
         <source>+%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1239"/>
-        <location filename="../svgui/view/Pane.cpp" line="1245"/>
+        <location filename="../svgui/view/Pane.cpp" line="1281"/>
+        <location filename="../svgui/view/Pane.cpp" line="1287"/>
         <source>Zoom</source>
         <translation>Масштабирование отображения</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1240"/>
+        <location filename="../svgui/view/Pane.cpp" line="1282"/>
         <source>Zoom In</source>
         <translation>Приблизить</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1240"/>
+        <location filename="../svgui/view/Pane.cpp" line="1282"/>
         <source>Wheel Up</source>
         <translation>Колесом вверх</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1241"/>
+        <location filename="../svgui/view/Pane.cpp" line="1283"/>
         <source>Zoom Out</source>
         <translation>Отдалить</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1241"/>
+        <location filename="../svgui/view/Pane.cpp" line="1283"/>
         <source>Wheel Down</source>
         <translation>Колесом вниз</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1243"/>
+        <location filename="../svgui/view/Pane.cpp" line="1285"/>
         <source>General Pane Mouse Actions</source>
         <translation>Использование мыши в окнах</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1245"/>
+        <location filename="../svgui/view/Pane.cpp" line="1287"/>
         <source>Wheel</source>
         <translation>Колесо</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1246"/>
+        <location filename="../svgui/view/Pane.cpp" line="1288"/>
         <source>Zoom in or out in time axis</source>
         <translation>Приближение и отдаление по временной шкале</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1247"/>
+        <location filename="../svgui/view/Pane.cpp" line="1289"/>
         <source>Ctrl+Wheel</source>
         <translation>Ctrl+прокрутка</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1247"/>
+        <location filename="../svgui/view/Pane.cpp" line="1289"/>
         <source>Scroll</source>
         <translation>Прокручивать окно сессии</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1248"/>
+        <location filename="../svgui/view/Pane.cpp" line="1290"/>
         <source>Scroll rapidly left or right in time axis</source>
         <translation>Быстро перемещаться вправо и влево по временной шкале</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1249"/>
+        <location filename="../svgui/view/Pane.cpp" line="1291"/>
         <source>Zoom Vertically</source>
         <translation>Вертикальный масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1249"/>
+        <location filename="../svgui/view/Pane.cpp" line="1291"/>
         <source>Shift+Wheel</source>
         <translation>Shift+прокрутка</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1250"/>
+        <location filename="../svgui/view/Pane.cpp" line="1292"/>
         <source>Zoom in or out in the vertical axis</source>
         <translation>Масштабировать отображение по вертикальной оси</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1251"/>
+        <location filename="../svgui/view/Pane.cpp" line="1293"/>
         <source>Scroll Vertically</source>
         <translation>Прокрутка по вертикали</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1251"/>
+        <location filename="../svgui/view/Pane.cpp" line="1293"/>
         <source>Alt+Wheel</source>
         <translation>Alt+Колесо</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1252"/>
+        <location filename="../svgui/view/Pane.cpp" line="1294"/>
         <source>Scroll up or down in the vertical axis</source>
         <translation>Прокручивать отображение по вертикальной оси</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1253"/>
+        <location filename="../svgui/view/Pane.cpp" line="1295"/>
         <source>Navigate</source>
         <translation>Перемещение</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1253"/>
+        <location filename="../svgui/view/Pane.cpp" line="1295"/>
         <source>Middle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1254"/>
+        <location filename="../svgui/view/Pane.cpp" line="1296"/>
         <source>Click middle button and drag to navigate with any tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1255"/>
+        <location filename="../svgui/view/Pane.cpp" line="1297"/>
         <source>Relocate</source>
         <translation>Перемещение скачком</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1255"/>
+        <location filename="../svgui/view/Pane.cpp" line="1297"/>
         <source>Double-Click Middle</source>
         <translation>Двойной щелчок средней клавишей</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1256"/>
+        <location filename="../svgui/view/Pane.cpp" line="1298"/>
         <source>Double-click middle button to relocate with any tool</source>
         <translation>Перескочить вправо или влево в зависимости от положения курсора</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1257"/>
+        <location filename="../svgui/view/Pane.cpp" line="1299"/>
         <source>Menu</source>
         <translation>Меню</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1257"/>
+        <location filename="../svgui/view/Pane.cpp" line="1299"/>
         <source>Right</source>
         <translation>Правая клавиша</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="1258"/>
+        <location filename="../svgui/view/Pane.cpp" line="1300"/>
         <source>Show pane context menu</source>
         <translation>Показать контекстное меню окна</translation>
     </message>
@@ -5805,53 +5950,45 @@ Label:	%4</source>
         <translation type="vanished">Измерить объект</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2802"/>
+        <location filename="../svgui/view/Pane.cpp" line="2845"/>
         <source>Click to erase an item from the active layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="172"/>
+        <location filename="../svgui/view/Pane.cpp" line="173"/>
         <source>Reset zoom to default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2809"/>
+        <location filename="../svgui/view/Pane.cpp" line="2852"/>
         <source>Click and drag an item in the active layer to move it; hold Shift to override initial resistance</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PathModel</name>
-    <message>
-        <location filename="../svcore/data/model/PathModel.h" line="79"/>
-        <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PlayParameterRepository</name>
     <message>
-        <location filename="../svcore/base/PlayParameterRepository.cpp" line="182"/>
+        <location filename="../svcore/base/PlayParameterRepository.cpp" line="175"/>
         <source>Adjust Playback Parameters</source>
         <translation type="unfinished">Коррекция параметров воспроизведения</translation>
     </message>
     <message>
-        <location filename="../svcore/base/PlayParameterRepository.cpp" line="187"/>
+        <location filename="../svcore/base/PlayParameterRepository.cpp" line="180"/>
         <source>Change Playback Mute State</source>
         <translation type="unfinished">Смена состояния приглушенности воспроизведения</translation>
     </message>
     <message>
-        <location filename="../svcore/base/PlayParameterRepository.cpp" line="192"/>
+        <location filename="../svcore/base/PlayParameterRepository.cpp" line="185"/>
         <source>Change Playback Gain</source>
         <translation type="unfinished">Смена громкости воспроизведения</translation>
     </message>
     <message>
-        <location filename="../svcore/base/PlayParameterRepository.cpp" line="197"/>
+        <location filename="../svcore/base/PlayParameterRepository.cpp" line="190"/>
         <source>Change Playback Pan</source>
         <translation type="unfinished">Смена панорамы при воспроизведении</translation>
     </message>
     <message>
-        <location filename="../svcore/base/PlayParameterRepository.cpp" line="202"/>
+        <location filename="../svcore/base/PlayParameterRepository.cpp" line="195"/>
         <source>Change Playback Sample</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6857,7 +6994,7 @@ Sonic Visualiser — программа для просмотра и иссле�
         <translation type="vanished">Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="179"/>
+        <location filename="../main/main.cpp" line="183"/>
         <source>
 Sonic Lineup is a comparative viewer for sets of related audio recordings.
 
@@ -6896,12 +7033,12 @@ viewing of multiple recordings of the same music or other related material.
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../main/main.cpp" line="328"/>
+        <location filename="../main/main.cpp" line="338"/>
         <source>Failed to open file</source>
         <translation>Не удалось открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="329"/>
+        <location filename="../main/main.cpp" line="339"/>
         <source>File &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7111,12 +7248,12 @@ viewing of multiple recordings of the same music or other related material.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/rdf/RDFImporter.cpp" line="294"/>
+        <location filename="../svcore/rdf/RDFImporter.cpp" line="295"/>
         <source>Importing dense signal data from RDF...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/rdf/RDFImporter.cpp" line="488"/>
+        <location filename="../svcore/rdf/RDFImporter.cpp" line="482"/>
         <source>Importing event data from RDF...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7132,7 +7269,7 @@ viewing of multiple recordings of the same music or other related material.
 <context>
     <name>RangeSummarisableTimeValueModel</name>
     <message>
-        <location filename="../svcore/data/model/RangeSummarisableTimeValueModel.h" line="101"/>
+        <location filename="../svcore/data/model/RangeSummarisableTimeValueModel.h" line="102"/>
         <source>Range-Summarisable Time-Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7148,73 +7285,73 @@ viewing of multiple recordings of the same music or other related material.
 <context>
     <name>RegionLayer</name>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="102"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="119"/>
         <source>Vertical Scale</source>
         <translation>Верт. масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="103"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="120"/>
         <source>Scale Units</source>
         <translation>Единицы шкалы</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="104"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="121"/>
         <source>Plot Type</source>
         <translation>Тип графика</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="122"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="139"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="183"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="201"/>
         <source>Bars</source>
         <translation>Такты</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="184"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="202"/>
         <source>Segmentation</source>
         <translation>Сегментация</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="190"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="208"/>
         <source>Auto-Align</source>
         <translation>Автовыравнивание</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="191"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="209"/>
         <source>Equal Spaced</source>
         <translation>Равные промежутки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="192"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="210"/>
         <source>Linear</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="193"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="211"/>
         <source>Log</source>
         <translation>Логарифмический</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="379"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="406"/>
         <source>In progress</source>
         <translation>В процессе</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="381"/>
         <location filename="../svgui/layer/RegionLayer.cpp" line="408"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="435"/>
         <source>No local points</source>
         <translation>Нет локальных точек</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="417"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="444"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="422"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="449"/>
         <source>Time:	%1
 Value:	%2
 Duration:	%3
@@ -7225,7 +7362,7 @@ No label</source>
 Без метки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="427"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="454"/>
         <source>Time:	%1
 Value:	%2
 Duration:	%3
@@ -7236,69 +7373,69 @@ Label:	%4</source>
 Метка:	%4</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1261"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1309"/>
         <source>Change Point Value</source>
         <translation>Изменить значение точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1320"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1370"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1344"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1395"/>
         <source>Resize Selection</source>
         <translation>Изменить размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1375"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1427"/>
         <source>Delete Selected Points</source>
         <translation>Удалить выбранные точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1417"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1471"/>
         <source>Re-align pasted items?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1418"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1472"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1432"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1486"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="54"/>
         <location filename="../svgui/layer/RegionLayer.cpp" line="55"/>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="56"/>
         <source>New Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1090"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1131"/>
         <source>Draw Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1174"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1219"/>
         <source>Erase Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1234"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1281"/>
         <source>Drag Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1256"/>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1303"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1304"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1352"/>
         <source>Edit Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1258"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1306"/>
         <source>Relocate Region</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7306,42 +7443,42 @@ Label:	%4</source>
 <context>
     <name>RegionModel</name>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="79"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="81"/>
         <source>Region</source>
         <translation>Область</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="245"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="248"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="246"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="249"/>
         <source>Frame</source>
         <translation>Выборка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="247"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="250"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="248"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="251"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="249"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="252"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="250"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="253"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="295"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="297"/>
         <source>Edit Data</source>
         <translation>Изменить данные</translation>
     </message>
@@ -7349,7 +7486,7 @@ Label:	%4</source>
 <context>
     <name>RemoveLayerCommand</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="1224"/>
+        <location filename="../svapp/framework/Document.cpp" line="1243"/>
         <source>Delete %1 Layer</source>
         <translation>Удалить слой %1 </translation>
     </message>
@@ -7364,13 +7501,13 @@ Label:	%4</source>
 <context>
     <name>SVFileReader</name>
     <message>
-        <location filename="../svapp/framework/SVFileReader.cpp" line="325"/>
-        <location filename="../svapp/framework/SVFileReader.cpp" line="329"/>
+        <location filename="../svapp/framework/SVFileReader.cpp" line="327"/>
+        <location filename="../svapp/framework/SVFileReader.cpp" line="331"/>
         <source>(derived model in SV-XML)</source>
         <translation>(модель извлечена в SV-XML)</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/SVFileReader.cpp" line="522"/>
+        <location filename="../svapp/framework/SVFileReader.cpp" line="520"/>
         <source>Opening file or URL...</source>
         <translation>Открывается файл или URL...</translation>
     </message>
@@ -7391,113 +7528,113 @@ Label:	%4</source>
 <context>
     <name>SliceLayer</name>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="165"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="172"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="153"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="160"/>
         <source>%1 - %2</source>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="183"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="171"/>
         <source>First</source>
         <translation type="unfinished">Первый</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="184"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="914"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="172"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="909"/>
         <source>Mean</source>
         <translation type="unfinished">Усреднённо</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="184"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="915"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="172"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="910"/>
         <source>Peak</source>
         <translation>Пик</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="682"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="677"/>
         <source>0dB</source>
         <translation>0 Дб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="683"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="678"/>
         <source>-Inf</source>
         <translation>-Inf</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="725"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="720"/>
         <source>x10</source>
         <translation>x10</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="761"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="756"/>
         <source>Plot Type</source>
         <translation>Тип графика</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="762"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="799"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="757"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="794"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="763"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="758"/>
         <source>Normalize</source>
         <translation>Нормализовать</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="765"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="760"/>
         <source>Gain</source>
         <translation>Усиление</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="766"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="761"/>
         <source>Sampling Mode</source>
         <translation>Режим сэмплирования</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="904"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="930"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="899"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="925"/>
         <source>Linear</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="905"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="900"/>
         <source>Meter</source>
         <translation>Счетчик</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="942"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="945"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="937"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="940"/>
         <source>dB</source>
         <translation>Дб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="913"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="908"/>
         <source>Any</source>
         <translation>Любые</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="921"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="916"/>
         <source>Lines</source>
         <translation>Линии</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="922"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="917"/>
         <source>Steps</source>
         <translation>Шаги</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="923"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="918"/>
         <source>Blocks</source>
         <translation>Блоки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="924"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="919"/>
         <source>Colours</source>
         <translation>Цвета</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="177"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="165"/>
         <source>Time:	%1 - %2
 Range:	%3 samples (%4)
 Bin:	%5
@@ -7508,40 +7645,40 @@ Bin:	%5
 %6 значение:	%7</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="191"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="179"/>
         <source>Time:	%1 - %2
 Range:	%3 samples (%4)</source>
         <translation>Время:	%1 - %2
 Диапазон:	%3 сэмплов (%4)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="764"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="759"/>
         <source>Threshold</source>
         <translation>Порог</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="767"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="762"/>
         <source>Bin Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="801"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="796"/>
         <source>Bins</source>
         <translation type="unfinished">Бины</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="906"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="931"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="901"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="926"/>
         <source>Log</source>
         <translation>Логарифм.</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="907"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="902"/>
         <source>Absolute</source>
         <translation type="unfinished">Абсолютный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="932"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="927"/>
         <source>Rev Log</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7589,32 +7726,32 @@ Range:	%3 samples (%4)</source>
 <context>
     <name>SparseOneDimensionalModel</name>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="63"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="66"/>
         <source>Sparse 1-D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="200"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="204"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="201"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="205"/>
         <source>Frame</source>
         <translation type="unfinished">Выборка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="202"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="206"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="203"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="207"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="243"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="246"/>
         <source>Edit Data</source>
         <translation>Изменить данные</translation>
     </message>
@@ -7622,37 +7759,37 @@ Range:	%3 samples (%4)</source>
 <context>
     <name>SparseTimeValueModel</name>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="83"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="88"/>
         <source>Sparse Time-Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="247"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="253"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="248"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="254"/>
         <source>Frame</source>
         <translation type="unfinished">Выборка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="249"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="255"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="250"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="256"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="251"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="257"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="293"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="298"/>
         <source>Edit Data</source>
         <translation>Изменить данные</translation>
     </message>
@@ -7660,18 +7797,18 @@ Range:	%3 samples (%4)</source>
 <context>
     <name>SpectrogramLayer</name>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="255"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="297"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="252"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="294"/>
         <source>Colour</source>
         <translation>Цвет</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="256"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="253"/>
         <source>Colour Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="257"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="254"/>
         <source>Window Size</source>
         <translation>Размер окна</translation>
     </message>
@@ -7680,274 +7817,274 @@ Range:	%3 samples (%4)</source>
         <translation type="vanished">Нормализовать столбцы</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="261"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="258"/>
         <source>Bin Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="262"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="259"/>
         <source>Threshold</source>
         <translation>Порог</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="263"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="260"/>
         <source>Gain</source>
         <translation>Усиление</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="264"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="261"/>
         <source>Colour Rotation</source>
         <translation>Вращение цвета</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="265"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="262"/>
         <source>Min Frequency</source>
         <translation>Мин. частота</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="266"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="263"/>
         <source>Max Frequency</source>
         <translation>Макс. частота</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="267"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="264"/>
         <source>Frequency Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="294"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="291"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="300"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="297"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="471"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="544"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="468"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="541"/>
         <source>Linear</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="472"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="469"/>
         <source>Meter</source>
         <translation>Счетчик</translation>
     </message>
     <message>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="576"/>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="579"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="582"/>
         <source>dB</source>
         <translation>Дб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="475"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="472"/>
         <source>Phase</source>
         <translation>Фаза</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="259"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="256"/>
         <source>Oversampling</source>
         <translation>Оверсэмплинг</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="260"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="257"/>
         <source>Normalization</source>
         <translation>Нормировка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="482"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="479"/>
         <source>Col</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="483"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="480"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="484"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="481"/>
         <source>Hybrid</source>
         <translation>Гибридный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="505"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="502"/>
         <source>1x</source>
         <translation>1x</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="506"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="503"/>
         <source>2x</source>
         <translation>2x</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="507"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="504"/>
         <source>4x</source>
         <translation>4x</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="508"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="505"/>
         <source>8x</source>
         <translation>8x</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="514"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="511"/>
         <source>No min</source>
         <translation>Без минимума</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="515"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="512"/>
         <source>10 Hz</source>
         <translation>10 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="516"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="513"/>
         <source>20 Hz</source>
         <translation>20 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="517"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="514"/>
         <source>40 Hz</source>
         <translation>40 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="518"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="515"/>
         <source>100 Hz</source>
         <translation>100 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="519"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="516"/>
         <source>250 Hz</source>
         <translation>250 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="520"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="529"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="517"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="526"/>
         <source>500 Hz</source>
         <translation>500 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="521"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="530"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="518"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="527"/>
         <source>1 KHz</source>
         <translation>1 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="522"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="533"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="519"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="530"/>
         <source>4 KHz</source>
         <translation>4 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="523"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="520"/>
         <source>10 KHz</source>
         <translation>10 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="531"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="528"/>
         <source>1.5 KHz</source>
         <translation>1,5 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="532"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="529"/>
         <source>2 KHz</source>
         <translation>2 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="534"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="531"/>
         <source>6 KHz</source>
         <translation>6 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="535"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="532"/>
         <source>8 KHz</source>
         <translation>8 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="536"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="533"/>
         <source>12 KHz</source>
         <translation>12 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="537"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="534"/>
         <source>16 KHz</source>
         <translation>16 КГц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="538"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="535"/>
         <source>No max</source>
         <translation>Без максимума</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="545"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="542"/>
         <source>Log</source>
         <translation>Логарифм.</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="551"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="548"/>
         <source>All Bins</source>
         <translation>Все бины</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="552"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="549"/>
         <source>Peak Bins</source>
         <translation>Пиковые бины</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="553"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="550"/>
         <source>Frequencies</source>
         <translation>Частоты</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="556"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="553"/>
         <source>&lt;unknown&gt;</source>
         <translation>&lt;неизвестно&gt;</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1980"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2018"/>
         <source>Peak Frequency:	%1 - %2 Hz
 </source>
         <translation>Пиковая частота:	%1 - %2 Гц
 </translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1983"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2021"/>
         <source>Peak Frequency:	%1 Hz
 </source>
         <translation>Пиковая частота:	%1 Гц
 </translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1991"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2029"/>
         <source>Peak Pitch:	%3 - %4
 </source>
         <translation>Пиковая высота тона:	%3 - %4
 </translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1993"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2031"/>
         <source>Peak Pitch:	%2
 </source>
         <translation>Пиковая высота тона:	%2
 </translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2004"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2042"/>
         <source>Time:	%1 - %2
 </source>
         <translation>Время:	%1 - %2
 </translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2008"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2046"/>
         <source>Time:	%1
 </source>
         <translation>Время:	%1
 </translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2013"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2051"/>
         <source>%1Bin Frequency:	%2 - %3 Hz
 %4Bin Pitch:	%5 - %6
 </source>
@@ -7956,7 +8093,7 @@ Range:	%3 samples (%4)</source>
 </translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2021"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2059"/>
         <source>%1Bin Frequency:	%2 Hz
 %3Bin Pitch:	%4
 </source>
@@ -7969,62 +8106,62 @@ Range:	%3 samples (%4)</source>
         <translation type="vanished">-Inf</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2044"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2082"/>
         <source>dB:	%1 - %2</source>
         <translation>Дб:	%1 - %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2046"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2084"/>
         <source>dB:	%1</source>
         <translation>Дб:	%1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2049"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2087"/>
         <source>
 Phase:	%1 - %2</source>
         <translation>
 Фаза:	%1 - %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2051"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2089"/>
         <source>
 Phase:	%1</source>
         <translation>
 Фаза:	%1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="258"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="255"/>
         <source>Window Overlap</source>
         <translation>Перекрытие окон</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="481"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="494"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="478"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="491"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="495"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="492"/>
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="496"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="493"/>
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="497"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="494"/>
         <source>75 %</source>
         <translation>75 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="498"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="495"/>
         <source>87.5 %</source>
         <translation>87,5 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="499"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="496"/>
         <source>93.75 %</source>
         <translation>93,75 %</translation>
     </message>
@@ -8033,39 +8170,39 @@ Phase:	%1</source>
         <translation type="vanished">Нормализовать видимую область</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="291"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="288"/>
         <source>Bins</source>
         <translation>Бины</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1402"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1417"/>
         <source>FFT cache failed</source>
         <translation>Не удалось кэшировать FFT</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1403"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1418"/>
         <source>Failed to create the FFT model for this spectrogram.
 There may be insufficient memory or disc space to continue.</source>
         <translation>Не удалось создать FFT-модель этой спектрограммы.
 Вероятно, не хватает памяти или дискового порстранства для продолжения.</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="473"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="470"/>
         <source>dBV^2</source>
         <translation>ДбВ^2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="474"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="471"/>
         <source>dBV</source>
         <translation>ДбВ</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2081"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2120"/>
         <source>43Hz</source>
         <translation>43 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2154"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2194"/>
         <source>%1Hz</source>
         <translation>%1 Гц</translation>
     </message>
@@ -8073,106 +8210,106 @@ There may be insufficient memory or disc space to continue.</source>
 <context>
     <name>SpectrumLayer</name>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="161"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="145"/>
         <source>Window Size</source>
         <translation>Размер окна</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="162"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="146"/>
         <source>Window Overlap</source>
         <translation>Перекрытие окон</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="190"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="174"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="707"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="716"/>
         <source>Mean</source>
         <translation type="unfinished">Усреднённо</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="256"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="240"/>
         <source>None</source>
         <translation>Ничего</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="163"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="147"/>
         <source>Oversampling</source>
         <translation>Оверсэмплинг</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="191"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="175"/>
         <source>Bins</source>
         <translation>Бины</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="257"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="241"/>
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="258"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="242"/>
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="259"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="243"/>
         <source>75 %</source>
         <translation>75 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="260"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="244"/>
         <source>87.5 %</source>
         <translation>87,5 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="261"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="245"/>
         <source>93.75 %</source>
         <translation>93,75 %</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="267"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="251"/>
         <source>1x</source>
         <translation>1x</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="268"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="252"/>
         <source>2x</source>
         <translation>2x</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="269"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="253"/>
         <source>4x</source>
         <translation>4x</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="270"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="254"/>
         <source>8x</source>
         <translation>8x</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="661"/>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="673"/>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="694"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="670"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="682"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="703"/>
         <source>%1 - %2</source>
         <translation>%1 - %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="666"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="675"/>
         <source>%1 - %2 Hz</source>
         <translation>%1 - %2 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="570"/>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="668"/>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="839"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="577"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="677"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="848"/>
         <source>%1 Hz</source>
         <translation>%1 Гц</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="912"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="921"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
@@ -8181,12 +8318,12 @@ There may be insufficient memory or disc space to continue.</source>
         <translation type="vanished">-Inf</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="696"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="705"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="702"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="711"/>
         <source>%1
 Bin:	%2 (%3)
 %4 value:	%5
@@ -8197,17 +8334,17 @@ dB:	%6</source>
 Дб:	%6</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="706"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="715"/>
         <source>First</source>
         <translation>Первый</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="707"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="716"/>
         <source>Peak</source>
         <translation>Пик</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="711"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="720"/>
         <source>%1
 Bin:	%2 (%3)
 Value:	%4
@@ -8218,7 +8355,7 @@ dB:	%5</source>
 Дб:	%5</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrumLayer.cpp" line="164"/>
+        <location filename="../svgui/layer/SpectrumLayer.cpp" line="148"/>
         <source>Show Peak Frequencies</source>
         <translation>Показывать пиковые частоты</translation>
     </message>
@@ -8249,24 +8386,24 @@ dB:	%5</source>
 <context>
     <name>TextLayer</name>
     <message>
+        <location filename="../svgui/layer/TextLayer.cpp" line="38"/>
         <location filename="../svgui/layer/TextLayer.cpp" line="39"/>
-        <location filename="../svgui/layer/TextLayer.cpp" line="40"/>
         <source>Empty Label</source>
         <translation>Очистить метку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="135"/>
-        <location filename="../svgui/layer/TextLayer.cpp" line="337"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="149"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="355"/>
         <source>&lt;no text&gt;</source>
         <translation>&lt;без текста&gt;</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="195"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="211"/>
         <source>In progress</source>
         <translation>В процессе</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="208"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="224"/>
         <source>Time:	%1
 Height:	%2
 Label:	%3</source>
@@ -8275,79 +8412,79 @@ Label:	%3</source>
 Метка:	%3</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="430"/>
-        <location filename="../svgui/layer/TextLayer.cpp" line="574"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="451"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="601"/>
         <source>Enter label</source>
         <translation>Введите метку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="431"/>
-        <location filename="../svgui/layer/TextLayer.cpp" line="575"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="452"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="602"/>
         <source>Please enter a new label:</source>
         <translation>Введите текст новой метки:</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="525"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="550"/>
         <source>Drag Label</source>
         <translation>Перетащите метку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="547"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="573"/>
         <source>Move Label</source>
         <translation>Переместите метку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="549"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="575"/>
         <source>Move Label Horizontally</source>
         <translation>Переместите по горизонтали</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="552"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="578"/>
         <source>Move Label Vertically</source>
         <translation>Переместите по вертикали</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="579"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="606"/>
         <source>Re-Label Point</source>
         <translation type="unfinished">Переразметить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="594"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="622"/>
         <source>Drag Selection</source>
         <translation>Перетащите выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="615"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="644"/>
         <source>Resize Selection</source>
         <translation>Смените размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="643"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="673"/>
         <source>Delete Selection</source>
         <translation>Удалите выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="695"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="727"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="739"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="771"/>
         <source>New Point</source>
         <translation>Новая точка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="479"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="502"/>
         <source>Erase Point</source>
         <translation>Удалить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="680"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="712"/>
         <source>Re-align pasted items?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TextLayer.cpp" line="681"/>
+        <location filename="../svgui/layer/TextLayer.cpp" line="713"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8355,37 +8492,37 @@ Label:	%3</source>
 <context>
     <name>TextModel</name>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="55"/>
+        <location filename="../svcore/data/model/TextModel.h" line="56"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="183"/>
+        <location filename="../svcore/data/model/TextModel.h" line="185"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="184"/>
+        <location filename="../svcore/data/model/TextModel.h" line="186"/>
         <source>Frame</source>
         <translation>Выборка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="185"/>
+        <location filename="../svcore/data/model/TextModel.h" line="187"/>
         <source>Height</source>
         <translation>Высота</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="186"/>
+        <location filename="../svcore/data/model/TextModel.h" line="188"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="187"/>
+        <location filename="../svcore/data/model/TextModel.h" line="189"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="230"/>
+        <location filename="../svcore/data/model/TextModel.h" line="231"/>
         <source>Edit Data</source>
         <translation>Изменить данные</translation>
     </message>
@@ -8433,107 +8570,107 @@ Label:	%3</source>
 <context>
     <name>TimeInstantLayer</name>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="46"/>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="455"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="45"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="491"/>
         <source>New Point</source>
         <translation>Новая точка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="86"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="95"/>
         <source>Plot Type</source>
         <translation>Тип графика</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="126"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="135"/>
         <source>Instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="127"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="136"/>
         <source>Segmentation</source>
         <translation>Сегментация</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="232"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="252"/>
         <source>In progress</source>
         <translation>В процессе</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="234"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="254"/>
         <source>No local points</source>
         <translation>Нет локальных точек</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="245"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="265"/>
         <source>Time:	%1
 No label</source>
         <translation>Время:	%1
 Без метки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="248"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="268"/>
         <source>Time:	%1
 Label:	%2</source>
         <translation>Время:	%1
 Метка:	%2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="458"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="494"/>
         <source>Draw Point</source>
         <translation>Нарисовать точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="488"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="526"/>
         <source>Add Point at %1 s</source>
         <translation>Добавить точку в %1 с</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="575"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="617"/>
         <source>Drag Point</source>
         <translation>Перетащить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="591"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="634"/>
         <source>Move Point to %1 s</source>
         <translation>Перетащить точку к %1 с</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="627"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="671"/>
         <source>Edit Point</source>
         <translation>Изменить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="643"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="688"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="664"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="710"/>
         <source>Resize Selection</source>
         <translation>Изменить размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="692"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="739"/>
         <source>Delete Selection</source>
         <translation>Удалить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="744"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="793"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="532"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="572"/>
         <source>Erase Point</source>
         <translation>Удалить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="729"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="778"/>
         <source>Re-align pasted instants?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="730"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="779"/>
         <source>The instants you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8541,80 +8678,80 @@ Label:	%2</source>
 <context>
     <name>TimeValueLayer</name>
     <message>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="58"/>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="59"/>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="60"/>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1287"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1347"/>
         <source>New Point</source>
         <translation>Новая точка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="114"/>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="150"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="126"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="162"/>
         <source>Plot Type</source>
         <translation>Тип графика</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="115"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="127"/>
         <source>Vertical Scale</source>
         <translation>Верт. масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="116"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="128"/>
         <source>Scale Units</source>
         <translation>Единицы шкалы</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="118"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="130"/>
         <source>Show Derivative</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="231"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="253"/>
         <source>Points</source>
         <translation>Точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="232"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="254"/>
         <source>Stems</source>
         <translation>Ножки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="233"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="255"/>
         <source>Connected Points</source>
         <translation>Соединённые точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="234"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="256"/>
         <source>Lines</source>
         <translation>Линии</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="235"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="257"/>
         <source>Curve</source>
         <translation>Кривая</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="236"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="258"/>
         <source>Segmentation</source>
         <translation>Сегментация</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="237"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="259"/>
         <source>Discrete Curves</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="242"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="264"/>
         <source>Auto-Align</source>
         <translation>Автовыравнивание</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="610"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="643"/>
         <source>In progress</source>
         <translation>В процессе</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="612"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="645"/>
         <source>No local points</source>
         <translation>Нет локальных точек</translation>
     </message>
@@ -8635,111 +8772,111 @@ Label:	%4</source>
 Метка:	%4</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1293"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1353"/>
         <source>Draw Point</source>
         <translation>Нарисовать точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1456"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1522"/>
         <source>Drag Point</source>
         <translation>Перетащить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1480"/>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1525"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1547"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1593"/>
         <source>Edit Point</source>
         <translation>Изменить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1482"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1549"/>
         <source>Relocate Point</source>
         <translation>Переместить точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1485"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1552"/>
         <source>Change Point Value</source>
         <translation>Изменить значение точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1541"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1610"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1563"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1633"/>
         <source>Resize Selection</source>
         <translation>Изменить размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1591"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1662"/>
         <source>Delete Selected Points</source>
         <translation>Удалить выбранные точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1644"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1717"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1697"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1770"/>
         <source>The items you are pasting do not have values.
 What values do you want to use for these items?</source>
         <translation>У вставляемых объектов нет значений.
 Какие значения вы хотите для них использовать?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1699"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1772"/>
         <source>Some of the items you are pasting do not have values.
 What values do you want to use for these items?</source>
         <translation>У некоторых вставляемых объектов нет значений.Какие значения вы хотите для них использовать?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1709"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1782"/>
         <source>Zero for all items</source>
         <translation>Ноль для всех объектов</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1718"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1791"/>
         <source>Choose value calculation</source>
         <translation>Выбрать вычисление значения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="146"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="158"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="243"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="265"/>
         <source>Linear</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="244"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="266"/>
         <source>Log</source>
         <translation>Логарифмический</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="245"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="267"/>
         <source>+/-1</source>
         <translation>+/-1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="625"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="658"/>
         <source>%1 Hz (%2, %3)</source>
         <translation>%1Гц (%2, %3)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="630"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="663"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="632"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="665"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="638"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="671"/>
         <source>Time:	%1
 Value:	%2
 No label</source>
@@ -8748,7 +8885,7 @@ No label</source>
 Без метки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="642"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="675"/>
         <source>Time:	%1
 Value:	%2
 Label:	%4</source>
@@ -8757,32 +8894,32 @@ Label:	%4</source>
 Метка:	%4</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1410"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1474"/>
         <source>Erase Point</source>
         <translation>Стереть точку</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1629"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1702"/>
         <source>Re-align pasted items?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1630"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1703"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1742"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1815"/>
         <source>Select cycle size</source>
         <translation>Выберите размер цикла</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1743"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1816"/>
         <source>Cycle size:</source>
         <translation>Размер цикла:</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="117"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="129"/>
         <source>Draw Segment Division Lines</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9161,171 +9298,170 @@ Label:	%4</source>
 <context>
     <name>View</name>
     <message>
-        <location filename="../svgui/view/View.cpp" line="103"/>
+        <location filename="../svgui/view/View.cpp" line="105"/>
         <source>Global Scroll</source>
         <translation>Глобальная прокрутка</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="104"/>
+        <location filename="../svgui/view/View.cpp" line="106"/>
         <source>Global Zoom</source>
         <translation>Глобальный масштаб</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="105"/>
+        <location filename="../svgui/view/View.cpp" line="107"/>
         <source>Follow Playback</source>
         <translation>Следовать за воспроизведением</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="148"/>
+        <location filename="../svgui/view/View.cpp" line="150"/>
         <source>Scroll</source>
         <translation>Прокручивать</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="149"/>
+        <location filename="../svgui/view/View.cpp" line="151"/>
         <source>Page</source>
         <translation>Постранично</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="150"/>
+        <location filename="../svgui/view/View.cpp" line="152"/>
         <source>Off</source>
         <translation>Выключить</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="153"/>
+        <location filename="../svgui/view/View.cpp" line="155"/>
         <source>&lt;unknown&gt;</source>
         <translation>&lt;неизвестно&gt;</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="1777"/>
+        <location filename="../svgui/view/View.cpp" line="1813"/>
         <source>Layer rendering error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="2660"/>
+        <location filename="../svgui/view/View.cpp" line="2823"/>
         <source>Waiting for layers to be ready...</source>
         <translation>Ожидание готовности слоёв...</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="2661"/>
-        <location filename="../svgui/view/View.cpp" line="2690"/>
+        <location filename="../svgui/view/View.cpp" line="2824"/>
+        <location filename="../svgui/view/View.cpp" line="2853"/>
         <source>Cancel</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="2689"/>
+        <location filename="../svgui/view/View.cpp" line="2852"/>
         <source>Rendering image...</source>
         <translation>Отрисовывается изображение...</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="2807"/>
+        <location filename="../svgui/view/View.cpp" line="2970"/>
         <source>Exported image from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="1804"/>
         <source>Alignment</source>
-        <translation>Выравнивание</translation>
+        <translation type="vanished">Выравнивание</translation>
     </message>
 </context>
 <context>
     <name>ViewManager</name>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="388"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="396"/>
         <source>Clear Selection</source>
         <translation>Снять выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="389"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="397"/>
         <source>Select Multiple Regions</source>
         <translation>Выделить несколько областей</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="390"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="398"/>
         <source>Select Region</source>
         <translation>Выделить область</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="407"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="415"/>
         <source>Enter Navigate mode</source>
         <translation>Перейти в режим навигации</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="408"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="416"/>
         <source>Enter Select mode</source>
         <translation>Перейти в режим выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="409"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="417"/>
         <source>Enter Edit mode</source>
         <translation>Перейти в режим редактирования</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="410"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="418"/>
         <source>Enter Draw mode</source>
         <translation>Перейти в режим рисования</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="411"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="419"/>
         <source>Enter Erase mode</source>
         <translation>Перейти в режим стирания</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="412"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="420"/>
         <source>Enter Measure mode</source>
         <translation>Перейти в режим измерения</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="413"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="421"/>
         <source>Enter NoteEdit mode</source>
         <translation>Перейти в режим правки нот</translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="449"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="457"/>
         <source>Switch on Loop mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="450"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="458"/>
         <source>Switch off Loop mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="464"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="472"/>
         <source>Switch on Play Selection mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="465"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="473"/>
         <source>Switch off Play Selection mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="479"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="487"/>
         <source>Switch on Play Solo mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="480"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="488"/>
         <source>Switch off Play Solo mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="494"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="502"/>
         <source>Switch on Alignment mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="495"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="503"/>
         <source>Switch off Alignment mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="643"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="651"/>
         <source>Scroll to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../svgui/view/ViewManager.cpp" line="713"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="721"/>
         <source>Zoom to %n sample(s) per pixel</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -9334,7 +9470,7 @@ Label:	%4</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../svgui/view/ViewManager.cpp" line="715"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="723"/>
         <source>Zoom to %n pixels per sample</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -9343,7 +9479,7 @@ Label:	%4</source>
         </translation>
     </message>
     <message>
-        <location filename="../svgui/view/ViewManager.cpp" line="726"/>
+        <location filename="../svgui/view/ViewManager.cpp" line="734"/>
         <source>Change overlay level</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9373,105 +9509,105 @@ Label:	%4</source>
 <context>
     <name>WaveformLayer</name>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="109"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="138"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="127"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="156"/>
         <source>Scale</source>
         <translation>Масштаб по Y</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="110"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="128"/>
         <source>Gain</source>
         <translation>Усиление</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="111"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="129"/>
         <source>Normalize Visible Area</source>
         <translation>Нормализовать видимую область</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="112"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="130"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="199"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="217"/>
         <source>Linear</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="200"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="218"/>
         <source>Meter</source>
         <translation>Счетчик</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="201"/>
         <location filename="../svgui/layer/WaveformLayer.cpp" line="219"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="237"/>
         <source>dB</source>
         <translation>Дб</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="207"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="225"/>
         <source>Separate</source>
         <translation>Отдельно</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="208"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="226"/>
         <source>Mean</source>
         <translation>Усреднённо</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="209"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="227"/>
         <source>Butterfly</source>
         <translation>V-образно</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1159"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1196"/>
         <source>Time:	%1 - %2</source>
         <translation>Время:	%1 - %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1163"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1200"/>
         <source>Time:	%1</source>
         <translation>Время:	%1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1183"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1220"/>
         <source>Level:</source>
         <translation>Уровень:</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1185"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1222"/>
         <source>Left:</source>
         <translation>Левый:</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1186"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1223"/>
         <source>Right:</source>
         <translation>Правый:</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1187"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1224"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1210"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1247"/>
         <source>
 %1	%2 - %3 (%4 dB peak)</source>
         <translation>
 %1	%2 - %3 (пик в %4 Дб)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1213"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1250"/>
         <source>
 %1	%2 (%3 dB peak)</source>
         <translation>
 %1	%2 (пик в %3 Дб)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1380"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1433"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1443"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1422"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1476"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1486"/>
         <source>0dB</source>
         <translation>0 Дб</translation>
     </message>
@@ -9483,12 +9619,12 @@ Label:	%4</source>
 <context>
     <name>WindowShapePreview</name>
     <message>
-        <location filename="../svgui/widgets/WindowShapePreview.cpp" line="120"/>
+        <location filename="../svgui/widgets/WindowShapePreview.cpp" line="125"/>
         <source>V / time</source>
         <translation>V / время</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/WindowShapePreview.cpp" line="202"/>
+        <location filename="../svgui/widgets/WindowShapePreview.cpp" line="207"/>
         <source>dB / freq</source>
         <translation>Дб / частота</translation>
     </message>

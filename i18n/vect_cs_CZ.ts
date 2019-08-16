@@ -1878,7 +1878,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
         <source>1</source>
@@ -1910,11 +1910,11 @@ All files (*.*)</source>
     </message>
     <message>
         <source>8</source>
-        <translation>8</translation>
+        <translation type="vanished">8</translation>
     </message>
     <message>
         <source>9</source>
-        <translation>9</translation>
+        <translation type="vanished">9</translation>
     </message>
     <message>
         <source>;</source>
@@ -1974,11 +1974,11 @@ All files (*.*)</source>
     </message>
     <message>
         <source>[</source>
-        <translation type="vanished">[</translation>
+        <translation>[</translation>
     </message>
     <message>
         <source>]</source>
-        <translation type="vanished">]</translation>
+        <translation>]</translation>
     </message>
     <message>
         <source>l</source>
@@ -2090,7 +2090,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>&amp;Úpravy</translation>
+        <translation type="vanished">&amp;Úpravy</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -2258,7 +2258,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With Ogg file decoder (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</source>
-        <translation type="vanished">&lt;br&gt;Dekodér souborů Ogg (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</translation>
+        <translation>&lt;br&gt;Dekodér souborů Ogg (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
         <source>Fast-forward to the next time instant or time ruler notch</source>
@@ -2306,7 +2306,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Switch to Previous Pane</source>
-        <translation type="vanished">Přepnout na předchozí tabulku</translation>
+        <translation>Přepnout na předchozí tabulku</translation>
     </message>
     <message>
         <source>New name for this layer:</source>
@@ -2314,11 +2314,11 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With PortAudio audio output library &amp;copy; Ross Bencina and Phil Burk</source>
-        <translation type="vanished">&lt;br&gt;Zvuková výstupní knihovna PortAudio &amp;copy; Ross Bencina a Phil Burk</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna PortAudio &amp;copy; Ross Bencina a Phil Burk</translation>
     </message>
     <message>
         <source>Switch to Next Pane</source>
-        <translation type="vanished">Přepnout na další tabulku</translation>
+        <translation>Přepnout na další tabulku</translation>
     </message>
     <message>
         <source>&amp;Recent Transforms</source>
@@ -2382,7 +2382,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Playback</source>
-        <translation>Přehrávání</translation>
+        <translation type="vanished">Přehrávání</translation>
     </message>
     <message>
         <source>Add a new layer showing a spectrogram</source>
@@ -2434,7 +2434,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Show &amp;All Overlays</source>
-        <translation>Ukázat &amp;všechna překrytí</translation>
+        <translation type="vanished">Ukázat &amp;všechna překrytí</translation>
     </message>
     <message>
         <source>Rename the currently active layer</source>
@@ -2454,7 +2454,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With libsamplerate &amp;copy; Erik de Castro Lopo</source>
-        <translation type="vanished">&lt;br&gt;libsamplerate &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;libsamplerate &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
         <source>Alt+Left</source>
@@ -2502,7 +2502,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With Ogg file decoder &amp;copy; CSIRO Australia</source>
-        <translation type="vanished">&lt;br&gt;Dekodér souborů Ogg &amp;copy; CSIRO Australia</translation>
+        <translation>&lt;br&gt;Dekodér souborů Ogg &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
         <source>Fragment file %1 already exists, aborting</source>
@@ -2538,7 +2538,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Make the next pane down in the pane stack current</source>
-        <translation type="vanished">Udělat další tabulku směrem dolů v zásobníku tabulek současnou</translation>
+        <translation>Udělat další tabulku směrem dolů v zásobníku tabulek současnou</translation>
     </message>
     <message>
         <source>Exit Sonic Visualiser</source>
@@ -2626,7 +2626,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With PulseAudio audio output library v%1 &amp;copy; Lennart Poettering and Pierre Ossman</source>
-        <translation type="vanished">&lt;br&gt;Zvuková výstupní knihovna PulseAudio v%1 &amp;copy; Lennart Poettering a Pierre Ossman</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna PulseAudio v%1 &amp;copy; Lennart Poettering a Pierre Ossman</translation>
     </message>
     <message>
         <source>Can&apos;t export non-note layers to MIDI</source>
@@ -2674,7 +2674,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With MAD mp3 decoder &amp;copy; Underbit Technologies Inc</source>
-        <translation type="vanished">&lt;br&gt;Dekodér souborů mp3 MAD &amp;copy; Underbit Technologies Inc</translation>
+        <translation>&lt;br&gt;Dekodér souborů mp3 MAD &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
         <source>Failed to calculate alignment</source>
@@ -2790,7 +2790,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Make the next pane up in the pane stack current</source>
-        <translation type="vanished">Udělat další tabulku směrem nahoru v zásobníku tabulek současnou</translation>
+        <translation>Udělat další tabulku směrem nahoru v zásobníku tabulek současnou</translation>
     </message>
     <message>
         <source>Scroll the current pane to the right</source>
@@ -2830,7 +2830,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</source>
-        <translation type="vanished">&lt;br&gt;FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</translation>
+        <translation>&lt;br&gt;FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</translation>
     </message>
     <message>
         <source>Time-stretch playback to speed it up without changing pitch</source>
@@ -2866,7 +2866,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With libsndfile &amp;copy; Erik de Castro Lopo</source>
-        <translation type="vanished">&lt;br&gt;libsndfile &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;libsndfile &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
         <source>Shift+Right</source>
@@ -2998,7 +2998,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Adjust the application preferences</source>
-        <translation>Upravit nastavení programu</translation>
+        <translation type="vanished">Upravit nastavení programu</translation>
     </message>
     <message>
         <source>Play&amp;back</source>
@@ -3058,7 +3058,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With JACK audio output library v%1 &amp;copy; Paul Davis and Jack O&apos;Quin</source>
-        <translation type="vanished">&lt;br&gt;Zvuková výstupní knihovna JACK v%1 &amp;copy; Paul Davis a Jack O&apos;Quin</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna JACK v%1 &amp;copy; Paul Davis a Jack O&apos;Quin</translation>
     </message>
     <message>
         <source>&amp;Insert Instant at Playback Position</source>
@@ -3074,7 +3074,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With Redland RDF datastore &amp;copy; Dave Beckett and the University of Bristol</source>
-        <translation type="vanished">&lt;br&gt;Datové skladiště RDF Redland &amp;copy; Dave Beckett a the University of Bristol</translation>
+        <translation>&lt;br&gt;Datové skladiště RDF Redland &amp;copy; Dave Beckett a the University of Bristol</translation>
     </message>
     <message>
         <source>Edit the currently active layer as a data grid</source>
@@ -3186,7 +3186,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With FFTW3 &amp;copy; Matteo Frigo and MIT</source>
-        <translation type="vanished">&lt;br&gt;FFTW3 &amp;copy; Matteo Frigo and MIT</translation>
+        <translation>&lt;br&gt;FFTW3 &amp;copy; Matteo Frigo and MIT</translation>
     </message>
     <message>
         <source>Failed to save image file</source>
@@ -3206,7 +3206,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Redland RDF datastore v%1 &amp;copy; Dave Beckett and the University of Bristol</source>
-        <translation type="vanished">&lt;br&gt;Datové skladiště RDF Redland v%1 &amp;copy; Dave Beckett a the University of Bristol</translation>
+        <translation>&lt;br&gt;Datové skladiště RDF Redland v%1 &amp;copy; Dave Beckett a the University of Bristol</translation>
     </message>
     <message>
         <source>Show all texts and scale</source>
@@ -3214,7 +3214,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With libsndfile v%1 &amp;copy; Erik de Castro Lopo</source>
-        <translation type="vanished">&lt;br&gt;libsndfile v%1 &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;libsndfile v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
         <source>Import layer data from an existing file</source>
@@ -3326,7 +3326,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Show &amp;Minimal Overlays</source>
-        <translation>Ukázat nej&amp;menší překrytí</translation>
+        <translation type="vanished">Ukázat nej&amp;menší překrytí</translation>
     </message>
     <message>
         <source>Peek Left</source>
@@ -3354,7 +3354,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation>&amp;Nastavení...</translation>
+        <translation type="vanished">&amp;Nastavení...</translation>
     </message>
     <message>
         <source>Edit Layer Data</source>
@@ -3410,7 +3410,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With JACK audio output library &amp;copy; Paul Davis and Jack O&apos;Quin</source>
-        <translation type="vanished">&lt;br&gt;Zvuková výstupní knihovna JACK &amp;copy; Paul Davis a Jack O&apos;Quin</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna JACK &amp;copy; Paul Davis a Jack O&apos;Quin</translation>
     </message>
     <message>
         <source>&amp;Delete Selected Items</source>
@@ -3418,7 +3418,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With PulseAudio audio output library &amp;copy; Lennart Poettering and Pierre Ossman</source>
-        <translation type="vanished">&lt;br&gt;Zvuková výstupní knihovna PulseAudio &amp;copy; Lennart Poettering a Pierre Ossman</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna PulseAudio &amp;copy; Lennart Poettering a Pierre Ossman</translation>
     </message>
     <message>
         <source>Bright Purple</source>
@@ -3550,7 +3550,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With libsamplerate v%1 &amp;copy; Erik de Castro Lopo</source>
-        <translation type="vanished">&lt;br&gt;libsamplerate v%1 &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;libsamplerate v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
         <source>Select from the current playback position to the end of the session</source>
@@ -3618,7 +3618,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;File or URL &quot;%1&quot; could not be opened</source>
-        <translation>&lt;b&gt;Otevření se nezdařilo&lt;/b&gt;&lt;p&gt;Soubor nebo adresu (URL) &quot;%1&quot; se nepodařilo otevřít</translation>
+        <translation type="vanished">&lt;b&gt;Otevření se nezdařilo&lt;/b&gt;&lt;p&gt;Soubor nebo adresu (URL) &quot;%1&quot; se nepodařilo otevřít</translation>
     </message>
     <message>
         <source>Bright Orange</source>
@@ -3654,7 +3654,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With MAD mp3 decoder v%1 &amp;copy; Underbit Technologies Inc</source>
-        <translation type="vanished">&lt;br&gt;Dekodér souborů mp3 MAD v%1 &amp;copy; Underbit Technologies Inc</translation>
+        <translation>&lt;br&gt;Dekodér souborů mp3 MAD v%1 &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam</source>
@@ -3698,7 +3698,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Show &amp;No Overlays</source>
-        <translation>&amp;Neukazovat žádná překrytí</translation>
+        <translation type="vanished">&amp;Neukazovat žádná překrytí</translation>
     </message>
     <message>
         <source>Add a new layer showing a spectrogram set up for an overview of note pitches</source>
@@ -3762,15 +3762,15 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Hide times, layer names, and scale</source>
-        <translation>Skrýt časy, názvy vrstev, a stupnici</translation>
+        <translation type="vanished">Skrýt časy, názvy vrstev, a stupnici</translation>
     </message>
     <message>
         <source>Show times and basic scale</source>
-        <translation>Ukázat časy a základní stupnici</translation>
+        <translation type="vanished">Ukázat časy a základní stupnici</translation>
     </message>
     <message>
         <source>Show times, layer names, and scale</source>
-        <translation>Ukázat časy, názvy vrstev, a stupnici</translation>
+        <translation type="vanished">Ukázat časy, názvy vrstev, a stupnici</translation>
     </message>
     <message>
         <source>Go Full-Screen</source>
@@ -3822,7 +3822,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Serd and Sord RDF parser and store &amp;copy; David Robillard</source>
-        <translation type="vanished">&lt;br&gt;Syntaktický analyzátor Serd a Sord RDF a ukládání &amp;copy; David Robillard</translation>
+        <translation>&lt;br&gt;Syntaktický analyzátor Serd a Sord RDF a ukládání &amp;copy; David Robillard</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Chris Cannam</source>
@@ -3862,7 +3862,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Open the Recorded Audio folder in the system file browser</source>
-        <translation type="vanished">Otevřít složku s nahraným zvukem v systémovém prohlížeči souborů</translation>
+        <translation>Otevřít složku s nahraným zvukem v systémovém prohlížeči souborů</translation>
     </message>
     <message>
         <source>Ctrl+Shift+Return</source>
@@ -3882,7 +3882,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>{</source>
-        <translation type="vanished">{</translation>
+        <translation>{</translation>
     </message>
     <message>
         <source>Make the previous layer in the pane current</source>
@@ -3894,7 +3894,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>}</source>
-        <translation type="vanished">}</translation>
+        <translation>}</translation>
     </message>
     <message>
         <source>Make the next layer in the pane current</source>
@@ -3902,15 +3902,15 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Record</source>
-        <translation type="vanished">Nahrát</translation>
+        <translation>Nahrát</translation>
     </message>
     <message>
         <source>Ctrl+Space</source>
-        <translation type="vanished">Ctrl+Mezerník</translation>
+        <translation>Ctrl+Mezerník</translation>
     </message>
     <message>
         <source>Record a new audio file</source>
-        <translation type="vanished">Nahrát nový zvukový soubor</translation>
+        <translation>Nahrát nový zvukový soubor</translation>
     </message>
     <message>
         <source>Navigate Tool Mouse Actions</source>
@@ -4126,19 +4126,19 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>With Qt v%1 &amp;copy; The Qt Company</source>
-        <translation type="vanished">Qt verze %1 &amp;copy; společnost Qt</translation>
+        <translation>Qt verze %1 &amp;copy; společnost Qt</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band Library v%1 &amp;copy; Particular Programs Ltd</source>
-        <translation type="vanished">&lt;br&gt;Knihovna Rubber Band verze %1 &amp;copy; Particular Programs Ltd</translation>
+        <translation>&lt;br&gt;Knihovna Rubber Band verze %1 &amp;copy; Particular Programs Ltd</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band Library &amp;copy; Particular Programs Ltd</source>
-        <translation type="vanished">&lt;br&gt;Knihovna Rubber Band &amp;copy; Particular Programs Ltd</translation>
+        <translation>&lt;br&gt;Knihovna Rubber Band &amp;copy; Particular Programs Ltd</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam and QMUL</source>
-        <translation type="vanished">&lt;br&gt;Podpora pro přídavné moduly Vamp (API verze %1, host SDK verze %2) &amp;copy; Chris Cannam and QMUL</translation>
+        <translation>&lt;br&gt;Podpora pro přídavné moduly Vamp (API verze %1, host SDK verze %2) &amp;copy; Chris Cannam and QMUL</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Particular Programs Ltd</source>
@@ -4186,11 +4186,11 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>%1 : %2 configuration, %3-bit build</source>
-        <translation type="vanished">%1 : %2 nastavení, %3-bitové sestavení</translation>
+        <translation>%1 : %2 nastavení, %3-bitové sestavení</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="vanished">O %1</translation>
+        <translation>O %1</translation>
     </message>
     <message>
         <source>Multiplexed audio</source>
@@ -4202,11 +4202,11 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Russian UI translation contributed by Alexandre Prokoudine.</source>
-        <translation type="vanished">Překlad rozhraní do ruštiny poskytnut Alexandrem Prokoudinem.</translation>
+        <translation>Překlad rozhraní do ruštiny poskytnut Alexandrem Prokoudinem.</translation>
     </message>
     <message>
         <source>Czech UI translation contributed by Pavel Fric.</source>
-        <translation type="vanished">Překlad rozhraní do češtiny poskytnut Pavlem Fricem.</translation>
+        <translation>Překlad rozhraní do češtiny poskytnut Pavlem Fricem.</translation>
     </message>
     <message>
         <source>Shift+;</source>
@@ -4353,20 +4353,12 @@ Co chcete vyvést?</translation>
         <translation type="unfinished">Spektrogram</translation>
     </message>
     <message>
-        <source>Melodic Range Spectrogram</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Curve</source>
-        <translation type="unfinished">Křivka</translation>
+        <translation type="obsolete">Křivka</translation>
     </message>
     <message>
         <source>Pitch</source>
-        <translation type="unfinished">Výška tónu</translation>
-    </message>
-    <message>
-        <source>Azimuth</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Výška tónu</translation>
     </message>
     <message>
         <source>The sample rate of this audio file (%1 Hz) does not match
@@ -4388,35 +4380,11 @@ The file will play at the wrong speed and pitch.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>http://www.sonicvisualiser.org/sonicvector/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>http://www.sonicvisualiser.org/sonicvector/doc/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;h3&gt;About Sonic Lineup&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;p&gt;Sonic Lineup is a comparative viewer for sets of related audio recordings.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;%1 : %2 configuration&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>About Sonic Lineup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Outline waveform</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Spectral flux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4442,6 +4410,110 @@ The file will play at the wrong speed and pitch.</source>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse Recorded Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to Previous View Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make the next view mode current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to Next View Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Vertical Scales</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show or hide all vertical scales</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow for Pitch Difference when Aligning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compare relative pitch content of audio files before aligning, in order to correctly align recordings of the same material at different tuning pitches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to open main audio file %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to open audio file %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to reload session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;Session file &quot;%1&quot; could not be opened: %2&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mapped Salient Feature Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test release</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;This is a test release of %1&lt;/b&gt;&lt;p&gt;This release is made for test purposes only - please send feedback to the developers.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>http://www.sonicvisualiser.org/sonic-lineup/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>http://www.sonicvisualiser.org/sonic-lineup/doc/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Sonic Lineup is an application for comparative visualisation and alignment of related audio recordings.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;small&gt;Sonic Lineup and Sonic Visualiser application code&lt;br&gt;Copyright &amp;copy; 2005&amp;ndash;2019 Chris Cannam and Queen Mary, University of London.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;small&gt;MATCH Audio Alignment plugin&lt;br&gt;Copyright &amp;copy; 2007&amp;ndash;2019 Simon Dixon, Chris Cannam, and Queen Mary University of London;&lt;br&gt;Copyright &amp;copy; 2014&amp;ndash;2015 Tido GmbH.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;small&gt;NNLS Chroma and Chordino plugin&lt;br&gt;Copyright &amp;copy; 2008&amp;ndash;2019 Matthias Mauch and Queen Mary University of London.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;small&gt;pYIN plugin&lt;br&gt;Copyright &amp;copy; 2012&amp;ndash;2019 Matthias Mauch and Queen Mary University of London.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;small&gt;QM Key Detector plugin&lt;br&gt;Copyright &amp;copy; 2006&amp;ndash;2019 Katy Noland, Christian Landone, and Queen Mary University of London.&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Opus decoder &amp;copy; Xiph.Org Foundation</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4694,6 +4766,10 @@ Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk 
         <source>Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)</source>
         <translation type="unfinished">Promiňte, ale typ této vrstvu nelze vyvést do RDF (podporovanými typy jsou: oblast, poznámka, text, okamžiky času. hodnoty času)</translation>
     </message>
+    <message>
+        <source>Internal error: unknown model</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModelDataTableDialog</name>
@@ -4796,7 +4872,7 @@ Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk 
     </message>
     <message>
         <source>Allow this</source>
-        <translation type="vanished">Povolit</translation>
+        <translation>Povolit</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to Sonic Visualiser!&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;:icons/qm-logo-smaller.png&quot; style=&quot;float:right&quot;&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;/p&gt;&lt;p&gt;Developed in the Centre for Digital Music at Queen Mary University of London, Sonic Visualiser is open source software under the GNU General Public License.&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Before we go on...&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Sonic Visualiser would like permission to use the network.&lt;/p&gt;</source>
@@ -4813,6 +4889,14 @@ Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk 
     <message>
         <source>&lt;p&gt;&lt;b&gt;No personal information will be sent, no tracking is carried out, and no individual information will be shared with anyone else.&lt;/b&gt; We will however make aggregate counts of distinct requests for usage reporting.&lt;/p&gt;&lt;p&gt;We recommend that you allow this, because it makes Sonic Visualiser more useful to you and supports the public funding of this work. But if you do not wish to allow it, please un-check the box below.&lt;br&gt;&lt;/p&gt;</source>
         <translation type="vanished">&lt;p&gt;&lt;b&gt;Nebudou odesílány žádné osobní informace, neprovádí se žádné sledování, a žádné údaje o jednotlivci nebudou s nikým dalším sdíleny.&lt;/b&gt; Nicméně budeme dělat úhrnné součty odlišných požadavků pro zpravodajství o užití.&lt;/p&gt;&lt;p&gt;Doporučujeme, abyste toto povolil, protože to pro vás dělá Sonic Visualiser užitečnějším a podporuje veřejné financování této práce. Pokud si to však nepřejete, zrušte, prosím, zaškrtnutí okénka níže.&lt;br&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Sonic Lineup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;img src=&quot;:icons/qm-logo-smaller-white.png&quot; style=&quot;float:right; margin-left: 4em&quot;&gt;&lt;h2&gt;Welcome to Sonic Lineup!&lt;/h2&gt;&lt;p&gt;Sonic Lineup is a program for comparative visualisation and alignment of groups of related audio recordings.&lt;/p&gt;&lt;p&gt;Developed in the Centre for Digital Music at Queen Mary, University of London, Sonic Lineup is open source software under the GNU General Public License.&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Before we go on...&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Sonic Lineup would like to make occasional network requests to our servers, in order to tell you when updates are available.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;b&gt;No personal information will be sent, no tracking is carried out, and no individual information will be shared with anyone else.&lt;/b&gt; We will however make aggregate counts of distinct requests for usage reporting.&lt;/p&gt;&lt;p&gt;We recommend that you allow this, because it makes Sonic Lineup more useful to you and supports the public funding of this work. But if you do not wish to do so, please un-check the box below.&lt;br&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5361,11 +5445,12 @@ Doba trvání:	%3
         <source>Click and drag to navigate; use mouse-wheel or trackpad-scroll to zoom; hold Shift and drag to zoom to an area</source>
         <translation>Klepněte a táhněte pro pohyb; použijte kolečko myši nebo polohovací plošku počítače pro přibližování/oddalování; podržte Shift a táhněte pro přiblížení na oblast</translation>
     </message>
-</context>
-<context>
-    <name>PathModel</name>
     <message>
-        <source>Path</source>
+        <source>Aligned at -%1 cents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aligned at +%1 cents</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8134,7 +8219,7 @@ Hodnota:	%2
     </message>
     <message>
         <source>Alignment</source>
-        <translation>Zarovnání</translation>
+        <translation type="vanished">Zarovnání</translation>
     </message>
     <message>
         <source>Exported image from %1</source>
