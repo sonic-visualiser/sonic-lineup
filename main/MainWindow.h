@@ -95,7 +95,6 @@ protected slots:
 
     void closeSession() override;
 
-    void curveModeSelected();
     void outlineWaveformModeSelected();
     void standardWaveformModeSelected();
     void spectrogramModeSelected();
@@ -217,6 +216,8 @@ protected:
     KeyReference            *m_keyReference;
     VersionTester           *m_versionTester;
 
+    QString getReleaseText() const;
+    
     void setupMenus() override;
     
     virtual void setupFileMenu();
@@ -225,7 +226,6 @@ protected:
     virtual void setupToolbars();
 
     enum DisplayMode {
-        CurveMode,
         OutlineWaveformMode,
         WaveformMode,
         SpectrogramMode,

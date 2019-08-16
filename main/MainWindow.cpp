@@ -110,6 +110,7 @@
 #include <QRegExp>
 #include <QScrollArea>
 #include <QCloseEvent>
+#include <QDialogButtonBox>
 
 #include <iostream>
 #include <cstdio>
@@ -293,20 +294,6 @@ MainWindow::MainWindow(SoundOptions options) :
     m_modeLayerNames[SpectrogramMode] = "Spectrogram"; // not to be translated
     m_modeDisplayOrder.push_back(SpectrogramMode);
 
-/*
-    button = new QPushButton;
-    button->setIcon(il.load("values"));
-    button->setText(tr("Spectral flux"));
-    button->setCheckable(true);
-    button->setChecked(false);
-    button->setFixedHeight(bottomButtonHeight);
-    bg->addButton(button);
-    buttonLayout->addWidget(button);
-    connect(button, SIGNAL(clicked()), this, SLOT(curveModeSelected()));
-    m_modeButtons[CurveMode] = button;
-    m_modeLayerNames[CurveMode] = "Curve";
-    m_modeDisplayOrder.push_back(CurveMode);
-*/
     button = new QPushButton;
     button->setIcon(il.load("values"));
     button->setText(tr("Sung pitch"));
@@ -1874,21 +1861,6 @@ MainWindow::selectTransformDrivenMode(DisplayMode mode,
 }
 
 void
-MainWindow::curveModeSelected()
-{
-    QString propertyXml =
-        QString("<layer plotStyle=\"%1\"/>")
-        .arg(int(TimeValueLayer::PlotStems));
-
-    selectTransformDrivenMode
-        (CurveMode,
-         "vamp:qm-vamp-plugins:qm-onsetdetector:detection_fn",
-         {},
-         propertyXml,
-         false);
-}
-
-void
 MainWindow::pitchModeSelected()
 {
     QString propertyXml =
@@ -2015,7 +1987,6 @@ void
 MainWindow::reselectMode()
 {
     switch (m_displayMode) {
-    case CurveMode: curveModeSelected(); break;
     case OutlineWaveformMode: outlineWaveformModeSelected(); break;
     case WaveformMode: standardWaveformModeSelected(); break;
     case SpectrogramMode: spectrogramModeSelected(); break;
@@ -2897,56 +2868,203 @@ MainWindow::mouseLeftWidget()
 void
 MainWindow::website()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/sonicvector/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/sonic-lineup/"));
 }
 
 void
 MainWindow::help()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/sonicvector/doc/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/sonic-lineup/doc/"));
 }
 
-void
-MainWindow::about()
+QString
+MainWindow::getReleaseText() const
 {
     bool debug = false;
     QString version = "(unknown version)";
 
 #ifdef BUILD_DEBUG
     debug = true;
-#endif
+#endif // BUILD_DEBUG
 #ifdef VECT_VERSION
 #ifdef SVNREV
     version = tr("Release %1 : Revision %2").arg(VECT_VERSION).arg(SVNREV);
-#else
+#else // !SVNREV
     version = tr("Release %1").arg(VECT_VERSION);
-#endif
-#else
+#endif // SVNREV
+#else // !VECT_VERSION
 #ifdef SVNREV
     version = tr("Unreleased : Revision %1").arg(SVNREV);
-#endif
-#endif
+#endif // SVNREV
+#endif // VECT_VERSION
 
+    return tr("%1 : %2 configuration, %3-bit build")
+        .arg(version)
+        .arg(debug ? tr("Debug") : tr("Release"))
+        .arg(sizeof(void *) * 8);
+}
+
+void
+MainWindow::about()
+{
     QString aboutText;
 
-    aboutText += tr("<h3>%1</h3>").arg(QApplication::applicationName());
-    aboutText += tr("<p>An application for comparative visualisation and alignment of related audio recordings.</p>");
-    aboutText += tr("<p>%1 : %2 configuration</p>")
-        .arg(version)
-        .arg(debug ? tr("Debug") : tr("Release"));
+    aboutText += tr("<h3>About Sonic Lineup</h3>");
+    aboutText += tr("<p>Sonic Lineup is an application for comparative visualisation and alignment of related audio recordings.</p>");
+    aboutText += QString("<p><small>%1</small></p>").arg(getReleaseText());
 
     aboutText += 
-        "<p>Sonic Lineup Copyright &copy; 2005 - 2019 Chris Cannam and "
-        "Queen Mary, University of London.</p>"
-        "<p>This program uses library code from many other authors. Please "
-        "refer to the accompanying documentation for more information.</p>"
-        "<p>This program is free software; you can redistribute it and/or "
+        tr("<p><small>Sonic Lineup and Sonic Visualiser application code<br>Copyright &copy; 2005&ndash;2019 Chris Cannam"
+           " and Queen Mary, University of London.</small></p>");
+
+    aboutText += 
+        tr("<p><small>MATCH Audio Alignment plugin<br>Copyright &copy; "
+           "2007&ndash;2019 Simon Dixon, Chris Cannam, and Queen Mary "
+           "University of London;<br>Copyright &copy; 2014&ndash;2015 Tido "
+           "GmbH.</small></p>");
+
+    aboutText += 
+        tr("<p><small>NNLS Chroma and Chordino plugin<br>Copyright &copy; "
+           "2008&ndash;2019 Matthias Mauch and Queen Mary "
+           "University of London.</small></p>");
+
+    aboutText += 
+        tr("<p><small>pYIN plugin<br>Copyright &copy; "
+           "2012&ndash;2019 Matthias Mauch and Queen Mary "
+           "University of London.</small></p>");
+
+    aboutText += 
+        tr("<p><small>QM Key Detector plugin<br>Copyright &copy; "
+           "2006&ndash;2019 Katy Noland, Christian Landone, and Queen Mary "
+           "University of London.</small></p>");
+
+    aboutText += "<p><small>";
+    
+    aboutText += tr("With Qt v%1 &copy; The Qt Company").arg(QT_VERSION_STR);
+
+    aboutText += "</small><small>";
+
+#ifdef HAVE_JACK
+#ifdef JACK_VERSION
+    aboutText += tr("<br>With JACK audio output library v%1 &copy; Paul Davis and Jack O'Quin").arg(JACK_VERSION);
+#else // !JACK_VERSION
+    aboutText += tr("<br>With JACK audio output library &copy; Paul Davis and Jack O'Quin");
+#endif // JACK_VERSION
+#endif // HAVE_JACK
+#ifdef HAVE_PORTAUDIO
+    aboutText += tr("<br>With PortAudio audio output library &copy; Ross Bencina and Phil Burk");
+#endif // HAVE_PORTAUDIO
+#ifdef HAVE_LIBPULSE
+#ifdef LIBPULSE_VERSION
+    aboutText += tr("<br>With PulseAudio audio output library v%1 &copy; Lennart Poettering and Pierre Ossman").arg(LIBPULSE_VERSION);
+#else // !LIBPULSE_VERSION
+    aboutText += tr("<br>With PulseAudio audio output library &copy; Lennart Poettering and Pierre Ossman");
+#endif // LIBPULSE_VERSION
+#endif // HAVE_LIBPULSE
+#ifdef HAVE_OGGZ
+#ifdef OGGZ_VERSION
+    aboutText += tr("<br>With Ogg file decoder (oggz v%1, fishsound v%2) &copy; CSIRO Australia").arg(OGGZ_VERSION).arg(FISHSOUND_VERSION);
+#else // !OGGZ_VERSION
+    aboutText += tr("<br>With Ogg file decoder &copy; CSIRO Australia");
+#endif // OGGZ_VERSION
+#endif // HAVE_OGGZ
+#ifdef HAVE_OPUS
+    aboutText += tr("<br>With Opus decoder &copy; Xiph.Org Foundation");
+#endif // HAVE_OPUS
+#ifdef HAVE_MAD
+#ifdef MAD_VERSION
+    aboutText += tr("<br>With MAD mp3 decoder v%1 &copy; Underbit Technologies Inc").arg(MAD_VERSION);
+#else // !MAD_VERSION
+    aboutText += tr("<br>With MAD mp3 decoder &copy; Underbit Technologies Inc");
+#endif // MAD_VERSION
+#endif // HAVE_MAD
+#ifdef HAVE_SAMPLERATE
+#ifdef SAMPLERATE_VERSION
+    aboutText += tr("<br>With libsamplerate v%1 &copy; Erik de Castro Lopo").arg(SAMPLERATE_VERSION);
+#else // !SAMPLERATE_VERSION
+    aboutText += tr("<br>With libsamplerate &copy; Erik de Castro Lopo");
+#endif // SAMPLERATE_VERSION
+#endif // HAVE_SAMPLERATE
+#ifdef HAVE_SNDFILE
+#ifdef SNDFILE_VERSION
+    aboutText += tr("<br>With libsndfile v%1 &copy; Erik de Castro Lopo").arg(SNDFILE_VERSION);
+#else // !SNDFILE_VERSION
+    aboutText += tr("<br>With libsndfile &copy; Erik de Castro Lopo");
+#endif // SNDFILE_VERSION
+#endif // HAVE_SNDFILE
+#ifdef HAVE_FFTW3F
+#ifdef FFTW3_VERSION
+    aboutText += tr("<br>With FFTW3 v%1 &copy; Matteo Frigo and MIT").arg(FFTW3_VERSION);
+#else // !FFTW3_VERSION
+    aboutText += tr("<br>With FFTW3 &copy; Matteo Frigo and MIT");
+#endif // FFTW3_VERSION
+#endif // HAVE_FFTW3F
+#ifdef HAVE_RUBBERBAND
+#ifdef RUBBERBAND_VERSION
+    aboutText += tr("<br>With Rubber Band Library v%1 &copy; Particular Programs Ltd").arg(RUBBERBAND_VERSION);
+#else // !RUBBERBAND_VERSION
+    aboutText += tr("<br>With Rubber Band Library &copy; Particular Programs Ltd");
+#endif // RUBBERBAND_VERSION
+#endif // HAVE_RUBBERBAND
+    aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam and QMUL").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
+#ifdef REDLAND_VERSION
+    aboutText += tr("<br>With Redland RDF datastore v%1 &copy; Dave Beckett and the University of Bristol").arg(REDLAND_VERSION);
+#else // !REDLAND_VERSION
+    aboutText += tr("<br>With Redland RDF datastore &copy; Dave Beckett and the University of Bristol");
+#endif // REDLAND_VERSION
+    aboutText += tr("<br>With Serd and Sord RDF parser and store &copy; David Robillard");
+    aboutText += "</small></p>";
+
+    aboutText += "<p><small>";
+    aboutText += tr("Russian UI translation contributed by Alexandre Prokoudine.");
+    aboutText += "<br>";
+    aboutText += tr("Czech UI translation contributed by Pavel Fric.");
+    aboutText += "</small></p>";
+    
+    aboutText +=
+        "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "
         "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
-        "COPYING included with this distribution for more information.</p>";
+        "COPYING included with this distribution for more information.</small></p>";
+
+    // use our own dialog so we can influence the size
+
+    QDialog *d = new QDialog(this);
+
+    d->setWindowTitle(tr("About %1").arg(QApplication::applicationName()));
+        
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    int row = 0;
     
-    QMessageBox::about(this, tr("About Sonic Lineup"), aboutText);
+    QLabel *iconLabel = new QLabel;
+    iconLabel->setPixmap(QApplication::windowIcon().pixmap(64, 64));
+    layout->addWidget(iconLabel, row, 0, Qt::AlignTop);
+
+    QLabel *mainText = new QLabel();
+    layout->addWidget(mainText, row, 1, 1, 2);
+
+    layout->setRowStretch(row, 10);
+    layout->setColumnStretch(1, 10);
+
+    ++row;
+
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+    layout->addWidget(bb, row++, 0, 1, 3);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+
+    mainText->setWordWrap(true);
+    mainText->setOpenExternalLinks(true);
+    mainText->setText(aboutText);
+
+    d->setMinimumSize(m_viewManager->scalePixelSize(420),
+                      m_viewManager->scalePixelSize(200));
+    
+    d->exec();
+
+    delete d;
 }
 
 void

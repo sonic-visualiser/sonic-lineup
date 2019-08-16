@@ -44,7 +44,7 @@ NetworkPermissionTester::havePermission()
 	QDialog d;
 	d.setWindowTitle(QCoreApplication::translate
                          ("NetworkPermissionTester", 
-                          "Sonic Lineup: visualisation of related audio recordings"));
+                          "Sonic Lineup"));
 
 	QGridLayout *layout = new QGridLayout;
 	d.setLayout(layout);
@@ -54,16 +54,14 @@ NetworkPermissionTester::havePermission()
 	label->setText
 	    (QCoreApplication::translate
 	     ("NetworkPermissionTester",
-	      "<h2>Sonic Lineup: an application for visualisation of related audio recordings</h2>"
+	      "<img src=\":icons/qm-logo-smaller-white.png\" style=\"float:right; margin-left: 4em\"><h2>Welcome to Sonic Lineup!</h2>"
 	      "<p>Sonic Lineup is a program for comparative visualisation and alignment of groups of related audio recordings.</p>"
-	      "<p><img src=\":icons/qm-logo-smaller-white.png\" style=\"float:right; margin-left: 4em\">Developed in the Centre for Digital Music at Queen Mary, University of London, Sonic Lineup is provided free as open source software under the GNU General Public License.</p>"
+	      "<p>Developed in the Centre for Digital Music at Queen Mary, University of London, Sonic Lineup is open source software under the GNU General Public License.</p>"
               "<p><hr></p>"
 	      "<p><b>Before we go on...</b></p>"
-	      "<p>Sonic Lineup needs to make occasional network requests to our servers.</p>"
-	      "<p>This is to:</p>"
-	      "<ul><li> tell you when updates are available.</li></ul>"
-	      "<p>No personal information will be sent, no tracking is carried out, and all requests happen in the background without interrupting your work.</p>"
-	      "<p>We recommend that you allow this. But if you do not wish to do so, please un-check the box below.<br></p>"));
+	      "<p>Sonic Lineup would like to make occasional network requests to our servers, in order to tell you when updates are available.</li></ul>"
+	      "<p><b>No personal information will be sent, no tracking is carried out, and no individual information will be shared with anyone else.</b> We will however make aggregate counts of distinct requests for usage reporting.</p>"
+	      "<p>We recommend that you allow this, because it makes Sonic Lineup more useful to you and supports the public funding of this work. But if you do not wish to do so, please un-check the box below.<br></p>"));
 	layout->addWidget(label, 0, 0);
 
 	QCheckBox *cb = new QCheckBox(QCoreApplication::translate("NetworkPermissionTester", "Allow this"));
