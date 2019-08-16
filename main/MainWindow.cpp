@@ -29,6 +29,7 @@
 #include "data/model/AlignmentModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "base/StorageAdviser.h"
+#include "base/Exceptions.h"
 #include "base/TempDirectory.h"
 #include "base/RecordDirectory.h"
 #include "view/ViewManager.h"
@@ -1108,9 +1109,24 @@ MainWindow::openFiles()
     m_sessionState = SessionActive;
     
     for (QString path: paths) {
-        
-        FileOpenStatus status = openPath(path, CreateAdditionalModel);
 
+        FileOpenStatus status = FileOpenFailed;
+        
+        FileSource source(path);
+        if (source.isAvailable()) {
+            source.waitForData();
+
+            try {
+                status = openAudio(source, CreateAdditionalModel);
+            } catch (const InsufficientDiscSpace &e) {
+                SVCERR << "MainWindowBase: Caught InsufficientDiscSpace in file open" << endl;
+                QMessageBox::critical
+                    (this, tr("Not enough disc space"),
+                     tr("<b>Not enough disc space</b><p>There doesn't appear to be enough spare disc space to accommodate any necessary temporary files.</p><p>Please clear some space and try again.</p>").arg(e.what()));
+                return;
+            }
+        }
+        
         if (status != FileOpenSucceeded) {
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("<b>File open failed</b><p>File \"%1\" could not be opened").arg(path));
@@ -1134,23 +1150,33 @@ MainWindow::openLocation()
          QLineEdit::Normal, lastLocation, &ok);
 
     if (!ok) return;
-
-    settings.setValue("lastremote", text);
-
     if (text.isEmpty()) return;
 
     m_sessionState = SessionActive;
-    
-    FileOpenStatus status = openPath(text, CreateAdditionalModel);
 
-    if (status == FileOpenFailed) {
+    FileOpenStatus status = FileOpenFailed;
+        
+    FileSource source(text);
+    if (source.isAvailable()) {
+        source.waitForData();
+
+        try {
+            status = openAudio(source, CreateAdditionalModel);
+        } catch (const InsufficientDiscSpace &e) {
+            SVCERR << "MainWindowBase: Caught InsufficientDiscSpace in file open" << endl;
+            QMessageBox::critical
+                (this, tr("Not enough disc space"),
+                 tr("<b>Not enough disc space</b><p>There doesn't appear to be enough spare disc space to accommodate any necessary temporary files.</p><p>Please clear some space and try again.</p>").arg(e.what()));
+            return;
+        }
+    }
+        
+    if (status != FileOpenSucceeded) {
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Open failed</b><p>URL \"%1\" could not be opened").arg(text));
-    } else if (status == FileOpenWrongMode) {
-        QMessageBox::critical(this, tr("Failed to open location"),
-                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     } else {
         configureNewPane(m_paneStack->getCurrentPane());
+        settings.setValue("lastremote", text);
     }
 }
 
