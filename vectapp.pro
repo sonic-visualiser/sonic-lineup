@@ -33,7 +33,7 @@ linux* {
 #    vect_desktop.CONFIG = no_check_exist
 
 #    vect_icon.path = $$PREFIX_PATH/share/icons/hicolor/scalable/apps/
-#    vect_icon.files = icons/sonic-visualiser.svg
+#    vect_icon.files = icons/sonic-lineup-icon.svg
 #    vect_icon.CONFIG = no_check_exist
     
      INSTALLS += vect_bins
@@ -52,7 +52,7 @@ MOC_DIR = o
 #ICON = icons/sv-macicon.icns
 #RC_FILE = icons/sv.rc
 
-RESOURCES += vect.qrc
+RESOURCES += sonic-lineup.qrc
 
 # Mac integration
 QMAKE_INFO_PLIST = deploy/osx/Info.plist
