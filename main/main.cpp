@@ -276,72 +276,28 @@ main(int argc, char **argv)
     
     gui->show();
 
+    SmallSession session;
     bool haveSession = false;
-    bool haveMainModel = false;
-    bool havePriorCommandLineModel = false;
-
+    
     for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
-
-        MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
 
         if (i == args.begin()) continue;
         if (i->startsWith('-')) continue;
 
-        if (i->startsWith("http:") || i->startsWith("ftp:")) {
-            std::cerr << "opening URL: \"" << i->toStdString() << "\"..." << std::endl;
-            status = gui->openPath(*i);
-            continue;
+        if (session.mainFile == "") {
+            session.mainFile = *i;
+        } else {
+            session.additionalFiles.push_back(*i);
         }
 
-        QString path = *i;
+        haveSession = true;
+    }
 
-        if (QFileInfo(path).isDir()) {
-            status = gui->openDirOfAudio(path);
-        }
-
-        if (status != MainWindow::FileOpenSucceeded) {
-            if (path.endsWith("sv")) {
-                if (!haveSession) {
-                    status = gui->openSessionPath(path);
-                    if (status == MainWindow::FileOpenSucceeded) {
-                        haveSession = true;
-                        haveMainModel = true;
-                    }
-                } else {
-                    std::cerr << "WARNING: Ignoring additional session file argument \"" << path.toStdString() << "\"" << std::endl;
-                    status = MainWindow::FileOpenSucceeded;
-                }
-            }
-        }
-        
-        if (status != MainWindow::FileOpenSucceeded) {
-            if (!haveMainModel) {
-                status = gui->openPath(path, MainWindow::ReplaceSession);
-                if (status == MainWindow::FileOpenSucceeded) {
-                    haveMainModel = true;
-                }
-            } else {
-                gui->selectMainPane();
-                if (haveSession && !havePriorCommandLineModel) {
-                    status = gui->openPath(path, MainWindow::AskUser);
-                    if (status == MainWindow::FileOpenSucceeded) {
-                        havePriorCommandLineModel = true;
-                    }
-                } else {
-                    status = gui->openPath(path, MainWindow::CreateAdditionalModel);
-                }
-            }
-        }
-        
-        if (status == MainWindow::FileOpenFailed) {
-	    QMessageBox::critical
-                (gui, QMessageBox::tr("Failed to open file"),
-                 QMessageBox::tr("File \"%1\" could not be opened").arg(path));
-        }
+    if (haveSession) {
+        gui->openSmallSession(session);
     }
 
     int rv = application.exec();
-//    std::cerr << "application.exec() returned " << rv << std::endl;
 
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();

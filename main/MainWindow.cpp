@@ -1224,17 +1224,26 @@ MainWindow::openSmallSessionFile(QString path)
     SVDEBUG << "MainWindow::openSmallSessionFile: m_sessionFile is now "
             << m_sessionFile << endl;
 
-    SmallSession session;
-    FileOpenStatus status;
-    QString errorText;
-    
     try {
-        session = SmallSession::load(path);
+        SmallSession session = SmallSession::load(path);
+        openSmallSession(session);
     } catch (const std::runtime_error &e) {
-        errorText = e.what();
-        goto failed;
+        QMessageBox::critical
+            (this, tr("Failed to reload session"),
+             tr("<b>Open failed</b>"
+                "<p>Session file \"%1\" could not be opened: %2</p>")
+             .arg(path).arg(e.what()));
+        m_sessionFile = "";
+        m_sessionState = NoSession;
     }
+}
 
+void
+MainWindow::openSmallSession(const SmallSession &session)
+{
+    QString errorText;
+    FileOpenStatus status;
+    
     closeSession();
     createDocument();
 
@@ -1267,8 +1276,8 @@ MainWindow::openSmallSessionFile(QString path)
     return;
 
 failed:
-    QMessageBox::critical(this, tr("Failed to reload session"),
-                          tr("<b>Open failed</b><p>Session file \"%1\" could not be opened: %2</p>").arg(path).arg(errorText));
+    QMessageBox::critical(this, tr("Failed to load session"),
+                          tr("<b>Open failed</b><p>Session could not be opened: %2</p>").arg(errorText));
     m_sessionFile = "";
     m_sessionState = NoSession;
 }

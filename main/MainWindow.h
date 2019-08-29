@@ -75,6 +75,8 @@ signals:
     void canSelectNextDisplayMode(bool);
 
 public slots:
+    void openSmallSession(const SmallSession &);
+
     void preferenceChanged(PropertyContainer::PropertyName) override;
     bool commitData(bool mayAskUser); // on session shutdown
 
