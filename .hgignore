@@ -57,3 +57,4 @@ build_win64
 constant-q-cpp
 Dockerfile*.gen
 qm-vamp-plugins
+glob:.repoint*
