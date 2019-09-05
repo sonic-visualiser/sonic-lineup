@@ -5,7 +5,7 @@ echo on
 
 set STARTPWD=%CD%
 
-set QTDIR=C:\Qt\5.12.2\msvc2017_64
+set QTDIR=C:\Qt\5.13.0\msvc2017_64
 if not exist %QTDIR% (
 @   echo Could not find 64-bit Qt
 @   exit /b 2
@@ -32,10 +32,10 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 mkdir build_win64
 cd build_win64
 
-qmake -spec win32-msvc -r -tp vc ..\vect.pro
+qmake -spec win32-msvc -r -tp vc ..\sonic-lineup.pro
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-msbuild vect.sln /t:Build /p:Configuration=Release
+msbuild sonic-lineup.sln /t:Build /p:Configuration=Release
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 copy .\checker\release\vamp-plugin-load-checker.exe .\release
