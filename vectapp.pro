@@ -32,9 +32,9 @@ linux* {
 #    vect_desktop.files = sonic-visualiser.desktop
 #    vect_desktop.CONFIG = no_check_exist
 
-#    vect_icon.path = $$PREFIX_PATH/share/icons/hicolor/scalable/apps/
-#    vect_icon.files = icons/sonic-lineup-icon.svg
-#    vect_icon.CONFIG = no_check_exist
+    vect_icon.path = $$PREFIX_PATH/share/icons/hicolor/scalable/apps/
+    vect_icon.files = icons/sonic-lineup-icon.svg
+    vect_icon.CONFIG = no_check_exist
     
      INSTALLS += vect_bins
 #vect_desktop vect_icon
@@ -50,7 +50,7 @@ OBJECTS_DIR = o
 MOC_DIR = o
 
 #ICON = icons/sv-macicon.icns
-#RC_FILE = icons/sv.rc
+RC_FILE = icons/sonic-lineup.rc
 
 RESOURCES += sonic-lineup.qrc
 
