@@ -37,6 +37,8 @@
 #include <iostream>
 #include <signal.h>
 
+#include "../version.h"
+
 #include <vamp-hostsdk/PluginHostAdapter.h>
 
 static QMutex cleanupMutex;
@@ -155,6 +157,12 @@ setupVectVampPath()
 int
 main(int argc, char **argv)
 {
+    if (argc == 2 && (QString(argv[1]) == "--version" ||
+                      QString(argv[1]) == "-v")) {
+        cerr << VECT_VERSION << endl;
+        exit(0);
+    }
+
     svSystemSpecificInitialisation();
 
     VectApplication application(argc, argv);
