@@ -108,11 +108,11 @@ putEnvQStr(QString assignment)
 }
 
 static void
-setupVectVampPath()
+setupMyVampPath()
 {
     // This based on similar logic from the Tony application
     
-    QString vectVampPath = getEnvQStr("VECT_VAMP_PATH");
+    QString myVampPath = getEnvQStr("SONIC_LINEUP_VAMP_PATH");
 
 #ifdef Q_OS_WIN32
     QChar sep(';');
@@ -120,35 +120,28 @@ setupVectVampPath()
     QChar sep(':');
 #endif
     
-    if (vectVampPath == "") {
-        vectVampPath = QApplication::applicationDirPath();
+    if (myVampPath == "") {
+        myVampPath = QApplication::applicationDirPath();
 
 #ifdef Q_OS_WIN32
         QString programFiles = getEnvQStr("ProgramFiles");
         if (programFiles == "") programFiles = "C:\\Program Files";
-        QString defaultVectPath(programFiles + "\\" + QApplication::applicationName());
-        vectVampPath = vectVampPath + sep + defaultVectPath;
+        QString defaultMyPath(programFiles + "\\" + QApplication::applicationName());
+        myVampPath = myVampPath + sep + defaultMyPath;
 #else
 #ifdef Q_OS_MAC
-        vectVampPath = vectVampPath + "/../Resources:" + vectVampPath;
+        myVampPath = myVampPath + "/../Resources" + sep + myVampPath;
 #else
-        QString defaultVectPath("/usr/local/lib/sonic-lineup:/usr/lib/sonic-lineup");
-        vectVampPath = vectVampPath + sep + defaultVectPath;
+        QString defaultMyPath("/usr/local/lib/sonic-lineup:/usr/lib/sonic-lineup");
+        myVampPath = myVampPath + sep + defaultMyPath;
 #endif
 #endif
     }
 
-    std::vector<std::string> vampPathList = 
-        Vamp::PluginHostAdapter::getPluginPath();
+    SVCERR << "Setting VAMP_PATH to " << myVampPath
+           << " for Sonic Lineup plugins" << endl;
 
-    for (auto p: vampPathList) {
-        vectVampPath = vectVampPath + sep + QString::fromUtf8(p.c_str());
-    }
-
-    SVCERR << "Setting VAMP_PATH to " << vectVampPath
-           << " for Vect plugins" << endl;
-
-    QString env = "VAMP_PATH=" + vectVampPath;
+    QString env = "VAMP_PATH=" + myVampPath;
 
     // Windows lacks setenv, must use putenv (different arg convention)
     putEnvQStr(env);
@@ -171,7 +164,7 @@ main(int argc, char **argv)
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName("Sonic Lineup");
 
-    setupVectVampPath();
+    setupMyVampPath();
 
     QStringList args = application.arguments();
 
