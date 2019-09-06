@@ -49,7 +49,7 @@ TRANSLATIONS += \
 OBJECTS_DIR = o
 MOC_DIR = o
 
-#ICON = icons/sv-macicon.icns
+ICON = icons/sonic-lineup-icon.icns
 RC_FILE = icons/sonic-lineup.rc
 
 RESOURCES += sonic-lineup.qrc

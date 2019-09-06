@@ -6,7 +6,8 @@ Sonic Lineup
 
 Sonic Lineup is an application for quick read-only comparative
 visualisation of multiple audio files whose contents consist of
-different performances or recordings of the same material.
+different performances of the same work or recordings of the same
+material.
 
 Although potentially useful for music study, rehearsal, musicological
 purposes, or language learning, the application is still in an

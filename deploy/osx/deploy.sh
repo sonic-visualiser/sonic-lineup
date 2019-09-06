@@ -64,7 +64,7 @@ echo
 echo "Writing version $bundleVersion in to bundle."
 echo "(This should be a three-part number: major.minor.point)"
 
-perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/osx/Info.plist \
+perl -p -e "s/VECT_VERSION/$bundleVersion/" deploy/osx/Info.plist \
     > "$source"/Contents/Info.plist
 
 echo "Done: check $source/Contents/Info.plist for sanity please"
@@ -83,10 +83,9 @@ dmg="$dmg"-"$version".dmg
 mkdir "$volume" || exit 1
 
 ln -s /Applications "$volume"/Applications
-#!!!cp README.md "$volume/README.txt"
-#cp COPYING "$volume/COPYING.txt"
-#cp CHANGELOG "$volume/CHANGELOG.txt"
-#cp CITATION "$volume/CITATION.txt"
+cp README.md "$volume/README.txt"
+cp COPYING "$volume/COPYING.txt"
+cp CHANGELOG "$volume/CHANGELOG.txt"
 cp -rp "$source" "$target"
 
 # update file timestamps so as to make the build date apparent
