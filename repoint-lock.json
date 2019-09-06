@@ -4,10 +4,10 @@
       "pin": "e0ff22b3c888"
     },
     "svcore": {
-      "pin": "f19711ab7074"
+      "pin": "e3db163e3f50"
     },
     "svgui": {
-      "pin": "175770a13495"
+      "pin": "76b388d4d19c"
     },
     "svapp": {
       "pin": "162c3f4b870c"
@@ -58,7 +58,7 @@
       "pin": "8fd1c994f937"
     },
     "pyin": {
-      "pin": "6f17d912e1dd"
+      "pin": "81f025823a5c"
     },
     "nnls-chroma": {
       "pin": "89099872c87b"
