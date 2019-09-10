@@ -51,10 +51,11 @@ vamp-plugin-load-checker
 piper-vamp-simple-server
 piper-convert
 .repoint*
-glob:.repoint*
 build_win32
+build_win32_debug
 build_win64
+build_win64_debug
 constant-q-cpp
 Dockerfile*.gen
 qm-vamp-plugins
-glob:.repoint*
+..*
