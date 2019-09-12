@@ -41,6 +41,7 @@
 #include "layer/Colour3DPlotLayer.h"
 #include "layer/SliceLayer.h"
 #include "layer/SliceableLayer.h"
+#include "layer/SpectrogramLayer.h"
 #include "view/Overview.h"
 #include "widgets/PropertyBox.h"
 #include "widgets/PropertyStack.h"
@@ -1750,6 +1751,9 @@ MainWindow::melodogramModeSelected()
             !createFrom.isNone()) {
             Layer *newLayer = m_document->createLayer
                 (LayerFactory::MelodicRangeSpectrogram);
+            SpectrogramLayer *spectrogram = qobject_cast<SpectrogramLayer *>
+                (newLayer);
+            spectrogram->setVerticallyFixed();
             newLayer->setObjectName(name);
             m_document->setModel(newLayer, createFrom);
             m_document->addLayerToView(pane, newLayer);
