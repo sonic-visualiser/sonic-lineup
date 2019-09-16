@@ -249,7 +249,6 @@
       <ComponentRef Id="VCRuntime"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
       <ComponentRef Id="Qt5StylePlugins"/>
-      <ComponentRef Id="Piper64"/>
       <ComponentRef Id="Checker64"/>
       <ComponentRef Id="ProgramMenuDir"/>
     </Feature>
