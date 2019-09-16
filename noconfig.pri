@@ -99,8 +99,7 @@ win32-msvc* {
 
     DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION
 
-    QMAKE_CXXFLAGS_RELEASE += -fp:fast -gl
-    QMAKE_LFLAGS_RELEASE += -ltcg
+    QMAKE_CXXFLAGS_RELEASE += -fp:fast
 
     LIBS -= -lFLAC -lvorbis -lvorbisenc -lvorbisfile
 
