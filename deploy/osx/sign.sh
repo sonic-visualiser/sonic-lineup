@@ -32,15 +32,15 @@ if false; then
 else
 
     echo
-    echo "Not applying sandboxing or hardened runtime"
+    echo "Not applying sandboxing"
     echo
 
     for app in "$dir"/*.app; do
 	find "$app" -name \*.dylib -print | while read fr; do
-	    codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$fr"
+	    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime "$fr"
 	done
-	codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$app/Contents/MacOS/Sonic Lineup"
-	codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$app"
+	codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime "$app/Contents/MacOS/Sonic Lineup"
+	codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime "$app"
     done
 
 fi
