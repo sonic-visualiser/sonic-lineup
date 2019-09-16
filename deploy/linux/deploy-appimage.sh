@@ -4,7 +4,6 @@ set -eu
 
 program=sonic-lineup
 checker=vamp-plugin-load-checker
-piper=piper-vamp-simple-server
 plugins="azi match-vamp-plugin nnls-chroma pyin qm-vamp-plugins tuning-difference"
 
 get_id() {
@@ -32,13 +31,13 @@ fi
 mkdir "$targetdir"
 
 mkdir -p "$targetdir"/usr/bin
-mkdir -p "$targetdir"/usr/lib
-mkdir -p "$targetdir"/usr/lib/vamp
+mkdir -p "$targetdir"/usr/lib/sonic-lineup
 
-cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
+cp "$program" "$targetdir"/usr/bin/
+cp "$checker" "$targetdir"/usr/lib/sonic-lineup/
 
 for p in $plugins ; do
-    cp "$p.so" "$targetdir"/usr/lib/vamp/
+    cp "$p.so" "$targetdir"/usr/lib/sonic-lineup/
 done
 
 ldd /usr/lib/x86_64-linux-gnu/libpulse.so.0 || true
@@ -77,7 +76,6 @@ add_dependencies() {
 
 add_dependencies "$program"
 add_dependencies "$checker"
-add_dependencies "$piper"
 
 for p in $plugins ; do
     add_dependencies "$p.so"
