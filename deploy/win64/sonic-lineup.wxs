@@ -1,13 +1,11 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
-<!-- TODO: rewrite GUIDs, these are still those from (other) SV -->
-
   <Product
       Name="Sonic Lineup" 
       Id="*"
       Language="1033"
       Codepage="1252" 
-      Version="3.2"
+      Version="1.0"
       UpgradeCode="a21e6cb2-df2e-43c0-aec3-22736add6a9c"
       Manufacturer="Queen Mary, University of London">
     
@@ -15,7 +13,7 @@
         Id="*"
         Keywords="Installer"
         Description="Sonic Lineup 64-bit Installer" 
-        Comments="Copyright (c) 2018 Queen Mary, University of London and others."
+        Comments="Copyright (c) 2019 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="200"
         Languages="1033" 
@@ -36,7 +34,7 @@
 
           <Component Win64="yes"
               Id="MainExecutable"
-              Guid="b253c538-321e-455e-81b2-9c879fe1371c">
+              Guid="8c6e694c-1bbc-48ae-955d-cb5157e78f26">
 
             <File
                 Id="SVExecutable"
@@ -77,13 +75,13 @@
                 Source="..\CHANGELOG"/>
             <File
                 Id="winicon.ico"
-                Name="sv-winicon.ico"
-                Source="..\icons\sv-winicon.ico"/>
+                Name="sonic-lineup-icon.ico"
+                Source="..\icons\sonic-lineup-icon.ico"/>
           </Component>
           
           <Component Win64="yes"
               Id="Plugins"
-              Guid="2ba2ade2-a813-4ddc-9ce6-ba79390cc14e">
+              Guid="4a11ba60-7d97-4cf3-aced-07ae9a16d956">
             <File
                 Id="MATCH"
                 Name="match-vamp-plugin.dll"
@@ -113,7 +111,7 @@
           
           <Component Win64="yes"
               Id="Qt5"
-              Guid="4d6d166f-9e3c-443d-a502-8711fbd80911">
+              Guid="5e09d9ab-468d-4e64-b539-95c935248a7c">
             <File
                 Id="QtCore"
                 Name="Qt5Core.dll"
@@ -143,7 +141,7 @@
 
           <Component Win64="yes"
                      Id="Sndfile"
-                     Guid="49332c83-e52c-4ce3-b772-737f865854f1">
+                     Guid="dbcbb75c-16ae-4e80-9449-b6d3d72873a7">
             <File
                 Id="libsndfile"
                 Name="libsndfile-1.dll"
@@ -153,7 +151,7 @@
 
           <Component Win64="yes"
                Id="VCRuntime"
-               Guid="5d4a1454-d726-4c46-8be0-79c916cba03d">
+               Guid="f212288f-e5a4-4fc2-b951-1396f61bc562">
 
             <!-- Redistributables are handled by the Visual Studio
                  installer (a separate program from VS itself) and are
@@ -186,7 +184,7 @@
 	  <Directory Id="Platforms" Name="platforms">
             <Component Win64="yes"
                 Id="Qt5PlatformPlugins"
-                Guid="363830fa-1117-4609-8d47-006900c1396e">
+                Guid="07672a65-2be3-40f5-88d2-1fd6dd392427">
 	      <File
                   Id="qminimal"
                   Name="qminimal.dll"
@@ -201,7 +199,7 @@
 	  <Directory Id="Styles" Name="styles">
             <Component Win64="yes"
                 Id="Qt5StylePlugins"
-                Guid="dd137a4b-e48d-4679-8628-5b01b82495ef">
+                Guid="e5731844-33a0-4be8-bf73-e106be653f1c">
 	      <File
                   Id="qwindowsvistastyle"
                   Name="qwindowsvistastyle.dll"
@@ -211,37 +209,8 @@
 
 	  <Directory Id="Helpers" Name="helpers">
             <Component Win64="yes"
-                Id="Piper64"
-                Guid="da7c2b7a-f950-4e2c-94bd-c86ec662835e">
-	      <File
-		  Id="piperconv64"
-		  Name="piper-convert.exe"
-		  Source="release\piper-convert.exe"/>
-	      <File
-		  Id="piper64"
-		  Name="piper-vamp-simple-server.exe"
-		  Source="release\piper-vamp-simple-server.exe"/>
-              <File
-                  Id="concrt140h"
-                  Name="concrt140.dll"
-                  Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\concrt140.DLL"
-                  KeyPath="yes"/>
-              <File
-                  Id="msvcp140h"
-                  Name="msvcp140.dll"
-                  Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\msvcp140.DLL"/>
-              <File
-                  Id="vccorlib140h"
-                  Name="vccorlib140.dll"
-                  Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\vccorlib140.DLL"/>
-              <File
-                  Id="vcruntime140h"
-                  Name="vcruntime140.dll"
-                  Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\x64\Microsoft.VC141.CRT\vcruntime140.DLL"/>
-	    </Component>
-            <Component Win64="yes"
                 Id="Checker64"
-                Guid="2170129f-cea0-499d-b761-ea95679f850d">
+                Guid="4d67a3ba-cf45-4a66-8700-c79c45f24d34">
 	      <File
 		  Id="checker64"
 		  Name="vamp-plugin-load-checker.exe"
@@ -254,7 +223,7 @@
 
       <Directory Id="ProgramMenuFolder" Name="Programs">
         <Directory Id="ProgramMenuDir" Name="Sonic Lineup">
-          <Component Id="ProgramMenuDir" Guid="633047c8-bfee-4522-b9cd-ec8143c09a8f">
+          <Component Id="ProgramMenuDir" Guid="48569a61-8b45-4aa1-a99b-63977363559e">
             <RemoveFolder Id="ProgramMenuDir" On="uninstall"/>
             <RegistryValue Root="HKMU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes"/>
           </Component>
@@ -296,7 +265,7 @@
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
     <WixVariable Id="WixUILicenseRtf" Value="..\deploy\win64\License.rtf" />
     
-    <Icon Id="winicon.ico" SourceFile="..\icons\sv-winicon.ico"/>
+    <Icon Id="winicon.ico" SourceFile="..\icons\sonic-lineup-icon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
 
     <WixVariable Id="WixUIBannerBmp" Value="..\deploy\win64\top.bmp"/>
