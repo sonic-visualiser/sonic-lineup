@@ -1115,6 +1115,8 @@ MainWindow::openFiles()
     QStringList paths = ff->getOpenFileNames(FileFinder::AudioFile,
                                              m_audioFile);
 
+    if (paths.empty()) return;
+    
     m_sessionState = SessionActive;
     
     for (QString path: paths) {
@@ -2078,6 +2080,8 @@ MainWindow::paneDropAccepted(Pane * /* pane */, QStringList uriList)
     cerr << "uriList.size() == " << uriList.size() << endl;
     cerr << "first.isLocalFile() == " << first.isLocalFile() << endl;
     cerr << "QFileInfo(first.path()).isDir() == " << QFileInfo(first.path()).isDir() << endl;
+
+    m_sessionState = SessionActive;
     
     if (uriList.size() == 1 &&
         first.isLocalFile() &&
@@ -2093,16 +2097,28 @@ MainWindow::paneDropAccepted(Pane * /* pane */, QStringList uriList)
         return;
     }
     
-    for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
+    for (QString uri: uriList) {
 
-        FileOpenStatus status = openPath(*i, CreateAdditionalModel);
+        FileOpenStatus status = FileOpenFailed;
+        
+        FileSource source(uri);
+        if (source.isAvailable()) {
+            source.waitForData();
 
-        if (status == FileOpenFailed) {
+            try {
+                status = openAudio(source, CreateAdditionalModel);
+            } catch (const InsufficientDiscSpace &e) {
+                SVCERR << "MainWindowBase: Caught InsufficientDiscSpace in file open" << endl;
+                QMessageBox::critical
+                    (this, tr("Not enough disc space"),
+                     tr("<b>Not enough disc space</b><p>There doesn't appear to be enough spare disc space to accommodate any necessary temporary files.</p><p>Please clear some space and try again.</p>").arg(e.what()));
+                return;
+            }
+        }
+            
+        if (status != FileOpenSucceeded) {
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
-                                  tr("<b>Open failed</b><p>Dropped URL \"%1\" could not be opened").arg(*i));
-        } else if (status == FileOpenWrongMode) {
-            QMessageBox::critical(this, tr("Failed to open dropped URL"),
-                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+                                  tr("<b>Open failed</b><p>Dropped audio file location \"%1\" could not be opened").arg(uri));
         } else {
             configureNewPane(m_paneStack->getCurrentPane());
         }
@@ -2648,6 +2664,7 @@ MainWindow::checkpointSession()
         settings.endGroup();
 
         SVCERR << "MainWindow::checkpointSession complete" << endl;
+        
     } catch (const std::runtime_error &e) {
         SVCERR << "MainWindow::checkpointSession: save failed: "
                << e.what() << endl;
