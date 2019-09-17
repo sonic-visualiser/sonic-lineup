@@ -16,6 +16,7 @@
 
 #include "base/TempWriteFile.h"
 #include "base/XmlExportable.h"
+#include "base/Exceptions.h"
 
 #include <QTextStream>
 #include <QTextCodec>
@@ -31,7 +32,7 @@ SmallSession::save(const SmallSession &session, QString sessionFile)
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         throw std::runtime_error("Failed to open temporary file for writing");
     }
-
+    
     QTextStream out(&f);
     out.setCodec(QTextCodec::codecForName("UTF-8"));
     
@@ -55,8 +56,12 @@ SmallSession::save(const SmallSession &session, QString sessionFile)
     out << "</vect>\n";
 
     f.close();
-    
-    tempFile.moveToTarget();
+
+    try {
+        tempFile.moveToTarget();
+    } catch (const FileOperationFailed &f) {
+        throw std::runtime_error("Failed to move temporary file to save target");
+    }
 }
 
 class SmallSessionReadHandler : public QXmlDefaultHandler
