@@ -176,8 +176,11 @@ protected slots:
 
     virtual void website();
     virtual void help();
+    virtual void whatsNew();
     virtual void about();
     virtual void keyReference();
+
+    virtual void newerVersionAvailable(QString);
 
 protected:
     LevelPanToolButton      *m_mainLevelPan;
@@ -217,6 +220,7 @@ protected:
 
     KeyReference            *m_keyReference;
     VersionTester           *m_versionTester;
+    QString                  m_newerVersionIs;
 
     QString getReleaseText() const;
     

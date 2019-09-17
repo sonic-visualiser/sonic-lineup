@@ -113,6 +113,7 @@
 #include <QScrollArea>
 #include <QCloseEvent>
 #include <QDialogButtonBox>
+#include <QTextEdit>
 
 #include <iostream>
 #include <cstdio>
@@ -746,14 +747,16 @@ MainWindow::setupHelpMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+
+    QString name = QApplication::applicationName();
     
-    action = new QAction(tr("Sonic Lineup on the &Web"), this); 
-    action->setStatusTip(tr("Open the Sonic Lineup website")); 
-    connect(action, SIGNAL(triggered()), this, SLOT(website()));
+    action = new QAction(tr("What's &New In This Release?"), this); 
+    action->setStatusTip(tr("List the changes in this release (and every previous release) of %1").arg(name)); 
+    connect(action, SIGNAL(triggered()), this, SLOT(whatsNew()));
     menu->addAction(action);
     
-    action = new QAction(tr("&About Sonic Lineup"), this); 
-    action->setStatusTip(tr("Show information about Sonic Lineup")); 
+    action = new QAction(tr("&About %1").arg(name), this); 
+    action->setStatusTip(tr("Show information about %1").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
 }
@@ -2958,6 +2961,62 @@ MainWindow::help()
     openHelpUrl(tr("http://www.sonicvisualiser.org/sonic-lineup/doc/"));
 }
 
+void
+MainWindow::whatsNew()
+{
+    QFile changelog(":CHANGELOG");
+    changelog.open(QFile::ReadOnly);
+    QByteArray content = changelog.readAll();
+    QString text = QString::fromUtf8(content);
+
+    QDialog *d = new QDialog(this);
+    d->setWindowTitle(tr("What's New"));
+        
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    int row = 0;
+    
+    QLabel *iconLabel = new QLabel;
+    iconLabel->setPixmap(QApplication::windowIcon().pixmap(64, 64));
+    layout->addWidget(iconLabel, row, 0);
+    
+    layout->addWidget
+        (new QLabel(tr("<h3>What's New in %1</h3>")
+                    .arg(QApplication::applicationName())),
+         row++, 1);
+    layout->setColumnStretch(2, 10);
+
+    QTextEdit *textEdit = new QTextEdit;
+    layout->addWidget(textEdit, row++, 1, 1, 2);
+
+    if (m_newerVersionIs != "") {
+        layout->addWidget(new QLabel(tr("<b>Note:</b> A newer version of %1 is available.<br>(Version %2 is available; you are using version %3)").arg(QApplication::applicationName()).arg(m_newerVersionIs).arg(VECT_VERSION)), row++, 1, 1, 2);
+    }
+    
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+    layout->addWidget(bb, row++, 0, 1, 3);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+
+    text.replace('\r', "");
+    text.replace(QRegExp("(.)\n +(.)"), "\\1 \\2");
+    text.replace(QRegExp("\n - ([^\n]+)"), "\n<li>\\1</li>");
+    text.replace(QRegExp(": *\n"), ":\n<ul>\n");
+    text.replace(QRegExp("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
+    text.replace(QRegExp("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
+//    text.replace(QRegExp("<li>([^,.\n]+)([,.] +\\w)"), "<li><b>\\1</b>\\2");
+    
+    textEdit->setHtml(text);
+    textEdit->setReadOnly(true);
+
+    d->setMinimumSize(m_viewManager->scalePixelSize(520),
+                      m_viewManager->scalePixelSize(450));
+    
+    d->exec();
+
+    delete d;
+}
+
 QString
 MainWindow::getReleaseText() const
 {
@@ -3152,6 +3211,24 @@ void
 MainWindow::keyReference()
 {
     m_keyReference->show();
+}
+
+void
+MainWindow::newerVersionAvailable(QString version)
+{
+    m_newerVersionIs = version;
+    
+    //!!! nicer URL would be nicer
+    QSettings settings;
+    settings.beginGroup("NewerVersionWarning");
+    QString tag = QString("version-%1-available-show").arg(version);
+    if (settings.value(tag, true).toBool()) {
+        QString title(tr("Newer version available"));
+        QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of %2, but version %3 is now available.</p><p>Please see the <a href=\"http://www.sonicvisualiser.org/sonic-lineup/\">%4 website</a> for more information.</p>").arg(VECT_VERSION).arg(QApplication::applicationName()).arg(version).arg(QApplication::applicationName()));
+        QMessageBox::information(this, title, text);
+        settings.setValue(tag, false);
+    }
+    settings.endGroup();
 }
 
 void

@@ -197,5 +197,6 @@
     <file>icons/style/radiobutton_unchecked_hover.png</file>
     <file>icons/style/radiobutton_unchecked.png</file>
     <file>icons/style/radiobutton_unchecked_pressed_disabled.png</file>
+    <file>CHANGELOG</file>
 </qresource>
 </RCC>

@@ -59,8 +59,8 @@ NetworkPermissionTester::havePermission()
 	      "<p>Developed in the Centre for Digital Music at Queen Mary, University of London, Sonic Lineup is open source software under the GNU General Public License.</p>"
               "<p><hr></p>"
 	      "<p><b>Before we go on...</b></p>"
-	      "<p>Sonic Lineup would like to make occasional network requests to our servers, in order to tell you when updates are available.</li></ul>"
-	      "<p><b>No personal information will be sent, no tracking is carried out, and no individual information will be shared with anyone else.</b> We will however make aggregate counts of distinct requests for usage reporting.</p>"
+	      "<p>Sonic Lineup would like to make occasional network requests, to check for updates.</li></ul>"
+	      "<p>No personal information is sent, but aggregated counts of requests may be made for usage reporting.</p>"
 	      "<p>We recommend that you allow this, because it makes Sonic Lineup more useful to you and supports the public funding of this work. But if you do not wish to do so, please un-check the box below.<br></p>"));
 	layout->addWidget(label, 0, 0);
 
