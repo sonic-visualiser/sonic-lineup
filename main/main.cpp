@@ -123,8 +123,9 @@ setupMyVampPath()
     if (myVampPath == "") {
 
         QString appName = QApplication::applicationName();
-        QString binaryName = QCoreApplication::arguments().at(0);
         QString myDir = QApplication::applicationDirPath();
+        QString binaryName = QFileInfo(QCoreApplication::arguments().at(0))
+            .fileName();
 
 #ifdef Q_OS_WIN32
         QString programFiles = getEnvQStr("ProgramFiles");
@@ -135,8 +136,11 @@ setupMyVampPath()
 #ifdef Q_OS_MAC
         myVampPath = myDir + "/../Resources";
 #else
-        myVampPath =
-            myDir + "/../lib/" + binaryName + sep +
+        if (binaryName != "") {
+            myVampPath =
+                myDir + "/../lib/" + binaryName + sep;
+        }
+        myVampPath = myVampPath +
             myDir + "/../lib/" + appName + sep +
             myDir;
 #endif
