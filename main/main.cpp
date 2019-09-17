@@ -121,19 +121,20 @@ setupMyVampPath()
 #endif
     
     if (myVampPath == "") {
-        myVampPath = QApplication::applicationDirPath();
+
+        QString appName = QApplication::applicationName();
+        QString myDir = QApplication::applicationDirPath();
 
 #ifdef Q_OS_WIN32
         QString programFiles = getEnvQStr("ProgramFiles");
         if (programFiles == "") programFiles = "C:\\Program Files";
-        QString defaultMyPath(programFiles + "\\" + QApplication::applicationName());
-        myVampPath = myVampPath + sep + defaultMyPath;
+        QString pfPath(programFiles + "\\" + QApplication::applicationName());
+        myVampPath = myDir + sep + pfPath;
 #else
 #ifdef Q_OS_MAC
-        myVampPath = myVampPath + "/../Resources" + sep + myVampPath;
+        myVampPath = myDir + "/../Resources";
 #else
-        QString defaultMyPath("/usr/local/lib/sonic-lineup:/usr/lib/sonic-lineup");
-        myVampPath = myVampPath + sep + defaultMyPath;
+        myVampPath = myDir + "/../lib/" + appName + sep + myDir;
 #endif
 #endif
     }
