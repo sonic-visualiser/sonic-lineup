@@ -89,7 +89,7 @@ protected slots:
     virtual void openFiles();
     virtual void openLocation();
     virtual void openRecentSession();
-    virtual void openMostRecentSession();
+    virtual void reopenLastSession();
     virtual void checkpointSession();
     virtual void browseRecordedAudio();
     virtual void newSession();

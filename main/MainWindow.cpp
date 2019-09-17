@@ -396,7 +396,7 @@ MainWindow::MainWindow(SoundOptions options) :
         m_versionTester = 0;
     }
 
-    openMostRecentSession();
+    reopenLastSession();
     
 //    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
@@ -1047,6 +1047,14 @@ MainWindow::newSession()
     CommandHistory::getInstance()->documentSaved();
     documentRestored();
     updateMenuStates();
+
+    // Record that the last (i.e. current, as of now) session is
+    // empty, so that if we exit now and re-start, we get an empty
+    // session as is proper instead of loading the last non-empty one
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("lastsession", "");
+    settings.endGroup();
 }
 
 void
@@ -1205,15 +1213,15 @@ MainWindow::openRecentSession()
 }
 
 void
-MainWindow::openMostRecentSession()
+MainWindow::reopenLastSession()
 {
-    vector<QString> files = m_recentSessions.getRecentIdentifiers();
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    QString lastSession = settings.value("lastsession", "").toString();
+    settings.endGroup();
 
-    if (!files.empty()) {
-        QString path = files[0];
-        if (path != "") {
-            openSmallSessionFile(path);
-        }
+    if (lastSession != "") {
+        openSmallSessionFile(lastSession);
     }
 
     if (m_sessionState == NoSession) {
@@ -2633,6 +2641,12 @@ MainWindow::checkpointSession()
         m_recentSessions.addFile(m_sessionFile, makeSessionLabel());
         CommandHistory::getInstance()->documentSaved();
         documentRestored();
+
+        QSettings settings;
+        settings.beginGroup("MainWindow");
+        settings.setValue("lastsession", m_sessionFile);
+        settings.endGroup();
+
         SVCERR << "MainWindow::checkpointSession complete" << endl;
     } catch (const std::runtime_error &e) {
         SVCERR << "MainWindow::checkpointSession: save failed: "
