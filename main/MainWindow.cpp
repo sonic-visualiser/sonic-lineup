@@ -2492,8 +2492,6 @@ MainWindow::makeSessionFilename()
         return {};
     }
     
-    //!!! can refactor in common with RecordDirectory?
-    
     QDir parentDir(TempDirectory::getInstance()->getContainingPath());
     QString sessionDirName("session");
 
@@ -2525,6 +2523,7 @@ MainWindow::makeSessionFilename()
         sessionName = mainModel->getLocation();
     }
     sessionName = QFileInfo(sessionName).baseName();
+    sessionName.replace(QRegExp("[<>:\"/\\\\|?*\\0000-\\0039()\\[\\]$]"), "_");
 
     QString sessionExt = 
         InteractiveFileFinder::getInstance()->getApplicationSessionExtension();
@@ -2536,6 +2535,8 @@ MainWindow::makeSessionFilename()
     while (QFile(filePath).exists()) {
         if (++suffix == 100) {
             SVCERR << "ERROR: makeSessionFilename: Failed to come up with unique session filename for " << sessionName << endl;
+            QMessageBox::critical(this, tr("Failed to obtain unique filename"),
+                                  tr("<p>Failed to obtain a unique filename for session file</p>"));
             return {};
         }
         filePath = dateDir.filePath(QString("%1-%2.%3")
@@ -2631,6 +2632,11 @@ MainWindow::checkpointSession()
     } catch (const std::runtime_error &e) {
         SVCERR << "MainWindow::checkpointSession: save failed: "
                << e.what() << endl;
+        QMessageBox::critical
+            (this, tr("Failed to checkpoint session"),
+             tr("<b>Checkpoint failed</b>"
+                "<p>Session checkpoint file could not be saved: %1</p>")
+             .arg(e.what()));
     }
 }
 
