@@ -195,7 +195,14 @@ main(int argc, char **argv)
         exit(2);
     }
 
-    if (args.contains("--no-audio")) audioOutput = false;
+    if (args.contains("--no-audio")) {
+        audioOutput = false;
+    }
+
+    if (args.contains("--first-run")) {
+        QSettings settings;
+        settings.clear();
+    }
 
     InteractiveFileFinder::getInstance()->setApplicationSessionExtension("vect");
 
