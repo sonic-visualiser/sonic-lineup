@@ -64,7 +64,7 @@ COPY id_rsa_build .ssh/id_rsa_build
 COPY known_hosts .ssh/known_hosts
 RUN chmod 600 .ssh/id_rsa_build .ssh/known_hosts
 RUN echo '{"accounts": {"sourcehut": "~breakfastquay"}}' > .repoint.json
-RUN ( echo '[ui]' ; echo 'ssh = ssh -v -i /root/.ssh/id_rsa_build' ) > .hgrc
+RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_rsa_build' ) > .hgrc
 
 WORKDIR /sonic-lineup
 ENV QTDIR /opt/qt510
