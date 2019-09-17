@@ -1208,12 +1208,17 @@ void
 MainWindow::openMostRecentSession()
 {
     vector<QString> files = m_recentSessions.getRecentIdentifiers();
-    if (files.empty()) return;
 
-    QString path = files[0];
-    if (path == "") return;
+    if (!files.empty()) {
+        QString path = files[0];
+        if (path != "") {
+            openSmallSessionFile(path);
+        }
+    }
 
-    openSmallSessionFile(path);
+    if (m_sessionState == NoSession) {
+        newSession(); // to ensure we have a drop target
+    }
 }
 
 void
