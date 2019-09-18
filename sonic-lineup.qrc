@@ -55,6 +55,12 @@
     <file>icons/scalable/zoom-out.svg</file>
     <file>icons/scalable/zoom-fit.svg</file>
     <file>icons/scalable/zoom-reset.svg</file>
+    <file>icons/scalable/arrow-above.svg</file>
+    <file>icons/scalable/arrow-below.svg</file>
+    <file>icons/scalable/arrow-left.svg</file>
+    <file>icons/scalable/arrow-above-white.svg</file>
+    <file>icons/scalable/arrow-below-white.svg</file>
+    <file>icons/scalable/arrow-left-white.svg</file>
 
     <file>icons/spectrum.png</file>
     <file>icons/spectrogram.png</file>

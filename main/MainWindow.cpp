@@ -21,6 +21,7 @@
 
 #include "PreferencesDialog.h"
 #include "NetworkPermissionTester.h"
+#include "IntroDialog.h"
 
 #include "view/Pane.h"
 #include "view/PaneStack.h"
@@ -398,7 +399,9 @@ MainWindow::MainWindow(SoundOptions options) :
     }
 
     reopenLastSession();
-    
+
+    QTimer::singleShot(400, this, SLOT(introDialog()));
+                       
 //    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
 
@@ -2487,6 +2490,12 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
         (this, tr("Audio processing overload"),
          tr("<b>Overloaded</b><p>Audio playback speed processing has been reduced to a single channel, due to a processing overload."));
     shownOnce = true;
+}
+
+void
+MainWindow::introDialog()
+{
+    IntroDialog d(this);
 }
 
 void

@@ -131,6 +131,8 @@ protected slots:
 
     void monitoringLevelsChanged(float, float) override;
 
+    void introDialog();
+    
     void betaReleaseWarning();
 
     void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;

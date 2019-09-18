@@ -25,19 +25,22 @@ solaris*:TARGET = sonic-lineup
 linux* {
 
     vect_bins.path = $$PREFIX_PATH/bin/
-    vect_bins.files = checker/vamp-plugin-load-checker piper-vamp-simple-server sonic-lineup
+    vect_bins.files = sonic-lineup
     vect_bins.CONFIG = no_check_exist
 
-#    vect_desktop.path = $$PREFIX_PATH/share/applications/
-#    vect_desktop.files = sonic-visualiser.desktop
-#    vect_desktop.CONFIG = no_check_exist
+    vect_support.path = $$PREFIX_PATH/lib/sonic-lineup/
+    vect_support.files = checker/vamp-plugin-load-checker azi.so match-vamp-plugin.so nnls-chroma.so pyin.so qm-vamp-plugins.so tuning-difference.so
+    vect_support.CONFIG = no_check_exist
+
+    vect_desktop.path = $$PREFIX_PATH/share/applications/
+    vect_desktop.files = sonic-lineup.desktop
+    vect_desktop.CONFIG = no_check_exist
 
     vect_icon.path = $$PREFIX_PATH/share/icons/hicolor/scalable/apps/
     vect_icon.files = icons/sonic-lineup-icon.svg
     vect_icon.CONFIG = no_check_exist
     
-     INSTALLS += vect_bins
-#vect_desktop vect_icon
+    INSTALLS += vect_bins vect_support vect_desktop vect_icon
 }
 
 TRANSLATIONS += \
@@ -67,12 +70,14 @@ for (file, SVGUI_HEADERS)    { HEADERS += $$sprintf("svgui/%1",    $$file) }
 for (file, SVAPP_HEADERS)    { HEADERS += $$sprintf("svapp/%1",    $$file) }
 
 HEADERS += \
+        main/IntroDialog.h \
         main/MainWindow.h \
         main/NetworkPermissionTester.h \
         main/PreferencesDialog.h \
         main/SmallSession.h
 
 SOURCES +=  \
+        main/IntroDialog.cpp \
 	main/main.cpp \
         main/MainWindow.cpp \
         main/NetworkPermissionTester.cpp \
