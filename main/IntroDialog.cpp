@@ -24,6 +24,8 @@
 #include <QPainter>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QFrame>
+#include <QApplication>
 
 #include "widgets/IconLoader.h"
 
@@ -44,8 +46,10 @@ IntroDialog::IntroDialog(QWidget *parent)
     d.setWindowTitle(d.tr("Welcome!"));
 
     vector<pair<QString, QString>> texts {
-        { d.tr("Open some audio files!"),
-          d.tr("<p>If you have more than one recording of the same thing,<br>"
+        { d.tr("Welcome!"),
+          d.tr("<p>The first thing to do is open some audio files.</p>"
+               "<p>(But read these introductory notes first.)</p>"
+               "<p>If you have more than one recording of the same thing,<br>"
                "such as multiple performances, takes, or even cover versions,"
                "<br>try opening them all in one go.</p>"
                "<p>Comparative visualisation is what this app is designed for.</p>"
@@ -57,27 +61,33 @@ IntroDialog::IntroDialog(QWidget *parent)
                "and use two-finger scroll-drag, or a scroll wheel, to zoom.</p>"
                "<p>You can also move using the left and right cursor keys,<br>"
                "and zoom using the up and down keys.</p>"
-               "<p>Sonic Lineup will try to align the audio files so as to<br>"
+               "<p>%1 will try to align the audio files, so as to<br>"
                "ensure they scroll together in terms of musical material.<br>"
                "You can toggle or control alignment in the Playback menu.</p>"
-              )
+              ).arg(QApplication::applicationName())
         },
-        { d.tr("Switch view"),
-          d.tr("<p>Use the buttons along the bottom to change the current view:</p>"
-               "<ul><li>Outline waveform: simplified waveform on a single axis</li>"
-               "<li>Waveform: classic audio-editor style waveform</li>"
-               "<li>Melodic spectrogram: detailed log-frequency spectrogram in limited range</li>"
-               "<li>Spectrogram: full-range dB spectrogram</li>"
-               "<li>Sung pitch: pitch contour extracted as if from singing</li>"
-               "<li>Key: likelihood plot for key within circle-of-fifths</li>"
-               "<li>Stereo azimuth: left/right decomposition of frequency bins</li>"
+        { d.tr("Change your view"),
+          d.tr("<p>Use the buttons along the bottom to change the current view.</p>"
+               "<p>There are two waveform views: Outline for a simplified<br>"
+               "overview, or a more typical waveform for detail. And two<br>"
+               "spectrograms with different frequency and colour profiles.</p>"
+               "<p>The Sung Pitch view shows pitch profiles, in the case of<br>"
+               "solo singing or similar music; Key is a key-likelihood plot;<br>"
+               "and Stereo Azimuth shows a decomposition of the stereo plan.</p>"
+               "<p>See the <a href=\"http://www.sonicvisualiser.org/sonic-lineup/doc/\">online documentation</a> for more details.</p>"
                "</ul>"
               )
         }
     };
+
+    QGridLayout *outerLayout = new QGridLayout;
+    d.setLayout(outerLayout);
+    QFrame *outerFrame = new QFrame;
+    outerFrame->setFrameStyle(QFrame::Panel | QFrame::Raised);
+    outerLayout->addWidget(outerFrame, 0, 0);
     
     QGridLayout *layout = new QGridLayout;
-    d.setLayout(layout);
+    outerFrame->setLayout(layout);
     layout->setRowStretch(0, 10);
     layout->setRowStretch(1, 20);
     layout->setRowStretch(2, 10);
@@ -121,33 +131,42 @@ IntroDialog::IntroDialog(QWidget *parent)
     }
         
     layout->addWidget(arrowLabels[0], 0, 0);
-    layout->addWidget(arrowLabels[1], 1, 0);
+    layout->addWidget(arrowLabels[1], 1, 0, 1, 1, Qt::AlignTop);
     layout->addWidget(arrowLabels[2], 1, 0, 1, 1, Qt::AlignBottom);
 
+    QFont smallerFont(d.font());
+#ifdef Q_OS_WIN32
+    if (smallerFont.pixelSize() > 0) {
+        smallerFont.setPixelSize(int(ceil(smallerFont.pixelSize() * 1.1)));
+    } else {
+        smallerFont.setPointSize(int(ceil(smallerFont.pointSize() * 1.1)));
+    }
+#endif
+    
+    QFont biggerFont(d.font());
+    if (biggerFont.pixelSize() > 0) {
+        biggerFont.setPixelSize(int(ceil(biggerFont.pixelSize() * 1.4)));
+    } else {
+        biggerFont.setPointSize(int(ceil(biggerFont.pointSize() * 1.4)));
+    }
+    
     QLabel *numberLabel = new QLabel;
     numberLabel->setText(d.tr("%1.").arg(page));
     layout->addWidget(numberLabel, 0, 1, 1, 1,
                       Qt::AlignRight | Qt::AlignBottom);
-    QFont f(numberLabel->font());
-    if (f.pixelSize() > 0) {
-        f.setPixelSize(int(ceil(f.pixelSize() * 1.4)));
-    } else {
-        f.setPointSize(int(ceil(f.pointSize() * 1.4)));
-    }
-    numberLabel->setFont(f);
+    numberLabel->setFont(biggerFont);
 
     QLabel *titleLabel = new QLabel;
     titleLabel->setText(texts[page-1].first);
-    titleLabel->setFont(f);
+    titleLabel->setFont(biggerFont);
     layout->addWidget(titleLabel, 0, 2, 1, 1,
                       Qt::AlignLeft | Qt::AlignBottom);
 
     QLabel *bodyLabel = new QLabel;
     bodyLabel->setWordWrap(false);
     bodyLabel->setText(texts[page-1].second);
+    bodyLabel->setFont(smallerFont);
     layout->addWidget(bodyLabel, 1, 2);
-    
-    d.setMinimumSize(parent->size() * 0.6);
         
     QDialogButtonBox *bb = new QDialogButtonBox;
 
@@ -162,6 +181,7 @@ IntroDialog::IntroDialog(QWidget *parent)
     
     QPushButton *close = bb->addButton(QDialogButtonBox::Close);
     QObject::connect(close, SIGNAL(clicked()), &d, SLOT(accept()));
+    close->setIcon(IconLoader().load("cross"));
     close->setEnabled(false);
     layout->addWidget(bb, 3, 0, 1, 3);
 
@@ -190,7 +210,9 @@ IntroDialog::IntroDialog(QWidget *parent)
 
     QObject::connect(next, &QPushButton::clicked, [&]() { repage(1); });
     QObject::connect(prev, &QPushButton::clicked, [&]() { repage(-1); });
-
+    
+    d.setMinimumSize(QSize(parent->width() * 0.4, parent->height() * 0.6));
+    d.setModal(false);
     d.exec();
     
     settings.setValue("shown", true);
