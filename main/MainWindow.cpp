@@ -398,9 +398,9 @@ MainWindow::MainWindow(SoundOptions options) :
         m_versionTester = 0;
     }
 
-    reopenLastSession();
-
-    QTimer::singleShot(400, this, SLOT(introDialog()));
+    if (!reopenLastSession()) {
+        QTimer::singleShot(400, this, SLOT(introDialog()));
+    }
                        
 //    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
@@ -1220,7 +1220,7 @@ MainWindow::openRecentSession()
     openSmallSessionFile(path);
 }
 
-void
+bool
 MainWindow::reopenLastSession()
 {
     QSettings settings;
@@ -1234,6 +1234,9 @@ MainWindow::reopenLastSession()
 
     if (m_sessionState == NoSession) {
         newSession(); // to ensure we have a drop target
+        return false;
+    } else {
+        return true;
     }
 }
 

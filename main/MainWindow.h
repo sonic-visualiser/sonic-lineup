@@ -89,12 +89,12 @@ protected slots:
     virtual void openFiles();
     virtual void openLocation();
     virtual void openRecentSession();
-    virtual void reopenLastSession();
     virtual void checkpointSession();
     virtual void browseRecordedAudio();
     virtual void newSession();
     virtual void preferences();
 
+    bool reopenLastSession();
     void closeSession() override;
 
     void outlineWaveformModeSelected();
@@ -182,7 +182,7 @@ protected slots:
     virtual void about();
     virtual void keyReference();
 
-    virtual void newerVersionAvailable(QString);
+    void newerVersionAvailable(QString) override;
 
 protected:
     LevelPanToolButton      *m_mainLevelPan;

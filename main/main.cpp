@@ -135,6 +135,7 @@ setupMyVampPath()
 #else
 #ifdef Q_OS_MAC
         myVampPath = myDir + "/../Resources";
+        (void)sep; // unused
 #else
         if (binaryName != "") {
             myVampPath =

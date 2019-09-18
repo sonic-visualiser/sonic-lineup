@@ -48,7 +48,7 @@ IntroDialog::IntroDialog(QWidget *parent)
           d.tr("<p>If you have more than one recording of the same thing,<br>"
                "such as multiple performances, takes, or even cover versions,"
                "<br>try opening them all in one go.</p>"
-               "<p>Comparative visualisation is what this app is all about!</p>"
+               "<p>Comparative visualisation is what this app is designed for.</p>"
                "<p>You can also record a new track directly from the "
                "microphone.</p>")
         },
@@ -58,8 +58,8 @@ IntroDialog::IntroDialog(QWidget *parent)
                "<p>You can also move using the left and right cursor keys,<br>"
                "and zoom using the up and down keys.</p>"
                "<p>Sonic Lineup will try to align the audio files so as to<br>"
-               "ensure they scroll in sync in terms of musical material.<br>"
-               "You can switch off or control alignment in the Playback menu.</p>"
+               "ensure they scroll together in terms of musical material.<br>"
+               "You can toggle or control alignment in the Playback menu.</p>"
               )
         },
         { d.tr("Switch view"),
@@ -94,7 +94,8 @@ IntroDialog::IntroDialog(QWidget *parent)
         ":icons/scalable/arrow-below-white.svg"
     };
 
-    int sz = int(round(parent->height() * 0.1));
+    int dpratio = d.devicePixelRatio();
+    int sz = dpratio * int(round(parent->height() * 0.1));
 
     vector<QPixmap> arrowPixmaps {
         QPixmap(sz, sz),
@@ -107,6 +108,7 @@ IntroDialog::IntroDialog(QWidget *parent)
         QPainter painter(&arrowPixmaps[i]);
         QSvgRenderer renderer(arrowFiles[i]);
         renderer.render(&painter);
+        arrowPixmaps[i].setDevicePixelRatio(dpratio);
     }
 
     vector<QLabel *> arrowLabels;
@@ -161,7 +163,7 @@ IntroDialog::IntroDialog(QWidget *parent)
     QPushButton *close = bb->addButton(QDialogButtonBox::Close);
     QObject::connect(close, SIGNAL(clicked()), &d, SLOT(accept()));
     close->setEnabled(false);
-    layout->addWidget(bb, 3, 0);
+    layout->addWidget(bb, 3, 0, 1, 3);
 
     auto repage =
         [&](int step)
