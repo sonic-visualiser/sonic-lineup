@@ -132,16 +132,18 @@ using std::pair;
 MainWindow::MainWindow(SoundOptions options) :
     MainWindowBase(options),
     m_mainMenusCreated(false),
-    m_playbackMenu(0),
-    m_recentSessionsMenu(0),
-    m_deleteSelectedAction(0),
-    m_ffwdAction(0),
-    m_rwdAction(0),
+    m_playbackMenu(nullptr),
+    m_recentSessionsMenu(nullptr),
+    m_deleteSelectedAction(nullptr),
+    m_ffwdAction(nullptr),
+    m_rwdAction(nullptr),
     m_recentSessions("RecentSessions", 20),
     m_exiting(false),
-    m_preferencesDialog(0),
-    m_layerTreeView(0),
+    m_preferencesDialog(nullptr),
+    m_layerTreeView(nullptr),
     m_keyReference(new KeyReference()),
+    m_versionTester(nullptr),
+    m_networkPermission(false),
     m_displayMode(OutlineWaveformMode),
     m_salientCalculating(false),
     m_salientColour(0),
@@ -388,21 +390,15 @@ MainWindow::MainWindow(SoundOptions options) :
     finaliseMenus();
 
     NetworkPermissionTester tester;
-    bool networkPermission = tester.havePermission();
-    if (networkPermission) {
-        SVDEBUG << "Network permission granted: checking for updates" << endl;
-        m_versionTester = new VersionTester
-            ("sonicvisualiser.org", "latest-vect-version.txt", VECT_VERSION);
-        connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
-                this, SLOT(newerVersionAvailable(QString)));
-    } else {
-        SVDEBUG << "Network permission not granted: not checking for updates"
-                << endl;
-        m_versionTester = 0;
-    }
+    m_networkPermission = tester.havePermission();
 
     if (!reopenLastSession()) {
         QTimer::singleShot(400, this, SLOT(introDialog()));
+    } else {
+        // Do this here only if not showing the intro dialog -
+        // otherwise the introDialog function will do this after it
+        // has shown the dialog, so we don't end up with both at once
+        checkForNewerVersion();
     }
                        
 //    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
@@ -2501,7 +2497,25 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 void
 MainWindow::introDialog()
 {
-    IntroDialog d(this);
+    IntroDialog::show(this);
+    
+    // and now that's out of the way
+    checkForNewerVersion();
+}
+
+void
+MainWindow::checkForNewerVersion()
+{
+    if (m_networkPermission) {
+        SVDEBUG << "Network permission granted: checking for updates" << endl;
+        m_versionTester = new VersionTester
+            ("sonicvisualiser.org", "latest-vect-version.txt", VECT_VERSION);
+        connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
+                this, SLOT(newerVersionAvailable(QString)));
+    } else {
+        SVDEBUG << "Network permission not granted: not checking for updates"
+                << endl;
+    }
 }
 
 void

@@ -132,6 +132,7 @@ protected slots:
     void monitoringLevelsChanged(float, float) override;
 
     void introDialog();
+    void checkForNewerVersion();
     
     void betaReleaseWarning();
 
@@ -222,6 +223,7 @@ protected:
 
     KeyReference            *m_keyReference;
     VersionTester           *m_versionTester;
+    bool                     m_networkPermission;
     QString                  m_newerVersionIs;
 
     QString getReleaseText() const;

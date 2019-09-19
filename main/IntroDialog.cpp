@@ -34,7 +34,8 @@
 
 using namespace std;
 
-IntroDialog::IntroDialog(QWidget *parent)
+void
+IntroDialog::show(QWidget *parent)
 {
     QSettings settings;
     settings.beginGroup("IntroDialog");
@@ -70,12 +71,12 @@ IntroDialog::IntroDialog(QWidget *parent)
         },
         { d.tr("Change your view"),
           d.tr("<p>Use the buttons along the bottom to change the current view.</p>"
-               "<p>There are two waveform views: Outline for a simplified<br>"
+               "<p>There are two waveform views: \"Outline\" for a simplified<br>"
                "overview, or a more typical waveform for detail. And two<br>"
                "spectrograms with different frequency and colour profiles.</p>"
-               "<p>The Sung Pitch view shows pitch profiles, in the case of<br>"
-               "solo singing or similar music; Key is a key-likelihood plot;<br>"
-               "and Stereo Azimuth shows a decomposition of the stereo plan.</p>"
+               "<p>The \"Sung pitch\" view shows pitch profiles, in the case of<br>"
+               "solo singing or similar music; \"Key\" is a key-likelihood plot;<br>"
+               "and \"Stereo azimuth\" gives a stereo-plan decomposition.</p>"
                "<p>See the documentation in the Help menu for more details.</p>"
                "</ul>"
               )

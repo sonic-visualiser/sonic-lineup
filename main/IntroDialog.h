@@ -21,7 +21,7 @@ class QWidget;
 class IntroDialog
 {
 public:
-    IntroDialog(QWidget *parent);
+    static void show(QWidget *parent);
 };
 
 #endif
