@@ -390,11 +390,14 @@ MainWindow::MainWindow(SoundOptions options) :
     NetworkPermissionTester tester;
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
+        SVDEBUG << "Network permission granted: checking for updates" << endl;
         m_versionTester = new VersionTester
             ("sonicvisualiser.org", "latest-vect-version.txt", VECT_VERSION);
         connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
                 this, SLOT(newerVersionAvailable(QString)));
     } else {
+        SVDEBUG << "Network permission not granted: not checking for updates"
+                << endl;
         m_versionTester = 0;
     }
 
@@ -3236,7 +3239,7 @@ MainWindow::newerVersionAvailable(QString version)
     QString tag = QString("version-%1-available-show").arg(version);
     if (settings.value(tag, true).toBool()) {
         QString title(tr("Newer version available"));
-        QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of %2, but version %3 is now available.</p><p>Please see the <a href=\"http://www.sonicvisualiser.org/sonic-lineup/\">%4 website</a> for more information.</p>").arg(VECT_VERSION).arg(QApplication::applicationName()).arg(version).arg(QApplication::applicationName()));
+        QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of %2, but version %3 is now available.</p><p>Please see the <a style=\"color: #c1e9f3\" href=\"http://www.sonicvisualiser.org/sonic-lineup/\">%4 website</a> for more information.</p>").arg(VECT_VERSION).arg(QApplication::applicationName()).arg(version).arg(QApplication::applicationName()));
         QMessageBox::information(this, title, text);
         settings.setValue(tag, false);
     }

@@ -44,11 +44,12 @@ IntroDialog::IntroDialog(QWidget *parent)
 
     QDialog d(parent, Qt::SplashScreen);
     d.setWindowTitle(d.tr("Welcome!"));
-
+    
     vector<pair<QString, QString>> texts {
         { d.tr("Welcome!"),
-          d.tr("<p>The first thing to do is open some audio files.</p>"
-               "<p>(But read these introductory notes first.)</p>"
+          d.tr("<p>The first thing is to open some audio files. The Open button<br>"
+               "is on the toolbar up here.</p>"
+               "<p>(But please read these introductory notes first!)</p>"
                "<p>If you have more than one recording of the same thing,<br>"
                "such as multiple performances, takes, or even cover versions,"
                "<br>try opening them all in one go.</p>"
@@ -57,8 +58,9 @@ IntroDialog::IntroDialog(QWidget *parent)
                "microphone.</p>")
         },
         { d.tr("Scroll, zoom, and play"),
-          d.tr("<p>Drag left and right in the main pane to move through time,<br>"
-               "and use two-finger scroll-drag, or a scroll wheel, to zoom.</p>"
+          d.tr("<p>Your audio files will all appear in this main pane.</p>"
+               "<p>Drag left and right to move through time, and use<br>"
+               "two-finger scroll-drag, or a scroll wheel, to zoom.</p>"
                "<p>You can also move using the left and right cursor keys,<br>"
                "and zoom using the up and down keys.</p>"
                "<p>%1 will try to align the audio files, so as to<br>"
@@ -74,7 +76,7 @@ IntroDialog::IntroDialog(QWidget *parent)
                "<p>The Sung Pitch view shows pitch profiles, in the case of<br>"
                "solo singing or similar music; Key is a key-likelihood plot;<br>"
                "and Stereo Azimuth shows a decomposition of the stereo plan.</p>"
-               "<p>See the <a href=\"http://www.sonicvisualiser.org/sonic-lineup/doc/\">online documentation</a> for more details.</p>"
+               "<p>See the documentation in the Help menu for more details.</p>"
                "</ul>"
               )
         }
@@ -83,7 +85,9 @@ IntroDialog::IntroDialog(QWidget *parent)
     QGridLayout *outerLayout = new QGridLayout;
     d.setLayout(outerLayout);
     QFrame *outerFrame = new QFrame;
+#ifdef Q_OS_WIN32
     outerFrame->setFrameStyle(QFrame::Panel | QFrame::Raised);
+#endif
     outerLayout->addWidget(outerFrame, 0, 0);
     
     QGridLayout *layout = new QGridLayout;
@@ -211,7 +215,8 @@ IntroDialog::IntroDialog(QWidget *parent)
     QObject::connect(next, &QPushButton::clicked, [&]() { repage(1); });
     QObject::connect(prev, &QPushButton::clicked, [&]() { repage(-1); });
     
-    d.setMinimumSize(QSize(parent->width() * 0.4, parent->height() * 0.6));
+    d.setMinimumSize(QSize(int(ceil(parent->width() * 0.4)),
+                           int(ceil(parent->height() * 0.6))));
     d.setModal(false);
     d.exec();
     
