@@ -2987,7 +2987,7 @@ MainWindow::website()
 void
 MainWindow::help()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/sonic-lineup/doc/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/sonic-lineup/doc/reference/%1/en/").arg(VECT_VERSION));
 }
 
 void
