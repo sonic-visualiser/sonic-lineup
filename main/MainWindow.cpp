@@ -3079,7 +3079,7 @@ MainWindow::about()
     QString aboutText;
 
     aboutText += tr("<h3>About Sonic Lineup</h3>");
-    aboutText += tr("<p>Sonic Lineup is an application for comparative visualisation and alignment of related audio recordings.</p>");
+    aboutText += tr("<p>Sonic Lineup is an application for comparative visualisation and alignment of related audio recordings.<br><a style=\"color: #c1e9f3\" href=\"http://www.sonicvisualiser.org/sonic-lineup/\">http://www.sonicvisualiser.org/sonic-lineup/</a></p>");
     aboutText += QString("<p><small>%1</small></p>").arg(getReleaseText());
 
     aboutText += 
