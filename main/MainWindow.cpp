@@ -1295,6 +1295,8 @@ MainWindow::openSmallSession(const SmallSession &session)
         configureNewPane(m_paneStack->getCurrentPane());
     }
 
+    rewindStart();
+    
     m_documentModified = false;
     m_sessionState = SessionActive;
     return;
