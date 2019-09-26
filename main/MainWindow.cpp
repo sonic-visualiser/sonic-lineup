@@ -1952,7 +1952,7 @@ MainWindow::keyModeSelected()
     
     selectTransformDrivenMode
         (KeyMode,
-         "vamp:qm-vamp-plugins:qm-keydetector:tonicstrength",
+         "vamp:qm-vamp-plugins:qm-keydetector:mergedkeystrength",
          {},
          propertyXml,
          false);
