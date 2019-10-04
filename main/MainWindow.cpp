@@ -130,7 +130,11 @@ using std::pair;
 
 
 MainWindow::MainWindow(SoundOptions options) :
-    MainWindowBase(options),
+    MainWindowBase(options,
+                   int(PaneStack::Option::NoUserResize) |
+                   int(PaneStack::Option::NoPropertyStacks) |
+                   int(PaneStack::Option::ShowAlignmentViews) |
+                   int(PaneStack::Option::NoCloseOnFirstPane)),
     m_mainMenusCreated(false),
     m_playbackMenu(nullptr),
     m_recentSessionsMenu(nullptr),
@@ -225,10 +229,6 @@ MainWindow::MainWindow(SoundOptions options) :
     m_mainScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_mainScroll->setFrameShape(QFrame::NoFrame);
 
-    m_paneStack->setResizeMode(PaneStack::AutoResizeOnly);
-    m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
-    m_paneStack->setShowCloseButtonOnFirstPane(false);
-    m_paneStack->setShowAlignmentViews(true);
     m_mainScroll->setWidget(m_paneStack);
 
     QFrame *bottomFrame = new QFrame(mainFrame);
