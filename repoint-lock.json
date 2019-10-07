@@ -7,7 +7,7 @@
       "pin": "13bd41bd8a17"
     },
     "svgui": {
-      "pin": "88fcbc4d93dd"
+      "pin": "34311e135695"
     },
     "svapp": {
       "pin": "8e9702c0b9c7"
@@ -52,7 +52,7 @@
       "pin": "4b272c839f7e"
     },
     "constant-q-cpp": {
-      "pin": "628db02cf5ee6b8d12c183cb0ea274161daf1d03"
+      "pin": "1b02461c83a8dc977023f36aafe3d13906dfaaf9"
     },
     "tuning-difference": {
       "pin": "8fd1c994f937"
