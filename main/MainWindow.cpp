@@ -401,7 +401,7 @@ MainWindow::MainWindow(SoundOptions options) :
         checkForNewerVersion();
     }
                        
-//    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
 
 MainWindow::~MainWindow()
@@ -2524,8 +2524,8 @@ void
 MainWindow::betaReleaseWarning()
 {
     QMessageBox::information
-        (this, tr("Test release"),
-         tr("<b>This is a test release of %1</b><p>This release is made for test purposes only - please send feedback to the developers.</p>").arg(QApplication::applicationName()));
+        (this, tr("Beta release"),
+         tr("<b>This is a beta release of %1</b><p>Please see the \"What's New\" option in the Help menu for a list of changes since the last proper release.</p>").arg(QApplication::applicationName()));
 }
 
 void
