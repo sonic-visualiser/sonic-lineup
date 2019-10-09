@@ -27,11 +27,7 @@ echo
 
 # Test that the appropriate version of the docs exist on the website
 
-echo "WARNING: Documentation not configured yet!"
-echo
-exit
-
-doc_url="http://sonicvisualiser.org/doc/reference/$v/en/"
+doc_url="http://sonicvisualiser.org/sonic-lineup/doc/reference/$v/en/"
 doc_status=$(curl -sL -w "%{http_code}" "$doc_url" -o /dev/null)
 
 if [ "$doc_status" = "404" ]; then
@@ -39,6 +35,6 @@ if [ "$doc_status" = "404" ]; then
     echo "***          $doc_url"
     echo "***          Please fix this before release!"
     echo "***          And remember to update the link from"
-    echo "             http://www.sonicvisualiser.org/documentation.html !"
+    echo "             http://www.sonicvisualiser.org/sonic-lineup/index.html !"
     echo
 fi
