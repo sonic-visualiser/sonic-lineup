@@ -54,7 +54,7 @@ for p in $plugins ; do
 done
 
 cp icons/"$program"-icon.svg "$targetdir"/usr/share/pixmaps/
-cp icons/"$program"-128x128.png "$targetdir"/usr/share/pixmaps/"$program"-icon.png
+cp icons/"$program"-icon-128x128.png "$targetdir"/usr/share/pixmaps/"$program"-icon.png
 cp "$program".desktop "$targetdir"/usr/share/applications/
 cp README.md "$targetdir"/usr/share/doc/"$program"/
 
