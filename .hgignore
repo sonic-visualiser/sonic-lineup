@@ -60,3 +60,4 @@ constant-q-cpp
 Dockerfile*.gen
 qm-vamp-plugins
 ..*
+deploy/linux/docker/output

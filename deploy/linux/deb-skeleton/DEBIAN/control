@@ -1,0 +1,13 @@
+Package: sonic-lineup
+Priority: optional
+Maintainer: Chris Cannam <cannam@all-day-breakfast.com>
+Architecture: amd64
+Version: 1.0cc-1
+Installed-Size: 6056
+Section: contrib/sound
+Depends: libqt5core5a, libsndfile1, libsamplerate0, libfftw3-3, libbz2-1.0, libpulse0, libmad0, libid3tag0, liboggz2, libfishsound1, libasound2, liblo7, liblrdf0, libsord-0-0, libserd-0-0, vamp-plugin-sdk, librubberband2, libc6
+Description: Comparative visualisation of related audio recordings
+ Sonic Lineup is an application for quick read-only comparative
+ visualisation of multiple audio files whose contents consist of
+ different performances of the same work or recordings of the same
+ material.

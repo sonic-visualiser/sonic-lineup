@@ -31,13 +31,13 @@ fi
 mkdir "$targetdir"
 
 mkdir -p "$targetdir"/usr/bin
-mkdir -p "$targetdir"/usr/lib/sonic-lineup
+mkdir -p "$targetdir"/usr/lib/"$program"
 
 cp "$program" "$targetdir"/usr/bin/
-cp "$checker" "$targetdir"/usr/lib/sonic-lineup/
+cp "$checker" "$targetdir"/usr/lib/"$program"/
 
 for p in $plugins ; do
-    cp "$p.so" "$targetdir"/usr/lib/sonic-lineup/
+    cp "$p.so" "$targetdir"/usr/lib/"$program"/
 done
 
 ldd /usr/lib/x86_64-linux-gnu/libpulse.so.0 || true
@@ -111,8 +111,7 @@ done
 
 cp "$program.desktop" "$targetdir/"
 
-##!!!
-cp "icons/sv-icon.svg" "$targetdir/sonic-lineup.svg"
+cp "icons/$program-icon.svg" "$targetdir/$program-icon.svg"
 
 cp "deploy/linux/AppRun" "$targetdir/"
 
