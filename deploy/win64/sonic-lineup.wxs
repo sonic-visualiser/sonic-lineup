@@ -12,7 +12,7 @@
     <Package
         Id="*"
         Keywords="Installer"
-        Description="Sonic Lineup 64-bit Installer" 
+        Description="Sonic Lineup Installer" 
         Comments="Copyright (c) 2019 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="200"
