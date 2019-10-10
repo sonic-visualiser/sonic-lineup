@@ -19,7 +19,6 @@ solaris*:TARGET = sonic-lineup
 
 !win32 {
     PRE_TARGETDEPS += $$PWD/libbase.a
-    QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker .
 }
 
 linux* {
@@ -83,4 +82,12 @@ SOURCES +=  \
         main/NetworkPermissionTester.cpp \
         main/PreferencesDialog.cpp \
         main/SmallSession.cpp
+
+macx* {
+    QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker . && deploy/osx/deploy.sh $$shell_quote(Sonic Lineup)
+}
+
+linux {
+    QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker .
+}
 

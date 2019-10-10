@@ -8,6 +8,7 @@ o/*
 */tmp_moc/*
 doc/html/
 *.o
+*.dylib
 *.so
 *.so.*
 *.a
