@@ -1,10 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*-  vi:set ts=8 sts=4 sw=4: */
 
 /*
-    Vect
-    An experimental audio player for plural recordings of a work
+    Sonic Lineup
+    Comparative visualisation and alignment of related audio recordings
     Centre for Digital Music, Queen Mary, University of London.
-    This file copyright 2006-2012 Chris Cannam and QMUL.
     
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
