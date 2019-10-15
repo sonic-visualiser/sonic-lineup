@@ -4,13 +4,13 @@
       "pin": "bc5e76e90e95"
     },
     "svcore": {
-      "pin": "6eb3a76c74f7"
+      "pin": "343ef2a866a4"
     },
     "svgui": {
-      "pin": "bfd8b22fd67c"
+      "pin": "4f8c72adbf43"
     },
     "svapp": {
-      "pin": "8e9702c0b9c7"
+      "pin": "ce698f8d0831"
     },
     "checker": {
       "pin": "c8c17e51aab0"
@@ -37,7 +37,7 @@
       "pin": "8c4162878ae6"
     },
     "bqaudiostream": {
-      "pin": "e3a6c41e042f"
+      "pin": "a0926b93e771"
     },
     "bqthingfactory": {
       "pin": "7686116dcdd5"
@@ -67,7 +67,7 @@
       "pin": "7aa2536321769ece0873c072200b8183c899c924"
     },
     "qm-vamp-plugins/lib/qm-dsp": {
-      "pin": "9b18a2294638e2a28c8b97ca04d870422a8da4ef"
+      "pin": "6bc10532c581a14bd26361249789100e771638cf"
     },
     "azi": {
       "pin": "06d2dd60a1b2"
