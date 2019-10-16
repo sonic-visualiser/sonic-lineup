@@ -128,8 +128,9 @@ using std::set;
 using std::pair;
 
 
-MainWindow::MainWindow(SoundOptions options) :
-    MainWindowBase(options,
+MainWindow::MainWindow(AudioMode audioMode) :
+    MainWindowBase(audioMode,
+                   MainWindowBase::MIDI_NONE,
                    int(PaneStack::Option::NoUserResize) |
                    int(PaneStack::Option::NoPropertyStacks) |
                    int(PaneStack::Option::ShowAlignmentViews) |

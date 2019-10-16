@@ -262,11 +262,14 @@ main(int argc, char **argv)
     // Permit size_t and PropertyName to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
-    MainWindow::SoundOptions options =
-        MainWindow::WithAudioInput | MainWindow::WithAudioOutput;
-    if (!audioOutput) options = 0;
+    MainWindow::AudioMode audioMode = 
+        MainWindow::AUDIO_PLAYBACK_NOW_RECORD_LATER;
 
-    MainWindow *gui = new MainWindow(options);
+    if (!audioOutput) {
+        audioMode = MainWindow::AUDIO_NONE;
+    } 
+    
+    MainWindow *gui = new MainWindow(audioMode);
     application.setMainWindow(gui);
 
     QScreen *screen = QApplication::primaryScreen();

@@ -66,7 +66,7 @@ class MainWindow : public MainWindowBase
     Q_OBJECT
 
 public:
-    MainWindow(SoundOptions options);
+    MainWindow(AudioMode audioMode);
     virtual ~MainWindow();
 
 signals:
