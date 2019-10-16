@@ -1052,6 +1052,7 @@ MainWindow::newSession()
     CommandHistory::getInstance()->documentSaved();
     documentRestored();
     updateMenuStates();
+    zoomDefault();
 
     // Record that the last (i.e. current, as of now) session is
     // empty, so that if we exit now and re-start, we get an empty
@@ -2199,6 +2200,7 @@ MainWindow::record()
 {
     MainWindowBase::record();
     configureNewPane(m_paneStack->getCurrentPane());
+    zoomDefault();
 }
 
 void
