@@ -64,6 +64,10 @@ echo "Copying in plugin server."
 cp piper-vamp-simple-server "$source"/Contents/MacOS/
 
 echo
+echo "Copying in lproj directories containing InfoPlist.strings translation files."
+cp -r i18n/*.lproj "$source"/Contents/Resources/
+
+echo
 echo "Writing version $bundleVersion in to bundle."
 echo "(This should be a three-part number: major.minor.point)"
 
@@ -71,9 +75,5 @@ perl -p -e "s/VECT_VERSION/$bundleVersion/" deploy/osx/Info.plist \
     > "$source"/Contents/Info.plist
 
 echo "Done: check $source/Contents/Info.plist for sanity please"
-
-echo
-echo "Copying in lproj directories containing InfoPlist.strings translation files."
-cp -r i18n/*.lproj "$source"/Contents/Resources/
 
 echo "Done"
