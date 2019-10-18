@@ -66,5 +66,6 @@ signtool verify /pa sonic-lineup.msi
 
 set PATH=%ORIGINALPATH%
 
+cd %STARTPWD%
 @echo Done
 
