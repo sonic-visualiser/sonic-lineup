@@ -18,7 +18,15 @@ echo -n "Packaging up version $v from tag $tag... "
 
 hg update -r"$tag"
 
-./repoint archive /tmp/sonic-lineup-"$v".tar.gz --exclude sv-dependency-builds repoint.pri
+./repoint archive /tmp/sonic-lineup-"$v".tar.gz \
+          --exclude \
+          sv-dependency-builds \
+          repoint.pri \
+          vamp-plugin-sdk/test \
+          pyin/testdata \
+          qm-vamp-plugins/build \
+          qm-vamp-plugins/test \
+          constant-q-cpp/test
 
 hg update -r"$current"
 
