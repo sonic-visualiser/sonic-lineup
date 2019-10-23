@@ -61,5 +61,6 @@ else
 	packages/
 fi
 
-echo "Done"
+echo
 
+ls -l packages

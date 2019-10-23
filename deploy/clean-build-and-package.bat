@@ -20,4 +20,5 @@ mkdir packages
 copy build_win64\sonic-lineup.msi packages\sonic-lineup-%VERSION%-win64.msi
 
 @echo(
-@echo Done
+
+dir packages
