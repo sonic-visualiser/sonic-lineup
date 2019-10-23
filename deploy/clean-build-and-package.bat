@@ -5,7 +5,7 @@
 @set VERSION=%VERSION:#define VECT_VERSION "=%
 set VERSION=%VERSION:"=%
 
-@echo ""
+@echo(
 @set YN=y
 @set /p YN="Proceed to clean, rebuild, package, and sign version %VERSION% [Yn] ?"
 
@@ -19,5 +19,5 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 mkdir packages
 copy build_win64\sonic-lineup.msi packages\sonic-lineup-%VERSION%-win64.msi
 
-@echo ""
+@echo(
 @echo Done
