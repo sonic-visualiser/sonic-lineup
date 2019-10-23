@@ -401,7 +401,7 @@ MainWindow::MainWindow(AudioMode audioMode) :
         checkForNewerVersion();
     }
                        
-    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+//    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
 
 MainWindow::~MainWindow()
