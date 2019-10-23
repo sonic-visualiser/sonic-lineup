@@ -84,7 +84,7 @@ win32-msvc* {
     # we want to do 32-bit builds with MSVC as well, then we'll
     # need to add a way to distinguish the two.
     
-    INCLUDEPATH += $$PWD/sv-dependency-builds/win64-msvc/include $$PWD/sv-dependency-builds/win64-msvc/include/opus /Libraries/boost_1_69_0 $$PWD/../boost_1_69_0/
+    INCLUDEPATH += $$PWD/sv-dependency-builds/win64-msvc/include $$PWD/sv-dependency-builds/win64-msvc/include/opus /Libraries/boost_1_71_0 /Libraries/boost_1_69_0 $$PWD/../boost_1_69_0/
 
     # This seems to be intruding even when we're supposed to be release
 #    CONFIG(debug) {
