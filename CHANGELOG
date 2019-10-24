@@ -1,4 +1,31 @@
 
+Changes in Sonic Lineup v1.0 (25 October 2019) since the previous release 0.3:
+
+ - Add ghost reference trace to Sung Pitch view for comparison with
+   pitch of reference
+
+ - Add first-run explainer dialog
+
+ - Improve rendering of alignment views between panes
+
+ - Fix performance problem when switching to spectrogram mode with
+   numerous tracks open, especially on Windows
+
+ - Merge major and minor key plots, because of lack of vertical space
+
+ - Fix problems with presentation and alignment of vertical scales
+
+ - Fix ffwd/rewind which could get stuck when used in aligned views
+
+ - Fix incorrect waveform type selection when switching modes, and
+   ensure outline waveform always uses the same waveform configuration
+
+ - Fix a number of crashes and thread-safety issues
+
+ - Fix sluggishness in starting and stopping playback when using
+   PulseAudio v13.0+
+
+
 Changes in Sonic Lineup v0.3 (14 June 2019):
 
  - First public release
