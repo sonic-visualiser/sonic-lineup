@@ -9,9 +9,8 @@ visualisation of multiple audio files whose contents consist of
 different performances of the same work or recordings of the same
 material.
 
-Although potentially useful for music study, rehearsal, musicological
-purposes, or language learning, the application is still in an
-exploratory experimental state at the moment.
+For more information, please see http://www.sonicvisualiser.org/sonic-lineup/.
+
 
 Credits
 -------
@@ -35,3 +34,9 @@ Sonic Lineup incorporates a number of audio analysis plugins:
 Distributed under the GNU General Public License. See the file COPYING
 for details.
 
+
+Automated build reports
+-----------------------
+
+ * Linux and macOS CI build: [![Build Status](https://travis-ci.org/sonic-visualiser/sonic-lineup.svg?branch=master)](https://travis-ci.org/sonic-visualiser/sonic-lineup)
+ * Windows CI build: [![Build status](https://ci.appveyor.com/api/projects/status/4r68mde0dlqk4sa5?svg=true)](https://ci.appveyor.com/project/cannam/sonic-lineup)
