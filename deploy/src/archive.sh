@@ -18,7 +18,7 @@ echo -n "Packaging up version $v from tag $tag... "
 
 hg update -r"$tag"
 
-./repoint archive /tmp/sonic-lineup-"$v".tar.gz \
+./repoint archive "$(pwd)"/packages/sonic-lineup-"$v".tar.gz \
           --exclude \
           sv-dependency-builds \
           repoint.pri \
