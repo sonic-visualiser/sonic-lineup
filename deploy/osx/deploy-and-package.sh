@@ -1,6 +1,16 @@
 #!/bin/bash
 
-set -eu
+set -e
+
+notarize=yes
+if [ "$1" = "--no-notarization" ]; then
+    notarize=no
+elif [ -n "$1" ]; then
+    echo "Usage: $0 [--no-notarization]"
+    exit 2
+fi
+
+set -u
 
 app="Sonic Lineup"
 
@@ -19,6 +29,11 @@ fi
 if [ -f "$dmg" ]; then
     echo "Target disc image $dmg already exists, not overwriting"
     exit 2
+fi
+
+if [ "$notarize" = no ]; then
+    echo
+    echo "Note: The --no-notarization flag is set: won't be submitting for notarization"
 fi
 
 echo
@@ -60,9 +75,14 @@ echo "Signing dmg..."
 
 codesign -s "Developer ID Application: Chris Cannam" -fv "$dmg"
 
-echo
-echo "Submitting dmg for notarization..."
-
-deploy/osx/notarize.sh "$dmg" || exit 1
+if [ "$notarize" = no ]; then
+    echo
+    echo "The --no-notarization flag was set: not submitting for notarization"
+else
+    echo
+    echo "Submitting dmg for notarization..."
+    
+    deploy/osx/notarize.sh "$dmg" || exit 1
+fi
 
 echo "Done"
