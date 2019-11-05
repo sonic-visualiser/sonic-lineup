@@ -1,0 +1,11 @@
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix vamp:     <http://purl.org/ontology/vamp/> .
+@prefix :         <#> .
+
+:transform a vamp:Transform ;
+    vamp:plugin <http://vamp-plugins.org/rdf/plugins/pyin#pyin> ;
+    vamp:parameter_binding [
+        vamp:parameter [ vamp:identifier "outputunvoiced" ] ;
+        vamp:value "2"^^xsd:float ;
+    ] ;
+    vamp:output <http://vamp-plugins.org/rdf/plugins/pyin#pyin_output_smoothedpitchtrack> .
