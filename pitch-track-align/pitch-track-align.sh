@@ -16,5 +16,5 @@ sonic-annotator -t "$mydir/pitch-track.ttl" "$file1" -w csv --csv-one-file "$tmp
 
 sonic-annotator -t "$mydir/pitch-track.ttl" "$file2" -w csv --csv-one-file "$tmproot.b" --csv-omit-filename --csv-force
 
-"$mydir"/../../sml-buildscripts/polyrun "$mydir"/pitch-track-align.sml "$tmproot.a" "$tmproot.b"
+"$mydir"/pitch-track-align "$tmproot.a" "$tmproot.b"
 

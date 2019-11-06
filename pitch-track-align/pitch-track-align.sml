@@ -1,6 +1,9 @@
 
+type value = real
+type cost = real
+                 
 datatype advance = START | ADVANCE_A | ADVANCE_B | ADVANCE_BOTH
-type step = advance * real
+type step = advance * cost
 
 fun choose costs =
     case costs of
@@ -15,11 +18,9 @@ fun choose costs =
             if both <= b then (ADVANCE_BOTH, both) else (ADVANCE_B, b)
 
 fun cost (p1, p2) =
-    if p1 < 0.0 then cost (0.0, p2)
-    else if p2 < 0.0 then cost (p1, 0.0)
-    else Real.abs(p1 - p2)
+    Real.abs(p1 - p2)
        
-fun costSeries (s1 : real vector) (s2 : real vector) : step vector vector =
+fun costSeries (s1 : value vector) (s2 : value vector) : step vector vector =
     let open Vector
 
         fun costSeries' (rowAcc : step vector list) j =
@@ -66,6 +67,19 @@ fun alignSeries s1 s2 =
              else trace (sj-1, si-1) [])
     end
 
+fun preprocess (times : real list, frequencies : real list) :
+    real vector * value vector =
+    let val pitches =
+            map (fn f =>
+                    if f < 0.0
+                    then 0.0
+                    else 12.0 * (Math.log10(f / 220.0) /
+                                 Math.log10(2.0)) + 57.0)
+                frequencies
+    in
+        (Vector.fromList times, Vector.fromList pitches)
+    end
+    
 fun read csvFile =
     let fun toNumberPair line =
             case String.fields (fn c => c = #",") line of
@@ -85,12 +99,10 @@ fun read csvFile =
                 end
               | NONE => rev acc
         val stream = TextIO.openIn csvFile
-        val (timeList, pitchList) = ListPair.unzip (read' stream [])
-        val (times, pitches) = (Vector.fromList timeList,
-                                Vector.fromList pitchList)
+        val (timeList, freqList) = ListPair.unzip (read' stream [])
         val _ = TextIO.closeIn stream
     in
-        (times, pitches)
+        preprocess (timeList, freqList)
     end
 
 fun alignFiles csv1 csv2 =
