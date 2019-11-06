@@ -7,25 +7,17 @@ datatype pitch_direction =
 type value = pitch_direction
 type cost = real
 
-datatype advance =
-         PATH_START |
-         ADVANCE_A |
-         ADVANCE_B |
-         ADVANCE_BOTH
-             
-type step = advance * cost
-
 fun choose costs =
     case costs of
-        (NONE,   NONE,   _) => (PATH_START, 0.0)
-      | (SOME a, NONE,   _) => (ADVANCE_A, a)
-      | (NONE,   SOME b, _) => (ADVANCE_B, b)
+        (NONE,   NONE,   _) => 0.0
+      | (SOME a, NONE,   _) => a
+      | (NONE,   SOME b, _) => b
       | (SOME _, SOME _, NONE) => raise Fail "Internal error"
       | (SOME a, SOME b, SOME both) =>
         if a < b then
-            if both <= a then (ADVANCE_BOTH, both) else (ADVANCE_A, a)
+            if both <= a then both else a
         else
-            if both <= b then (ADVANCE_BOTH, both) else (ADVANCE_B, b)
+            if both <= b then both else b
 
 fun cost (p1, p2) =
     let fun together a b = Real.abs (a - b)
@@ -40,28 +32,28 @@ fun cost (p1, p2) =
           | _ => 2.0
     end
        
-fun costSeries (s1 : value vector) (s2 : value vector) : step vector vector =
+fun costSeries (s1 : value vector) (s2 : value vector) : cost vector vector =
     let open Vector
 
-        fun costSeries' (rowAcc : step vector list) j =
+        fun costSeries' (rowAcc : cost vector list) j =
             if j = length s1
             then fromList (rev rowAcc)
             else costSeries' (costRow' rowAcc j [] 0 :: rowAcc) (j+1)
 
-        and costRow' (rowAcc : step vector list) j (colAcc : step list) i =
+        and costRow' (rowAcc : cost vector list) j (colAcc : cost list) i =
             if i = length s2
             then fromList (rev colAcc)
             else let val c = cost (sub (s1, j), sub (s2, i))
                      val options =
                          (if null rowAcc
                           then NONE
-                          else SOME (c + #2 (sub (hd rowAcc, i))),
+                          else SOME (c + sub (hd rowAcc, i)),
                           if i = 0
                           then NONE
-                          else SOME (c + #2 (hd colAcc)),
+                          else SOME (c + hd colAcc),
                           if null rowAcc orelse i = 0
                           then NONE
-                          else SOME (c + #2 (sub (hd rowAcc, i-1))))
+                          else SOME (c + sub (hd rowAcc, i-1)))
                  in
                      costRow' rowAcc j (choose options :: colAcc) (i+1)
                  end
@@ -71,12 +63,26 @@ fun costSeries (s1 : value vector) (s2 : value vector) : step vector vector =
 
 fun alignSeries s1 s2 =
     let val cumulativeCosts = costSeries s1 s2
+        fun cost (j, i) = Vector.sub (Vector.sub (cumulativeCosts, j), i)
         fun trace (j, i) acc =
-            case Vector.sub (Vector.sub (cumulativeCosts, j), i) of
-                (PATH_START, _) => (i :: acc)
-              | (ADVANCE_A, _) => trace (j-1, i) (i :: acc)
-              | (ADVANCE_B, _) => trace (j, i-1) acc
-              | (ADVANCE_BOTH, _) => trace (j-1, i-1) (i :: acc)
+            if i = 0
+            then if j = 0
+                 then i :: acc
+                 else trace (j-1, i) (i :: acc)
+            else if j = 0
+            then trace (j, i-1) acc
+            else let val (a, b, both) =
+                         (cost (j-1, i), cost (j, i-1), cost (j-1, i-1))
+                 in
+                     if a < b then
+                         if both <= a
+                         then trace (j-1, i-1) (i :: acc)
+                         else trace (j-1, i) (i :: acc)
+                     else
+                         if both <= b
+                         then trace (j-1, i-1) (i :: acc)
+                         else trace (j, i-1) acc
+                 end
 
         val sj = Vector.length s1
         val si = Vector.length s2
@@ -167,12 +173,13 @@ fun printAlignment alignment =
         alignment
         
 fun usage () =
-    print ("Usage: pitch-track-align pitch1.csv pitch2.csv\n")
+    TextIO.output (TextIO.stdErr,
+                   "Usage: pitch-track-align pitch1.csv pitch2.csv\n")
 
 fun main () =
     (case CommandLine.arguments () of
          [csv1, csv2] => printAlignment (alignFiles csv1 csv2)
        | _ => usage ())
     handle exn => 
-           (print ("Error: " ^ (exnMessage exn) ^ "\n");
+           (TextIO.output (TextIO.stdErr, "Error: " ^ (exnMessage exn) ^ "\n");
             OS.Process.exit OS.Process.failure)
