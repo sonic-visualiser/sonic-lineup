@@ -1,13 +1,24 @@
 
-type value = real
+datatype pitch_direction =
+         PITCH_NONE |
+         PITCH_START |
+         PITCH_UP of real |
+         PITCH_DOWN of real
+
+type value = pitch_direction
 type cost = real
-                 
-datatype advance = START | ADVANCE_A | ADVANCE_B | ADVANCE_BOTH
+
+datatype advance =
+         PATH_START |
+         ADVANCE_A |
+         ADVANCE_B |
+         ADVANCE_BOTH
+             
 type step = advance * cost
 
 fun choose costs =
     case costs of
-        (NONE,   NONE,   _) => (START, 0.0)
+        (NONE,   NONE,   _) => (PATH_START, 0.0)
       | (SOME a, NONE,   _) => (ADVANCE_A, a)
       | (NONE,   SOME b, _) => (ADVANCE_B, b)
       | (SOME _, SOME _, NONE) => raise Fail "Internal error"
@@ -16,9 +27,40 @@ fun choose costs =
             if both <= a then (ADVANCE_BOTH, both) else (ADVANCE_A, a)
         else
             if both <= b then (ADVANCE_BOTH, both) else (ADVANCE_B, b)
-
+(*
 fun cost (p1, p2) =
-    Real.abs(p1 - p2)
+    case (p1, p2) of
+        (PITCH_NONE, PITCH_NONE) => 0.0
+      | (PITCH_START, PITCH_START) => 0.0
+      | (PITCH_START, _) => 120.0
+      | (_, PITCH_START) => 120.0
+      | (PITCH_NONE, _) => 120.0
+      | (_, PITCH_NONE) => 120.0
+      | (PITCH_UP a, PITCH_UP b) => Real.abs (a - b)
+      | (PITCH_UP a, PITCH_DOWN b) => 7.0
+      | (PITCH_DOWN a, PITCH_UP b) => 7.0
+      | (PITCH_DOWN a, PITCH_DOWN b) => Real.abs (a - b)
+*)
+fun cost (p1, p2) =
+    case (p1, p2) of
+        (PITCH_NONE, PITCH_NONE) => 0.0
+      | (PITCH_START, PITCH_START) => 0.0
+      | (PITCH_START, _) => 1.0
+      | (_, PITCH_START) => 1.0
+      | (PITCH_NONE, _) => 2.0
+      | (_, PITCH_NONE) => 2.0
+      | (PITCH_UP a, PITCH_UP b) => if Real.abs (a - b) > 3.0
+                                    then 1.0
+                                    else 0.0
+      | (PITCH_UP a, PITCH_DOWN b) => if Real.abs (a + b) > 4.0
+                                      then 2.0
+                                      else 1.0
+      | (PITCH_DOWN a, PITCH_UP b) => if Real.abs (a - b) > 3.0
+                                      then 1.0
+                                      else 0.0
+      | (PITCH_DOWN a, PITCH_DOWN b) => if Real.abs (a + b) > 4.0
+                                        then 2.0
+                                        else 1.0
        
 fun costSeries (s1 : value vector) (s2 : value vector) : step vector vector =
     let open Vector
@@ -53,7 +95,7 @@ fun alignSeries s1 s2 =
     let val cumulativeCosts = costSeries s1 s2
         fun trace (j, i) acc =
             case Vector.sub (Vector.sub (cumulativeCosts, j), i) of
-                (START, _) => (i :: acc)
+                (PATH_START, _) => (i :: acc)
               | (ADVANCE_A, _) => trace (j-1, i) (i :: acc)
               | (ADVANCE_B, _) => trace (j, i-1) acc
               | (ADVANCE_BOTH, _) => trace (j-1, i-1) (i :: acc)
@@ -73,12 +115,34 @@ fun preprocess (times : real list, frequencies : real list) :
             map (fn f =>
                     if f < 0.0
                     then 0.0
-                    else 12.0 * (Math.log10(f / 220.0) /
-                                 Math.log10(2.0)) + 57.0)
+                    else Real.realRound (12.0 * (Math.log10(f / 220.0) /
+                                                 Math.log10(2.0)) + 57.0))
                 frequencies
+        val values =
+            rev (#1 (foldl (fn (p, ([], _)) =>
+                               if p <= 0.0 then ([PITCH_NONE], p)
+                               else ([PITCH_START], p)
+                           | (p, (acc, prev)) =>
+                             if p <= 0.0 then (PITCH_NONE :: acc, p)
+                             else if prev <= 0.0 then (PITCH_START :: acc, p)
+                             else if p >= prev then (PITCH_UP (p - prev) :: acc, p)
+                             else (PITCH_DOWN (prev - p) :: acc, p))
+                           ([], 0.0)
+                           pitches))
+        val _ =
+            app (fn (text, p) =>
+                    TextIO.output (TextIO.stdErr, ("[" ^ text ^ "] -> " ^
+                                                   Real.toString p ^ "\n")))
+                (ListPair.map (fn (PITCH_NONE, p) => (" ", p)
+                                | (PITCH_START, p) => ("!", p)
+                                | (PITCH_UP d, p) => ("+", p)
+                                | (PITCH_DOWN d, p) => ("-", p))
+                              (values, pitches))
     in
-        (Vector.fromList times, Vector.fromList pitches)
+        (Vector.fromList times,
+         Vector.fromList values)
     end
+
     
 fun read csvFile =
     let fun toNumberPair line =
