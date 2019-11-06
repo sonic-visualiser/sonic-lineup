@@ -1,7 +1,6 @@
 
 datatype pitch_direction =
          PITCH_NONE |
-         PITCH_START |
          PITCH_UP of real |
          PITCH_DOWN of real
 
@@ -27,40 +26,19 @@ fun choose costs =
             if both <= a then (ADVANCE_BOTH, both) else (ADVANCE_A, a)
         else
             if both <= b then (ADVANCE_BOTH, both) else (ADVANCE_B, b)
-(*
+
 fun cost (p1, p2) =
-    case (p1, p2) of
-        (PITCH_NONE, PITCH_NONE) => 0.0
-      | (PITCH_START, PITCH_START) => 0.0
-      | (PITCH_START, _) => 120.0
-      | (_, PITCH_START) => 120.0
-      | (PITCH_NONE, _) => 120.0
-      | (_, PITCH_NONE) => 120.0
-      | (PITCH_UP a, PITCH_UP b) => Real.abs (a - b)
-      | (PITCH_UP a, PITCH_DOWN b) => 7.0
-      | (PITCH_DOWN a, PITCH_UP b) => 7.0
-      | (PITCH_DOWN a, PITCH_DOWN b) => Real.abs (a - b)
-*)
-fun cost (p1, p2) =
-    case (p1, p2) of
-        (PITCH_NONE, PITCH_NONE) => 0.0
-      | (PITCH_START, PITCH_START) => 0.0
-      | (PITCH_START, _) => 1.0
-      | (_, PITCH_START) => 1.0
-      | (PITCH_NONE, _) => 2.0
-      | (_, PITCH_NONE) => 2.0
-      | (PITCH_UP a, PITCH_UP b) => if Real.abs (a - b) > 3.0
-                                    then 1.0
-                                    else 0.0
-      | (PITCH_UP a, PITCH_DOWN b) => if Real.abs (a + b) > 4.0
-                                      then 2.0
-                                      else 1.0
-      | (PITCH_DOWN a, PITCH_UP b) => if Real.abs (a - b) > 3.0
-                                      then 1.0
-                                      else 0.0
-      | (PITCH_DOWN a, PITCH_DOWN b) => if Real.abs (a + b) > 4.0
-                                        then 2.0
-                                        else 1.0
+    let fun together a b = Real.abs (a - b)
+        fun opposing a b = a + b + 0.5
+    in
+        case (p1, p2) of
+            (PITCH_NONE, PITCH_NONE) => 0.0
+          | (PITCH_UP a, PITCH_UP b) => together a b
+          | (PITCH_UP a, PITCH_DOWN b) => opposing a b
+          | (PITCH_DOWN a, PITCH_UP b) => opposing a b
+          | (PITCH_DOWN a, PITCH_DOWN b) => together a b
+          | _ => 2.0
+    end
        
 fun costSeries (s1 : value vector) (s2 : value vector) : step vector vector =
     let open Vector
@@ -119,22 +97,24 @@ fun preprocess (times : real list, frequencies : real list) :
                                                  Math.log10(2.0)) + 57.0))
                 frequencies
         val values =
-            rev (#1 (foldl (fn (p, ([], _)) =>
-                               if p <= 0.0 then ([PITCH_NONE], p)
-                               else ([PITCH_START], p)
-                           | (p, (acc, prev)) =>
-                             if p <= 0.0 then (PITCH_NONE :: acc, p)
-                             else if prev <= 0.0 then (PITCH_START :: acc, p)
-                             else if p >= prev then (PITCH_UP (p - prev) :: acc, p)
-                             else (PITCH_DOWN (prev - p) :: acc, p))
-                           ([], 0.0)
-                           pitches))
+            let val acc =
+                    foldl (fn (p, (acc, prev)) =>
+                              if p <= 0.0 then (PITCH_NONE :: acc, prev)
+                              else if prev <= 0.0
+                              then (PITCH_UP p :: acc, p)
+                              else if p >= prev
+                              then (PITCH_UP (p - prev) :: acc, p)
+                              else (PITCH_DOWN (prev - p) :: acc, p))
+                          ([], 0.0)
+                          pitches
+            in
+                rev (#1 acc)
+            end
         val _ =
             app (fn (text, p) =>
                     TextIO.output (TextIO.stdErr, ("[" ^ text ^ "] -> " ^
                                                    Real.toString p ^ "\n")))
                 (ListPair.map (fn (PITCH_NONE, p) => (" ", p)
-                                | (PITCH_START, p) => ("!", p)
                                 | (PITCH_UP d, p) => ("+", p)
                                 | (PITCH_DOWN d, p) => ("-", p))
                               (values, pitches))
