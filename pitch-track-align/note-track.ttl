@@ -1,0 +1,7 @@
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix vamp:     <http://purl.org/ontology/vamp/> .
+@prefix :         <#> .
+
+:transform a vamp:Transform ;
+    vamp:plugin <http://vamp-plugins.org/rdf/plugins/pyin#pyin> ;
+    vamp:output <http://vamp-plugins.org/rdf/plugins/pyin#pyin_output_notes> .

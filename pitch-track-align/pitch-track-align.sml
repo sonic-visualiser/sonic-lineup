@@ -20,8 +20,15 @@ fun choose costs =
             if both <= b then both else b
 
 fun cost (p1, p2) =
-    let fun together a b = Real.abs (a - b)
-        fun opposing a b = a + b + 0.5
+    let fun together a b = let val diff = Real.abs (a - b) in 
+                               if diff < 1.0 then ~1.0
+                               else if diff > 3.0 then 1.0
+                               else 0.0 
+                           end
+        fun opposing a b = let val diff = a + b in
+                               if diff < 2.0 then 1.0
+                               else 2.0
+                           end
     in
         case (p1, p2) of
             (PITCH_NONE, PITCH_NONE) => 0.0
@@ -29,7 +36,7 @@ fun cost (p1, p2) =
           | (PITCH_UP a, PITCH_DOWN b) => opposing a b
           | (PITCH_DOWN a, PITCH_UP b) => opposing a b
           | (PITCH_DOWN a, PITCH_DOWN b) => together a b
-          | _ => 2.0
+          | _ => 1.0
     end
        
 fun costSeries (s1 : value vector) (s2 : value vector) : cost vector vector =
@@ -107,7 +114,7 @@ fun preprocess (times : real list, frequencies : real list) :
                     foldl (fn (p, (acc, prev)) =>
                               if p <= 0.0 then (PITCH_NONE :: acc, prev)
                               else if prev <= 0.0
-                              then (PITCH_UP p :: acc, p)
+                              then (PITCH_UP 0.0 :: acc, p)
                               else if p >= prev
                               then (PITCH_UP (p - prev) :: acc, p)
                               else (PITCH_DOWN (prev - p) :: acc, p))
