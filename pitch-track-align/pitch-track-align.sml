@@ -101,7 +101,7 @@ fun alignSeries s1 s2 =
     end
 
 fun preprocess (times : real list, frequencies : real list) :
-    real vector * value vector =
+    real vector * value vector * real vector =
     let val pitches =
             map (fn f =>
                     if f < 0.0
@@ -133,9 +133,9 @@ fun preprocess (times : real list, frequencies : real list) :
                               (values, pitches))
     in
         (Vector.fromList times,
-         Vector.fromList values)
+         Vector.fromList values,
+         Vector.fromList pitches)
     end
-
     
 fun read csvFile =
     let fun toNumberPair line =
@@ -162,12 +162,29 @@ fun read csvFile =
         preprocess (timeList, freqList)
     end
 
+fun meanDiff pitches1 pitches2 mapping =
+    let open Vector
+        val n = length mapping
+        val sumDiff =
+            foldli (fn (i, j, acc) => acc +
+                                      sub (pitches1, i) -
+                                      sub (pitches2, j))
+                   0.0 mapping
+    in
+        if n = 0 then 0.0
+        else sumDiff / Real.fromInt n
+    end
+        
 fun alignFiles csv1 csv2 =
-    let val (times1, pitches1) = read csv1
-        val (times2, pitches2) = read csv2
+    let val (times1, values1, pitches1) = read csv1
+        val (times2, values2, pitches2) = read csv2
         (* raw alignment returns the index into pitches2 for each
            element in pitches1 *)
-        val raw = alignSeries pitches1 pitches2
+        val raw = alignSeries values1 values2
+        val _ = TextIO.output (TextIO.stdErr,
+                               "Mean pitch difference: reference " ^
+                               Real.toString (meanDiff pitches1 pitches2 raw)
+                               ^ " semitones higher than other track\n")
     in
         List.tabulate (Vector.length raw,
                        fn i => (Vector.sub (times1, i),
