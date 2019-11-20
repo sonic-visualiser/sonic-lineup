@@ -25,11 +25,11 @@ linux* {
 
     vect_bins.path = $$PREFIX_PATH/bin/
     vect_bins.files = sonic-lineup
-    vect_bins.CONFIG = no_check_exist
+    vect_bins.CONFIG = no_check_exist executable
 
     vect_support.path = $$PREFIX_PATH/lib/sonic-lineup/
     vect_support.files = checker/vamp-plugin-load-checker azi.so match-vamp-plugin.so nnls-chroma.so pyin.so qm-vamp-plugins.so tuning-difference.so
-    vect_support.CONFIG = no_check_exist
+    vect_support.CONFIG = no_check_exist executable
 
     vect_desktop.path = $$PREFIX_PATH/share/applications/
     vect_desktop.files = sonic-lineup.desktop
