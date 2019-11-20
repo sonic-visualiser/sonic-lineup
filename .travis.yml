@@ -29,7 +29,7 @@ before_script:
 
 script:
   - make -j3
-  - sudo make install
-  - /usr/local/bin/sonic-lineup -v
-  - ( for p in azi match-vamp-plugin nnls-chroma pyin qm-vamp-plugins tuning-difference; do echo /usr/local/lib/sonic-lineup/$p.so ; done ) | /usr/local/lib/sonic-lineup/vamp-plugin-load-checker vampGetPluginDescriptor
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then sudo make install ; fi
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then /usr/local/bin/sonic-lineup -v ; fi
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ( for p in azi match-vamp-plugin nnls-chroma pyin qm-vamp-plugins tuning-difference; do echo /usr/local/lib/sonic-lineup/$p.so ; done ) | /usr/local/lib/sonic-lineup/vamp-plugin-load-checker vampGetPluginDescriptor ; fi
   
