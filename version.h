@@ -1,1 +1,1 @@
-#define VECT_VERSION "1.1-pre"
+#define VECT_VERSION "1.0.1"
