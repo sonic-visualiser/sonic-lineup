@@ -1,28 +1,28 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "569fc23fa37a"
+      "pin": "74c5b0bfa108"
     },
     "svcore": {
-      "pin": "73447d746db3"
+      "pin": "498ed1e86f92"
     },
     "svgui": {
-      "pin": "e95cefd4aa81"
+      "pin": "27ea5d61b402"
     },
     "svapp": {
-      "pin": "464fed3096f5"
+      "pin": "7b1d30af4b38"
     },
     "checker": {
-      "pin": "c8c17e51aab0"
+      "pin": "ef64b3f171d9"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
     "piper-vamp-cpp": {
-      "pin": "0e3328c6091f59c912e25bc392a7dc75182be1c7"
+      "pin": "f381235a4ba88eac2fa31fc1f7f613cca9707f63"
     },
     "dataquay": {
-      "pin": "b82360a98f49"
+      "pin": "35098262cadd"
     },
     "bqvec": {
       "pin": "cd235ecbeb31"
@@ -34,7 +34,7 @@
       "pin": "c2fb51b31fe4"
     },
     "bqaudioio": {
-      "pin": "9f275ac85af1"
+      "pin": "4fe94361597f"
     },
     "bqaudiostream": {
       "pin": "a0926b93e771"
@@ -43,34 +43,34 @@
       "pin": "7686116dcdd5"
     },
     "sv-dependency-builds": {
-      "pin": "7029a4916348"
+      "pin": "08ae793730bd"
     },
     "icons/scalable": {
-      "pin": "be45984f7915"
+      "pin": "fd0ace21dce3"
     },
     "match": {
       "pin": "4b272c839f7e"
     },
     "constant-q-cpp": {
-      "pin": "1b02461c83a8dc977023f36aafe3d13906dfaaf9"
+      "pin": "7ac84048e3e43c433d88e12d221af15e50f41591"
     },
     "tuning-difference": {
       "pin": "8fd1c994f937"
     },
     "pyin": {
-      "pin": "81f025823a5c"
+      "pin": "a7d9c6142f8f"
     },
     "nnls-chroma": {
-      "pin": "89099872c87b"
+      "pin": "1efe67570b75"
     },
     "qm-vamp-plugins": {
-      "pin": "7aa2536321769ece0873c072200b8183c899c924"
+      "pin": "06933fecfa33aec41a07cc865098be7545ffcca3"
     },
     "qm-vamp-plugins/lib/qm-dsp": {
-      "pin": "6bc10532c581a14bd26361249789100e771638cf"
+      "pin": "e34a3cc188332ed7c33cd9257ef164de5b587191"
     },
     "azi": {
-      "pin": "06d2dd60a1b2"
+      "pin": "d490c1c7e1ae"
     }
   }
 }

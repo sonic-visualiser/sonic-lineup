@@ -64,6 +64,14 @@ QMenu::separator
     margin-right: 10px;
 }
 
+QMenu QLabel /* title on popup */
+{
+    background-color: transparent;
+    color: #000000;
+    padding: 2px 20px 2px 0px;
+    border: 1px solid transparent;
+}
+
 QMenu::item:enabled
 {
     background-color: transparent;

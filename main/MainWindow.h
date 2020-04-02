@@ -165,7 +165,9 @@ protected slots:
 
     virtual void salientLayerCompletionChanged(ModelId);
 
-    void rightButtonMenuRequested(Pane *, QPoint) override { /* none */ }
+    void paneRightButtonMenuRequested(Pane *, QPoint) override { /* none */ }
+    void panePropertiesRightButtonMenuRequested(Pane *, QPoint) override { /* none */ }
+    void layerPropertiesRightButtonMenuRequested(Pane *, Layer *, QPoint) override { /* none */ }
 
     virtual void setupRecentSessionsMenu();
 
