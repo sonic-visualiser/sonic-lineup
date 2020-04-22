@@ -137,7 +137,6 @@ protected slots:
 
     void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;
     void audioOverloadPluginDisabled() override;
-    void audioTimeStretchMultiChannelDisabled() override;
 
     void documentModified() override;
     void documentRestored() override;
