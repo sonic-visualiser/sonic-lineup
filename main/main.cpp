@@ -19,6 +19,7 @@
 #include "base/TempDirectory.h"
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
+#include "data/fileio/PlaylistFileReader.h"
 #include "widgets/TipDialog.h"
 #include "svcore/plugin/PluginScan.h"
 
@@ -302,16 +303,57 @@ main(int argc, char **argv)
 
     SmallSession session;
     bool haveSession = false;
+
+    QStringList filePaths;
     
     for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
 
         if (i == args.begin()) continue;
         if (i->startsWith('-')) continue;
 
-        if (session.mainFile == "") {
-            session.mainFile = *i;
+        QString arg = *i;
+
+        // If an arg is a playlist file, we can streamline things and
+        // make sure we get the proper absolute paths by expanding it
+        // here, rather than adding it to the session and waiting for
+        // it to be expanded in the main application logic. (That
+        // would work too, it's just not so clean a user experience.)
+
+        if (PlaylistFileReader::isSupported(arg)) {
+            PlaylistFileReader reader(arg);
+            if (!reader.isOK()) {
+                // But if we can't open the playlist file, add it to
+                // the session as if it were just any old file and let
+                // the main application worry about it later - we
+                // don't want to be popping up dialogs before the app
+                // has been exec'd
+                filePaths.push_back(arg);
+            } else {
+                auto playlist = reader.load();
+                for (auto entry: playlist) {
+                    filePaths.push_back(entry);
+                }
+            }
         } else {
-            session.additionalFiles.push_back(*i);
+            filePaths.push_back(arg);
+        }
+    }
+
+    for (auto filePath: filePaths) {
+
+        // Add the argument to our session as a file path or URL to be
+        // opened. We want to avoid relative file paths, but to do so
+        // we must first check that they are not absolute URLs.
+        
+        QUrl url(filePath);
+        if (url.isRelative()) {
+            filePath = QFileInfo(filePath).absoluteFilePath();
+        }
+        
+        if (session.mainFile == "") {
+            session.mainFile = filePath;
+        } else {
+            session.additionalFiles.push_back(filePath);
         }
 
         haveSession = true;
@@ -319,6 +361,13 @@ main(int argc, char **argv)
 
     if (haveSession) {
         gui->openSmallSession(session);
+    } else if (!gui->reopenLastSession()) {
+        QTimer::singleShot(400, gui, SLOT(introDialog()));
+    } else {
+        // Do this here only if not showing the intro dialog -
+        // otherwise the introDialog function will do this after it
+        // has shown the dialog, so we don't end up with both at once
+        gui->checkForNewerVersion();
     }
 
     int rv = application.exec();

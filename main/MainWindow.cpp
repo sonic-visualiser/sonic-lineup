@@ -58,7 +58,6 @@
 #include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
-#include "data/fileio/PlaylistFileReader.h"
 #include "data/fileio/WavFileWriter.h"
 #include "data/fileio/CSVFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
@@ -391,16 +390,7 @@ MainWindow::MainWindow(AudioMode audioMode) :
 
     NetworkPermissionTester tester;
     m_networkPermission = tester.havePermission();
-
-    if (!reopenLastSession()) {
-        QTimer::singleShot(400, this, SLOT(introDialog()));
-    } else {
-        // Do this here only if not showing the intro dialog -
-        // otherwise the introDialog function will do this after it
-        // has shown the dialog, so we don't end up with both at once
-        checkForNewerVersion();
-    }
-                       
+        
 //    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 }
 
