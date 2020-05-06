@@ -2885,7 +2885,7 @@ MainWindow::alignmentComplete(ModelId modelId)
 }
 
 void
-MainWindow::alignmentFailed(QString message)
+MainWindow::alignmentFailed(ModelId, QString message)
 {
     QMessageBox::warning
         (this,

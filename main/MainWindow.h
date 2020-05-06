@@ -160,7 +160,7 @@ protected slots:
     void modelRegenerationWarning(QString, QString, QString) override;
 
     void alignmentComplete(ModelId) override;
-    void alignmentFailed(QString) override;
+    void alignmentFailed(ModelId, QString) override;
 
     virtual void salientLayerCompletionChanged(ModelId);
 

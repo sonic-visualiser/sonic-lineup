@@ -7,10 +7,10 @@
       "pin": "f36fef97ac81"
     },
     "svgui": {
-      "pin": "d6976d231efb"
+      "pin": "52d4bfba5b3d"
     },
     "svapp": {
-      "pin": "f32df46d0c84"
+      "pin": "6429a164b7e1"
     },
     "checker": {
       "pin": "e839338d3869"
