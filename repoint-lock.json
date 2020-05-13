@@ -1,25 +1,25 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "74c5b0bfa108"
+      "pin": "8ffb8985ae8f"
     },
     "svcore": {
-      "pin": "498ed1e86f92"
+      "pin": "f36fef97ac81"
     },
     "svgui": {
-      "pin": "27ea5d61b402"
+      "pin": "52d4bfba5b3d"
     },
     "svapp": {
-      "pin": "7b1d30af4b38"
+      "pin": "6429a164b7e1"
     },
     "checker": {
-      "pin": "ef64b3f171d9"
+      "pin": "e839338d3869"
     },
     "piper": {
-      "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
+      "pin": "3a742c556ac1f2bf9823f30b937c71c690e1f6ae"
     },
     "piper-vamp-cpp": {
-      "pin": "f381235a4ba88eac2fa31fc1f7f613cca9707f63"
+      "pin": "f0d3ab2952b21d287b481759bda986427df10ef7"
     },
     "dataquay": {
       "pin": "35098262cadd"
@@ -61,7 +61,7 @@
       "pin": "a7d9c6142f8f"
     },
     "nnls-chroma": {
-      "pin": "1efe67570b75"
+      "pin": "82d5d11b68d7"
     },
     "qm-vamp-plugins": {
       "pin": "06933fecfa33aec41a07cc865098be7545ffcca3"

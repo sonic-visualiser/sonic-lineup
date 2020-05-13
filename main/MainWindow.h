@@ -75,6 +75,7 @@ signals:
 
 public slots:
     void openSmallSession(const SmallSession &);
+    bool reopenLastSession();
 
     void preferenceChanged(PropertyContainer::PropertyName) override;
     bool commitData(bool mayAskUser); // on session shutdown
@@ -83,6 +84,9 @@ public slots:
     void endFullScreen();
 
     void selectMainPane();
+
+    void introDialog();
+    void checkForNewerVersion();
 
 protected slots:
     virtual void openFiles();
@@ -93,7 +97,6 @@ protected slots:
     virtual void newSession();
     virtual void preferences();
 
-    bool reopenLastSession();
     void closeSession() override;
 
     void outlineWaveformModeSelected();
@@ -129,15 +132,11 @@ protected slots:
     virtual void restoreNormalPlayback();
 
     void monitoringLevelsChanged(float, float) override;
-
-    void introDialog();
-    void checkForNewerVersion();
     
     void betaReleaseWarning();
 
     void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;
     void audioOverloadPluginDisabled() override;
-    void audioTimeStretchMultiChannelDisabled() override;
 
     void documentModified() override;
     void documentRestored() override;
@@ -161,7 +160,7 @@ protected slots:
     void modelRegenerationWarning(QString, QString, QString) override;
 
     void alignmentComplete(ModelId) override;
-    void alignmentFailed(QString) override;
+    void alignmentFailed(ModelId, QString) override;
 
     virtual void salientLayerCompletionChanged(ModelId);
 
