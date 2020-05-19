@@ -24,8 +24,7 @@
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-            "branch": "pitch-align"
+	    "service": "soundsoftware"
         },
         "checker": {
             "vcs": "hg",
