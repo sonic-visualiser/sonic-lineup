@@ -17,6 +17,7 @@
 #include "MainWindow.h"
 #include "framework/Document.h"
 #include "framework/VersionTester.h"
+#include "align/Align.h"
 
 #include "PreferencesDialog.h"
 #include "NetworkPermissionTester.h"
@@ -54,6 +55,7 @@
 #include "widgets/SubdividingMenu.h"
 #include "widgets/NotifyingPushButton.h"
 #include "widgets/KeyReference.h"
+#include "widgets/MenuTitle.h"
 #include "audio/AudioCallbackPlaySource.h"
 #include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
@@ -135,11 +137,12 @@ MainWindow::MainWindow(AudioMode audioMode) :
                    int(PaneStack::Option::ShowAlignmentViews) |
                    int(PaneStack::Option::NoCloseOnFirstPane)),
     m_mainMenusCreated(false),
-    m_playbackMenu(nullptr),
+    m_playbackToolBar(nullptr),
     m_recentSessionsMenu(nullptr),
     m_deleteSelectedAction(nullptr),
     m_ffwdAction(nullptr),
     m_rwdAction(nullptr),
+    m_previousActiveAlignmentType(Align::NoAlignment),
     m_recentSessions("RecentSessions", 20),
     m_exiting(false),
     m_preferencesDialog(nullptr),
@@ -380,8 +383,6 @@ MainWindow::MainWindow(AudioMode audioMode) :
     mainFrame->setLayout(mainLayout);
 
     setupMenus();
-    setupToolbars();
-    setupHelpMenu();
 
     statusBar()->hide();
 
@@ -416,10 +417,18 @@ MainWindow::setupMenus()
         // the system menubar integration altogether. Like this:
 	menuBar()->setNativeMenuBar(false);
 #endif
-    }
 
-    setupFileMenu();
-    setupViewMenu();
+        setupFileMenu();
+        setupViewMenu();
+        setupPlaybackMenu();
+        setupAlignmentMenu();
+        setupHelpMenu();
+
+        Pane::registerShortcuts(*m_keyReference);
+
+    } else {
+        setupRecentSessionsMenu();
+    }
 
     m_mainMenusCreated = true;
 }
@@ -542,6 +551,28 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+}
+
+void
+MainWindow::setupRecentSessionsMenu()
+{
+    m_recentSessionsMenu->clear();
+    vector<pair<QString, QString>> sessions = m_recentSessions.getRecentEntries();
+    for (size_t i = 0; i < sessions.size(); ++i) {
+        QString path = sessions[i].first;
+        QString label = sessions[i].second;
+        if (label == "") label = path;
+        QAction *action = m_recentSessionsMenu->addAction(label);
+        action->setObjectName(path);
+	connect(action, SIGNAL(triggered()), this, SLOT(openRecentSession()));
+        if (i == 0) {
+            action->setShortcut(tr("Ctrl+R"));
+            m_keyReference->registerShortcut
+                (tr("Re-open"),
+                 action->shortcut().toString(),
+                 tr("Re-open the current or most recently opened session"));
+        }
+    }
 }
 
 void
@@ -716,77 +747,87 @@ MainWindow::setupViewMenu()
 }
 
 void
-MainWindow::setupHelpMenu()
+MainWindow::setupAlignmentMenu()
 {
-    QMenu *menu = menuBar()->addMenu(tr("&Help"));
-    menu->setTearOffEnabled(false);
-    
-    m_keyReference->setCategory(tr("Help"));
+    m_keyReference->setCategory(tr("Alignment"));
 
     IconLoader il;
 
-    QAction *action = new QAction(il.load("help"),
-                                  tr("&Help Reference"), this); 
-    action->setShortcut(tr("F1"));
-    action->setStatusTip(tr("Open the reference manual")); 
-    connect(action, SIGNAL(triggered()), this, SLOT(help()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    QMenu *menu = menuBar()->addMenu(tr("&Alignment"));
+    menu->setTearOffEnabled(false);
 
-    action = new QAction(tr("&Key and Mouse Reference"), this);
-    action->setShortcut(tr("F2"));
-    action->setStatusTip(tr("Open a window showing the keystrokes you can use"));
-    connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+/*!!! update:
 
-    QString name = QApplication::applicationName();
+    QToolBar *toolbar = nullptr;
+    if (m_playbackToolBar) {
+        toolbar = m_playbackToolBar;
+    } else {
+        toolbar = m_playbackToolBar = addToolBar(tr("Playback Toolbar"));
+    }
+
+    QAction *alAction = 0;
+    alAction = toolbar->addAction(il.load("align"),
+                                  tr("Align File Timelines"));
+    alAction->setCheckable(true);
+    alAction->setChecked(m_viewManager->getAlignMode());
+    alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
+    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
+            alAction, SLOT(setChecked(bool)));
+    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+
+    menu->addAction(alAction);
+*/
+//    MenuTitle::addSection(menu, tr("Alignment Method"));
+
+    QSettings settings;
+
+    QActionGroup *alignmentGroup = new QActionGroup(this);
+
+//!!! + explanatory status bar texts
+
+    map<Align::AlignmentType, QString> alignmentLabels {
+        { Align::NoAlignment, tr("No Alignment") },
+        { Align::LinearAlignment, tr("Linear") },
+        { Align::TrimmedLinearAlignment, tr("Linear Trimmed") },
+        { Align::MATCHAlignment, tr("Online DTW (MATCH)") },
+        { Align::MATCHAlignmentWithPitchCompare, tr("Online DTW with Pitch Compensation") },
+        { Align::SungPitchContourAlignment, tr("Sung Pitch Contour") }
+    };
+
+    QAction *action = nullptr;
+    QString additionalData;
+    Align::AlignmentType preference =
+        Align::getAlignmentPreference(additionalData);
     
-    action = new QAction(tr("What's &New In This Release?"), this); 
-    action->setStatusTip(tr("List the changes in this release (and every previous release) of %1").arg(name)); 
-    connect(action, SIGNAL(triggered()), this, SLOT(whatsNew()));
-    menu->addAction(action);
-    
-    action = new QAction(tr("&About %1").arg(name), this); 
-    action->setStatusTip(tr("Show information about %1").arg(name)); 
-    connect(action, SIGNAL(triggered()), this, SLOT(about()));
-    menu->addAction(action);
-}
-
-void
-MainWindow::setupRecentSessionsMenu()
-{
-    m_recentSessionsMenu->clear();
-    vector<pair<QString, QString>> sessions = m_recentSessions.getRecentEntries();
-    for (size_t i = 0; i < sessions.size(); ++i) {
-        QString path = sessions[i].first;
-        QString label = sessions[i].second;
-        if (label == "") label = path;
-        QAction *action = new QAction(label, this);
-        action->setObjectName(path);
-	connect(action, SIGNAL(triggered()), this, SLOT(openRecentSession()));
-        if (i == 0) {
-            action->setShortcut(tr("Ctrl+R"));
-            m_keyReference->registerShortcut
-                (tr("Re-open"),
-                 action->shortcut().toString(),
-                 tr("Re-open the current or most recently opened session"));
+    for (auto al: alignmentLabels) {
+        action = menu->addAction(al.second);
+        action->setObjectName(Align::getAlignmentTypeTag(al.first));
+        action->setActionGroup(alignmentGroup);
+        action->setCheckable(true);
+        action->setChecked(al.first == preference);
+        connect(action, SIGNAL(triggered()), this, SLOT(alignmentTypeChanged()));
+        if (al.first == Align::NoAlignment) {
+            menu->addSeparator();
         }
-	m_recentSessionsMenu->addAction(action);
     }
 }
 
 void
-MainWindow::setupToolbars()
+MainWindow::setupPlaybackMenu()
 {
     m_keyReference->setCategory(tr("Playback and Transport Controls"));
 
     IconLoader il;
 
-    QMenu *menu = m_playbackMenu = menuBar()->addMenu(tr("Play&back"));
+    QMenu *menu = menuBar()->addMenu(tr("Play&back"));
     menu->setTearOffEnabled(false);
 
-    QToolBar *toolbar = addToolBar(tr("Playback Toolbar"));
+    QToolBar *toolbar = nullptr;
+    if (m_playbackToolBar) {
+        toolbar = m_playbackToolBar;
+    } else {
+        toolbar = m_playbackToolBar = addToolBar(tr("Playback Toolbar"));
+    }
 
     QAction *rwdStartAction = toolbar->addAction(il.load("rewind-start"),
                                                  tr("Rewind to Start"));
@@ -876,33 +917,44 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(fastAction);
     m_keyReference->registerShortcut(slowAction);
     m_keyReference->registerShortcut(normalAction);
+}
 
-    QAction *alAction = 0;
-    alAction = toolbar->addAction(il.load("align"),
-                                  tr("Align File Timelines"));
-    alAction->setCheckable(true);
-    alAction->setChecked(m_viewManager->getAlignMode());
-    alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
-    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
-            alAction, SLOT(setChecked(bool)));
-    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+void
+MainWindow::setupHelpMenu()
+{
+    QMenu *menu = menuBar()->addMenu(tr("&Help"));
+    menu->setTearOffEnabled(false);
+    
+    m_keyReference->setCategory(tr("Help"));
 
-    QSettings settings;
+    IconLoader il;
 
-    QAction *tdAction = 0;
-    tdAction = new QAction(tr("Allow for Pitch Difference when Aligning"), this);
-    tdAction->setCheckable(true);
-    settings.beginGroup("Alignment");
-    tdAction->setChecked(settings.value("align-pitch-aware", false).toBool());
-    settings.endGroup();
-    tdAction->setStatusTip(tr("Compare relative pitch content of audio files before aligning, in order to correctly align recordings of the same material at different tuning pitches"));
-    connect(tdAction, SIGNAL(triggered()), this, SLOT(tuningDifferenceToggled()));
+    QAction *action = new QAction(il.load("help"),
+                                  tr("&Help Reference"), this); 
+    action->setShortcut(tr("F1"));
+    action->setStatusTip(tr("Open the reference manual")); 
+    connect(action, SIGNAL(triggered()), this, SLOT(help()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
 
-    menu->addSeparator();
-    menu->addAction(alAction);
-    menu->addAction(tdAction);
+    action = new QAction(tr("&Key and Mouse Reference"), this);
+    action->setShortcut(tr("F2"));
+    action->setStatusTip(tr("Open a window showing the keystrokes you can use"));
+    connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
 
-    Pane::registerShortcuts(*m_keyReference);
+    QString name = QApplication::applicationName();
+    
+    action = new QAction(tr("What's &New In This Release?"), this); 
+    action->setStatusTip(tr("List the changes in this release (and every previous release) of %1").arg(name)); 
+    connect(action, SIGNAL(triggered()), this, SLOT(whatsNew()));
+    menu->addAction(action);
+    
+    action = new QAction(tr("&About %1").arg(name), this); 
+    action->setStatusTip(tr("Show information about %1").arg(name)); 
+    connect(action, SIGNAL(triggered()), this, SLOT(about()));
+    menu->addAction(action);
 }
 
 void
@@ -2286,23 +2338,34 @@ MainWindow::renameCurrentLayer()
 }
 
 void
-MainWindow::alignToggled()
+MainWindow::alignmentTypeChanged()
 {
     QAction *action = dynamic_cast<QAction *>(sender());
     
-    if (!m_viewManager) return;
+    if (!action || !m_viewManager) return;
 
-    if (action) {
-	m_viewManager->setAlignMode(action->isChecked());
-    } else {
-	m_viewManager->setAlignMode(!m_viewManager->getAlignMode());
-    }
+    Align::AlignmentType alignmentType =
+        Align::getAlignmentTypeForTag(action->objectName());
 
-    if (m_viewManager->getAlignMode()) {
-        m_document->alignModels();
-        m_document->setAutoAlignment(true);
-    } else {
+    Align::setAlignmentPreference(alignmentType);
+    
+    if (alignmentType == Align::NoAlignment) {
+
+        m_viewManager->setAlignMode(false);
         m_document->setAutoAlignment(false);
+
+    } else {
+
+        m_viewManager->setAlignMode(true);
+        
+        if (alignmentType == m_previousActiveAlignmentType) {
+            m_document->alignModels();
+        } else {
+            m_document->realignModels();
+        }
+
+        m_document->setAutoAlignment(true);
+        m_previousActiveAlignmentType = alignmentType;
     }
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
@@ -2311,20 +2374,6 @@ MainWindow::alignToggled()
         pane->update();
     }
 }
-
-void
-MainWindow::tuningDifferenceToggled()
-{
-    QSettings settings;
-    settings.beginGroup("Alignment");
-    bool on = settings.value("align-pitch-aware", false).toBool();
-    settings.setValue("align-pitch-aware", !on);
-    settings.endGroup();
-
-    if (m_viewManager->getAlignMode()) {
-        m_document->realignModels();
-    }
-}    
     
 void
 MainWindow::playSpeedChanged(int position)
@@ -2879,7 +2928,7 @@ MainWindow::modelRegenerationWarning(QString layerName,
 void
 MainWindow::alignmentComplete(ModelId modelId)
 {
-    cerr << "MainWindow::alignmentComplete(" << modelId << ")" << endl;
+    SVCERR << "MainWindow::alignmentComplete(" << modelId << ")" << endl;
     mapSalientFeatureLayer(modelId);
     checkpointSession();
 }
