@@ -115,6 +115,7 @@
 #include <QCloseEvent>
 #include <QDialogButtonBox>
 #include <QTextEdit>
+#include <QFileDialog>
 
 #include <iostream>
 #include <cstdio>
@@ -791,7 +792,8 @@ MainWindow::setupAlignmentMenu()
         { Align::TrimmedLinearAlignment, tr("Linear Trimmed") },
         { Align::MATCHAlignment, tr("Online DTW (MATCH)") },
         { Align::MATCHAlignmentWithPitchCompare, tr("Online DTW with Pitch Compensation") },
-        { Align::SungPitchContourAlignment, tr("Sung Pitch Contour") }
+        { Align::SungPitchContourAlignment, tr("Sung Pitch Contour") },
+        { Align::ExternalProgramAlignment, tr("External Alignment Program...") }
     };
 
     QAction *action = nullptr;
@@ -800,6 +802,9 @@ MainWindow::setupAlignmentMenu()
         Align::getAlignmentPreference(additionalData);
     
     for (auto al: alignmentLabels) {
+        if (al.first == Align::ExternalProgramAlignment) {
+            menu->addSeparator();
+        }
         action = menu->addAction(al.second);
         action->setObjectName(Align::getAlignmentTypeTag(al.first));
         action->setActionGroup(alignmentGroup);
@@ -2346,15 +2351,53 @@ MainWindow::alignmentTypeChanged()
 
     Align::AlignmentType alignmentType =
         Align::getAlignmentTypeForTag(action->objectName());
-
-    Align::setAlignmentPreference(alignmentType);
     
     if (alignmentType == Align::NoAlignment) {
 
+        Align::setAlignmentPreference(alignmentType);
         m_viewManager->setAlignMode(false);
         m_document->setAutoAlignment(false);
 
+    } else if (alignmentType == Align::ExternalProgramAlignment) {
+
+        QSettings settings;
+        settings.beginGroup("Alignment");
+        QString formerProgram =
+            settings.value("alignment-program", "").toString();
+        bool ok = true;
+        QString newProgram =
+            QFileDialog::getOpenFileName(this,
+                                         tr("External Alignment Program"),
+                                         formerProgram);
+        if (newProgram != "") {
+/*
+            QInputDialog::getText(this,
+                                  tr("External Alignment Program"),
+                                  tr("External Alignment Program:"),
+                                  QLineEdit::Normal,
+                                  formerProgram,
+                                  &ok);
+        if (ok) {
+*/
+            Align::setAlignmentPreference(alignmentType, newProgram);
+        } else {
+            Align::setAlignmentPreference(alignmentType, formerProgram);
+        }
+
+        m_viewManager->setAlignMode(true);
+        
+        if (alignmentType == m_previousActiveAlignmentType) {
+            m_document->alignModels();
+        } else {
+            m_document->realignModels();
+        }
+
+        m_document->setAutoAlignment(true);
+        m_previousActiveAlignmentType = alignmentType;
+
     } else {
+
+        Align::setAlignmentPreference(alignmentType);
 
         m_viewManager->setAlignMode(true);
         
