@@ -792,7 +792,7 @@ MainWindow::setupAlignmentMenu()
         { Align::TrimmedLinearAlignment, tr("Linear Trimmed") },
         { Align::MATCHAlignment, tr("Online DTW (MATCH)") },
         { Align::MATCHAlignmentWithPitchCompare, tr("Online DTW with Pitch Compensation") },
-        { Align::SungPitchContourAlignment, tr("Sung Pitch Contour") },
+        { Align::SungNoteContourAlignment, tr("Sung Note Contour") },
         { Align::ExternalProgramAlignment, tr("External Alignment Program...") }
     };
 
