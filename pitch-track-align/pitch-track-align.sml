@@ -70,6 +70,16 @@ fun costSeries (s1 : value vector) (s2 : value vector) : cost vector vector =
 
 fun alignSeries s1 s2 =
     let val cumulativeCosts = costSeries s1 s2
+(*        val _ = let open TextIO in
+                    output (stdErr, "Cost matrix:\n");
+                    Vector.app
+                        (fn v =>
+                            (Vector.app
+                                 (fn x => output (stdErr, Real.toString x ^ " ")) v;
+                             output (stdErr, "\n")))
+                        cumulativeCosts
+                end
+*)
         fun cost (j, i) = Vector.sub (Vector.sub (cumulativeCosts, j), i)
         fun trace (j, i) acc =
             if i = 0
