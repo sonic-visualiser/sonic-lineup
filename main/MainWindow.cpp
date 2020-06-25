@@ -765,8 +765,8 @@ MainWindow::setupAlignmentMenu()
         { Align::NoAlignment, tr("No Alignment") },
         { Align::LinearAlignment, tr("Linear") },
         { Align::TrimmedLinearAlignment, tr("Linear Trimmed") },
-        { Align::MATCHAlignment, tr("Online DTW (MATCH)") },
-        { Align::MATCHAlignmentWithPitchCompare, tr("Online DTW with Pitch Compensation") },
+        { Align::MATCHAlignment, tr("MATCH Aligner") },
+        { Align::MATCHAlignmentWithPitchCompare, tr("MATCH with Tuning Compensation") },
         { Align::SungNoteContourAlignment, tr("Sung Note Contour") },
     };
 
@@ -791,7 +791,7 @@ MainWindow::setupAlignmentMenu()
         action->setEnabled(false);
     } else {
         QString filename = QFileInfo(program).fileName();
-        action = menu->addAction(tr("External Program (%1)").arg(filename));
+        action = menu->addAction(tr("External Program: %1").arg(filename));
     }
 
     m_externalAlignmentAction = action;
