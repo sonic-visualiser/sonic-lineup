@@ -1463,6 +1463,22 @@ MainWindow::salientLayerCompletionChanged(ModelId)
     }
 }
 
+void
+MainWindow::mapAllSalientFeatureLayers()
+{
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+        Pane *p = m_paneStack->getPane(i);
+        for (int j = 0; j < p->getLayerCount(); ++j) {
+            auto modelId = p->getLayer(j)->getModel();
+            if (auto wfm = ModelById::getAs<WaveFileModel>(modelId)) {
+                SVDEBUG << "MainWindow::mapAllSalientFeatureLayers: calling mapSalientFeatureLayer for modelId " << modelId << " in pane " << i << ", layer " << j << endl;
+                mapSalientFeatureLayer(modelId);
+                break; // but only from inner loop, go on to next pane
+            }
+        }
+    }
+}
+
 TimeInstantLayer *
 MainWindow::findSalientFeatureLayer(Pane *pane)
 {
@@ -1545,17 +1561,13 @@ MainWindow::toggleSalientFeatures()
 }
 
 void
-MainWindow::mapSalientFeatureLayer(ModelId amId)
+MainWindow::mapSalientFeatureLayer(ModelId modelId)
 {
-    auto am = ModelById::getAs<AlignmentModel>(amId);
-    if (!am) {
-        SVCERR << "MainWindow::mapSalientFeatureLayer: AlignmentModel is absent!"
-               << endl;
-        return;
-    }
+    SVDEBUG << "MainWindow::mapSalientFeatureLayer(" << modelId << ")" << endl;
     
     if (m_salientCalculating) {
-        m_salientPending.insert(amId);
+        SVDEBUG << "MainWindow::mapSalientFeatureLayer(" << modelId << "): salient still calculating, adding to pending list" << endl;
+        m_salientPending.insert(modelId);
         return;
     }
 
@@ -1563,14 +1575,13 @@ MainWindow::mapSalientFeatureLayer(ModelId amId)
     if (!salient) {
         SVCERR << "MainWindow::mapSalientFeatureLayer: No salient layer found"
                << endl;
-        m_salientPending.insert(amId);
+        m_salientPending.insert(modelId);
         return;
     }
     
-    ModelId modelId = am->getAlignedModel();
     auto model = ModelById::get(modelId);
     if (!model) {
-        SVCERR << "MainWindow::mapSalientFeatureLayer: No aligned model in AlignmentModel" << endl;
+        SVCERR << "MainWindow::mapSalientFeatureLayer: Aligned model is absent" << endl;
         return;
     }
 
@@ -1629,14 +1640,24 @@ MainWindow::mapSalientFeatureLayer(ModelId amId)
     auto toId = ModelById::add(to);
 
     EventVector pp = from->getAllEvents();
-    for (const auto &p: pp) {
-        Event aligned = p
-            .withFrame(model->alignFromReference(p.getFrame()))
-            .withLabel(""); // remove label, as the analysis was not
-                            // conducted on the audio we're mapping to
-        to->add(aligned);
+
+    if (Align::getAlignmentPreference() != Align::NoAlignment) {
+        for (const auto &p: pp) {
+            Event aligned = p
+                .withFrame(model->alignFromReference(p.getFrame()))
+                .withLabel(""); // remove label, as the analysis was not
+                                // conducted on the audio we're mapping to
+            to->add(aligned);
+        }
+    } else {
+        for (const auto &p: pp) {
+            to->add(p.withLabel(""));
+        }
     }
 
+    SVDEBUG << "MainWindow::mapSalientFeatureLayer for model " << modelId
+            << ": have " << pp.size() << " events" << endl;
+    
     Layer *newLayer = m_document->createImportedLayer(toId);
 
     if (newLayer) {
@@ -2232,6 +2253,10 @@ MainWindow::configureNewPane(Pane *pane)
 
     zoomToFit();
     reselectMode();
+
+    if (Align::getAlignmentPreference() == Align::NoAlignment) {
+        mapAllSalientFeatureLayers();
+    }
 }
 
 void
@@ -2349,6 +2374,11 @@ MainWindow::alignmentTypeChanged()
         Align::setAlignmentPreference(alignmentType);
         m_viewManager->setAlignMode(false);
         m_document->setAutoAlignment(false);
+
+        SVDEBUG << "MainWindow::alignmentTypeChanged: type is now NoAlignment, so salient feature layer won't be automatically mapped - doing it by hand" << endl;
+
+        mapAllSalientFeatureLayers();
+        checkpointSession();
 
     } else {
 
@@ -2945,9 +2975,17 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
-MainWindow::alignmentComplete(ModelId modelId)
+MainWindow::alignmentComplete(ModelId amId)
 {
-    SVCERR << "MainWindow::alignmentComplete(" << modelId << ")" << endl;
+    SVCERR << "MainWindow::alignmentComplete(" << amId << ")" << endl;
+    auto am = ModelById::getAs<AlignmentModel>(amId);
+    if (!am) {
+        SVCERR << "MainWindow::alignmentComplete: AlignmentModel is absent!"
+               << endl;
+        return;
+    }
+    
+    ModelId modelId = am->getAlignedModel();
     mapSalientFeatureLayer(modelId);
     checkpointSession();
 }

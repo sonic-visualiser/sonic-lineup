@@ -270,7 +270,9 @@ protected:
                                             ModelId *createFrom);
 
     virtual void addSalientFeatureLayer(Pane *, ModelId); // a WaveFileModel
-    virtual void mapSalientFeatureLayer(ModelId); // an AlignmentModel
+    virtual void mapSalientFeatureLayer(ModelId); // a WaveFileModel
+
+    void mapAllSalientFeatureLayers();
 
     // Return the salient-feature layer in the given pane. If pane is
     // unspecified, return the main salient-feature layer, i.e. the
@@ -279,7 +281,7 @@ protected:
     virtual TimeInstantLayer *findSalientFeatureLayer(Pane *pane = nullptr);
     
     bool m_salientCalculating;
-    std::set<ModelId> m_salientPending; // AlignmentModels
+    std::set<ModelId> m_salientPending; // Aligned WaveFileModels
     int m_salientColour;
     
     void updateVisibleRangeDisplay(Pane *p) const override;
