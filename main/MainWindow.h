@@ -125,6 +125,7 @@ protected slots:
     void record() override;
 
     void alignmentTypeChanged();
+    void chooseAlignmentProgram();
 
     void playSpeedChanged(int);
     void speedUpPlayback();
@@ -211,6 +212,7 @@ protected:
     QAction                 *m_selectPreviousDisplayModeAction;
     QAction                 *m_selectNextDisplayModeAction;
 
+    QAction                 *m_externalAlignmentAction;
     Align::AlignmentType     m_previousActiveAlignmentType;
     
     RecentFiles              m_recentSessions;

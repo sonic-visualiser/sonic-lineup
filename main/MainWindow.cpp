@@ -757,31 +757,6 @@ MainWindow::setupAlignmentMenu()
     QMenu *menu = menuBar()->addMenu(tr("&Alignment"));
     menu->setTearOffEnabled(false);
 
-/*!!! update:
-
-    QToolBar *toolbar = nullptr;
-    if (m_playbackToolBar) {
-        toolbar = m_playbackToolBar;
-    } else {
-        toolbar = m_playbackToolBar = addToolBar(tr("Playback Toolbar"));
-    }
-
-    QAction *alAction = 0;
-    alAction = toolbar->addAction(il.load("align"),
-                                  tr("Align File Timelines"));
-    alAction->setCheckable(true);
-    alAction->setChecked(m_viewManager->getAlignMode());
-    alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
-    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
-            alAction, SLOT(setChecked(bool)));
-    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
-
-    menu->addAction(alAction);
-*/
-//    MenuTitle::addSection(menu, tr("Alignment Method"));
-
-    QSettings settings;
-
     QActionGroup *alignmentGroup = new QActionGroup(this);
 
 //!!! + explanatory status bar texts
@@ -793,18 +768,12 @@ MainWindow::setupAlignmentMenu()
         { Align::MATCHAlignment, tr("Online DTW (MATCH)") },
         { Align::MATCHAlignmentWithPitchCompare, tr("Online DTW with Pitch Compensation") },
         { Align::SungNoteContourAlignment, tr("Sung Note Contour") },
-        { Align::ExternalProgramAlignment, tr("External Alignment Program...") }
     };
 
     QAction *action = nullptr;
-    QString additionalData;
-    Align::AlignmentType preference =
-        Align::getAlignmentPreference(additionalData);
-    
+    Align::AlignmentType preference = Align::getAlignmentPreference();
+
     for (auto al: alignmentLabels) {
-        if (al.first == Align::ExternalProgramAlignment) {
-            menu->addSeparator();
-        }
         action = menu->addAction(al.second);
         action->setObjectName(Align::getAlignmentTypeTag(al.first));
         action->setActionGroup(alignmentGroup);
@@ -815,6 +784,29 @@ MainWindow::setupAlignmentMenu()
             menu->addSeparator();
         }
     }
+
+    QString program = Align::getPreferredAlignmentProgram();
+    if (program == "") {
+        action = menu->addAction(tr("External Alignment Program"));
+        action->setEnabled(false);
+    } else {
+        QString filename = QFileInfo(program).fileName();
+        action = menu->addAction(tr("External Program (%1)").arg(filename));
+    }
+
+    m_externalAlignmentAction = action;
+    
+    action->setObjectName
+        (Align::getAlignmentTypeTag(Align::ExternalProgramAlignment));
+    action->setActionGroup(alignmentGroup);
+    action->setCheckable(true);
+    action->setChecked(preference == Align::ExternalProgramAlignment);
+    connect(action, SIGNAL(triggered()), this, SLOT(alignmentTypeChanged()));
+
+    menu->addSeparator();
+    
+    action = menu->addAction(tr("Choose External Alignment Program..."));
+    connect(action, SIGNAL(triggered()), this, SLOT(chooseAlignmentProgram()));
 }
 
 void
@@ -2358,43 +2350,6 @@ MainWindow::alignmentTypeChanged()
         m_viewManager->setAlignMode(false);
         m_document->setAutoAlignment(false);
 
-    } else if (alignmentType == Align::ExternalProgramAlignment) {
-
-        QSettings settings;
-        settings.beginGroup("Alignment");
-        QString formerProgram =
-            settings.value("alignment-program", "").toString();
-        bool ok = true;
-        QString newProgram =
-            QFileDialog::getOpenFileName(this,
-                                         tr("External Alignment Program"),
-                                         formerProgram);
-        if (newProgram != "") {
-/*
-            QInputDialog::getText(this,
-                                  tr("External Alignment Program"),
-                                  tr("External Alignment Program:"),
-                                  QLineEdit::Normal,
-                                  formerProgram,
-                                  &ok);
-        if (ok) {
-*/
-            Align::setAlignmentPreference(alignmentType, newProgram);
-        } else {
-            Align::setAlignmentPreference(alignmentType, formerProgram);
-        }
-
-        m_viewManager->setAlignMode(true);
-        
-        if (alignmentType == m_previousActiveAlignmentType) {
-            m_document->alignModels();
-        } else {
-            m_document->realignModels();
-        }
-
-        m_document->setAutoAlignment(true);
-        m_previousActiveAlignmentType = alignmentType;
-
     } else {
 
         Align::setAlignmentPreference(alignmentType);
@@ -2415,6 +2370,27 @@ MainWindow::alignmentTypeChanged()
 	Pane *pane = m_paneStack->getPane(i);
 	if (!pane) continue;
         pane->update();
+    }
+}
+
+void
+MainWindow::chooseAlignmentProgram()
+{
+    QString formerProgram = Align::getPreferredAlignmentProgram();
+    QString newProgram =
+        QFileDialog::getOpenFileName(this,
+                                     tr("External Alignment Program"),
+                                     formerProgram);
+    if (newProgram != "") {
+        SVCERR << "Setting alignment preference to ExternalProgramAlignment "
+               << "with program " << newProgram << endl;
+        Align::setAlignmentPreference(Align::ExternalProgramAlignment);
+        Align::setPreferredAlignmentProgram(newProgram);
+        QString filename = QFileInfo(newProgram).fileName();
+        m_externalAlignmentAction->setText
+            (tr("External Program: %1").arg(filename));
+        m_externalAlignmentAction->setEnabled(true);
+        m_externalAlignmentAction->activate(QAction::Trigger);
     }
 }
     
