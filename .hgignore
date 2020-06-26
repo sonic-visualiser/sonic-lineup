@@ -17,9 +17,10 @@ doc/html/
 *.orig
 *.rej
 re:^autom4te\.cache/
-re:^qrc_vect\.cpp$
+re:^qrc_.*\.cpp$
 re:^vect$
 re:^sonic-lineup$
+re:^sonic-vector$
 re:^aclocal\.m4$
 re:^config\.log$
 re:^config\.pri$
@@ -62,3 +63,6 @@ qm-vamp-plugins
 ..*
 deploy/linux/docker/output
 *.AppImage
+packages/
+pitch-track-align/pitch-track-align
+pitch-track-align/pitch-track-align.deps

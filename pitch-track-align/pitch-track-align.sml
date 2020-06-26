@@ -70,6 +70,16 @@ fun costSeries (s1 : value vector) (s2 : value vector) : cost vector vector =
 
 fun alignSeries s1 s2 =
     let val cumulativeCosts = costSeries s1 s2
+(*        val _ = let open TextIO in
+                    output (stdErr, "Cost matrix:\n");
+                    Vector.app
+                        (fn v =>
+                            (Vector.app
+                                 (fn x => output (stdErr, Real.toString x ^ " ")) v;
+                             output (stdErr, "\n")))
+                        cumulativeCosts
+                end
+*)
         fun cost (j, i) = Vector.sub (Vector.sub (cumulativeCosts, j), i)
         fun trace (j, i) acc =
             if i = 0
@@ -123,7 +133,7 @@ fun preprocess (times : real list, frequencies : real list) :
             in
                 rev (#1 acc)
             end
-        val _ =
+(*        val _ =
             app (fn (text, p) =>
                     TextIO.output (TextIO.stdErr, ("[" ^ text ^ "] -> " ^
                                                    Real.toString p ^ "\n")))
@@ -131,6 +141,18 @@ fun preprocess (times : real list, frequencies : real list) :
                                 | (PITCH_UP d, p) => ("+", p)
                                 | (PITCH_DOWN d, p) => ("-", p))
                               (values, pitches))
+        val _ = TextIO.output (TextIO.stdErr, "(end)\n");
+ *)
+        val _ =
+            app (fn v =>
+                    TextIO.output (TextIO.stdErr,
+                                   (case v of
+                                        PITCH_NONE => "=0"
+                                      | PITCH_UP d => "+" ^ Real.toString d
+                                      | PITCH_DOWN d => "-" ^ Real.toString d)
+                                   ^ " "))
+                values
+        val _ = TextIO.output (TextIO.stdErr, " (end)\n");
     in
         (Vector.fromList times,
          Vector.fromList values,
@@ -181,6 +203,11 @@ fun alignFiles csv1 csv2 =
         (* raw alignment returns the index into pitches2 for each
            element in pitches1 *)
         val raw = alignSeries values1 values2
+        val _ = TextIO.output (TextIO.stdErr, "DTW output:\n")
+        val _ = Vector.app
+                    (fn i => TextIO.output (TextIO.stdErr, Int.toString i ^ " "))
+                    raw
+        val _ = TextIO.output (TextIO.stdErr, "\n")
         val _ = TextIO.output (TextIO.stdErr,
                                "Mean pitch difference: reference " ^
                                Real.toString (meanDiff pitches1 pitches2 raw)

@@ -30,6 +30,7 @@
 #include "transform/Transform.h"
 #include "framework/SVFileReader.h"
 #include "widgets/InteractiveFileFinder.h"
+#include "align/Align.h"
 
 #include "SmallSession.h"
 
@@ -122,14 +123,14 @@ protected slots:
     void paneDropAccepted(Pane *, QString) override;
 
     void record() override;
-    
-    virtual void alignToggled();
-    virtual void tuningDifferenceToggled();
-    virtual void playSpeedChanged(int);
 
-    virtual void speedUpPlayback();
-    virtual void slowDownPlayback();
-    virtual void restoreNormalPlayback();
+    void alignmentTypeChanged();
+    void chooseAlignmentProgram();
+
+    void playSpeedChanged(int);
+    void speedUpPlayback();
+    void slowDownPlayback();
+    void restoreNormalPlayback();
 
     void monitoringLevelsChanged(float, float) override;
     
@@ -192,7 +193,7 @@ protected:
     QScrollArea             *m_mainScroll;
 
     bool                     m_mainMenusCreated;
-    QMenu                   *m_playbackMenu;
+    QToolBar                *m_playbackToolBar;
     QMenu                   *m_recentSessionsMenu;
 
     QAction                 *m_deleteSelectedAction;
@@ -211,6 +212,9 @@ protected:
     QAction                 *m_selectPreviousDisplayModeAction;
     QAction                 *m_selectNextDisplayModeAction;
 
+    QAction                 *m_externalAlignmentAction;
+    Align::AlignmentType     m_previousActiveAlignmentType;
+    
     RecentFiles              m_recentSessions;
     
     bool                     m_exiting;
@@ -232,8 +236,9 @@ protected:
     
     virtual void setupFileMenu();
     virtual void setupViewMenu();
+    virtual void setupAlignmentMenu();
+    virtual void setupPlaybackMenu();
     virtual void setupHelpMenu();
-    virtual void setupToolbars();
 
     enum DisplayMode {
         OutlineWaveformMode,
@@ -265,7 +270,9 @@ protected:
                                             ModelId *createFrom);
 
     virtual void addSalientFeatureLayer(Pane *, ModelId); // a WaveFileModel
-    virtual void mapSalientFeatureLayer(ModelId); // an AlignmentModel
+    virtual void mapSalientFeatureLayer(ModelId); // a WaveFileModel
+
+    void mapAllSalientFeatureLayers();
 
     // Return the salient-feature layer in the given pane. If pane is
     // unspecified, return the main salient-feature layer, i.e. the
@@ -274,7 +281,7 @@ protected:
     virtual TimeInstantLayer *findSalientFeatureLayer(Pane *pane = nullptr);
     
     bool m_salientCalculating;
-    std::set<ModelId> m_salientPending; // AlignmentModels
+    std::set<ModelId> m_salientPending; // Aligned WaveFileModels
     int m_salientColour;
     
     void updateVisibleRangeDisplay(Pane *p) const override;
