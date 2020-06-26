@@ -13,7 +13,7 @@ if (!$redists) {
 
 $redist_ver = $redists[-1]
 
-$version = (Get-Content version.h) -replace '#define VECT_VERSION ','' -replace '"',''
+$version = (Get-Content version.h) -replace '#define VECT_VERSION ','' -replace '"','' -replace '-pre.*',''
 $wxs = "deploy\win64\sonic-lineup.wxs"
 
 $in = "$wxs.in"
