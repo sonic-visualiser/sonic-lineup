@@ -132,6 +132,8 @@ macx* {
     QMAKE_CXXFLAGS_RELEASE += -O3 -ffast-math -flto
     QMAKE_LFLAGS_RELEASE += -O3 -flto
 
+    QMAKE_LFLAGS_RELEASE += -isysroot $$QMAKE_MAC_SDK_PATH
+
     DEFINES += HAVE_COREAUDIO HAVE_VDSP
     LIBS += \
         -framework CoreAudio \
