@@ -40,11 +40,14 @@ SOURCES += \
     match/src/FeatureConditioner.cpp \
     match/src/FeatureExtractor.cpp \
     match/src/Finder.cpp \
+    match/src/FullDTW.cpp \
     match/src/Matcher.cpp \
     match/src/MatchFeatureFeeder.cpp \
     match/src/MatchPipeline.cpp \
     match/src/MatchVampPlugin.cpp \
     match/src/Path.cpp \
+    match/src/SubsequenceMatchVampPlugin.cpp \
+    match/src/libmain.cpp \
     vamp-plugin-sdk/src/vamp-sdk/FFT.cpp \
     vamp-plugin-sdk/src/vamp-sdk/PluginAdapter.cpp \
     vamp-plugin-sdk/src/vamp-sdk/RealTime.cpp
@@ -54,11 +57,13 @@ HEADERS += \
     match/src/FeatureConditioner.h \
     match/src/FeatureExtractor.h \
     match/src/Finder.h \
+    match/src/FullDTW.h \
     match/src/Matcher.h \
     match/src/MatchFeatureFeeder.h \
     match/src/MatchPipeline.h \
     match/src/MatchTypes.h \
     match/src/MatchVampPlugin.h \
-    match/src/Path.h
+    match/src/Path.h \
+    match/src/SubsequenceMatchVampPlugin.h
 
 
