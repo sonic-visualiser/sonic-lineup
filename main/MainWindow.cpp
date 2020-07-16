@@ -144,6 +144,7 @@ MainWindow::MainWindow(AudioMode audioMode) :
     m_ffwdAction(nullptr),
     m_rwdAction(nullptr),
     m_previousActiveAlignmentType(Align::NoAlignment),
+    m_previousSubsequence(false),
     m_recentSessions("RecentSessions", 20),
     m_exiting(false),
     m_preferencesDialog(nullptr),
@@ -802,11 +803,23 @@ MainWindow::setupAlignmentMenu()
     action->setCheckable(true);
     action->setChecked(preference == Align::ExternalProgramAlignment);
     connect(action, SIGNAL(triggered()), this, SLOT(alignmentTypeChanged()));
-
+    
     menu->addSeparator();
     
     action = menu->addAction(tr("Choose External Alignment Program..."));
     connect(action, SIGNAL(triggered()), this, SLOT(chooseAlignmentProgram()));
+
+    menu->addSeparator();
+
+    action = menu->addAction(tr("Align to Section of Reference"));
+    action->setCheckable(true);
+    action->setChecked(Align::getUseSubsequenceAlignment());
+    action->setEnabled(preference != Align::NoAlignment &&
+                       preference != Align::LinearAlignment &&
+                       preference != Align::TrimmedLinearAlignment);
+    connect(action, SIGNAL(triggered()), this, SLOT(alignmentSubsequenceChanged()));
+
+    m_subsequenceAlignmentAction = action;
 }
 
 void
@@ -2368,10 +2381,36 @@ MainWindow::alignmentTypeChanged()
 
     Align::AlignmentType alignmentType =
         Align::getAlignmentTypeForTag(action->objectName());
+
+    m_subsequenceAlignmentAction->setEnabled
+        (alignmentType != Align::NoAlignment &&
+         alignmentType != Align::LinearAlignment &&
+         alignmentType != Align::TrimmedLinearAlignment);
+
+    updateAlignmentPreferences(alignmentType,
+                               Align::getUseSubsequenceAlignment());
+}
+
+void
+MainWindow::alignmentSubsequenceChanged()
+{
+    QAction *action = dynamic_cast<QAction *>(sender());
+    
+    if (!action || !m_viewManager) return;
+
+    updateAlignmentPreferences(Align::getAlignmentPreference(),
+                               action->isChecked());
+}
+
+void
+MainWindow::updateAlignmentPreferences(Align::AlignmentType alignmentType,
+                                       bool subsequence)
+{
+    Align::setAlignmentPreference(alignmentType);
+    Align::setUseSubsequenceAlignment(subsequence);
     
     if (alignmentType == Align::NoAlignment) {
 
-        Align::setAlignmentPreference(alignmentType);
         m_viewManager->setAlignMode(false);
         m_document->setAutoAlignment(false);
 
@@ -2382,11 +2421,10 @@ MainWindow::alignmentTypeChanged()
 
     } else {
 
-        Align::setAlignmentPreference(alignmentType);
-
         m_viewManager->setAlignMode(true);
         
-        if (alignmentType == m_previousActiveAlignmentType) {
+        if (alignmentType == m_previousActiveAlignmentType &&
+            subsequence == m_previousSubsequence) {
             m_document->alignModels();
         } else {
             m_document->realignModels();
@@ -2394,6 +2432,7 @@ MainWindow::alignmentTypeChanged()
 
         m_document->setAutoAlignment(true);
         m_previousActiveAlignmentType = alignmentType;
+        m_previousSubsequence = subsequence;
     }
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
