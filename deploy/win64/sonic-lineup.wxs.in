@@ -166,6 +166,30 @@
           </Component>
 
           <Component Win64="yes"
+                     Id="OSWin10"
+                     Transitive="yes"
+                     Guid="7b9ce14e-62ba-446e-ad45-9642b3bc4188">
+            <Condition>VersionNT64 &gt;= 603</Condition>
+            <File
+                Id="os_win10"
+                Name="os.dll"
+                Source="release\os.dll"
+                KeyPath="yes"/>
+          </Component>
+
+          <Component Win64="yes"
+                     Id="OSOther"
+                     Transitive="yes"
+                     Guid="4419cc33-2a69-437e-8466-98f9104d01e9">
+            <Condition>NOT (VersionNT64 &gt;= 603)</Condition>
+            <File
+                Id="os_other"
+                Name="os.dll"
+                Source="release\os_other.dll"
+                KeyPath="yes"/>
+          </Component>
+
+          <Component Win64="yes"
                Id="VCRuntime"
                Guid="f212288f-e5a4-4fc2-b951-1396f61bc562">
 
@@ -284,6 +308,8 @@
 	Level="1">
       <ComponentRef Id="MainExecutable"/>
       <ComponentRef Id="Plugins"/>
+      <ComponentRef Id="OSWin10"/>
+      <ComponentRef Id="OSOther"/>
       <ComponentRef Id="Qt5"/>
       <ComponentRef Id="Sndfile"/>
       <ComponentRef Id="OpenSSL"/>

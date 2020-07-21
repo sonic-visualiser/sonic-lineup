@@ -83,6 +83,10 @@ SOURCES +=  \
         main/PreferencesDialog.cpp \
         main/SmallSession.cpp
 
+win32-msvc* {
+    LIBS += -los
+}
+
 macx* {
     QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker . && deploy/osx/deploy.sh $$shell_quote(Sonic Lineup)
 }
