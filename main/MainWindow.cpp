@@ -155,7 +155,8 @@ MainWindow::MainWindow(AudioMode audioMode) :
     m_displayMode(OutlineWaveformMode),
     m_salientCalculating(false),
     m_salientColour(0),
-    m_sessionState(NoSession)
+    m_sessionState(NoSession),
+    m_shownAlignmentError(false)
 {
     setWindowTitle(QApplication::applicationName());
 
@@ -791,7 +792,8 @@ MainWindow::setupAlignmentMenu()
     action->setChecked(Align::getUseSubsequenceAlignment());
     action->setEnabled(preference != Align::NoAlignment &&
                        preference != Align::LinearAlignment &&
-                       preference != Align::TrimmedLinearAlignment);
+                       preference != Align::TrimmedLinearAlignment &&
+                       preference != Align::ExternalProgramAlignment);
     connect(action, SIGNAL(triggered()), this, SLOT(alignmentSubsequenceChanged()));
 
     m_subsequenceAlignmentAction = action;
@@ -1134,6 +1136,8 @@ MainWindow::closeSession()
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
     documentRestored();
+
+    m_shownAlignmentError = false;
 }
 
 void
@@ -2366,7 +2370,8 @@ MainWindow::alignmentTypeChanged()
     m_subsequenceAlignmentAction->setEnabled
         (alignmentType != Align::NoAlignment &&
          alignmentType != Align::LinearAlignment &&
-         alignmentType != Align::TrimmedLinearAlignment);
+         alignmentType != Align::TrimmedLinearAlignment &&
+         alignmentType != Align::ExternalProgramAlignment);
 
     updateAlignmentPreferences(alignmentType,
                                Align::getUseSubsequenceAlignment());
@@ -2387,6 +2392,8 @@ void
 MainWindow::updateAlignmentPreferences(Align::AlignmentType alignmentType,
                                        bool subsequence)
 {
+    m_shownAlignmentError = false;
+    
     Align::setAlignmentPreference(alignmentType);
     Align::setUseSubsequenceAlignment(subsequence);
     
@@ -3094,12 +3101,20 @@ MainWindow::alignmentComplete(ModelId amId)
 void
 MainWindow::alignmentFailed(ModelId, QString message)
 {
+    if (m_shownAlignmentError) {
+        return;
+    }
+    
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
          tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
          .arg(message),
          QMessageBox::Ok);
+
+    m_shownAlignmentError = true; // (will be reset when
+                                  // e.g. alignment type changes or
+                                  // new session started)
 }
 
 void

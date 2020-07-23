@@ -218,7 +218,6 @@ protected:
     QAction                 *m_selectPreviousDisplayModeAction;
     QAction                 *m_selectNextDisplayModeAction;
 
-//    QAction                 *m_externalAlignmentAction;
     QAction                 *m_subsequenceAlignmentAction;
     Align::AlignmentType     m_previousActiveAlignmentType;
     bool                     m_previousSubsequence;
@@ -322,6 +321,8 @@ protected:
         SessionActive
     };
     SessionState m_sessionState;
+
+    bool m_shownAlignmentError;
 
     void loadStyle();
 };
