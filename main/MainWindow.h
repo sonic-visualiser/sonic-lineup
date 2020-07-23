@@ -74,6 +74,8 @@ signals:
     void canSelectPreviousDisplayMode(bool);
     void canSelectNextDisplayMode(bool);
 
+    void externalAlignmentProgramChanged();
+
 public slots:
     void openSmallSession(const SmallSession &);
     bool reopenLastSession();
@@ -126,9 +128,10 @@ protected slots:
 
     void alignmentTypeChanged();
     void alignmentSubsequenceChanged();
-    void chooseAlignmentProgram();
     void updateAlignmentPreferences(Align::AlignmentType type,
                                     bool subsequence);
+    void selectAlignmentProgram();
+    void clearAlignmentProgram();
 
     void playSpeedChanged(int);
     void speedUpPlayback();
@@ -215,7 +218,7 @@ protected:
     QAction                 *m_selectPreviousDisplayModeAction;
     QAction                 *m_selectNextDisplayModeAction;
 
-    QAction                 *m_externalAlignmentAction;
+//    QAction                 *m_externalAlignmentAction;
     QAction                 *m_subsequenceAlignmentAction;
     Align::AlignmentType     m_previousActiveAlignmentType;
     bool                     m_previousSubsequence;
@@ -310,7 +313,9 @@ protected:
 
     // Open a session from the given SmallSession file path
     void openSmallSessionFile(QString path);
-    
+
+    bool approveAlignmentProgram();
+
     enum SessionState {
         NoSession,
         SessionLoading,

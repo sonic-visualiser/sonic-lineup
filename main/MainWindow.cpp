@@ -769,6 +769,7 @@ MainWindow::setupAlignmentMenu()
         { Align::MATCHAlignment, tr("MATCH Aligner") },
         { Align::MATCHAlignmentWithPitchCompare, tr("MATCH with Tuning Compensation") },
         { Align::SungNoteContourAlignment, tr("Sung Note Contour") },
+        { Align::ExternalProgramAlignment, tr("External Alignment Program...") }
     };
 
     QAction *action = nullptr;
@@ -781,33 +782,7 @@ MainWindow::setupAlignmentMenu()
         action->setCheckable(true);
         action->setChecked(al.first == preference);
         connect(action, SIGNAL(triggered()), this, SLOT(alignmentTypeChanged()));
-        if (al.first == Align::NoAlignment) {
-            menu->addSeparator();
-        }
     }
-
-    QString program = Align::getPreferredAlignmentProgram();
-    if (program == "") {
-        action = menu->addAction(tr("External Alignment Program"));
-        action->setEnabled(false);
-    } else {
-        QString filename = QFileInfo(program).fileName();
-        action = menu->addAction(tr("External Program: %1").arg(filename));
-    }
-
-    m_externalAlignmentAction = action;
-    
-    action->setObjectName
-        (Align::getAlignmentTypeTag(Align::ExternalProgramAlignment));
-    action->setActionGroup(alignmentGroup);
-    action->setCheckable(true);
-    action->setChecked(preference == Align::ExternalProgramAlignment);
-    connect(action, SIGNAL(triggered()), this, SLOT(alignmentTypeChanged()));
-    
-    menu->addSeparator();
-    
-    action = menu->addAction(tr("Choose External Alignment Program..."));
-    connect(action, SIGNAL(triggered()), this, SLOT(chooseAlignmentProgram()));
 
     menu->addSeparator();
 
@@ -2382,6 +2357,12 @@ MainWindow::alignmentTypeChanged()
     Align::AlignmentType alignmentType =
         Align::getAlignmentTypeForTag(action->objectName());
 
+    if (alignmentType == Align::ExternalProgramAlignment) {
+        if (!approveAlignmentProgram()) {
+            return;
+        }
+    }
+        
     m_subsequenceAlignmentAction->setEnabled
         (alignmentType != Align::NoAlignment &&
          alignmentType != Align::LinearAlignment &&
@@ -2442,25 +2423,106 @@ MainWindow::updateAlignmentPreferences(Align::AlignmentType alignmentType,
     }
 }
 
-void
-MainWindow::chooseAlignmentProgram()
+bool
+MainWindow::approveAlignmentProgram()
 {
-    QString formerProgram = Align::getPreferredAlignmentProgram();
+    bool finished = false;
+    bool accepted = false;
+
+    while (!finished) {
+    
+        QString currentProgram = Align::getPreferredAlignmentProgram();
+
+        QDialog *d = new QDialog(this);
+        d->setWindowTitle(tr("External Alignment Program"));
+
+        QGridLayout *layout = new QGridLayout;
+        d->setLayout(layout);
+
+        int row = 0;
+
+        if (currentProgram == "") {
+            layout->addWidget
+                (new QLabel(tr("<p>The following external program will be run in order to calculate time alignments:</p><p><i>No program is currently set.</i></p>")),
+                 row++, 0, 1, 3);
+        } else {
+            layout->addWidget
+                (new QLabel(tr("<p>The following external program will be run in order to calculate time alignments:</p><p><small><code>%1</code></small></p>")
+                            .arg(XmlExportable::encodeEntities(currentProgram))),
+                 row++, 0, 1, 3);
+        }
+
+        QPushButton *choose = new QPushButton;
+        if (currentProgram == "") {
+            choose->setText(tr("Choose program..."));
+        } else {
+            choose->setText(tr("Change..."));
+        }
+        connect(choose, SIGNAL(clicked()),
+                this, SLOT(selectAlignmentProgram()));
+        layout->addWidget(choose, row, 0);
+
+        if (currentProgram != "") {
+            QPushButton *forget = new QPushButton;
+            forget->setText(tr("Clear"));
+            layout->addWidget(forget, row, 1);
+            connect(forget, SIGNAL(clicked()),
+                    this, SLOT(clearAlignmentProgram()));
+        }
+
+        row++;
+        layout->setColumnStretch(2, 100);
+
+        layout->addWidget
+            (new QLabel(tr("<p>Please refer to the documentation for more details.</p>")),
+             row++, 0, 1, 3);
+    
+        QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+        layout->addWidget(bb, row++, 0, 1, 3);
+        connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+        connect(bb, SIGNAL(rejected()), d, SLOT(reject()));
+        connect(this, SIGNAL(externalAlignmentProgramChanged()),
+                d, SLOT(reject()));
+
+        if (d->exec() == QDialog::Accepted) {
+            finished = true;
+            accepted = true;
+        } else {
+            if (Align::getPreferredAlignmentProgram() == currentProgram) {
+                // unchanged, not accepted - must be explicit cancel
+                finished = true;
+            }
+        }
+        
+        delete d;
+    }
+
+    return accepted;
+}
+
+void
+MainWindow::selectAlignmentProgram()
+{
+    QString currentProgram = Align::getPreferredAlignmentProgram();
     QString newProgram =
         QFileDialog::getOpenFileName(this,
                                      tr("External Alignment Program"),
-                                     formerProgram);
+                                     currentProgram);
     if (newProgram != "") {
         SVCERR << "Setting alignment preference to ExternalProgramAlignment "
                << "with program " << newProgram << endl;
         Align::setAlignmentPreference(Align::ExternalProgramAlignment);
         Align::setPreferredAlignmentProgram(newProgram);
-        QString filename = QFileInfo(newProgram).fileName();
-        m_externalAlignmentAction->setText
-            (tr("External Program: %1").arg(filename));
-        m_externalAlignmentAction->setEnabled(true);
-        m_externalAlignmentAction->activate(QAction::Trigger);
+        emit externalAlignmentProgramChanged();
     }
+}
+
+void
+MainWindow::clearAlignmentProgram()
+{
+    Align::setAlignmentPreference(Align::ExternalProgramAlignment);
+    Align::setPreferredAlignmentProgram("");
+    emit externalAlignmentProgramChanged();
 }
     
 void
