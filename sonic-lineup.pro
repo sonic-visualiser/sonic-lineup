@@ -4,6 +4,12 @@ TEMPLATE = subdirs
 SUBDIRS += \
         sub_base
 
+win32-msvc* {
+    SUBDIRS += \
+        sub_os_other \
+        sub_os_win10
+}
+
 # We build the tests on every platform, though at the time of
 # writing they are only automatically run on non-Windows platforms
 # (because of the difficulty of getting them running nicely in the
@@ -27,6 +33,9 @@ SUBDIRS += \
 	sub_vect
 
 sub_base.file = base.pro
+
+sub_os_other.file = os-other.pro
+sub_os_win10.file = os-win10.pro
 
 sub_test_svcore_base.file = test-svcore-base.pro
 sub_test_svcore_system.file = test-svcore-system.pro
