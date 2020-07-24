@@ -722,9 +722,9 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    action = new QAction(tr("Show Vertical Scales"), this);
+    action = new QAction(tr("Show Times and Scales"), this);
     action->setShortcut(tr("S"));
-    action->setStatusTip(tr("Show or hide all vertical scales"));
+    action->setStatusTip(tr("Show or hide centre-line timings and all vertical scales"));
     connect(action, SIGNAL(triggered()), this, SLOT(toggleVerticalScales()));
     action->setCheckable(true);
     action->setChecked(false);
@@ -3104,17 +3104,18 @@ MainWindow::alignmentFailed(ModelId, QString message)
     if (m_shownAlignmentError) {
         return;
     }
-    
+
+    // Set this before showing the dialog, in case we have more than
+    // one pending. It will be reset when e.g. alignment type changes
+    // or new session started.
+    m_shownAlignmentError = true;
+        
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
          tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
          .arg(message),
          QMessageBox::Ok);
-
-    m_shownAlignmentError = true; // (will be reset when
-                                  // e.g. alignment type changes or
-                                  // new session started)
 }
 
 void
