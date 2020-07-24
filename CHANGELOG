@@ -1,4 +1,25 @@
 
+Changes in Sonic Lineup v1.1 (Aug 2020) since the previous release 1.1:
+
+ - Add an Alignment menu allowing you to choose one of a set of
+   alignment methods, including new sung-notes alignment and an option
+   for an external program that you supply
+
+ - Add a subsequence alignment option for cases where the "other"
+   tracks represent only fragments of the "reference"
+
+ - Improve display of alignment views in cases where two adjacent
+   tracks overlap each other in time only partially or not at all
+
+ - Improve selection of font sizes and pane sizing, especially when
+   many tracks are loaded
+
+ - Speed up re-opening the application with many tracks in session
+
+ - If alignment fails for all tracks because of some external factor,
+   show the failure report dialog once only instead of for every track
+
+
 Changes in Sonic Lineup v1.0.1 (10 Dec 2019) since the previous release 1.0:
 
  - Fix salient features disappearing as the view scrolls
