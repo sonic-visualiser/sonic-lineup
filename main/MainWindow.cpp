@@ -208,11 +208,7 @@ MainWindow::MainWindow(AudioMode audioMode) :
     settings.setValue("showcancelbuttons", false);
     settings.endGroup();
 
-    settings.beginGroup("Alignment");
-    if (!settings.contains("align-pitch-aware")) {
-        settings.setValue("align-pitch-aware", true);
-    }
-    settings.endGroup();
+    Align::setDefaultAlignmentPreference(Align::MATCHAlignmentWithPitchCompare);
 
     m_viewManager->setAlignMode(true);
     m_viewManager->setPlaySoloMode(true);
