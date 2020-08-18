@@ -3285,12 +3285,12 @@ MainWindow::about()
     aboutText += QString("<p><small>%1</small></p>").arg(getReleaseText());
 
     aboutText += 
-        tr("<p><small>Sonic Lineup and Sonic Visualiser application code<br>Copyright &copy; 2005&ndash;2019 Chris Cannam"
+        tr("<p><small>Sonic Lineup and Sonic Visualiser application code<br>Copyright &copy; 2005&ndash;2020 Chris Cannam"
            " and Queen Mary, University of London.</small></p>");
 
     aboutText += 
         tr("<p><small>MATCH Audio Alignment plugin<br>Copyright &copy; "
-           "2007&ndash;2019 Simon Dixon, Chris Cannam, and Queen Mary "
+           "2007&ndash;2020 Simon Dixon, Chris Cannam, and Queen Mary "
            "University of London;<br>Copyright &copy; 2014&ndash;2015 Tido "
            "GmbH.</small></p>");
 

@@ -59,8 +59,8 @@ NetworkPermissionTester::havePermission()
               "<p><hr></p>"
 	      "<p><b>Before we go on...</b></p>"
 	      "<p>Sonic Lineup would like to make occasional network requests, to check for updates.</li></ul>"
-	      "<p>No personal information is sent, but aggregated counts of requests may be made for usage reporting.</p>"
-	      "<p>We recommend that you allow this, because it makes Sonic Lineup more useful to you and supports the public funding of this work. But if you do not wish to do so, please un-check the box below.<br></p>"));
+              "<p>No personal information will be sent, no tracking is carried out, and no information will be shared with anyone else.</p>"
+	      "<p>We recommend that you allow this, because it makes Sonic Lineup more useful to you. But if you do not wish to do so, please un-check the box below.<br></p>"));
 	layout->addWidget(label, 0, 0);
 
 	QCheckBox *cb = new QCheckBox(QCoreApplication::translate("NetworkPermissionTester", "Allow this"));
