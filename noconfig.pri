@@ -127,7 +127,7 @@ macx* {
     INCLUDEPATH += $$PWD/sv-dependency-builds/osx/include $$PWD/sv-dependency-builds/osx/include/opus
     LIBS += -L$$PWD/sv-dependency-builds/osx/lib -L$$PWD
 
-    INCLUDEPATH += /usr/local/opt/boost/include
+    INCLUDEPATH += /usr/local/opt/boost/include $$PWD/../boost_1_74_0
 
     QMAKE_CXXFLAGS_RELEASE += -O3 -ffast-math -flto
     QMAKE_LFLAGS_RELEASE += -O3 -flto
