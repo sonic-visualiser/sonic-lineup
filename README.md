@@ -38,5 +38,5 @@ for details.
 Automated build reports
 -----------------------
 
- * Linux and macOS CI build: [![Build Status](https://travis-ci.org/sonic-visualiser/sonic-lineup.svg?branch=master)](https://travis-ci.org/sonic-visualiser/sonic-lineup)
+ * Linux and macOS CI build: [![Build Status](https://travis-ci.org/sonic-visualiser/sonic-lineup.svg?branch=default)](https://travis-ci.org/sonic-visualiser/sonic-lineup)
  * Windows CI build: [![Build status](https://ci.appveyor.com/api/projects/status/4r68mde0dlqk4sa5?svg=true)](https://ci.appveyor.com/project/cannam/sonic-lineup)
